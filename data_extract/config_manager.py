@@ -19,6 +19,8 @@ class ConfigManager:
 
         self.GENIUS_ACCESS_TOKEN = self.config['GENIUS_ACCESS_TOKEN']
 
+        self.CHROME_DRIVER_PATH = self.config['WEB_SCRAPPER']['CHROME_DRIVER_PATH']
+
     def load_json(self, path: str) -> dict:
         try:
             with open(path) as f:
