@@ -25,6 +25,7 @@ class Spotify:
                 'artist': track['artists'][0]['name'],
                 'album': track['album']['name'],
                 'release_date': track['album']['release_date'],
+                'duration_ms': track['duration_ms'],
                 'popularity': track['popularity'],
                 'genres': self.sp.artist(track['artists'][0]['id'])['genres']
             }
