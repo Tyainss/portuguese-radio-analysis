@@ -5,8 +5,8 @@ from config_manager import ConfigManager
 
 class Genius:
 
-    def __init__(self, config_path = '../config.json') -> None:
-        self.config_manager = ConfigManager(config_path)
+    def __init__(self) -> None:
+        self.config_manager = ConfigManager()
         self.access_token = self.config_manager.GENIUS_ACCESS_TOKEN
 
         # Base URL for Genius API
