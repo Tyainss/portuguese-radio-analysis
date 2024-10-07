@@ -20,10 +20,10 @@ class ConfigManager:
         self.GENIUS_ACCESS_TOKEN = self.config['GENIUS_ACCESS_TOKEN']
 
         self.CHROME_DRIVER_PATH = self.config['WEB_SCRAPPER']['CHROME_DRIVER_PATH']
-
-    def load_json(self, path: str) -> dict:
+        
+    def load_json(self, path: str, encoding: str = 'utf-8') -> dict:
         try:
-            with open(path) as f:
+            with open(path, 'r', encoding=encoding) as f:
                 return json.load(f)
         except FileNotFoundError:
             logger.error(f"Error: The file {path} does not exist.")
