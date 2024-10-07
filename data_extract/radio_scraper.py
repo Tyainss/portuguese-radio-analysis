@@ -1,3 +1,4 @@
+import os
 import polars as pl
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -31,8 +32,9 @@ class RadioScraper:
         self.driver.get(url)
         self.wait = WebDriverWait(self.driver, self.wait_time)
 
-    def _get_csv_path(self, path_format, radio):
-        pass
+    def _get_csv_path(self, radio):
+        csv_path = self.CSV_PATH_FORMAT.format(radio=radio)
+        return csv_path
 
     def _accept_cookies(self, cookies_button_accept_text, cookies_button='qc-cmp2-summary-buttons') -> None:
         try:
@@ -97,7 +99,7 @@ class PassouTypeRadioScraper(RadioScraper):
         day_values = [option.get_attribute("value") for option in day_select.options if option.get_attribute("value")]
         return day_values
 
-    def _select_day(self, day_value):
+    def _select_day(self, day_value, last_time_played=None):
         day_select = Select(self.driver.find_element(By.ID, self.day_element_id))
         day_select.select_by_value(day_value)
 
@@ -115,6 +117,8 @@ class PassouTypeRadioScraper(RadioScraper):
             return day_track_data
         
         for time_played, track_title, artist_name in zip(times_played, tracks_title, artists_name):
+            if last_time_played and day_value == last_time_played[self.DAY_COLUMN] and time_played.text <= last_time_played[self.TIME_PLAYED_COLUMN]:
+                continue
             track_data = {
                     self.DAY_COLUMN: day_value,
                     self.TIME_PLAYED_COLUMN: time_played.text,
@@ -124,28 +128,44 @@ class PassouTypeRadioScraper(RadioScraper):
             day_track_data.append(track_data)
         
         return day_track_data
+
+    def _get_most_recent_date_and_time(self, df):
+        if df.is_empty():
+            return None
+        most_recent_row = df.sort(by=[self.DAY_COLUMN, self.TIME_PLAYED_COLUMN], reverse=True).head(1)
+        return {
+            self.DAY_COLUMN: most_recent_row[self.DAY_COLUMN][0],
+            self.TIME_PLAYED_COLUMN: most_recent_row[self.TIME_PLAYED_COLUMN][0]
+        }
         
     def scrape(self, max_days=None, save_csv=True):
         self._accept_cookies(self.cookies_button_accept_text)
         self._select_radio(radio_name=self.radio_select)
         day_values = self._get_days_list()
 
+        csv_path = self._get_csv_path(radio=self.radio_select)
+        schema = self.config_manager.schema
+
+        last_time_played = None
+        if os.path.exists(csv_path):
+            existing_data = self.data_storage.read_csv(path=csv_path, schema=schema)
+            last_time_played = self._get_most_recent_date_and_time(existing_data)
+            if last_time_played:
+                day_values = [day for day in day_values if day >= last_time_played[self.DAY_COLUMN]]
+
         if max_days:
             day_values = day_values[:min(max_days, len(day_values))]
 
         all_data = []
         for day_value in day_values:
-            day_track_data = self._select_day(day_value=day_value)
+            day_track_data = self._select_day(day_value=day_value, last_time_played=last_time_played)
             if day_track_data:
                 all_data.extend(day_track_data)
 
         df_all_data = pl.DataFrame(all_data)
         if save_csv:
-            self.data_storage.output_excel()
+            self.data_storage.output_csv(path=csv_path, df=df_all_data, schema=schema, append=True)
         return df_all_data
 
 
-
-
-            # Finish updating data_storage.py so I can save the extract data to a CSV
             # Also add some checks to see if data was already extracted, and extract only startting from most recent day extracted etc
