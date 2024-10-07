@@ -7,9 +7,11 @@ logger = setup_logging()
 
 
 class ConfigManager:
-
-    def __init__(self, config_path = '../config.json') -> None:
+    CONFIG_PATH_DEFAULT = '../config.json'
+    SCHEMA_PATH_DEFAULT = '../schema.json'
+    def __init__(self, config_path = CONFIG_PATH_DEFAULT, schema_path = SCHEMA_PATH_DEFAULT) -> None:
         self.config = self.load_json(config_path)
+        self.schema = self.load_json(schema_path)
 
         self.SPOTIFY_CLIENT_ID = self.config['SPOTIFY_CLIENT_ID']
         self.SPOTIFY_CLIENT_SECRET = self.config['SPOTIFY_CLIENT_SECRET']
