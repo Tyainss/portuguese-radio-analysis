@@ -39,8 +39,18 @@ class DataStorage:
         if schema:
             # Convert DataFrame columns to the specified data types
             for column, dtype in schema.items():
-                logger.info(f'Column :{column}, dtype :{dtype}')
-                df = df.with_columns(pl.col(column).cast(dtype))
+                logger.info(f'Processing column :{column}, dtype :{dtype}')
+                
+                if dtype == pl.Date:
+                    df = df.with_columns(
+                        pl.col(column).str.strptime(pl.Date, format="%Y-%m-%d")
+                    )
+                elif dtype == pl.Time:
+                    df = df.with_columns(
+                        pl.col(column).str.strptime(pl.Time, format="%H:%M")
+                    )
+                else:
+                    df = df.with_columns(pl.col(column).cast(dtype))
         
         if os.path.exists(path) and append:
             existing_df = self.read_excel(path=path, schema=schema)
@@ -54,8 +64,18 @@ class DataStorage:
         if schema:
             # Convert DataFrame columns to the specified data types
             for column, dtype in schema.items():
-                logger.info(f'Column :{column}, dtype :{dtype}')
-                df = df.with_columns(pl.col(column).cast(dtype))
+                logger.info(f'Processing column :{column}, dtype :{dtype}')
+
+                if dtype == pl.Date:
+                    df = df.with_columns(
+                        pl.col(column).str.strptime(pl.Date, format="%Y-%m-%d")
+                    )
+                elif dtype == pl.Time:
+                    df = df.with_columns(
+                        pl.col(column).str.strptime(pl.Time, format="%H:%M")
+                    )
+                else:
+                    df = df.with_columns(pl.col(column).cast(dtype))
         
         if os.path.exists(path) and append:
             existing_df = self.read_csv(path=path, schema=schema)

@@ -1,6 +1,6 @@
 {
     "DAY": "date",
     "TIME PLAYED": "time",
-    "SONG TITLE": "str",
-    "SONG ARTIST": "str"
+    "TRACK TITLE": "str",
+    "TRACK ARTIST": "str"
 }
