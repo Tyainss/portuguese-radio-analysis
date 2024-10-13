@@ -1,6 +1,17 @@
 {
-    "DAY": "date",
-    "TIME PLAYED": "time",
-    "TRACK TITLE": "str",
-    "TRACK ARTIST": "str"
+    "RADIO_SCRAPPER": {
+        "RADIO": "str",
+        "DAY": "date",
+        "TIME_PLAYED": "time",
+        "TRACK_TITLE": "str",
+        "TRACK_ARTIST": "str"
+    },
+    "TRACK_INFO": {
+        "TRACK_TITLE": "str",
+        "TRACK_ARTIST": "str",
+        "ALBUM": "str",
+        "RELEASE_DATE": "date",
+        "DURATION_MS": "int64",
+        "POPULARITY": "int64"
+    }
 }
