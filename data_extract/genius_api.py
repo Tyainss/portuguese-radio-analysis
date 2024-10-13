@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 
 from config_manager import ConfigManager
 
-class Genius:
+class GeniusAPI:
 
     def __init__(self) -> None:
         self.config_manager = ConfigManager()

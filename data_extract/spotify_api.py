@@ -4,7 +4,7 @@ from spotipy.oauth2 import SpotifyClientCredentials
 
 from config_manager import ConfigManager
 
-class Spotify:
+class SpotifyAPI:
     
     def __init__(self, config_path = '../config.json') -> None:
         self.config_manager = ConfigManager(config_path)

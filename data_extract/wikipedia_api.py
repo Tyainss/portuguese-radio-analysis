@@ -1,7 +1,7 @@
 import re
 import requests
 
-class Wikipedia:
+class WikipediaAPI:
 
     def __init__(self) -> None:
         pass
