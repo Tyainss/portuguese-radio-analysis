@@ -13,12 +13,6 @@ from config_manager import ConfigManager
 from data_storage import DataStorage
 
 class RadioScraper:
-    # Define column names as class attributes
-    RADIO_COLUMN = "RADIO"
-    DAY_COLUMN = "DAY"
-    TIME_PLAYED_COLUMN = "TIME_PLAYED"
-    TRACK_TITLE_COLUMN = "TRACK_TITLE"
-    TRACK_ARTIST_COLUMN = "TRACK_ARTIST"
 
     def __init__(self, url, wait_time=None) -> None:
         self.url = url
@@ -26,12 +20,20 @@ class RadioScraper:
         self.data_storage = DataStorage()
 
         self.schema = self.config_manager.RADIO_SCRAPPER_SCHEMA
+        self._initialize_column_names()
         self.wait_time = wait_time if wait_time is not None else self.config_manager.WAIT_DURATION
 
         service = Service(executable_path=self.config_manager.CHROME_DRIVER_PATH)
         self.driver = webdriver.Chrome(service=service)
         self.driver.get(url)
         self.wait = WebDriverWait(self.driver, self.wait_time)
+
+    def _initialize_column_names(self):
+        self.RADIO_COLUMN = self.config_manager.RADIO_COLUMN
+        self.DAY_COLUMN = self.config_manager.DAY_COLUMN
+        self.TIME_PLAYED_COLUMN = self.config_manager.TIME_PLAYED_COLUMN
+        self.TRACK_TITLE_COLUMN = self.config_manager.TRACK_TITLE_COLUMN
+        self.TRACK_ARTIST_COLUMN = self.config_manager.TRACK_ARTIST_COLUMN
 
     def _get_csv_path(self, radio):
         csv_path = self.config_manager.CSV_PATH_FORMAT.format(radio=radio)

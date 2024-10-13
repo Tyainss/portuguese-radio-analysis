@@ -39,6 +39,12 @@ class ConfigManager:
         self.GENIUS_ACCESS_TOKEN = self.config['GENIUS_ACCESS_TOKEN']        
 
     def _initialize_web_scrapper_config(self) -> None:
+        self.RADIO_COLUMN = "RADIO"
+        self.DAY_COLUMN = "DAY"
+        self.TIME_PLAYED_COLUMN = "TIME_PLAYED"
+        self.TRACK_TITLE_COLUMN = "TRACK_TITLE"
+        self.TRACK_ARTIST_COLUMN = "TRACK_ARTIST"
+
         self.WEB_SCRAPPER = self.config['WEB_SCRAPPER']
         self.CHROME_DRIVER_PATH = self.WEB_SCRAPPER['CHROME_DRIVER_PATH']
         self.CSV_PATH_FORMAT = self.WEB_SCRAPPER['CSV_PATH']
