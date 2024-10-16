@@ -14,7 +14,8 @@ class ConfigManager:
     json_to_polars_types = {
         "date": pl.Date,
         "time": pl.Time,
-        "str": pl.Utf8
+        "str": pl.Utf8,
+        "int64": pl.Int64,
     }
     def __init__(self, config_path = CONFIG_PATH_DEFAULT, schema_path = SCHEMA_PATH_DEFAULT) -> None:
         self.config = self.load_json(config_path)
