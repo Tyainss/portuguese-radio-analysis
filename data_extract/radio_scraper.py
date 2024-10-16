@@ -14,8 +14,8 @@ from data_storage import DataStorage
 
 class RadioScraper:
 
-    def __init__(self, url, wait_time=None) -> None:
-        self.url = url
+    def __init__(self, radio_config, wait_time=None) -> None:
+        self.url = radio_config.get('url')
         self.config_manager = ConfigManager()
         self.data_storage = DataStorage()
 
@@ -25,7 +25,7 @@ class RadioScraper:
 
         service = Service(executable_path=self.config_manager.CHROME_DRIVER_PATH)
         self.driver = webdriver.Chrome(service=service)
-        self.driver.get(url)
+        self.driver.get(self.url)
         self.wait = WebDriverWait(self.driver, self.wait_time)
 
     def _initialize_column_names(self):
@@ -118,15 +118,19 @@ class PassouTypeRadioScraper(RadioScraper):
     until 6 days prior to the current day.
     """
 
-    def __init__(self, url, radio_name, time_played_name, track_name, artist_name, wait_time=None) -> None:
-        super().__init__(url, wait_time)
-        self.radio_name = radio_name
-        self.time_played_name = time_played_name
-        self.track_name = track_name
-        self.artist_name = artist_name
-        self.cookies_button_accept_text = 'CONCORDO'
-        self.day_element_id = 'day'
-        self.search_button_text = 'Procurar'
+    def __init__(self, radio_config, wait_time=None) -> None:
+        super().__init__(radio_config, wait_time)
+        self.radio_name = radio_config.get('radio_name')
+        self.time_played_name = radio_config.get('time_played_name')
+        self.track_name = radio_config.get('track_name')
+        self.artist_name = radio_config.get('artist_name')
+        self.cookies_button_accept_text = radio_config.get('cookies_button_accept', 'CONCORDO')
+        self.day_element_id = radio_config.get('day_element_id', 'day')
+        self.search_button_text = radio_config.get('seach_button', 'Procurar')
+
+    def _ignore_last_option(self, options):
+        """Ignore last option since it shows the same values as "Today" """
+        return options[:-1]
 
     def _get_days_list(self) -> list:
         self.wait.until(EC.presence_of_element_located((By.ID, self.day_element_id)))
@@ -170,7 +174,7 @@ class PassouTypeRadioScraper(RadioScraper):
         self._accept_cookies(self.cookies_button_accept_text)
         self._select_radio(radio_name=self.radio_name)
         # day_values = self._get_days_list()
-        day_values = self._get_option_list(self.day_element_id)
+        day_values = self._ignore_last_option(self._get_option_list(self.day_element_id))
 
         csv_path = self._get_csv_path(radio=self.radio_name)
 
@@ -200,18 +204,18 @@ class RFMRadioScraper(RadioScraper):
     It requires the selection of Day, Period and Hour filter.
     It only allows the extraction of the current day data and from the previous day (Today and Yesterday)
     """
-    def __init__(self, url, wait_time=None) -> None:
-        super().__init__(url, wait_time)
-        self.radio_name = 'RFM'
-        self.time_played_name = 't-hor'
-        self.track_name = 'medium.no-margin.align-left'
-        self.artist_name = 'large.no-margin.align-left'
-        self.cookies_button_accept_text = 'ACEITAR'
-        self.day_element_id = 'dp-dia'
-        self.period_element_id = 'dp-periodo'
-        self.hour_element_id = 'dp-hora'
-        self.search_button_text = 'pesquisa_quemusicaera'
-        self.ad_wait_time = 1
+    def __init__(self, radio_config, wait_time=None) -> None:
+        super().__init__(radio_config, wait_time)
+        self.radio_name = radio_config.get('radio_name', 'RFM')
+        self.time_played_name = radio_config.get('time_played_name', 't-hor')
+        self.track_name = radio_config.get('track_name', 'medium.no-margin.align-left')
+        self.artist_name = radio_config.get('artist_name', 'large.no-margin.align-left')
+        self.cookies_button_accept_text = radio_config.get('cookies_button_accept_text', 'ACEITAR')
+        self.day_element_id = radio_config.get('day_element_id', 'dp-dia')
+        self.period_element_id = radio_config.get('period_element_id', 'dp-periodo')
+        self.hour_element_id = radio_config.get('hour_element_id', 'dp-hora')
+        self.search_button_text = radio_config.get('search_button', 'pesquisa_quemusicaera')
+        self.ad_wait_time = radio_config.get('ad_wait_time', 1)
 
     def _ignore_first_option(self, options):
         """Ignore first option since it's the label of the element selection and not a real option"""
@@ -330,19 +334,18 @@ class MegaHitsRadioScraper(RadioScraper):
     It requires the Selection of day and the input of Hour and Minute of the search.
     After inputing both hour and minute, it provides all songs played in an interval of 15 minutes prior and after the time we chose.
     """
-    def __init__(self, url, wait_time=None) -> None:
-        super().__init__(url, wait_time)
-        self.radio_name = 'MegaHits'
-        self.time_played_name = 'ac-horas1'
-        self.track_name = 'ac-nomem1'
-        self.artist_name = 'ac-autor1'
-        self.cookies_button_accept_text = 'ACEITAR'
-        self.day_element_id = 'dias'
-        self.search_hour = 'txtHoraPesq'
-        self.search_minute = 'txtMinutoPesq'
-        self.search_button_text = 'pesquisa'
-        # self.ad_wait_time = 1
-        self.max_retries = 3
+    def __init__(self, radio_config, wait_time=None) -> None:
+        super().__init__(radio_config, wait_time)
+        self.radio_name = radio_config.get('radio_name', 'MegaHits')
+        self.time_played_name = radio_config.get('time_played_name', 'ac-horas1')
+        self.track_name = radio_config.get('track_name', 'ac-nomem1')
+        self.artist_name = radio_config.get('artist_name', 'ac-autor1')
+        self.cookies_button_accept_text = radio_config.get('cookies_button_accept_text', 'ACEITAR')
+        self.day_element_id = radio_config.get('day_element_id', 'dias')
+        self.search_hour = radio_config.get('search_hour', 'txtHoraPesq')
+        self.search_minute = radio_config.get('search_minute', 'txtMinutoPesq')
+        self.search_button_text = radio_config.get('search_button_text', 'pesquisa')
+        self.max_retries = radio_config.get('max_retries', 3)
 
     def _extract_day_data(self, day_value, last_time_played=None):
         day_select = Select(self.driver.find_element(By.ID, self.day_element_id))
