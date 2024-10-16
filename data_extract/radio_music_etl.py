@@ -37,14 +37,17 @@ class RadioMusicETL:
         new_track_df = new_track_df.with_columns(
             pl.concat_str([self.TRACK_TITLE_COLUMN, self.TRACK_ARTIST_COLUMN], separator=" - ").alias("track_id")
         )
-        registered_tracks = registered_tracks.with_columns(
-            pl.concat_str([self.TRACK_TITLE_COLUMN, self.TRACK_ARTIST_COLUMN], separator=" - ").alias("track_id")
-        )
+        if not registered_tracks.is_empty():
+            registered_tracks = registered_tracks.with_columns(
+                pl.concat_str([self.TRACK_TITLE_COLUMN, self.TRACK_ARTIST_COLUMN], separator=" - ").alias("track_id")
+            )
 
-        # Find tracks in new_track_df that are not in registered_tracks
-        unregistered_tracks = new_track_df.filter(
-            ~pl.col("track_id").is_in(registered_tracks["track_id"])
-        )
+            # Find tracks in new_track_df that are not in registered_tracks
+            unregistered_tracks = new_track_df.filter(
+                ~pl.col("track_id").is_in(registered_tracks["track_id"])
+            )
+        else:
+            unregistered_tracks = new_track_df
 
         # Select only TRACK_TITLE and TRACK_ARTIST columns and remove duplicates
         result = unregistered_tracks.select([self.TRACK_TITLE_COLUMN, self.TRACK_ARTIST_COLUMN]).unique()
@@ -52,10 +55,13 @@ class RadioMusicETL:
         return result
     
     def _identify_unregistered_artists(self, new_artist_df, registered_artists):
+        if not registered_artists.is_empty():
+            unregistered_artists = new_artist_df.filter(
+                ~pl.col(self.TRACK_ARTIST_COLUMN).is_in(registered_artists[self.TRACK_ARTIST_COLUMN])
+            )
+        else:
+            unregistered_artists = new_artist_df
 
-        unregistered_artists = new_artist_df.filter(
-            ~pl.col(self.TRACK_ARTIST_COLUMN).is_in(registered_artists[self.TRACK_ARTIST_COLUMN])
-        )
         result = unregistered_artists.select([self.TRACK_ARTIST_COLUMN]).unique()
         
         return result
@@ -82,21 +88,26 @@ class RadioMusicETL:
             path=self.config_manager.TRACK_INFO_CSV_PATH,
             schema=self.config_manager.TRACK_INFO_SCHEMA
         )
-        already_extracted_artists = already_extracted_data.select([self.TRACK_ARTIST_COLUMN])
+        if not already_extracted_data.is_empty():
+            already_extracted_artists = already_extracted_data.select([self.TRACK_ARTIST_COLUMN])
+        else:
+            already_extracted_artists = pl.DataFrame()
 
-        new_tracks = self._identify_unregistered_tracks(
+        new_tracks_df = self._identify_unregistered_tracks(
             new_track_df=combined_df,
             registered_tracks=already_extracted_data
         )
 
-        new_artists = self._identify_unregistered_artists(
+        new_artists_df = self._identify_unregistered_artists(
             new_artist_df=combined_df,
             registered_artists=already_extracted_artists
         )
 
-        # Check Track Info data extracted
+        return new_artists_df, new_tracks_df
+
         # For every song never extracted, get data from spotify, wikipedia, musicbrainz
+            # Extract data from APIs asynchronously - using asyncio
+            #  Find limit for each API
         # (Don't save genius lyrics since it will make the files too big)
         # Save the new track info into a csv file
-
 
