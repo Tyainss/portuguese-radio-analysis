@@ -9,8 +9,8 @@ logger = setup_logging()
 
 
 class ConfigManager:
-    CONFIG_PATH_DEFAULT = '../config.json'
-    SCHEMA_PATH_DEFAULT = '../schema.json'
+    CONFIG_PATH_DEFAULT = 'config.json'
+    SCHEMA_PATH_DEFAULT = 'schema.json'
     json_to_polars_types = {
         "date": pl.Date,
         "time": pl.Time,

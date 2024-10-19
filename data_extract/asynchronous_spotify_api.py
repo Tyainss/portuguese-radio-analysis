@@ -5,8 +5,8 @@ from config_manager import ConfigManager
 
 class AsyncSpotifyAPI:
     
-    def __init__(self, config_path='config.json') -> None:
-        self.config_manager = ConfigManager(config_path)
+    def __init__(self) -> None:
+        self.config_manager = ConfigManager()
         self.client_id = self.config_manager.SPOTIFY_CLIENT_ID
         self.client_secret = self.config_manager.SPOTIFY_CLIENT_SECRET
         self.token_url = 'https://accounts.spotify.com/api/token'

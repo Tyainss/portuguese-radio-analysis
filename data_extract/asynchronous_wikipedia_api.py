@@ -7,8 +7,8 @@ from config_manager import ConfigManager
 
 class AsyncWikipediaAPI:
 
-    def __init__(self, config_path='config.json') -> None:
-        self.config_manager = ConfigManager(config_path)
+    def __init__(self) -> None:
+        self.config_manager = ConfigManager()
 
     def _process_artist_name(self, artist_name):
         # This method cleans up an artist name by:

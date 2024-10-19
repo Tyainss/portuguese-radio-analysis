@@ -5,8 +5,8 @@ from config_manager import ConfigManager
 
 class SpotifyAPI:
     
-    def __init__(self, config_path = '../config.json') -> None:
-        self.config_manager = ConfigManager(config_path)
+    def __init__(self) -> None:
+        self.config_manager = ConfigManager()
         client_id = self.config_manager.SPOTIFY_CLIENT_ID
         client_secret = self.config_manager.SPOTIFY_CLIENT_SECRET
         self.auth_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
