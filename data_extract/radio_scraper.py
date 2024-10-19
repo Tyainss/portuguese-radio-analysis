@@ -62,7 +62,7 @@ class RadioScraper:
     def _get_most_recent_date_and_time(self, df):
         if df.is_empty():
             return None
-        most_recent_row = df.sort(by=[self.DAY_COLUMN, self.TIME_PLAYED_COLUMN], reverse=True).head(1)
+        most_recent_row = df.sort(by=[self.DAY_COLUMN, self.TIME_PLAYED_COLUMN], descending=True).head(1)
         return {
             self.DAY_COLUMN: most_recent_row[self.DAY_COLUMN][0],
             self.TIME_PLAYED_COLUMN: most_recent_row[self.TIME_PLAYED_COLUMN][0]
