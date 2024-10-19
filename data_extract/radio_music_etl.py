@@ -1,4 +1,5 @@
 import polars as pl
+import asyncio
 
 from config_manager import ConfigManager
 from data_storage import DataStorage
@@ -6,7 +7,9 @@ from radio_scraper import  PassouTypeRadioScraper, RFMRadioScraper, MegaHitsRadi
 from genius_api import GeniusAPI
 from musicbrainz_api import MusicBrainzAPI
 from spotify_api import SpotifyAPI
+from asynchronous_spotify_api import AsyncSpotifyAPI
 from wikipedia_api import WikipediaAPI
+from asynchronous_wikipedia_api import AsyncWikipediaAPI
 
 from logger import setup_logging
 
@@ -15,14 +18,18 @@ logger = setup_logging()
 
 
 class RadioMusicETL:
+    CONFIG_PATH_DEFAULT = 'config.json'
+    SCHEMA_PATH_DEFAULT = 'schema.json'
 
-    def __init__(self, config_path: str, schema_path: str) -> None:
+    def __init__(self, config_path: str = CONFIG_PATH_DEFAULT, schema_path: str = SCHEMA_PATH_DEFAULT) -> None:
         self.config_manager = ConfigManager(config_path, schema_path)
         self.data_storage = DataStorage()
         self.genius_api = GeniusAPI()
         self.mb_api = MusicBrainzAPI()
         self.spotify_api = SpotifyAPI()
+        self.async_spotify_api = AsyncSpotifyAPI()
         self.wikipedia_api = WikipediaAPI()
+        self.async_wikipedia_api = AsyncWikipediaAPI()
         self._initialize_column_names()
 
     def _initialize_column_names(self):
@@ -66,8 +73,10 @@ class RadioMusicETL:
         
         return result
 
+    # async def fetch_all
 
-    def run(self):
+
+    async def run(self):
         # Scrape data from radios
         scrapers = [
             PassouTypeRadioScraper(self.config_manager.WEB_SITES['Comercial'])
@@ -80,7 +89,7 @@ class RadioMusicETL:
 
         for scraper in scrapers:
             tracks_df = scraper.scrape(save_csv=True)
-            all_scrape_dfs.extend(tracks_df)
+            all_scrape_dfs.append(tracks_df)
 
         combined_df = pl.concat(all_scrape_dfs)
 
@@ -103,11 +112,25 @@ class RadioMusicETL:
             registered_artists=already_extracted_artists
         )
 
-        return new_artists_df, new_tracks_df
+        spotify_track_df = await self.async_spotify_api.process_data(new_tracks_df)
+        track_combined_df = new_tracks_df.join(spotify_track_df, on=[self.config_manager.TRACK_TITLE_COLUMN, self.config_manager.TRACK_ARTIST_COLUMN], how="left")
 
-        # For every song never extracted, get data from spotify, wikipedia, musicbrainz
-            # Extract data from APIs asynchronously - using asyncio
-            #  Find limit for each API
+        wikipedia_artist_df = await self.async_wikipedia_api.process_data(new_artists_df)
+
+        return track_combined_df, wikipedia_artist_df
+
+
+        # Does it make sense to do asynchronous with MusicBrainz?
+            # Fix the class to NOT use mbid and search with Artist Name instead
+
         # (Don't save genius lyrics since it will make the files too big)
         # Save the new track info into a csv file
 
+if __name__ == "__main__":
+    etl = RadioMusicETL()
+    
+    async def run_test():
+        result = await etl.run()
+        print(result)
+
+    asyncio.run(run_test())
