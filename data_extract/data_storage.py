@@ -14,29 +14,69 @@ class DataStorage:
 
     def read_excel(self, path: str, schema: Optional[Dict[str, pl.DataType]] = None) -> pl.DataFrame:
         logger.info(f'Reading Excel from: {path}')
+
         if not os.path.exists(path):
             logger.warning(f'Excel file not found: {path}')
             return pl.DataFrame()
+        
         df = pl.read_excel(path)
+
         if schema:
             # Convert DataFrame columns to the specified data types
             for column, dtype in schema.items():
                 logger.info(f'Column : {column}, dtype : {dtype}')
-                df = df.with_columns(pl.col(column).cast(dtype))
-        
+                
+                if dtype == pl.Date:
+                    df = df.with_columns(
+                        pl.col(column).str.strptime(pl.Date, format="%Y-%m-%d")
+                    )
+                elif dtype == pl.Time:
+                    # Detect if time includes nanoseconds
+                    sample_time = df[column].head(1).to_series()[0]
+                    if '.' in sample_time and len(sample_time.split('.')[1]) > 0:
+                        df = df.with_columns(
+                            pl.col(column).str.strptime(pl.Time, format="%H:%M:%S%.9f")
+                        )
+                    else:
+                        df = df.with_columns(
+                            pl.col(column).str.strptime(pl.Time, format="%H:%M")
+                        )
+                else:
+                    df = df.with_columns(pl.col(column).cast(dtype))
+
         return df
 
     def read_csv(self, path: str, schema: Optional[Dict[str, pl.DataType]] = None) -> pl.DataFrame:
         logger.info(f'Reading CSV from: {path}')
+
         if not os.path.exists(path):
             logger.warning(f'CSV file not found: {path}')
             return pl.DataFrame()
+        
         df = pl.read_csv(path)
+
         if schema:
             # Convert DataFrame columns to the specified data types
             for column, dtype in schema.items():
                 logger.info(f'Column : {column}, dtype : {dtype}')
-                df = df.with_columns(pl.col(column).cast(dtype))
+                
+                if dtype == pl.Date:
+                    df = df.with_columns(
+                        pl.col(column).str.strptime(pl.Date, format="%Y-%m-%d")
+                    )
+                elif dtype == pl.Time:
+                    # Detect if time includes nanoseconds
+                    sample_time = df[column].head(1)[0]
+                    if '.' in sample_time and len(sample_time.split('.')[1]) > 0:
+                        df = df.with_columns(
+                            pl.col(column).str.strptime(pl.Time, format="%H:%M:%S%.9f")
+                        )
+                    else:
+                        df = df.with_columns(
+                            pl.col(column).str.strptime(pl.Time, format="%H:%M")
+                        )
+                else:
+                    df = df.with_columns(pl.col(column).cast(dtype))
         
         return df
 
@@ -94,7 +134,9 @@ class DataStorage:
                     )
                 elif dtype == pl.Time:
                     df = df.with_columns(
-                        pl.col(column).str.strptime(pl.Time, format="%H:%M")
+                        # pl.col(column).str.strptime(pl.Time, format="%H:%M")
+                        # Convert time to string before saving to save it as only Hours : Minutes
+                        pl.col(column).dt.strftime("%H:%M").alias(column)  
                     )
                 else:
                     df = df.with_columns(pl.col(column).cast(dtype))
