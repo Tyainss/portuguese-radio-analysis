@@ -43,11 +43,17 @@ class AsyncSpotifyAPI:
         }
 
         async with aiohttp.ClientSession() as session:
-            async with session.get(f"{self.base_url}/{endpoint}", headers=headers, params=params) as response:
-                if response.status == 200:
-                    return await response.json()
-                else:
-                    raise Exception(f"API request failed with status code {response.status}: {await response.text()}")
+            while True:  # Loop to retry on rate limits
+                async with session.get(f"{self.base_url}/{endpoint}", headers=headers, params=params) as response:
+                    if response.status == 200:
+                        return await response.json()
+                    elif response.status == 429:
+                        # Handle rate limit by checking the Retry-After header
+                        retry_after = int(response.headers.get("Retry-After", 5))  # Default to 5 seconds if not provided
+                        print(f"Rate limit exceeded. Retrying after {retry_after} seconds.")
+                        await asyncio.sleep(retry_after)
+                    else:
+                        raise Exception(f"API request failed with status code {response.status}: {await response.text()}")
 
     async def get_track_info(self, track_name, artist_name):
         """Asynchronous function to fetch track information by track name and artist."""
@@ -72,13 +78,15 @@ class AsyncSpotifyAPI:
             
             # Build the track info dictionary
             track_info = {
-                'name': track['name'],
-                'artist': track['artists'][0]['name'],
-                'album': track['album']['name'],
-                'release_date': track['album']['release_date'],
-                'duration_ms': track['duration_ms'],
-                'popularity': track['popularity'],
-                'genres': genres
+                self.config_manager.TRACK_TITLE_COLUMN: track_name,
+                self.config_manager.TRACK_ARTIST_COLUMN: artist_name,
+                'spotify_track_name': track['name'],
+                'spotify_artist_name': track['artists'][0]['name'],
+                'spotify_album': track['album']['name'],
+                'spotify_release_date': track['album']['release_date'],
+                'spotify_duration_ms': track['duration_ms'],
+                'spotify_popularity': track['popularity'],
+                'spotify_genres': genres
             }
             return track_info
         else:
