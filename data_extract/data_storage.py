@@ -134,9 +134,7 @@ class DataStorage:
                     )
                 elif dtype == pl.Time:
                     df = df.with_columns(
-                        # pl.col(column).str.strptime(pl.Time, format="%H:%M")
-                        # Convert time to string before saving to save it as only Hours : Minutes
-                        pl.col(column).dt.strftime("%H:%M").alias(column)  
+                        pl.col(column).str.strptime(pl.Time, format="%H:%M")
                     )
                 else:
                     df = df.with_columns(pl.col(column).cast(dtype))

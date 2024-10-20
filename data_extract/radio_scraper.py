@@ -1,6 +1,6 @@
 import os
 import polars as pl
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date, time as datetime_time
 import time
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -64,8 +64,8 @@ class RadioScraper:
             return None
         most_recent_row = df.sort(by=[self.DAY_COLUMN, self.TIME_PLAYED_COLUMN], descending=True).head(1)
         return {
-            self.DAY_COLUMN: most_recent_row[self.DAY_COLUMN][0],
-            self.TIME_PLAYED_COLUMN: most_recent_row[self.TIME_PLAYED_COLUMN][0]
+            self.DAY_COLUMN: str(most_recent_row[self.DAY_COLUMN][0]),
+            self.TIME_PLAYED_COLUMN: str(most_recent_row[self.TIME_PLAYED_COLUMN][0])
         }
 
     def _get_day_value(self, day_text):
@@ -131,12 +131,6 @@ class PassouTypeRadioScraper(RadioScraper):
     def _ignore_last_option(self, options):
         """Ignore last option since it shows the same values as "Today" """
         return options[:-1]
-
-    def _get_days_list(self) -> list:
-        self.wait.until(EC.presence_of_element_located((By.ID, self.day_element_id)))
-        day_select = Select(self.driver.find_element(By.ID, self.day_element_id))
-        day_values = [option.get_attribute("value") for option in day_select.options if option.get_attribute("value")]
-        return day_values
 
     def _extract_day_data(self, day_value, last_time_played=None):
         day_select = Select(self.driver.find_element(By.ID, self.day_element_id))
@@ -275,8 +269,6 @@ class RFMRadioScraper(RadioScraper):
 
                 search_button = self.wait.until(EC.element_to_be_clickable((By.ID, self.search_button_text)))
                 search_button.click()
-                # driver.execute_script("arguments[0].scrollIntoView(true);", search_button)
-                # driver.execute_script("arguments[0].click();", search_button)
 
                 try:
                     self.wait.until(EC.presence_of_all_elements_located((By.CLASS_NAME, self.time_played_name)))
