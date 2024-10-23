@@ -37,16 +37,16 @@ class RadioMusicETL:
         self.DAY_COLUMN = self.config_manager.DAY_COLUMN
         self.TIME_PLAYED_COLUMN = self.config_manager.TIME_PLAYED_COLUMN
         self.TRACK_TITLE_COLUMN = self.config_manager.TRACK_TITLE_COLUMN
-        self.TRACK_ARTIST_COLUMN = self.config_manager.TRACK_ARTIST_COLUMN
+        self.ARTIST_NAME_COLUMN = self.config_manager.ARTIST_NAME_COLUMN
 
     def _identify_unregistered_tracks(self, new_track_df, registered_tracks):
-        # Combine TRACK_TITLE and TRACK_ARTIST to create a unique identifier
+        # Combine TRACK_TITLE and ARTIST_NAME to create a unique identifier
         new_track_df = new_track_df.with_columns(
-            pl.concat_str([self.TRACK_TITLE_COLUMN, self.TRACK_ARTIST_COLUMN], separator=" - ").alias("track_id")
+            pl.concat_str([self.TRACK_TITLE_COLUMN, self.ARTIST_NAME_COLUMN], separator=" - ").alias("track_id")
         )
         if not registered_tracks.is_empty():
             registered_tracks = registered_tracks.with_columns(
-                pl.concat_str([self.TRACK_TITLE_COLUMN, self.TRACK_ARTIST_COLUMN], separator=" - ").alias("track_id")
+                pl.concat_str([self.TRACK_TITLE_COLUMN, self.ARTIST_NAME_COLUMN], separator=" - ").alias("track_id")
             )
 
             # Find tracks in new_track_df that are not in registered_tracks
@@ -56,20 +56,20 @@ class RadioMusicETL:
         else:
             unregistered_tracks = new_track_df
 
-        # Select only TRACK_TITLE and TRACK_ARTIST columns and remove duplicates
-        result = unregistered_tracks.select([self.TRACK_TITLE_COLUMN, self.TRACK_ARTIST_COLUMN]).unique()
+        # Select only TRACK_TITLE and ARTIST_NAME columns and remove duplicates
+        result = unregistered_tracks.select([self.TRACK_TITLE_COLUMN, self.ARTIST_NAME_COLUMN]).unique()
 
         return result
     
     def _identify_unregistered_artists(self, new_artist_df, registered_artists):
         if not registered_artists.is_empty():
             unregistered_artists = new_artist_df.filter(
-                ~pl.col(self.TRACK_ARTIST_COLUMN).is_in(registered_artists[self.TRACK_ARTIST_COLUMN])
+                ~pl.col(self.ARTIST_NAME_COLUMN).is_in(registered_artists[self.ARTIST_NAME_COLUMN])
             )
         else:
             unregistered_artists = new_artist_df
 
-        result = unregistered_artists.select([self.TRACK_ARTIST_COLUMN]).unique()
+        result = unregistered_artists.select([self.ARTIST_NAME_COLUMN]).unique()
         
         return result
 
@@ -98,7 +98,7 @@ class RadioMusicETL:
             schema=self.config_manager.TRACK_INFO_SCHEMA
         )
         if not already_extracted_data.is_empty():
-            already_extracted_artists = already_extracted_data.select([self.TRACK_ARTIST_COLUMN])
+            already_extracted_artists = already_extracted_data.select([self.ARTIST_NAME_COLUMN])
         else:
             already_extracted_artists = pl.DataFrame()
 
@@ -113,13 +113,37 @@ class RadioMusicETL:
         )
 
         spotify_track_df = await self.async_spotify_api.process_data(new_tracks_df)
-        track_combined_df = new_tracks_df.join(spotify_track_df, on=[self.config_manager.TRACK_TITLE_COLUMN, self.config_manager.TRACK_ARTIST_COLUMN], how="left")
+        print('Spotify \n', spotify_track_df)
+
+        # Save track info df
+        track_info_df = spotify_track_df
+        self.data_storage.output_csv(
+            df=track_info_df,
+            path=self.config_manager.TRACK_INFO_CSV_PATH,
+            schema=self.config_manager.TRACK_INFO_SCHEMA
+        )        
 
         wikipedia_artist_df = await self.async_wikipedia_api.process_data(new_artists_df)
+        print('Wikipedia \n', wikipedia_artist_df)
 
-        return track_combined_df, wikipedia_artist_df
+        mb_artist_df = self.mb_api.process_data(new_artists_df)
+        print('MusicBrainz \n', mb_artist_df)
 
+        # Save artist info df
+        artist_info_df = mb_artist_df.join(wikipedia_artist_df, on=[self.config_manager.ARTIST_NAME_COLUMN], how='left')
+        self.data_storage.output_csv(
+            df=artist_info_df,
+            path=self.config_manager.ARTIST_INFO_CSV_PATH,
+            schema=self.config_manager.ARTIST_INFO_SCHEMA
+        )   
 
+        # track_combined_df = new_tracks_df.join(spotify_track_df, on=[self.config_manager.TRACK_TITLE_COLUMN, self.config_manager.ARTIST_NAME_COLUMN], how="left")
+
+        
+
+        return track_info_df, wikipedia_artist_df
+
+        # Continue testing codes and see if there's still errors with wikipedia api
         # Does it make sense to do asynchronous with MusicBrainz?
             # Fix the class to NOT use mbid and search with Artist Name instead
 
