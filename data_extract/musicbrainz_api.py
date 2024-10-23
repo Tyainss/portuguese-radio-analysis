@@ -1,6 +1,7 @@
 import requests
 import time
-import pandas as pd
+from datetime import datetime
+import polars as pl  # Assuming you are using Polars DataFrame
 
 from helper import Helper
 
@@ -9,59 +10,132 @@ class MusicBrainzAPI:
     def __init__(self) -> None:
         self.helper = Helper()
 
-    def fetch_artist_info_from_musicbrainz(self, artist_mbid_list):
-        """
-        Needs 1 second sleep between every call to not reach API limit
-        """
-        print('Fetching artist info from MusicBrainz')
-        all_artists = []
-        for artist_mbid in artist_mbid_list:
-            # Sleep 1 second to prevent breaking API limit call per second
-            time.sleep(1)
-            # MusicBrainz API endpoint for fetching artist information
-            url = f'https://musicbrainz.org/ws/2/artist/{artist_mbid}?inc=aliases+tags+ratings+works+url-rels&fmt=json'
+    def _format_date(self, date_str):
+        if date_str:
+            try:
+                # Attempt to parse the date using multiple formats
+                # First try full date, then year-month, then just year
+                if len(date_str) == 10:  # yyyy-mm-dd
+                    return datetime.strptime(date_str, "%Y-%m-%d").strftime("%Y-%m-%d")
+                elif len(date_str) == 7:  # yyyy-mm
+                    return datetime.strptime(date_str, "%Y-%m").strftime("%Y-%m-%d")
+                elif len(date_str) == 4:  # yyyy
+                    return datetime.strptime(date_str, "%Y").strftime("%Y-%m-%d")
+            except:
+                return date_str
+            
+        return date_str
 
-            response = requests.get(url)
-            data = response.json()
-
-            tags = data.get('tags', '')
-            if tags:
-                tags.sort(reverse=True, key=lambda x: x['count'])
-                main_genre = tags[0].get('name')
-            else:
-                main_genre = None
-            
-            country_1 = data.get('country', '')
-            country_2 = data.get('area', {}).get('iso-3166-1-codes', [''])[0]
-            country_name = self.helper.get_country_name_from_iso_code(country_2 if country_2 else country_1)
-            
-            career_begin = data.get('life-span', {}).get('begin')
-            career_end = data.get('life-span', {}).get('end')
-            career_ended = data.get('life-span', {}).get('ended')
-            artist_type = data.get('type', '')
-            
-            # Data treatment on dates to have them in yyyy-MM-DD format
-            if career_begin:
-                try:
-                    career_begin = pd.to_datetime(career_begin).strftime('%Y-%m-%d')
-                except:
-                    career_begin = ''
-            if career_end:
-                try:
-                    career_end = pd.to_datetime(career_end).strftime('%Y-%m-%d')
-                except:
-                    career_end = ''
-            
-            artist_info = {
-                'artist_mbid': artist_mbid
-                , 'artist_country': country_name
-                , 'artist_type': artist_type
-                , 'artist_main_genre': main_genre
-                , 'artist_career_begin': career_begin
-                , 'artist_career_end': career_end
-                , 'artist_career_ended': career_ended
-            }
-            
-            all_artists.append(artist_info)
+    def search_artist_by_name(self, artist_name):
+        """
+        Search for an artist in MusicBrainz by their name and return their mbid.
+        """
+        print(f"Searching for artist: {artist_name}")
+        url = "https://musicbrainz.org/ws/2/artist/"
+        params = {
+            'query': f'artist:{artist_name}',
+            'fmt': 'json',
+            'limit': 1  # Return the first match
+        }
         
-        return all_artists
+        response = requests.get(url, params=params)
+        data = response.json()
+        
+        if data['artists']:
+            # Extract the first artist's mbid
+            artist_mbid = data['artists'][0]['id']
+            return artist_mbid
+        else:
+            print(f"No artist found for name: {artist_name}")
+            return None
+
+    def fetch_artist_info_by_mbid(self, artist_mbid):
+        """
+        Fetch detailed artist information from MusicBrainz by their mbid.
+        """
+        url = f'https://musicbrainz.org/ws/2/artist/{artist_mbid}?inc=aliases+tags+ratings+works+url-rels&fmt=json'
+        time.sleep(1)  # To avoid rate limits
+        response = requests.get(url)
+        data = response.json()
+
+        # Extract artist details
+        tags = data.get('tags', [])
+        if tags:
+            tags.sort(reverse=True, key=lambda x: x['count'])
+            main_genre = tags[0].get('name')
+        else:
+            main_genre = None
+
+        country_1 = data.get('country', '')
+        country_2 = data.get('area', {}).get('iso-3166-1-codes', [''])[0]
+        country_name = self.helper.get_country_name_from_iso_code(country_2 if country_2 else country_1)
+        
+        career_begin = self._format_date(data.get('life-span', {}).get('begin'))
+        career_end = self._format_date(data.get('life-span', {}).get('end'))
+        career_ended = data.get('life-span', {}).get('ended')
+        artist_type = data.get('type', '')
+
+        return {
+            'mb_artist_country': country_name,
+            'mb_artist_main_genre': main_genre,
+            'mb_artist_type': artist_type,
+            'mb_artist_career_begin': career_begin,
+            'mb_artist_career_end': career_end,
+            'mb_artist_career_ended': career_ended
+        }
+
+    def fetch_artist_info_by_name(self, artist_name):
+        """
+        Fetch detailed artist information from MusicBrainz by the artist name.
+        """
+        # Step 1: Search for the artist by name and get their mbid
+        artist_mbid = self.search_artist_by_name(artist_name)
+        
+        # Step 2: If mbid is found, fetch the artist info using mbid
+        if artist_mbid:
+            artist_info = self.fetch_artist_info_by_mbid(artist_mbid)
+            return artist_info
+        else:
+            return None
+
+    def process_data(self, df):
+        """
+        Process a DataFrame containing artist names and return a DataFrame with extra artist info.
+        """
+        artist_info_list = []
+
+        for artist_name in df['artist_name']:  # Assuming the column name is 'artist_name'
+            artist_info = self.fetch_artist_info_by_name(artist_name)
+            if artist_info:
+                artist_info_list.append(artist_info)
+            else:
+                # Append None values for columns if no info is found
+                artist_info_list.append({
+                    'mb_artist_country': None,
+                    'mb_artist_main_genre': None,
+                    'mb_artist_type': None,
+                    'mb_artist_career_begin': None,
+                    'mb_artist_career_end': None,
+                    'mb_artist_career_ended': None
+                })
+
+        # Convert the list of artist info into a DataFrame
+        artist_info_df = pl.DataFrame(artist_info_list)
+
+        # Concatenate the original DataFrame with the new artist info DataFrame
+        result_df = pl.concat([df, artist_info_df], how='horizontal')
+        return result_df
+
+
+# Example usage
+if __name__ == "__main__":
+    mb_api = MusicBrainzAPI()
+
+    # Create a sample DataFrame with artist names
+    df = pl.DataFrame({
+        'artist_name': ['Radiohead', 'Coldplay', 'Adele']
+    })
+
+    # Process the data and fetch artist info
+    result_df = mb_api.process_data(df)
+    print(result_df)
