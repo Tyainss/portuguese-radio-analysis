@@ -1,17 +1,28 @@
 {
     "RADIO_SCRAPPER": {
-        "RADIO": "str",
-        "DAY": "date",
-        "TIME_PLAYED": "time",
-        "TRACK_TITLE": "str",
-        "TRACK_ARTIST": "str"
+        "radio": "str",
+        "day": "date",
+        "time_played": "time",
+        "track_title": "str",
+        "artist_name": "str"
     },
     "TRACK_INFO": {
-        "TRACK_TITLE": "str",
-        "TRACK_ARTIST": "str",
-        "ALBUM": "str",
-        "RELEASE_DATE": "date",
-        "DURATION_MS": "int64",
-        "POPULARITY": "int64"
+        "track_title": "str",
+        "artist_name": "str",
+        "spotify_album": "str",
+        "spotify_release_date": "date",
+        "spotify_duration_ms": "int64",
+        "spotify_popularity": "int64",
+        "spotify_genres": "str"
+    },
+    "ARTIST_INFO": {
+        "artist_name": "str",
+        "mb_artist_country": "str",
+        "mb_artist_main_genre": "str",
+        "mb_artist_type": "str",
+        "mb_artist_career_begin": "date",
+        "mb_artist_career_end": "date",
+        "mb_artist_career_ended": "bool",
+        "wiki_nationality": "str"
     }
 }
