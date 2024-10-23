@@ -33,7 +33,7 @@ class RadioScraper:
         self.DAY_COLUMN = self.config_manager.DAY_COLUMN
         self.TIME_PLAYED_COLUMN = self.config_manager.TIME_PLAYED_COLUMN
         self.TRACK_TITLE_COLUMN = self.config_manager.TRACK_TITLE_COLUMN
-        self.TRACK_ARTIST_COLUMN = self.config_manager.TRACK_ARTIST_COLUMN
+        self.ARTIST_NAME_COLUMN = self.config_manager.ARTIST_NAME_COLUMN
 
     def _get_csv_path(self, radio):
         csv_path = self.config_manager.CSV_PATH_FORMAT.format(radio=radio)
@@ -157,7 +157,7 @@ class PassouTypeRadioScraper(RadioScraper):
                 self.DAY_COLUMN: day_value,
                 self.TIME_PLAYED_COLUMN: time_played.text,
                 self.TRACK_TITLE_COLUMN: track_title.text,
-                self.TRACK_ARTIST_COLUMN: artist_name.text
+                self.ARTIST_NAME_COLUMN: artist_name.text
             }
             day_track_data.append(track_data)
         
@@ -284,7 +284,7 @@ class RFMRadioScraper(RadioScraper):
                             self.DAY_COLUMN: day,
                             self.TIME_PLAYED_COLUMN: time_played.text,
                             self.TRACK_TITLE_COLUMN: track_title.text,
-                            self.TRACK_ARTIST_COLUMN: artist_name.text
+                            self.ARTIST_NAME_COLUMN: artist_name.text
                         }
                         day_track_data.append(track_data)
                 
@@ -375,7 +375,7 @@ class MegaHitsRadioScraper(RadioScraper):
                                 self.DAY_COLUMN: day,
                                 self.TIME_PLAYED_COLUMN: time_played.text,
                                 self.TRACK_TITLE_COLUMN: track_title.text,
-                                self.TRACK_ARTIST_COLUMN: artist_name.text
+                                self.ARTIST_NAME_COLUMN: artist_name.text
                             }
                             day_track_data.append(track_data)
                         
