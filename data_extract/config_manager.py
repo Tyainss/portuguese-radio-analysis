@@ -16,6 +16,7 @@ class ConfigManager:
         "time": pl.Time,
         "str": pl.Utf8,
         "int64": pl.Int64,
+        "bool": pl.Boolean,
     }
     def __init__(self, config_path = CONFIG_PATH_DEFAULT, schema_path = SCHEMA_PATH_DEFAULT) -> None:
         self.config = self.load_json(config_path)
@@ -28,7 +29,8 @@ class ConfigManager:
     def _initialize_schema_config(self, schema_path) -> None:
         self.schema = self.load_polars_schema(schema_path)
         self.RADIO_SCRAPPER_SCHEMA = self.schema['RADIO_SCRAPPER']
-        self.TRACK_INFO_SCHEMA = self.schema['TRACK_INFO']    
+        self.TRACK_INFO_SCHEMA = self.schema['TRACK_INFO']
+        self.ARTIST_INFO_SCHEMA = self.schema['ARTIST_INFO']
 
     def _initialize_secrets(self) -> None:
         self.SPOTIFY_CLIENT_ID = self.config['SPOTIFY_CLIENT_ID']
@@ -40,11 +42,11 @@ class ConfigManager:
         self.GENIUS_ACCESS_TOKEN = self.config['GENIUS_ACCESS_TOKEN']        
 
     def _initialize_web_scrapper_config(self) -> None:
-        self.RADIO_COLUMN = "RADIO"
-        self.DAY_COLUMN = "DAY"
-        self.TIME_PLAYED_COLUMN = "TIME_PLAYED"
-        self.TRACK_TITLE_COLUMN = "TRACK_TITLE"
-        self.TRACK_ARTIST_COLUMN = "TRACK_ARTIST"
+        self.RADIO_COLUMN = "radio"
+        self.DAY_COLUMN = "day"
+        self.TIME_PLAYED_COLUMN = "time_played"
+        self.TRACK_TITLE_COLUMN = "track_title"
+        self.ARTIST_NAME_COLUMN = "artist_name"
 
         self.WEB_SCRAPPER = self.config['WEB_SCRAPPER']
         self.CHROME_DRIVER_PATH = self.WEB_SCRAPPER['CHROME_DRIVER_PATH']
@@ -54,6 +56,7 @@ class ConfigManager:
 
     def _initialize_other_config(self) -> None:
         self.TRACK_INFO_CSV_PATH = self.config['TRACK_INFO_CSV_PATH']
+        self.ARTIST_INFO_CSV_PATH = self.config['ARTIST_INFO_CSV_PATH']
 
     def load_json(self, path: str, encoding: str = 'utf-8') -> dict:
         try:
