@@ -77,7 +77,7 @@ class AsyncWikipediaAPI:
 
                         # Return the first nationality found, or "Unknown" if none found
                         if nationalities:
-                            return {'nationality' : nationalities[0]}
+                            return nationalities[0]
             
             return "Unknown"
         
@@ -86,24 +86,28 @@ class AsyncWikipediaAPI:
             print(f"Error with artist '{artist_name}': {e}")
             return "Unknown"
 
-    async def fetch_all_artist_nationality_wikidata(self, df):
+    async def get_artist_info(self, artist_name):
+        nationality = await self.get_artist_nationality_wikidata(artist_name)
+        result = {
+            'artist_name': artist_name
+            , 'wiki_nationality': nationality
+        }
+        return result
+
+    async def fetch_all_artist_info(self, df):
         """Fetch Wikipedia nationality info for all rows in the dataframe."""
         tasks = []
         for row in df.iter_rows(named=True):
-            artist_name = row[self.config_manager.TRACK_ARTIST_COLUMN]
-            tasks.append(self.get_artist_nationality_wikidata(artist_name))
+            artist_name = row[self.config_manager.ARTIST_NAME_COLUMN]
+            tasks.append(self.get_artist_info(artist_name))
         return await asyncio.gather(*tasks)
     
     async def process_data(self, df):
         """Fetch artist nationality info and return a dataframe with Wikipedia data joined."""
         # Fetch track info for all rows
-        wiki_data = await self.fetch_all_artist_nationality_wikidata(df)
+        wiki_data = await self.fetch_all_artist_info(df)
+        wiki_df = pl.DataFrame(wiki_data)
 
-        # Filter out None values and create a new dataframe with the Spotify data
-        wiki_data_filtered = [track for track in wiki_data if track]
-        wiki_df = pl.DataFrame(wiki_data_filtered)
-
-        # Merge with the original dataframe
         return wiki_df
 
 
@@ -121,7 +125,7 @@ if __name__ == "__main__":
         print(wiki_df)
 
     df = pl.DataFrame({
-    'TRACK_ARTIST': ['Dua Lipa', 'Sabrina Carpenter']
+    'artist_name': ['Dua Lipa', 'Sabrina Carpenter']
     })
 
     asyncio.run(process(df))
