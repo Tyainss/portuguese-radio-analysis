@@ -1,6 +1,6 @@
 import os
 import polars as pl
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date, time as datetime_time
 import time
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -13,30 +13,30 @@ from config_manager import ConfigManager
 from data_storage import DataStorage
 
 class RadioScraper:
-    # Define column names as class attributes
-    DAY_COLUMN = "DAY"
-    TIME_PLAYED_COLUMN = "TIME PLAYED"
-    TRACK_TITLE_COLUMN = "TRACK TITLE"
-    TRACK_ARTIST_COLUMN = "TRACK ARTIST"
 
-    def __init__(self, url, wait_time=None) -> None:
-        self.url = url
+    def __init__(self, radio_config, wait_time=None) -> None:
+        self.url = radio_config.get('url')
         self.config_manager = ConfigManager()
         self.data_storage = DataStorage()
 
-        self.CHROME_DRIVER_PATH = self.config_manager.config['WEB_SCRAPPER']['CHROME_DRIVER_PATH']
-        self.CSV_PATH_FORMAT = self.config_manager.config['WEB_SCRAPPER']['CSV_PATH']
-        self.WAIT_DURATION = self.config_manager.config['WEB_SCRAPPER']['WAIT_DURATION']
+        self.schema = self.config_manager.RADIO_SCRAPPER_SCHEMA
+        self._initialize_column_names()
+        self.wait_time = wait_time if wait_time is not None else self.config_manager.WAIT_DURATION
 
-        self.wait_time = wait_time if wait_time is not None else self.WAIT_DURATION
-
-        service = Service(executable_path=self.CHROME_DRIVER_PATH)
+        service = Service(executable_path=self.config_manager.CHROME_DRIVER_PATH)
         self.driver = webdriver.Chrome(service=service)
-        self.driver.get(url)
+        self.driver.get(self.url)
         self.wait = WebDriverWait(self.driver, self.wait_time)
 
+    def _initialize_column_names(self):
+        self.RADIO_COLUMN = self.config_manager.RADIO_COLUMN
+        self.DAY_COLUMN = self.config_manager.DAY_COLUMN
+        self.TIME_PLAYED_COLUMN = self.config_manager.TIME_PLAYED_COLUMN
+        self.TRACK_TITLE_COLUMN = self.config_manager.TRACK_TITLE_COLUMN
+        self.ARTIST_NAME_COLUMN = self.config_manager.ARTIST_NAME_COLUMN
+
     def _get_csv_path(self, radio):
-        csv_path = self.CSV_PATH_FORMAT.format(radio=radio)
+        csv_path = self.config_manager.CSV_PATH_FORMAT.format(radio=radio)
         return csv_path
 
     def _accept_cookies(self, cookies_button_accept_text, cookies_button='qc-cmp2-summary-buttons') -> None:
@@ -62,10 +62,10 @@ class RadioScraper:
     def _get_most_recent_date_and_time(self, df):
         if df.is_empty():
             return None
-        most_recent_row = df.sort(by=[self.DAY_COLUMN, self.TIME_PLAYED_COLUMN], reverse=True).head(1)
+        most_recent_row = df.sort(by=[self.DAY_COLUMN, self.TIME_PLAYED_COLUMN], descending=True).head(1)
         return {
-            self.DAY_COLUMN: most_recent_row[self.DAY_COLUMN][0],
-            self.TIME_PLAYED_COLUMN: most_recent_row[self.TIME_PLAYED_COLUMN][0]
+            self.DAY_COLUMN: str(most_recent_row[self.DAY_COLUMN][0]),
+            self.TIME_PLAYED_COLUMN: str(most_recent_row[self.TIME_PLAYED_COLUMN][0])
         }
 
     def _get_day_value(self, day_text):
@@ -118,21 +118,19 @@ class PassouTypeRadioScraper(RadioScraper):
     until 6 days prior to the current day.
     """
 
-    def __init__(self, url, radio_select, time_played_name, track_name, artist_name, wait_time=None) -> None:
-        super().__init__(url, wait_time)
-        self.radio_select = radio_select
-        self.time_played_name = time_played_name
-        self.track_name = track_name
-        self.artist_name = artist_name
-        self.cookies_button_accept_text = 'CONCORDO'
-        self.day_element_id = 'day'
-        self.search_button_text = 'Procurar'
+    def __init__(self, radio_config, wait_time=None) -> None:
+        super().__init__(radio_config, wait_time)
+        self.radio_name = radio_config.get('radio_name')
+        self.time_played_name = radio_config.get('time_played_name')
+        self.track_name = radio_config.get('track_name')
+        self.artist_name = radio_config.get('artist_name')
+        self.cookies_button_accept_text = radio_config.get('cookies_button_accept', 'CONCORDO')
+        self.day_element_id = radio_config.get('day_element_id', 'day')
+        self.search_button_text = radio_config.get('seach_button', 'Procurar')
 
-    def _get_days_list(self) -> list:
-        self.wait.until(EC.presence_of_element_located((By.ID, self.day_element_id)))
-        day_select = Select(self.driver.find_element(By.ID, self.day_element_id))
-        day_values = [option.get_attribute("value") for option in day_select.options if option.get_attribute("value")]
-        return day_values
+    def _ignore_last_option(self, options):
+        """Ignore last option since it shows the same values as "Today" """
+        return options[:-1]
 
     def _extract_day_data(self, day_value, last_time_played=None):
         day_select = Select(self.driver.find_element(By.ID, self.day_element_id))
@@ -155,10 +153,11 @@ class PassouTypeRadioScraper(RadioScraper):
             if last_time_played and day_value == last_time_played[self.DAY_COLUMN] and time_played.text <= last_time_played[self.TIME_PLAYED_COLUMN]:
                 continue
             track_data = {
-                    self.DAY_COLUMN: day_value,
-                    self.TIME_PLAYED_COLUMN: time_played.text,
-                    self.TRACK_TITLE_COLUMN: track_title.text,
-                    self.TRACK_ARTIST_COLUMN: artist_name.text
+                self.RADIO_COLUMN: self.radio_name,
+                self.DAY_COLUMN: day_value,
+                self.TIME_PLAYED_COLUMN: time_played.text,
+                self.TRACK_TITLE_COLUMN: track_title.text,
+                self.ARTIST_NAME_COLUMN: artist_name.text
             }
             day_track_data.append(track_data)
         
@@ -167,14 +166,13 @@ class PassouTypeRadioScraper(RadioScraper):
         
     def scrape(self, max_days=None, save_csv=True):
         self._accept_cookies(self.cookies_button_accept_text)
-        self._select_radio(radio_name=self.radio_select)
+        self._select_radio(radio_name=self.radio_name)
         # day_values = self._get_days_list()
-        day_values = self._get_option_list(self.day_element_id)
+        day_values = self._ignore_last_option(self._get_option_list(self.day_element_id))
 
-        csv_path = self._get_csv_path(radio=self.radio_select)
-        schema = self.config_manager.schema
+        csv_path = self._get_csv_path(radio=self.radio_name)
 
-        last_time_played = self._get_last_time_played(csv_path, schema)
+        last_time_played = self._get_last_time_played(csv_path, self.schema)
         if last_time_played:
             day_values = [day for day in day_values if day >= last_time_played[self.DAY_COLUMN]]
 
@@ -189,7 +187,7 @@ class PassouTypeRadioScraper(RadioScraper):
 
         df_all_data = pl.DataFrame(all_data)
         if save_csv:
-            self.data_storage.output_csv(path=csv_path, df=df_all_data, schema=schema, append=True)
+            self.data_storage.output_csv(path=csv_path, df=df_all_data, schema=self.schema, append=True)
         return df_all_data
 
 
@@ -200,17 +198,18 @@ class RFMRadioScraper(RadioScraper):
     It requires the selection of Day, Period and Hour filter.
     It only allows the extraction of the current day data and from the previous day (Today and Yesterday)
     """
-    def __init__(self, url, wait_time=None) -> None:
-        super().__init__(url, wait_time)
-        self.time_played_name = 't-hor'
-        self.track_name = 'medium.no-margin.align-left'
-        self.artist_name = 'large.no-margin.align-left'
-        self.cookies_button_accept_text = 'ACEITAR'
-        self.day_element_id = 'dp-dia'
-        self.period_element_id = 'dp-periodo'
-        self.hour_element_id = 'dp-hora'
-        self.search_button_text = 'pesquisa_quemusicaera'
-        self.ad_wait_time = 1
+    def __init__(self, radio_config, wait_time=None) -> None:
+        super().__init__(radio_config, wait_time)
+        self.radio_name = radio_config.get('radio_name', 'RFM')
+        self.time_played_name = radio_config.get('time_played_name', 't-hor')
+        self.track_name = radio_config.get('track_name', 'medium.no-margin.align-left')
+        self.artist_name = radio_config.get('artist_name', 'large.no-margin.align-left')
+        self.cookies_button_accept_text = radio_config.get('cookies_button_accept_text', 'ACEITAR')
+        self.day_element_id = radio_config.get('day_element_id', 'dp-dia')
+        self.period_element_id = radio_config.get('period_element_id', 'dp-periodo')
+        self.hour_element_id = radio_config.get('hour_element_id', 'dp-hora')
+        self.search_button_text = radio_config.get('search_button', 'pesquisa_quemusicaera')
+        self.ad_wait_time = radio_config.get('ad_wait_time', 1)
 
     def _ignore_first_option(self, options):
         """Ignore first option since it's the label of the element selection and not a real option"""
@@ -270,8 +269,6 @@ class RFMRadioScraper(RadioScraper):
 
                 search_button = self.wait.until(EC.element_to_be_clickable((By.ID, self.search_button_text)))
                 search_button.click()
-                # driver.execute_script("arguments[0].scrollIntoView(true);", search_button)
-                # driver.execute_script("arguments[0].click();", search_button)
 
                 try:
                     self.wait.until(EC.presence_of_all_elements_located((By.CLASS_NAME, self.time_played_name)))
@@ -283,10 +280,11 @@ class RFMRadioScraper(RadioScraper):
                         if last_time_played and day == last_time_played[self.DAY_COLUMN] and time_played.text <= last_time_played[self.TIME_PLAYED_COLUMN]:
                             continue
                         track_data = {
-                                self.DAY_COLUMN: day,
-                                self.TIME_PLAYED_COLUMN: time_played.text,
-                                self.TRACK_TITLE_COLUMN: track_title.text,
-                                self.TRACK_ARTIST_COLUMN: artist_name.text
+                            self.RADIO_COLUMN: self.radio_name,
+                            self.DAY_COLUMN: day,
+                            self.TIME_PLAYED_COLUMN: time_played.text,
+                            self.TRACK_TITLE_COLUMN: track_title.text,
+                            self.ARTIST_NAME_COLUMN: artist_name.text
                         }
                         day_track_data.append(track_data)
                 
@@ -301,10 +299,9 @@ class RFMRadioScraper(RadioScraper):
         self._wait_for_ad_to_finish()
         day_values = self._ignore_first_option(self._get_option_list(self.day_element_id))[::-1]
         
-        csv_path = self._get_csv_path(radio='RFM')
-        schema = self.config_manager.schema
+        csv_path = self._get_csv_path(radio=self.radio_name)
 
-        last_time_played = self._get_last_time_played(csv_path, schema)
+        last_time_played = self._get_last_time_played(csv_path, self.schema)
         if last_time_played:
             day_values = [day for day in day_values if day >= last_time_played[self.DAY_COLUMN]]
 
@@ -319,7 +316,7 @@ class RFMRadioScraper(RadioScraper):
     
         df_all_data = pl.DataFrame(all_data)
         if save_csv:
-            self.data_storage.output_csv(path=csv_path, df=df_all_data, schema=schema, append=True)
+            self.data_storage.output_csv(path=csv_path, df=df_all_data, schema=self.schema, append=True)
         return df_all_data
     
 class MegaHitsRadioScraper(RadioScraper):
@@ -329,18 +326,18 @@ class MegaHitsRadioScraper(RadioScraper):
     It requires the Selection of day and the input of Hour and Minute of the search.
     After inputing both hour and minute, it provides all songs played in an interval of 15 minutes prior and after the time we chose.
     """
-    def __init__(self, url, wait_time=None) -> None:
-        super().__init__(url, wait_time)
-        self.time_played_name = 'ac-horas1'
-        self.track_name = 'ac-nomem1'
-        self.artist_name = 'ac-autor1'
-        self.cookies_button_accept_text = 'ACEITAR'
-        self.day_element_id = 'dias'
-        self.search_hour = 'txtHoraPesq'
-        self.search_minute = 'txtMinutoPesq'
-        self.search_button_text = 'pesquisa'
-        # self.ad_wait_time = 1
-        self.max_retries = 3
+    def __init__(self, radio_config, wait_time=None) -> None:
+        super().__init__(radio_config, wait_time)
+        self.radio_name = radio_config.get('radio_name', 'MegaHits')
+        self.time_played_name = radio_config.get('time_played_name', 'ac-horas1')
+        self.track_name = radio_config.get('track_name', 'ac-nomem1')
+        self.artist_name = radio_config.get('artist_name', 'ac-autor1')
+        self.cookies_button_accept_text = radio_config.get('cookies_button_accept_text', 'ACEITAR')
+        self.day_element_id = radio_config.get('day_element_id', 'dias')
+        self.search_hour = radio_config.get('search_hour', 'txtHoraPesq')
+        self.search_minute = radio_config.get('search_minute', 'txtMinutoPesq')
+        self.search_button_text = radio_config.get('search_button_text', 'pesquisa')
+        self.max_retries = radio_config.get('max_retries', 3)
 
     def _extract_day_data(self, day_value, last_time_played=None):
         day_select = Select(self.driver.find_element(By.ID, self.day_element_id))
@@ -374,10 +371,11 @@ class MegaHitsRadioScraper(RadioScraper):
                             if last_time_played and day == last_time_played[self.DAY_COLUMN] and time_played.text <= last_time_played[self.TIME_PLAYED_COLUMN]:
                                 continue
                             track_data = {
-                                    self.DAY_COLUMN: day,
-                                    self.TIME_PLAYED_COLUMN: time_played.text,
-                                    self.TRACK_TITLE_COLUMN: track_title.text,
-                                    self.TRACK_ARTIST_COLUMN: artist_name.text
+                                self.RADIO_COLUMN: self.radio_name,
+                                self.DAY_COLUMN: day,
+                                self.TIME_PLAYED_COLUMN: time_played.text,
+                                self.TRACK_TITLE_COLUMN: track_title.text,
+                                self.ARTIST_NAME_COLUMN: artist_name.text
                             }
                             day_track_data.append(track_data)
                         
@@ -402,10 +400,9 @@ class MegaHitsRadioScraper(RadioScraper):
         self._accept_cookies(self.cookies_button_accept_text)
         day_values = self._get_option_list(self.day_element_id)[::-1]
 
-        csv_path = self._get_csv_path(radio='MegaHits')
-        schema = self.config_manager.schema
+        csv_path = self._get_csv_path(radio=self.radio_name)
 
-        last_time_played = self._get_last_time_played(csv_path, schema)
+        last_time_played = self._get_last_time_played(csv_path, self.schema)
         if last_time_played:
             day_values = [day for day in day_values if day >= last_time_played[self.DAY_COLUMN]]
 
@@ -420,5 +417,5 @@ class MegaHitsRadioScraper(RadioScraper):
     
         df_all_data = pl.DataFrame(all_data)
         if save_csv:
-            self.data_storage.output_csv(path=csv_path, df=df_all_data, schema=schema, append=True)
+            self.data_storage.output_csv(path=csv_path, df=df_all_data, schema=self.schema, append=True)
         return df_all_data
