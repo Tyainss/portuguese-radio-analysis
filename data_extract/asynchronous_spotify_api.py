@@ -79,14 +79,12 @@ class AsyncSpotifyAPI:
             # Build the track info dictionary
             track_info = {
                 self.config_manager.TRACK_TITLE_COLUMN: track_name,
-                self.config_manager.TRACK_ARTIST_COLUMN: artist_name,
-                'spotify_track_name': track['name'],
-                'spotify_artist_name': track['artists'][0]['name'],
+                self.config_manager.ARTIST_NAME_COLUMN: artist_name,
                 'spotify_album': track['album']['name'],
                 'spotify_release_date': track['album']['release_date'],
                 'spotify_duration_ms': track['duration_ms'],
                 'spotify_popularity': track['popularity'],
-                'spotify_genres': genres
+                'spotify_genres': genres[0] if genres else None
             }
             return track_info
         else:
@@ -97,7 +95,7 @@ class AsyncSpotifyAPI:
         tasks = []
         for row in df.iter_rows(named=True):
             track_name = row[self.config_manager.TRACK_TITLE_COLUMN]
-            artist_name = row[self.config_manager.TRACK_ARTIST_COLUMN]
+            artist_name = row[self.config_manager.ARTIST_NAME_COLUMN]
             tasks.append(self.get_track_info(track_name, artist_name))
         return await asyncio.gather(*tasks)
 
@@ -128,8 +126,8 @@ if __name__ ==  "__main__":
         print(spotify_df)
 
     df = pl.DataFrame({
-    'TRACK_TITLE': ['Houdini', 'Please Please Please'],
-    'TRACK_ARTIST': ['Dua Lipa', 'Sabrina Carpenter']
+    'track_title': ['Houdini', 'Please Please Please'],
+    'artist_name': ['Dua Lipa', 'Sabrina Carpenter']
     })
 
     # Run the event loop
