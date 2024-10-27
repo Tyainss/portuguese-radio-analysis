@@ -1,12 +1,15 @@
 import polars as pl
 import aiohttp
 import asyncio
+
 from config_manager import ConfigManager
+from helper import Helper
 
 class AsyncSpotifyAPI:
     
     def __init__(self) -> None:
         self.config_manager = ConfigManager()
+        self.helper = Helper()
         self.client_id = self.config_manager.SPOTIFY_CLIENT_ID
         self.client_secret = self.config_manager.SPOTIFY_CLIENT_SECRET
         self.token_url = 'https://accounts.spotify.com/api/token'
@@ -81,7 +84,7 @@ class AsyncSpotifyAPI:
                 self.config_manager.TRACK_TITLE_COLUMN: track_name,
                 self.config_manager.ARTIST_NAME_COLUMN: artist_name,
                 'spotify_album': track['album']['name'],
-                'spotify_release_date': track['album']['release_date'],
+                'spotify_release_date': self.helper.format_date(track['album']['release_date']),
                 'spotify_duration_ms': track['duration_ms'],
                 'spotify_popularity': track['popularity'],
                 'spotify_genres': genres[0] if genres else None
@@ -126,8 +129,8 @@ if __name__ ==  "__main__":
         print(spotify_df)
 
     df = pl.DataFrame({
-    'track_title': ['Houdini', 'Please Please Please'],
-    'artist_name': ['Dua Lipa', 'Sabrina Carpenter']
+    'track_title': ['Houdini', 'Please Please Please', 'She Will Be Loved'],
+    'artist_name': ['Dua Lipa', 'Sabrina Carpenter', 'Maroon 5']
     })
 
     # Run the event loop
