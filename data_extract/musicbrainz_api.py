@@ -52,12 +52,14 @@ class MusicBrainzAPI:
             main_genre = None
 
         country_1 = data.get('country', '')
-        country_2 = data.get('area', {}).get('iso-3166-1-codes', [''])[0]
+        area = data.get('area')
+        country_2 = area.get('iso-3166-1-codes', [''])[0] if area else None
         country_name = self.helper.get_country_name_from_iso_code(country_2 if country_2 else country_1)
         
-        career_begin = self.helper.format_date(data.get('life-span', {}).get('begin'))
-        career_end = self.helper.format_date(data.get('life-span', {}).get('end'))
-        career_ended = data.get('life-span', {}).get('ended')
+        life_span = data.get('life-span', {})
+        career_begin = self.helper.format_date(life_span.get('begin'))
+        career_end = self.helper.format_date(life_span.get('end'))
+        career_ended = life_span.get('ended')
         artist_type = data.get('type', '')
 
         return {
