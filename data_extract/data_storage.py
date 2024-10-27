@@ -12,6 +12,63 @@ class DataStorage:
     def __init__(self):
         pass
 
+    def _read_schema(self, df, schema):
+        # Convert DataFrame columns to the specified data types
+        for column, dtype in schema.items():
+            logger.info(f'Column : {column}, dtype : {dtype}')
+            
+            if dtype == pl.Date:
+                df = df.with_columns(
+                    pl.col(column).str.strptime(pl.Date, format="%Y-%m-%d").cast(dtype, strict=False)
+                )
+            elif dtype == pl.Time:
+                # Detect if time includes nanoseconds
+                sample_time = df[column].head(1)[0]
+                if '.' in sample_time and len(sample_time.split('.')[1]) > 0:
+                    df = df.with_columns(
+                        pl.col(column).str.strptime(pl.Time, format="%H:%M:%S%.9f").cast(dtype, strict=False)
+                    )
+                else:
+                    df = df.with_columns(
+                        pl.col(column).str.strptime(pl.Time, format="%H:%M").cast(dtype, strict=False)
+                    )
+            else:
+                df = df.with_columns(pl.col(column).cast(dtype, strict=False))
+
+        return df
+
+    def _output_schema(self, df, schema):
+        # Convert DataFrame columns to the specified data types
+        for column, dtype in schema.items():
+            logger.info(f'Processing column: {column}, dtype: {dtype}')
+
+            if dtype == pl.Date:
+                # Only attempt conversion of non-null values and preserver nulls
+                df = df.with_columns(
+                        pl.when(pl.col(column).is_not_null())
+                          .then(pl.col(column).str.strptime(pl.Date, format='%Y-%m-%d', strict=False))
+                          .otherwise(pl.lit(None, dtype=pl.Date))
+                          .alias(column)
+                    # pl.col(column).str.strptime(pl.Date, format="%Y-%m-%d").cast(dtype, strict=False)
+                )
+            elif dtype == pl.Time:
+                df = df.with_columns(
+                        pl.when(pl.col(column).is_not_null())
+                          .then(pl.col(column).str.strptime(pl.Time, format="%H:%M", strict=False))
+                          .otherwise(pl.lit(None, dtype=pl.Time))
+                          .alias(column)
+                    # pl.col(column).str.strptime(pl.Time, format="%H:%M").cast(dtype, strict=False)
+                )
+            elif dtype == pl.Utf8:
+                # Fill nulls with empty string to match String dtype
+                df = df.with_columns(
+                    pl.col(column).fill_null("").cast(dtype, strict=False)
+                )
+            else:
+                df = df.with_columns(pl.col(column).cast(dtype, strict=False))
+
+        return df
+
     def read_excel(self, path: str, schema: Optional[Dict[str, pl.DataType]] = None) -> pl.DataFrame:
         logger.info(f'Reading Excel from: {path}')
 
@@ -22,27 +79,7 @@ class DataStorage:
         df = pl.read_excel(path)
 
         if schema:
-            # Convert DataFrame columns to the specified data types
-            for column, dtype in schema.items():
-                logger.info(f'Column : {column}, dtype : {dtype}')
-                
-                if dtype == pl.Date:
-                    df = df.with_columns(
-                        pl.col(column).str.strptime(pl.Date, format="%Y-%m-%d").cast(dtype, strict=False)
-                    )
-                elif dtype == pl.Time:
-                    # Detect if time includes nanoseconds
-                    sample_time = df[column].head(1).to_series()[0]
-                    if '.' in sample_time and len(sample_time.split('.')[1]) > 0:
-                        df = df.with_columns(
-                            pl.col(column).str.strptime(pl.Time, format="%H:%M:%S%.9f").cast(dtype, strict=False)
-                        )
-                    else:
-                        df = df.with_columns(
-                            pl.col(column).str.strptime(pl.Time, format="%H:%M").cast(dtype, strict=False)
-                        )
-                else:
-                    df = df.with_columns(pl.col(column).cast(dtype, strict=False))
+            df = self._read_schema(df, schema)
 
         return df
 
@@ -56,27 +93,7 @@ class DataStorage:
         df = pl.read_csv(path)
 
         if schema:
-            # Convert DataFrame columns to the specified data types
-            for column, dtype in schema.items():
-                logger.info(f'Column : {column}, dtype : {dtype}')
-                
-                if dtype == pl.Date:
-                    df = df.with_columns(
-                        pl.col(column).str.strptime(pl.Date, format="%Y-%m-%d").cast(dtype, strict=False)
-                    )
-                elif dtype == pl.Time:
-                    # Detect if time includes nanoseconds
-                    sample_time = df[column].head(1)[0]
-                    if '.' in sample_time and len(sample_time.split('.')[1]) > 0:
-                        df = df.with_columns(
-                            pl.col(column).str.strptime(pl.Time, format="%H:%M:%S%.9f").cast(dtype, strict=False)
-                        )
-                    else:
-                        df = df.with_columns(
-                            pl.col(column).str.strptime(pl.Time, format="%H:%M").cast(dtype, strict=False)
-                        )
-                else:
-                    df = df.with_columns(pl.col(column).cast(dtype, strict=False))
+            df = self._read_schema(df, schema)
         
         return df
 
@@ -87,20 +104,7 @@ class DataStorage:
         os.makedirs(os.path.dirname(path), exist_ok=True)
         
         if schema:
-            # Convert DataFrame columns to the specified data types
-            for column, dtype in schema.items():
-                logger.info(f'Processing column: {column}, dtype: {dtype}')
-                
-                if dtype == pl.Date:
-                    df = df.with_columns(
-                        pl.col(column).str.strptime(pl.Date, format="%Y-%m-%d").cast(dtype, strict=False)
-                    )
-                elif dtype == pl.Time:
-                    df = df.with_columns(
-                        pl.col(column).str.strptime(pl.Time, format="%H:%M").cast(dtype, strict=False)
-                    )
-                else:
-                    df = df.with_columns(pl.col(column).cast(dtype, strict=False))
+            df = self._output_schema(df, schema)
         
         if os.path.exists(path) and append:
             try:
@@ -124,20 +128,7 @@ class DataStorage:
         os.makedirs(os.path.dirname(path), exist_ok=True)
         
         if schema:
-            # Convert DataFrame columns to the specified data types
-            for column, dtype in schema.items():
-                logger.info(f'Processing column: {column}, dtype: {dtype}')
-
-                if dtype == pl.Date:
-                    df = df.with_columns(
-                        pl.col(column).str.strptime(pl.Date, format="%Y-%m-%d").cast(dtype, strict=False)
-                    )
-                elif dtype == pl.Time:
-                    df = df.with_columns(
-                        pl.col(column).str.strptime(pl.Time, format="%H:%M").cast(dtype, strict=False)
-                    )
-                else:
-                    df = df.with_columns(pl.col(column).cast(dtype, strict=False))
+            df = self._output_schema(df, schema)
         
         if os.path.exists(path) and append:
             try:
