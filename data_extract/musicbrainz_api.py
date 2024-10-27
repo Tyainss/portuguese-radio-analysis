@@ -10,21 +10,6 @@ class MusicBrainzAPI:
     def __init__(self) -> None:
         self.helper = Helper()
 
-    def _format_date(self, date_str):
-        if date_str:
-            try:
-                # Attempt to parse the date using multiple formats
-                # First try full date, then year-month, then just year
-                if len(date_str) == 10:  # yyyy-mm-dd
-                    return datetime.strptime(date_str, "%Y-%m-%d").strftime("%Y-%m-%d")
-                elif len(date_str) == 7:  # yyyy-mm
-                    return datetime.strptime(date_str, "%Y-%m").strftime("%Y-%m-%d")
-                elif len(date_str) == 4:  # yyyy
-                    return datetime.strptime(date_str, "%Y").strftime("%Y-%m-%d")
-            except:
-                return date_str
-            
-        return date_str
 
     def search_artist_by_name(self, artist_name):
         """
@@ -70,8 +55,8 @@ class MusicBrainzAPI:
         country_2 = data.get('area', {}).get('iso-3166-1-codes', [''])[0]
         country_name = self.helper.get_country_name_from_iso_code(country_2 if country_2 else country_1)
         
-        career_begin = self._format_date(data.get('life-span', {}).get('begin'))
-        career_end = self._format_date(data.get('life-span', {}).get('end'))
+        career_begin = self.helper.format_date(data.get('life-span', {}).get('begin'))
+        career_end = self.helper.format_date(data.get('life-span', {}).get('end'))
         career_ended = data.get('life-span', {}).get('ended')
         artist_type = data.get('type', '')
 
