@@ -26,12 +26,18 @@ class AsyncSpotifyAPI:
         }
 
         async with aiohttp.ClientSession() as session:
-            async with session.post(self.token_url, headers=auth_headers, data=data) as response:
-                if response.status == 200:
-                    token_data = await response.json()
-                    self.access_token = token_data['access_token']
-                else:
-                    raise Exception(f"Failed to authenticate: {response.status}")
+            for attempt in range(5):
+                async with session.post(self.token_url, headers=auth_headers, data=data) as response:
+                    if response.status == 200:
+                        token_data = await response.json()
+                        self.access_token = token_data['access_token']
+                        return
+                    elif response.status == 502:
+                        wait_time = 2 ** attempt
+                        print(f"Received 502 error. Retrying after {wait_time} seconds.")
+                        await asyncio.sleep(wait_time)
+                    else:
+                        raise Exception(f"Failed to authenticate: {response.status}")
 
     def _encode_client_credentials(self):
         """Helper function to encode client credentials in base64."""
