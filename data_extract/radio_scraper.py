@@ -150,12 +150,13 @@ class PassouTypeRadioScraper(RadioScraper):
             return day_track_data
         
         for time_played, track_title, artist_name in zip(times_played, tracks_title, artists_name):
-            if last_time_played and day_value == last_time_played[self.DAY_COLUMN] and time_played.text <= last_time_played[self.TIME_PLAYED_COLUMN]:
+            formatted_time_played = time_played.text.strip('[] ')
+            if last_time_played and day_value == last_time_played[self.DAY_COLUMN] and formatted_time_played <= last_time_played[self.TIME_PLAYED_COLUMN]:
                 continue
             track_data = {
                 self.RADIO_COLUMN: self.radio_name,
                 self.DAY_COLUMN: day_value,
-                self.TIME_PLAYED_COLUMN: time_played.text,
+                self.TIME_PLAYED_COLUMN: formatted_time_played,
                 self.TRACK_TITLE_COLUMN: track_title.text,
                 self.ARTIST_NAME_COLUMN: artist_name.text
             }
