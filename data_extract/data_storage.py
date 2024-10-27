@@ -28,21 +28,21 @@ class DataStorage:
                 
                 if dtype == pl.Date:
                     df = df.with_columns(
-                        pl.col(column).str.strptime(pl.Date, format="%Y-%m-%d")
+                        pl.col(column).str.strptime(pl.Date, format="%Y-%m-%d").cast(dtype, strict=False)
                     )
                 elif dtype == pl.Time:
                     # Detect if time includes nanoseconds
                     sample_time = df[column].head(1).to_series()[0]
                     if '.' in sample_time and len(sample_time.split('.')[1]) > 0:
                         df = df.with_columns(
-                            pl.col(column).str.strptime(pl.Time, format="%H:%M:%S%.9f")
+                            pl.col(column).str.strptime(pl.Time, format="%H:%M:%S%.9f").cast(dtype, strict=False)
                         )
                     else:
                         df = df.with_columns(
-                            pl.col(column).str.strptime(pl.Time, format="%H:%M")
+                            pl.col(column).str.strptime(pl.Time, format="%H:%M").cast(dtype, strict=False)
                         )
                 else:
-                    df = df.with_columns(pl.col(column).cast(dtype))
+                    df = df.with_columns(pl.col(column).cast(dtype, strict=False))
 
         return df
 
@@ -62,21 +62,21 @@ class DataStorage:
                 
                 if dtype == pl.Date:
                     df = df.with_columns(
-                        pl.col(column).str.strptime(pl.Date, format="%Y-%m-%d")
+                        pl.col(column).str.strptime(pl.Date, format="%Y-%m-%d").cast(dtype, strict=False)
                     )
                 elif dtype == pl.Time:
                     # Detect if time includes nanoseconds
                     sample_time = df[column].head(1)[0]
                     if '.' in sample_time and len(sample_time.split('.')[1]) > 0:
                         df = df.with_columns(
-                            pl.col(column).str.strptime(pl.Time, format="%H:%M:%S%.9f")
+                            pl.col(column).str.strptime(pl.Time, format="%H:%M:%S%.9f").cast(dtype, strict=False)
                         )
                     else:
                         df = df.with_columns(
-                            pl.col(column).str.strptime(pl.Time, format="%H:%M")
+                            pl.col(column).str.strptime(pl.Time, format="%H:%M").cast(dtype, strict=False)
                         )
                 else:
-                    df = df.with_columns(pl.col(column).cast(dtype))
+                    df = df.with_columns(pl.col(column).cast(dtype, strict=False))
         
         return df
 
@@ -93,14 +93,14 @@ class DataStorage:
                 
                 if dtype == pl.Date:
                     df = df.with_columns(
-                        pl.col(column).str.strptime(pl.Date, format="%Y-%m-%d")
+                        pl.col(column).str.strptime(pl.Date, format="%Y-%m-%d").cast(dtype, strict=False)
                     )
                 elif dtype == pl.Time:
                     df = df.with_columns(
-                        pl.col(column).str.strptime(pl.Time, format="%H:%M")
+                        pl.col(column).str.strptime(pl.Time, format="%H:%M").cast(dtype, strict=False)
                     )
                 else:
-                    df = df.with_columns(pl.col(column).cast(dtype))
+                    df = df.with_columns(pl.col(column).cast(dtype, strict=False))
         
         if os.path.exists(path) and append:
             try:
@@ -130,14 +130,14 @@ class DataStorage:
 
                 if dtype == pl.Date:
                     df = df.with_columns(
-                        pl.col(column).str.strptime(pl.Date, format="%Y-%m-%d")
+                        pl.col(column).str.strptime(pl.Date, format="%Y-%m-%d").cast(dtype, strict=False)
                     )
                 elif dtype == pl.Time:
                     df = df.with_columns(
-                        pl.col(column).str.strptime(pl.Time, format="%H:%M")
+                        pl.col(column).str.strptime(pl.Time, format="%H:%M").cast(dtype, strict=False)
                     )
                 else:
-                    df = df.with_columns(pl.col(column).cast(dtype))
+                    df = df.with_columns(pl.col(column).cast(dtype, strict=False))
         
         if os.path.exists(path) and append:
             try:
