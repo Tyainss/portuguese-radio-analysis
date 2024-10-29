@@ -98,11 +98,16 @@ class RadioMusicETL:
         already_extracted_data = self.data_storage.read_csv(
             path=self.config_manager.TRACK_INFO_CSV_PATH,
             schema=self.config_manager.TRACK_INFO_SCHEMA
-        )
-        if not already_extracted_data.is_empty():
-            already_extracted_artists = already_extracted_data.select([self.ARTIST_NAME_COLUMN])
-        else:
-            already_extracted_artists = pl.DataFrame()
+        ).select([self.TRACK_TITLE_COLUMN, self.ARTIST_NAME_COLUMN])
+
+        already_extracted_artists = self.data_storage.read_csv(
+            path=self.config_manager.ARTIST_INFO_CSV_PATH,
+            schema=self.config_manager.ARTIST_INFO_SCHEMA
+        ).select([self.ARTIST_NAME_COLUMN])
+
+        # if not already_extracted_data.is_empty():
+        #     track_artist_tmp = already_extracted_data.select([self.ARTIST_NAME_COLUMN])
+        #     already_extracted_artists = pl.concat([track_artist_tmp, already_extracted_artists])
 
         new_tracks_df = self._identify_unregistered_tracks(
             new_track_df=combined_df,
@@ -113,6 +118,8 @@ class RadioMusicETL:
             new_artist_df=combined_df,
             registered_artists=already_extracted_artists
         )
+
+        # print('New artists:', new_artists_df)
 
         spotify_track_df = await self.async_spotify_api.process_data(new_tracks_df)
         print('Spotify \n', spotify_track_df)
@@ -142,7 +149,6 @@ class RadioMusicETL:
         # track_combined_df = new_tracks_df.join(spotify_track_df, on=[self.config_manager.TRACK_TITLE_COLUMN, self.config_manager.ARTIST_NAME_COLUMN], how="left")
         return track_info_df, wikipedia_artist_df
 
-        # (Don't save genius lyrics since it will make the files too big)
 
 if __name__ == "__main__":
     etl = RadioMusicETL()
