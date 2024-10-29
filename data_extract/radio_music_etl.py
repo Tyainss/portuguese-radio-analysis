@@ -73,16 +73,14 @@ class RadioMusicETL:
         
         return result
 
-    # async def fetch_all
-
 
     async def run(self):
         # Scrape data from radios
         scrapers = [
             PassouTypeRadioScraper(self.config_manager.WEB_SITES['Comercial'])
-            # , PassouTypeRadioScraper(self.config_manager.WEB_SITES['Cidade'])
-            # , RFMRadioScraper(self.config_manager.WEB_SITES['RFM'])
-            # , MegaHitsRadioScraper(self.config_manager.WEB_SITES['MegaHits'])
+            , PassouTypeRadioScraper(self.config_manager.WEB_SITES['CidadeFM'])
+            , RFMRadioScraper(self.config_manager.WEB_SITES['RFM'])
+            , MegaHitsRadioScraper(self.config_manager.WEB_SITES['MegaHits'])
         ]
         
         all_scrape_dfs = []
@@ -92,6 +90,10 @@ class RadioMusicETL:
             all_scrape_dfs.append(tracks_df)
 
         combined_df = pl.concat(all_scrape_dfs)
+
+        # Close browser after extracting data
+        for scraper in scrapers:
+            scraper.close()
 
         already_extracted_data = self.data_storage.read_csv(
             path=self.config_manager.TRACK_INFO_CSV_PATH,
@@ -138,17 +140,9 @@ class RadioMusicETL:
         )   
 
         # track_combined_df = new_tracks_df.join(spotify_track_df, on=[self.config_manager.TRACK_TITLE_COLUMN, self.config_manager.ARTIST_NAME_COLUMN], how="left")
-
-        
-
         return track_info_df, wikipedia_artist_df
 
-        # Continue testing codes and see if there's still errors with wikipedia api
-        # Does it make sense to do asynchronous with MusicBrainz?
-            # Fix the class to NOT use mbid and search with Artist Name instead
-
         # (Don't save genius lyrics since it will make the files too big)
-        # Save the new track info into a csv file
 
 if __name__ == "__main__":
     etl = RadioMusicETL()
