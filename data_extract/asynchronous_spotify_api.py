@@ -52,6 +52,7 @@ class AsyncSpotifyAPI:
         }
 
         async with aiohttp.ClientSession() as session:
+            previous_retry_after = None
             while True:  # Loop to retry on rate limits
                 async with session.get(f"{self.base_url}/{endpoint}", headers=headers, params=params) as response:
                     if response.status == 200:
@@ -59,7 +60,11 @@ class AsyncSpotifyAPI:
                     elif response.status == 429:
                         # Handle rate limit by checking the Retry-After header
                         retry_after = int(response.headers.get("Retry-After", 5))  # Default to 5 seconds if not provided
-                        print(f"Rate limit exceeded. Retrying after {retry_after} seconds.")
+                        
+                        if retry_after != previous_retry_after:
+                            print(f"Rate limit exceeded. Retrying after {retry_after} seconds.")
+                            previous_retry_after = retry_after
+                            
                         await asyncio.sleep(retry_after)
                     else:
                         raise Exception(f"API request failed with status code {response.status}: {await response.text()}")
