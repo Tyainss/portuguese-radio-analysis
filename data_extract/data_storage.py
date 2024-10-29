@@ -43,21 +43,16 @@ class DataStorage:
             logger.info(f'Processing column: {column}, dtype: {dtype}')
 
             if dtype == pl.Date:
-                # Only attempt conversion of non-null values and preserver nulls
                 df = df.with_columns(
-                        pl.when(pl.col(column).is_not_null())
-                          .then(pl.col(column).str.strptime(pl.Date, format='%Y-%m-%d', strict=False))
-                          .otherwise(pl.lit(None, dtype=pl.Date))
+                        pl.col(column).cast(pl.Utf8)
+                          .str.strptime(pl.Date, format='%Y-%m-%d', strict=False)
                           .alias(column)
-                    # pl.col(column).str.strptime(pl.Date, format="%Y-%m-%d").cast(dtype, strict=False)
                 )
             elif dtype == pl.Time:
                 df = df.with_columns(
-                        pl.when(pl.col(column).is_not_null())
-                          .then(pl.col(column).str.strptime(pl.Time, format="%H:%M", strict=False))
-                          .otherwise(pl.lit(None, dtype=pl.Time))
+                        pl.col(column).cast(pl.Utf8)
+                          .str.strptime(pl.Time, format="%H:%M", strict=False)
                           .alias(column)
-                    # pl.col(column).str.strptime(pl.Time, format="%H:%M").cast(dtype, strict=False)
                 )
             elif dtype == pl.Utf8:
                 # Fill nulls with empty string to match String dtype
