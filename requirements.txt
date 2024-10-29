@@ -2,3 +2,5 @@ polars
 selenium
 spotipy
 pycountry
+langdetect
+textblob
