@@ -345,8 +345,12 @@ class MegaHitsRadioScraper(RadioScraper):
         day_select.select_by_value(day_value)
         day = self._get_day_value(day_text=day_value)
         
+        min_hour_range = 0
+        if day == last_time_played[self.DAY_COLUMN]:
+            min_hour_range = int(last_time_played[self.TIME_PLAYED_COLUMN].split(':')[0])
+
         day_track_data = []
-        for hour in range(24):
+        for hour in range(min_hour_range, 24):
             for minute in [15, 45]:
                 for attempt in range (self.max_retries):
                     try:
@@ -404,13 +408,15 @@ class MegaHitsRadioScraper(RadioScraper):
         csv_path = self._get_csv_path(radio=self.radio_name)
 
         last_time_played = self._get_last_time_played(csv_path, self.schema)
+        print('MH last time played: ', last_time_played)
         if last_time_played:
-            day_values = [day for day in day_values if day >= last_time_played[self.DAY_COLUMN]]
+            day_values = [day for day in day_values if self._get_day_value(day) >= last_time_played[self.DAY_COLUMN]]
 
         if max_days:
             day_values = day_values[:min(max_days, len(day_values))]
 
         all_data = []
+        print('MH day values: ', day_values)
         for day_value in day_values:
             day_track_data = self._extract_day_data(day_value=day_value, last_time_played=last_time_played)
             if day_track_data:
