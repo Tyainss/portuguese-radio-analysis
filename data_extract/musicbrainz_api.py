@@ -26,7 +26,7 @@ class MusicBrainzAPI:
         response = requests.get(url, params=params)
         data = response.json()
         
-        if data['artists']:
+        if 'artists' in data and data['artists']:
             # Extract the first artist's mbid
             artist_mbid = data['artists'][0]['id']
             return artist_mbid
