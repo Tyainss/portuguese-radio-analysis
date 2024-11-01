@@ -1,11 +1,17 @@
+import polars as pl
 from googletrans import Translator
 from langdetect import detect
 from textblob import TextBlob
 from transformers import pipeline, AutoTokenizer
 
-class Lyrics:
+from genius_api import GeniusAPI
+from config_manager import ConfigManager
+
+class LyricsAnalyzer:
 
     def __init__(self):
+        self.config_manager = ConfigManager()
+        self.genius = GeniusAPI()
         self.translator = Translator()
         self.transformer_model_name = 'cardiffnlp/twitter-roberta-base-emotion'
         self.classifier = pipeline("text-classification", model=self.transformer_model_name, top_k=5)
@@ -22,11 +28,11 @@ class Lyrics:
     
     def translate_text(self, text, src_lang='pt', dest_lang='en'):
         translation = self.translator.translate(text, src=src_lang, dest=dest_lang)
-        return translation
+        return translation.text
     
     def translate_lyrics(self, lyrics, src_lang=None, dest_lang='en'):
         if not src_lang:
-            src_lang = self.detect_language(text=lyrics)
+            src_lang = self.detect_language(lyrics)
 
         translation = self.translate_text(text=lyrics, src_lang=src_lang, dest_lang=dest_lang)
         return translation
@@ -81,7 +87,9 @@ class Lyrics:
         return emotion_scores
     
     def classify_lyric_sentiments(self, lyrics):
-        basic_sentiments = self.classify_basic_sentiments(lyrics)
+        english_lyrics = self.translate_lyrics(lyrics) if self.detect_language(lyrics) != 'en' else lyrics
+
+        basic_sentiments = self.classify_basic_sentiments(english_lyrics) # TextBlob seems to only work well with english lyrics
         complex_sentiments = self.classify_complex_sentiments(lyrics)
 
         sentiments = {
@@ -94,3 +102,37 @@ class Lyrics:
         }
 
         return sentiments
+
+    def process_data(self, df):
+        """
+        Process a DataFrame of track titles and artist names, and returns a DataFrame
+        containing information about the lyrics, such as sentiment analysis and its language
+        """
+        lyrics_info_list = []
+
+        for row in df.iter_rows(named=True):
+            track_title = row[self.config_manager.TRACK_TITLE_COLUMN]
+            artist_name = row[self.config_manager.ARTIST_NAME_COLUMN]
+            lyrics = self.genius.get_song_lyrics(song_title=track_title, artist_name=artist_name)
+
+            sentiments = self.classify_lyric_sentiments(lyrics)
+            language = {'lyrics_language': self.detect_language(lyrics)}
+            lyrics_info = sentiments | language # Append both dictionaries
+
+            lyrics_info_list.append(lyrics_info)
+        
+        lyrics_info_df = pl.DataFrame(lyrics_info_list)
+
+        result_df = pl.concat([df, lyrics_info_df], how='horizontal')
+        return result_df
+
+if __name__ == '__main__':
+    la = LyricsAnalyzer()
+
+    df = pl.DataFrame({
+        'artist_name': ['Sabrina Carpenter', 'Billie Eilish', 'Ed Sheeran'],
+        'track_title': ['Please Please Please', 'BIRDS OF A FEATHER', 'Shape of You']
+    })
+
+    results = la.process_data(df)
+    print(results)
