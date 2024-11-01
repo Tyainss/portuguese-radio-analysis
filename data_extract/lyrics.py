@@ -121,7 +121,20 @@ class LyricsAnalyzer:
             artist_name = row[self.config_manager.ARTIST_NAME_COLUMN]
             lyrics = self.genius.get_song_lyrics(song_title=track_title, artist_name=artist_name)
 
-
+            # Skip processing if no lyrics are found
+            if not lyrics:
+                print(f"No lyrics found for '{track_title}' by '{artist_name}'. Skipping...")
+                lyrics_info_list.append({
+                    'lyrics_language': 'unknown',
+                    'love_occurrences': 0,
+                    'polarity': None,
+                    'subjectivity': None,
+                    'joy': None,
+                    'sadness': None,
+                    'optimism': None,
+                    'anger': None,
+                })
+                continue
 
             sentiments = self.classify_lyric_sentiments(lyrics)
             lyrics_info = {
