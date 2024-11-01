@@ -1,7 +1,5 @@
 import requests
 from bs4 import BeautifulSoup
-from langdetect import detect
-from textblob import TextBlob
 
 from config_manager import ConfigManager
 
@@ -72,23 +70,4 @@ class GeniusAPI:
             print("Song not found on Genius.")
             return ''
         
-    def detect_language(self, lyrics):
-        try:
-            language = detect(lyrics)
-            print(f'Detected language: {language}')
-            return language
-        except Exception as e:
-            print("Error detecting language:", e)
-            return "unknown"
-        
-    def count_love_occurrences(self, lyrics):
-        love_words = ["love", "amor", "amour", "amore"]
-        count = sum(lyrics.lower().count(word) for word in love_words)
-        print(f"'Love' word count: {count}")
-        return count
-
-    def sentiment_analysis(self, lyrics):
-        blob = TextBlob(lyrics)
-        sentiment = blob.sentiment
-        print(f"Sentiment analysis - Polarity: {sentiment.polarity}, Subjectivity: {sentiment.subjectivity}")
-        return sentiment
+    
