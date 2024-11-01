@@ -4,12 +4,13 @@ from datetime import datetime
 import polars as pl  # Assuming you are using Polars DataFrame
 
 from helper import Helper
+from config_manager import ConfigManager
 
 class MusicBrainzAPI:
     
     def __init__(self) -> None:
         self.helper = Helper()
-
+        self.config_manager = ConfigManager()
 
     def search_artist_by_name(self, artist_name):
         """
@@ -91,7 +92,7 @@ class MusicBrainzAPI:
         """
         artist_info_list = []
 
-        for artist_name in df['artist_name']:  # Assuming the column name is 'artist_name'
+        for artist_name in df[self.config_manager.ARTIST_NAME_COLUMN]:
             artist_info = self.fetch_artist_info_by_name(artist_name)
             if artist_info:
                 artist_info_list.append(artist_info)
