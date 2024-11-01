@@ -84,11 +84,15 @@ class AsyncSpotifyAPI:
         search_results = await self._make_request('search', search_params)
         if search_results['tracks']['items']:
             track = search_results['tracks']['items'][0]
+            track_id = track['id']
             artist_id = track['artists'][0]['id']
             
             # Fetch genres for the artist
             artist_info = await self._make_request(f'artists/{artist_id}')
             genres = artist_info.get('genres', [])
+            
+            # Fetch audio features for the track
+            audio_features = await self._make_request(f'audio-features/{track_id}')
             
             # Build the track info dictionary
             track_info = {
@@ -98,7 +102,18 @@ class AsyncSpotifyAPI:
                 'spotify_release_date': self.helper.format_date(track['album']['release_date']),
                 'spotify_duration_ms': track['duration_ms'],
                 'spotify_popularity': track['popularity'],
-                'spotify_genres': genres[0] if genres else None
+                'spotify_genres': genres[0] if genres else None,
+                'spotify_danceability': audio_features.get('danceability'),
+                'spotify_energy': audio_features.get('energy'),
+                'spotify_valence': audio_features.get('valence'),
+                'spotify_acousticness': audio_features.get('acousticness'),
+                'spotify_instrumentalness': audio_features.get('instrumentalness'),
+                'spotify_liveness': audio_features.get('liveness'),
+                'spotify_speechiness': audio_features.get('speechiness'),
+                'spotify_tempo': audio_features.get('tempo'),
+                'spotify_mode': audio_features.get('mode'),
+                'spotify_loudness': audio_features.get('loudness'),
+                'spotify_time_signature': audio_features.get('time_signature')
             }
             return track_info
         else:
