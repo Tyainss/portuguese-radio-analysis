@@ -38,7 +38,13 @@ class LyricsAnalyzer:
         return translation
         
     def count_love_occurrences(self, lyrics):
-        love_words = ['love', 'amor', 'amour', 'amore']
+        """
+        Count occurrences of 'love' in various languages and conjugations.
+        """
+        love_words = [
+            'love', 'amor', 'amour', 'amore', 'amo', 'amar', 'amando', 'amado',
+            'lieben', 'liebe', 'querer', 'quiero', 'adoro', 'adorar'
+        ]
         count = sum(lyrics.lower().count(word) for word in love_words)
         print(f'"Love" word count: {count}')
         return count
@@ -115,9 +121,15 @@ class LyricsAnalyzer:
             artist_name = row[self.config_manager.ARTIST_NAME_COLUMN]
             lyrics = self.genius.get_song_lyrics(song_title=track_title, artist_name=artist_name)
 
+
+
             sentiments = self.classify_lyric_sentiments(lyrics)
-            language = {'lyrics_language': self.detect_language(lyrics)}
-            lyrics_info = sentiments | language # Append both dictionaries
+            lyrics_info = {
+                'lyrics_language': self.detect_language(lyrics)
+                , 'love_occurrences': self.count_love_occurrences(lyrics)
+                }
+            
+            lyrics_info = sentiments | lyrics_info # Append both dictionaries
 
             lyrics_info_list.append(lyrics_info)
         
