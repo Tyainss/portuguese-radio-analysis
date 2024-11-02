@@ -97,6 +97,11 @@ class DataStorage:
         
         # Ensure the directory exists
         os.makedirs(os.path.dirname(path), exist_ok=True)
+
+        # Ensure dataframe is not empty:
+        if df.is_empty():
+            logger.info('Dataframe is empty. Skipping outputting')
+            return
         
         if schema:
             df = self._output_schema(df, schema)
@@ -121,6 +126,11 @@ class DataStorage:
         
         # Ensure the directory exists
         os.makedirs(os.path.dirname(path), exist_ok=True)
+
+        # Ensure dataframe is not empty:
+        if df.is_empty():
+            logger.info('Dataframe is empty. Skipping outputting')
+            return
         
         if schema:
             df = self._output_schema(df, schema)

@@ -187,7 +187,7 @@ class PassouTypeRadioScraper(RadioScraper):
                 all_data.extend(day_track_data)
 
         df_all_data = pl.DataFrame(all_data)
-        if save_csv:
+        if save_csv and not df_all_data.is_empty():
             self.data_storage.output_csv(path=csv_path, df=df_all_data, schema=self.schema, append=True)
         return df_all_data
 
@@ -316,7 +316,7 @@ class RFMRadioScraper(RadioScraper):
                 all_data.extend(day_track_data)
     
         df_all_data = pl.DataFrame(all_data)
-        if save_csv:
+        if save_csv and not df_all_data.is_empty():
             self.data_storage.output_csv(path=csv_path, df=df_all_data, schema=self.schema, append=True)
         return df_all_data
     
@@ -408,7 +408,6 @@ class MegaHitsRadioScraper(RadioScraper):
         csv_path = self._get_csv_path(radio=self.radio_name)
 
         last_time_played = self._get_last_time_played(csv_path, self.schema)
-        print('MH last time played: ', last_time_played)
         if last_time_played:
             day_values = [day for day in day_values if self._get_day_value(day) >= last_time_played[self.DAY_COLUMN]]
 
@@ -416,13 +415,12 @@ class MegaHitsRadioScraper(RadioScraper):
             day_values = day_values[:min(max_days, len(day_values))]
 
         all_data = []
-        print('MH day values: ', day_values)
         for day_value in day_values:
             day_track_data = self._extract_day_data(day_value=day_value, last_time_played=last_time_played)
             if day_track_data:
                 all_data.extend(day_track_data)
     
         df_all_data = pl.DataFrame(all_data)
-        if save_csv:
+        if save_csv and not df_all_data.is_empty():
             self.data_storage.output_csv(path=csv_path, df=df_all_data, schema=self.schema, append=True)
         return df_all_data
