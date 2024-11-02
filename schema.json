@@ -13,7 +13,18 @@
         "spotify_release_date": "date",
         "spotify_duration_ms": "int64",
         "spotify_popularity": "int64",
-        "spotify_genres": "str"
+        "spotify_genres": "str",
+        "spotify_danceability": "float64",
+        "spotify_energy": "float64",
+        "spotify_valence": "float64",
+        "spotify_acousticness": "float64",
+        "spotify_instrumentalness": "float64",
+        "spotify_liveness": "float64",
+        "spotify_speechiness": "float64",
+        "spotify_tempo": "float64",
+        "spotify_mode": "int64",
+        "spotify_loudness": "float64",
+        "spotify_time_signature": "int64"
     },
     "ARTIST_INFO": {
         "artist_name": "str",
