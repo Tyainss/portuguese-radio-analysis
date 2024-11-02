@@ -64,19 +64,6 @@ class DataStorage:
 
         return df
 
-    def read_excel(self, path: str, schema: Optional[Dict[str, pl.DataType]] = None) -> pl.DataFrame:
-        logger.info(f'Reading Excel from: {path}')
-
-        if not os.path.exists(path):
-            logger.warning(f'Excel file not found: {path}')
-            return pl.DataFrame()
-        
-        df = pl.read_excel(path)
-
-        if schema:
-            df = self._read_schema(df, schema)
-
-        return df
 
     def read_csv(self, path: str, schema: Optional[Dict[str, pl.DataType]] = None) -> pl.DataFrame:
         logger.info(f'Reading CSV from: {path}')
@@ -91,35 +78,6 @@ class DataStorage:
             df = self._read_schema(df, schema)
         
         return df
-
-    def output_excel(self, path: str, df: pl.DataFrame, schema: Optional[Dict[str, pl.DataType]] = None, append: bool = False) -> None:
-        logger.info(f'Outputting Excel to: {path}')
-        
-        # Ensure the directory exists
-        os.makedirs(os.path.dirname(path), exist_ok=True)
-
-        # Ensure dataframe is not empty:
-        if df.is_empty():
-            logger.info('Dataframe is empty. Skipping outputting')
-            return
-        
-        if schema:
-            df = self._output_schema(df, schema)
-        
-        if os.path.exists(path) and append:
-            try:
-                existing_df = self.read_excel(path=path, schema=schema)
-                df = pl.concat([existing_df, df])
-            except Exception as e:
-                logger.error(f"Error reading existing Excel for appending: {e}")
-                # Continue with writing the new data even if appending fails
-        
-        try:
-            df.write_excel(path)
-            logger.info('Successfully updated Excel')
-        except Exception as e:
-            logger.error(f"Error writing Excel: {e}")
-            raise
 
     def output_csv(self, path: str, df: pl.DataFrame, schema: Optional[Dict[str, pl.DataType]] = None, append: bool = False) -> None:
         logger.info(f'Outputting CSV to: {path}')
