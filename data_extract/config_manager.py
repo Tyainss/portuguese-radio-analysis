@@ -17,6 +17,7 @@ class ConfigManager:
         "str": pl.Utf8,
         "int64": pl.Int64,
         "bool": pl.Boolean,
+        "float64": pl.Float64,
     }
     def __init__(self, config_path = CONFIG_PATH_DEFAULT, schema_path = SCHEMA_PATH_DEFAULT) -> None:
         self.config = self.load_json(config_path)
