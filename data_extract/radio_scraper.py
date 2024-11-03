@@ -35,9 +35,9 @@ class RadioScraper:
         self.TRACK_TITLE_COLUMN = self.config_manager.TRACK_TITLE_COLUMN
         self.ARTIST_NAME_COLUMN = self.config_manager.ARTIST_NAME_COLUMN
 
-    def _get_csv_path(self, radio):
-        csv_path = self.config_manager.CSV_PATH_FORMAT.format(radio=radio)
-        return csv_path
+    # def _get_csv_path(self, radio):
+    #     csv_path = self.config_manager.CSV_PATH_FORMAT.format(radio=radio)
+    #     return csv_path
 
     def _accept_cookies(self, cookies_button_accept_text, cookies_button='qc-cmp2-summary-buttons') -> None:
         try:
@@ -127,6 +127,7 @@ class PassouTypeRadioScraper(RadioScraper):
         self.cookies_button_accept_text = radio_config.get('cookies_button_accept', 'CONCORDO')
         self.day_element_id = radio_config.get('day_element_id', 'day')
         self.search_button_text = radio_config.get('seach_button', 'Procurar')
+        self.csv_path = self.config_manager.get_scraper_csv_path(radio=self.radio_name, path_format=self.config_manager.CSV_PATH_FORMAT)
 
     def _ignore_last_option(self, options):
         """Ignore last option since it shows the same values as "Today" """
@@ -171,9 +172,8 @@ class PassouTypeRadioScraper(RadioScraper):
         # day_values = self._get_days_list()
         day_values = self._ignore_last_option(self._get_option_list(self.day_element_id))
 
-        csv_path = self._get_csv_path(radio=self.radio_name)
 
-        last_time_played = self._get_last_time_played(csv_path, self.schema)
+        last_time_played = self._get_last_time_played(self.csv_path, self.schema)
         if last_time_played:
             day_values = [day for day in day_values if day >= last_time_played[self.DAY_COLUMN]]
 
@@ -188,7 +188,7 @@ class PassouTypeRadioScraper(RadioScraper):
 
         df_all_data = pl.DataFrame(all_data)
         if save_csv and not df_all_data.is_empty():
-            self.data_storage.output_csv(path=csv_path, df=df_all_data, schema=self.schema, append=True)
+            self.data_storage.output_csv(path=self.csv_path, df=df_all_data, schema=self.schema, append=True)
         return df_all_data
 
 
@@ -211,6 +211,7 @@ class RFMRadioScraper(RadioScraper):
         self.hour_element_id = radio_config.get('hour_element_id', 'dp-hora')
         self.search_button_text = radio_config.get('search_button', 'pesquisa_quemusicaera')
         self.ad_wait_time = radio_config.get('ad_wait_time', 1)
+        self.csv_path = self.config_manager.get_scraper_csv_path(radio=self.radio_name, path_format=self.config_manager.CSV_PATH_FORMAT)
 
     def _ignore_first_option(self, options):
         """Ignore first option since it's the label of the element selection and not a real option"""
@@ -300,9 +301,9 @@ class RFMRadioScraper(RadioScraper):
         self._wait_for_ad_to_finish()
         day_values = self._ignore_first_option(self._get_option_list(self.day_element_id))[::-1]
         
-        csv_path = self._get_csv_path(radio=self.radio_name)
+        # csv_path = self._get_csv_path(radio=self.radio_name)
 
-        last_time_played = self._get_last_time_played(csv_path, self.schema)
+        last_time_played = self._get_last_time_played(self.csv_path, self.schema)
         if last_time_played:
             day_values = [day for day in day_values if day >= last_time_played[self.DAY_COLUMN]]
 
@@ -317,7 +318,7 @@ class RFMRadioScraper(RadioScraper):
     
         df_all_data = pl.DataFrame(all_data)
         if save_csv and not df_all_data.is_empty():
-            self.data_storage.output_csv(path=csv_path, df=df_all_data, schema=self.schema, append=True)
+            self.data_storage.output_csv(path=self.csv_path, df=df_all_data, schema=self.schema, append=True)
         return df_all_data
     
 class MegaHitsRadioScraper(RadioScraper):
@@ -339,6 +340,7 @@ class MegaHitsRadioScraper(RadioScraper):
         self.search_minute = radio_config.get('search_minute', 'txtMinutoPesq')
         self.search_button_text = radio_config.get('search_button_text', 'pesquisa')
         self.max_retries = radio_config.get('max_retries', 3)
+        self.csv_path = self.config_manager.get_scraper_csv_path(radio=self.radio_name, path_format=self.config_manager.CSV_PATH_FORMAT)
 
     def _extract_day_data(self, day_value, last_time_played=None):
         day_select = Select(self.driver.find_element(By.ID, self.day_element_id))
@@ -405,9 +407,7 @@ class MegaHitsRadioScraper(RadioScraper):
         self._accept_cookies(self.cookies_button_accept_text)
         day_values = self._get_option_list(self.day_element_id)[::-1]
 
-        csv_path = self._get_csv_path(radio=self.radio_name)
-
-        last_time_played = self._get_last_time_played(csv_path, self.schema)
+        last_time_played = self._get_last_time_played(self.csv_path, self.schema)
         if last_time_played:
             day_values = [day for day in day_values if self._get_day_value(day) >= last_time_played[self.DAY_COLUMN]]
 
@@ -422,5 +422,5 @@ class MegaHitsRadioScraper(RadioScraper):
     
         df_all_data = pl.DataFrame(all_data)
         if save_csv and not df_all_data.is_empty():
-            self.data_storage.output_csv(path=csv_path, df=df_all_data, schema=self.schema, append=True)
+            self.data_storage.output_csv(path=self.csv_path, df=df_all_data, schema=self.schema, append=True)
         return df_all_data

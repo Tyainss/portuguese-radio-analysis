@@ -84,10 +84,20 @@ class RadioMusicETL:
         ]
         
         all_scrape_dfs = []
+        all_scrape_csv_paths = []
 
         for scraper in scrapers:
+            # Scrape information
             tracks_df = scraper.scrape(save_csv=True)
-            all_scrape_dfs.append(tracks_df)
+            # all_scrape_dfs.append(tracks_df)
+
+            # Add csv path to list
+            all_scrape_csv_paths.append(scraper.csv_path)
+
+        # Read all extracted dataframes so far
+        for path in all_scrape_csv_paths:
+            radio_df = self.data_storage.read_csv(path=path, schema=self.config_manager.RADIO_SCRAPPER_SCHEMA)
+            all_scrape_dfs.append(radio_df)
 
         combined_df = pl.concat(all_scrape_dfs)
 
@@ -95,15 +105,17 @@ class RadioMusicETL:
         for scraper in scrapers:
             scraper.close()
 
-        already_extracted_data = self.data_storage.read_csv(
+        already_extracted_data = self.data_storage.read_csv_if_exists(
             path=self.config_manager.TRACK_INFO_CSV_PATH,
-            schema=self.config_manager.TRACK_INFO_SCHEMA
-        ).select([self.TRACK_TITLE_COLUMN, self.ARTIST_NAME_COLUMN])
+            schema=self.config_manager.TRACK_INFO_SCHEMA,
+            columns=[self.TRACK_TITLE_COLUMN, self.ARTIST_NAME_COLUMN]
+        )
 
-        already_extracted_artists = self.data_storage.read_csv(
+        already_extracted_artists = self.data_storage.read_csv_if_exists(
             path=self.config_manager.ARTIST_INFO_CSV_PATH,
-            schema=self.config_manager.ARTIST_INFO_SCHEMA
-        ).select([self.ARTIST_NAME_COLUMN])
+            schema=self.config_manager.ARTIST_INFO_SCHEMA,
+            columns=[self.ARTIST_NAME_COLUMN]
+        )
 
         # if not already_extracted_data.is_empty():
         #     track_artist_tmp = already_extracted_data.select([self.ARTIST_NAME_COLUMN])
@@ -158,3 +170,26 @@ if __name__ == "__main__":
         print(result)
 
     asyncio.run(run_test())
+
+    # TODO:
+    # 4. Fix error with Wikidata
+        # Replace AsyncWikipedia by normal Wikipedia
+
+
+
+    # Polarity (-1 to 1): do histogram
+        # TextBlob - simpler NLP lib
+        # VADER
+        # BERT (transformer model)
+    
+    # Emotion Classification Model:
+        # cardiffnlp/twitter-roberta-base-emotion
+    
+    # Grab metrics from Spotify such as "danceability,” “energy,” and “valence” (positivity)
+    # spotipy library to access data on energy and mood
+
+    # Test Lyrics Sentiment Analysis for more songs
+
+    # Check for duplicated scraped data
+    # Manually fix Wiki data
+    # Manually fix MB data
