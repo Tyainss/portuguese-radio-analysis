@@ -107,3 +107,33 @@ class DataStorage:
         except Exception as e:
             logger.error(f"Error writing CSV: {e}")
             raise
+
+    def read_csv_if_exists(self, path, schema, columns):
+        """
+        Reads a CSV file if it exists and selects specified columns.
+
+        Parameters:
+        data_storage (DataStorage): The data storage instance to read CSV.
+        path (str): The path to the CSV file.
+        schema (dict): The schema of the CSV file.
+        columns (list): The columns to select.
+
+        Returns:
+        pl.DataFrame: The resulting DataFrame with selected columns or an empty DataFrame.
+        """
+        try:
+            if os.path.exists(path):
+                df = self.read_csv(path=path, schema=schema).select(columns)
+            else:
+                logger.warning(f"File {path} does not exist. Returning an empty DataFrame.")
+                df = pl.DataFrame(schema={col: schema[col] for col in columns if col in schema})
+
+        except pl.exceptions.ColumnNotFoundError as e:
+            logger.error(f"Column not found in {path}: {e}")
+            df = pl.DataFrame(schema={col: schema[col] for col in columns if col in schema})
+
+        except Exception as e:
+            logger.error(f"Error reading {path}: {e}")
+            df = pl.DataFrame(schema={col: schema[col] for col in columns if col in schema})
+
+        return df
