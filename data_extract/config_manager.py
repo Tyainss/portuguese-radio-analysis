@@ -40,7 +40,10 @@ class ConfigManager:
         self.MUSICBRAINZ_CLIENT_ID = self.config['MUSICBRAINZ_CLIENT_ID']
         self.MUSICBRAINZ_CLIENT_SECRET = self.config['MUSICBRAINZ_CLIENT_SECRET']
 
-        self.GENIUS_ACCESS_TOKEN = self.config['GENIUS_ACCESS_TOKEN']        
+        self.GENIUS_ACCESS_TOKEN = self.config['GENIUS_ACCESS_TOKEN']       
+
+        self.WIKI_ACCESS_TOKEN = self.config.get('WIKIPEDIA_ACCESS_TOKEN', None)
+        self.WIKI_CLIENT_SECRET = self.config.get('WIKIPEDIA_CLIENT_SECRET', None)
 
     def _initialize_web_scrapper_config(self) -> None:
         self.RADIO_COLUMN = "radio"
@@ -58,6 +61,10 @@ class ConfigManager:
     def _initialize_other_config(self) -> None:
         self.TRACK_INFO_CSV_PATH = self.config['TRACK_INFO_CSV_PATH']
         self.ARTIST_INFO_CSV_PATH = self.config['ARTIST_INFO_CSV_PATH']
+
+    def get_scraper_csv_path(self, radio, path_format):
+        csv_path = path_format.format(radio=radio)
+        return csv_path
 
     def load_json(self, path: str, encoding: str = 'utf-8') -> dict:
         try:
