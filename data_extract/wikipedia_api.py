@@ -1,10 +1,19 @@
+import polars as pl
 import re
 import requests
+
+from config_manager import ConfigManager
+from logger import setup_logging
+
+# Set up logging
+logger = setup_logging()
 
 class WikipediaAPI:
 
     def __init__(self) -> None:
-        pass
+        self.config_manager = ConfigManager()
+        self.wiki_access_token = self.config_manager.WIKI_ACCESS_TOKEN
+        self.wiki_client_secret = self.config_manager.WIKI_CLIENT_SECRET
 
     def _process_artist_name(self, artist_name):
         # This method cleans up an artist name by:
@@ -29,6 +38,12 @@ class WikipediaAPI:
                 'srlimit': 1,
                 'redirects': 1
             }
+            headers = {}
+            if self.wiki_access_token:
+                headers['Authorization'] = f'Bearer {self.wiki_access_token}'
+            elif self.wiki_client_secret:
+                headers['Client-Secret'] = self.wiki_client_secret
+
             search_data = requests.get(wiki_api_url, params=search_params).json()
 
             if search_data['query']['search']:
@@ -73,3 +88,10 @@ class WikipediaAPI:
             # If any error occurs during the process, print it and return "Unknown"
             print(f"Error with artist '{artist_name}': {e}")
             return "Unknown"
+        
+        
+
+if __name__ == '__main__':
+    wiki = WikipediaAPI()
+    res = wiki.get_artist_nationality_wikidata(artist_name='Sabrina Carpenter')
+    print(res)
