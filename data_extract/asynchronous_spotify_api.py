@@ -65,7 +65,7 @@ class AsyncSpotifyAPI:
                         if retry_after != previous_retry_after:
                             message = f"Rate limit exceeded. Retrying after {retry_after} seconds."
                             if message != last_printed_message:  # Only print if the message has changed
-                                print(message)
+                                # print(message)
                                 last_printed_message = message
                         
                         previous_retry_after = retry_after
