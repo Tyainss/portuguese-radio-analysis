@@ -144,7 +144,8 @@ class RadioMusicETL:
             schema=self.config_manager.TRACK_INFO_SCHEMA
         )        
 
-        wikipedia_artist_df = await self.async_wikipedia_api.process_data(new_artists_df)
+        # wikipedia_artist_df = await self.async_wikipedia_api.process_data(new_artists_df)
+        wikipedia_artist_df = self.wikipedia_api.process_data(new_artists_df)
         print('Wikipedia \n', wikipedia_artist_df)
 
         mb_artist_df = self.mb_api.process_data(new_artists_df)
@@ -172,24 +173,5 @@ if __name__ == "__main__":
     asyncio.run(run_test())
 
     # TODO:
-    # 4. Fix error with Wikidata
-        # Replace AsyncWikipedia by normal Wikipedia
-
-
-
-    # Polarity (-1 to 1): do histogram
-        # TextBlob - simpler NLP lib
-        # VADER
-        # BERT (transformer model)
-    
-    # Emotion Classification Model:
-        # cardiffnlp/twitter-roberta-base-emotion
-    
-    # Grab metrics from Spotify such as "danceability,” “energy,” and “valence” (positivity)
-    # spotipy library to access data on energy and mood
-
-    # Test Lyrics Sentiment Analysis for more songs
-
+    # Don't save empty rows (without track and artist - MegaHits)
     # Check for duplicated scraped data
-    # Manually fix Wiki data
-    # Manually fix MB data

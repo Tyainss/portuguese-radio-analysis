@@ -89,9 +89,31 @@ class WikipediaAPI:
             print(f"Error with artist '{artist_name}': {e}")
             return "Unknown"
         
+    def get_artist_info(self, artist_name):
+        nationality = self.get_artist_nationality_wikidata(artist_name)
+        result = {
+            self.config_manager.ARTIST_NAME_COLUMN: artist_name
+            , 'wiki_nationality': nationality
+        }
+        return result
+
+    def process_data(self, df):
+        wiki_data = []
+        for row in df.iter_rows(named=True):
+            artist_name = row[self.config_manager.ARTIST_NAME_COLUMN]
+            result = self.get_artist_info(artist_name)
+            wiki_data.append(result)
+        
+        wiki_df = pl.DataFrame(wiki_data)
+        return wiki_df
         
 
 if __name__ == '__main__':
     wiki = WikipediaAPI()
-    res = wiki.get_artist_nationality_wikidata(artist_name='Sabrina Carpenter')
-    print(res)
+    # res = wiki.get_artist_nationality_wikidata(artist_name='Sabrina Carpenter')
+    # print(res)
+    df = pl.DataFrame({
+    'artist_name': ['Dua Lipa', 'Sabrina Carpenter']
+    })
+
+    print(wiki.process_data(df))
