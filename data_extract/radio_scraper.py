@@ -22,7 +22,9 @@ class RadioScraper:
         self.schema = self.config_manager.RADIO_SCRAPPER_SCHEMA
         self._initialize_column_names()
         self.wait_time = wait_time if wait_time is not None else self.config_manager.WAIT_DURATION
+        
 
+    def _initiate_driver(self):
         service = Service(executable_path=self.config_manager.CHROME_DRIVER_PATH)
         self.driver = webdriver.Chrome(service=service)
         self.driver.get(self.url)
@@ -167,6 +169,7 @@ class PassouTypeRadioScraper(RadioScraper):
 
         
     def scrape(self, max_days=None, save_csv=True):
+        self._initiate_driver()
         self._accept_cookies(self.cookies_button_accept_text)
         self._select_radio(radio_name=self.radio_name)
         # day_values = self._get_days_list()
@@ -189,6 +192,8 @@ class PassouTypeRadioScraper(RadioScraper):
         df_all_data = pl.DataFrame(all_data)
         if save_csv and not df_all_data.is_empty():
             self.data_storage.output_csv(path=self.csv_path, df=df_all_data, schema=self.schema, append=True)
+
+        self.close()
         return df_all_data
 
 
@@ -297,6 +302,7 @@ class RFMRadioScraper(RadioScraper):
         return day_track_data
 
     def scrape(self, max_days=None, save_csv=True):
+        self._initiate_driver()
         self._accept_cookies(self.cookies_button_accept_text)
         self._wait_for_ad_to_finish()
         day_values = self._ignore_first_option(self._get_option_list(self.day_element_id))[::-1]
@@ -319,6 +325,8 @@ class RFMRadioScraper(RadioScraper):
         df_all_data = pl.DataFrame(all_data)
         if save_csv and not df_all_data.is_empty():
             self.data_storage.output_csv(path=self.csv_path, df=df_all_data, schema=self.schema, append=True)
+
+        self.close()
         return df_all_data
     
 class MegaHitsRadioScraper(RadioScraper):
@@ -404,6 +412,7 @@ class MegaHitsRadioScraper(RadioScraper):
         return day_track_data
 
     def scrape(self, max_days=None, save_csv=True):
+        self._initiate_driver()
         self._accept_cookies(self.cookies_button_accept_text)
         day_values = self._get_option_list(self.day_element_id)[::-1]
 
@@ -423,4 +432,17 @@ class MegaHitsRadioScraper(RadioScraper):
         df_all_data = pl.DataFrame(all_data)
         if save_csv and not df_all_data.is_empty():
             self.data_storage.output_csv(path=self.csv_path, df=df_all_data, schema=self.schema, append=True)
+
+        self.close()
         return df_all_data
+    
+
+if __name__ == '__main__':
+    cm = ConfigManager()
+    ds = DataStorage()
+    mh = MegaHitsRadioScraper(cm.WEB_SITES['MegaHits'])
+    print(mh._get_last_time_played(mh.csv_path, mh.schema))
+    
+    existing_data = ds.read_csv(path=mh.csv_path, schema=mh.schema)
+    last_time_played = mh._get_most_recent_date_and_time(existing_data)
+    print(last_time_played)
