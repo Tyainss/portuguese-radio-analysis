@@ -1,6 +1,7 @@
 import polars as pl
 import re
 import requests
+from tqdm import tqdm
 
 from config_manager import ConfigManager
 from logger import setup_logging
@@ -99,7 +100,7 @@ class WikipediaAPI:
 
     def process_data(self, df):
         wiki_data = []
-        for row in df.iter_rows(named=True):
+        for row in tqdm(df.iter_rows(named=True), total=len(df), desc='Processing Wikipedia Artist Info', unit='row'):
             artist_name = row[self.config_manager.ARTIST_NAME_COLUMN]
             result = self.get_artist_info(artist_name)
             wiki_data.append(result)

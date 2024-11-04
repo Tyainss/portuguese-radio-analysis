@@ -1,7 +1,7 @@
 import requests
 import time
-from datetime import datetime
-import polars as pl  # Assuming you are using Polars DataFrame
+import polars as pl
+from tqdm import tqdm
 
 from helper import Helper
 from config_manager import ConfigManager
@@ -92,7 +92,7 @@ class MusicBrainzAPI:
         """
         artist_info_list = []
 
-        for artist_name in df[self.config_manager.ARTIST_NAME_COLUMN]:
+        for artist_name in tqdm(df[self.config_manager.ARTIST_NAME_COLUMN], total=len(df), desc='Processing MusicBrainz Artist info', unit='row'):
             artist_info = self.fetch_artist_info_by_name(artist_name)
             if artist_info:
                 artist_info_list.append(artist_info)

@@ -7,3 +7,4 @@ textblob
 torch
 transformers
 googletrans==4.0.0-rc1
+tqdm

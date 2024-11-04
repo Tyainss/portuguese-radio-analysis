@@ -1,6 +1,7 @@
 import polars as pl
 import aiohttp
 import asyncio
+from tqdm.asyncio import tqdm_asyncio
 
 from config_manager import ConfigManager
 from helper import Helper
@@ -142,7 +143,7 @@ class AsyncSpotifyAPI:
         return await asyncio.gather(*tasks)
 
     async def process_data(self, df, batch_size=100, delay=5):
-        """Fetch track info and return a dataframe with Spotify data joined."""
+        # """Fetch track info and return a dataframe with Spotify data joined."""
         # # Fetch track info for all rows
         # spotify_data = await self.fetch_all_track_info(df)
 
@@ -154,8 +155,8 @@ class AsyncSpotifyAPI:
         spotify_data = []
 
         # Split the dataframe into batches
-        for start in range(0, len(df), batch_size):
-            print(f'Batch {start}')
+        num_batches = (len(df) + batch_size - 1) // batch_size
+        for start in tqdm_asyncio(range(0, len(df), batch_size), desc='Processing batches of SpotifyAPI requests', total=num_batches, unit='batch'):
             batch = df[start:start + batch_size]
             tasks = [self.get_track_info(row[self.config_manager.TRACK_TITLE_COLUMN], 
                                         row[self.config_manager.ARTIST_NAME_COLUMN]) 
