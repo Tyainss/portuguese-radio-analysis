@@ -25,19 +25,28 @@ class AsyncSpotifyAPI:
             'grant_type': 'client_credentials'
         }
 
-        async with aiohttp.ClientSession() as session:
+        async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=90)) as session:
             for attempt in range(5):
-                async with session.post(self.token_url, headers=auth_headers, data=data) as response:
-                    if response.status == 200:
-                        token_data = await response.json()
-                        self.access_token = token_data['access_token']
-                        return
-                    elif response.status == 502:
-                        wait_time = 2 ** attempt
-                        print(f"Received 502 error. Retrying after {wait_time} seconds.")
-                        await asyncio.sleep(wait_time)
-                    else:
-                        raise Exception(f"Failed to authenticate: {response.status}")
+                try:
+                    async with session.post(self.token_url, headers=auth_headers, data=data) as response:
+                        if response.status == 200:
+                            token_data = await response.json()
+                            self.access_token = token_data['access_token']
+                            # print("Authenticated successfully")
+                            return
+                        elif response.status == 502:
+                            wait_time = 2 ** attempt
+                            print(f"Received 502 error. Retrying after {wait_time} seconds.")
+                            await asyncio.sleep(wait_time)
+                        else:
+                            print(f"Failed to authenticate: Status {response.status}")
+                            await response.text()
+                except aiohttp.ClientConnectorError as e:
+                    print(f"Connection error during authentication attempt {attempt + 1}: {e}")
+                    await asyncio.sleep(2 ** attempt)
+                except Exception as e:
+                    print(f"Unexpected error during authentication: {e}")
+            raise Exception("Max retries exceeded during authentication")
 
     def _encode_client_credentials(self):
         """Helper function to encode client credentials in base64."""
@@ -132,14 +141,37 @@ class AsyncSpotifyAPI:
             tasks.append(self.get_track_info(track_name, artist_name))
         return await asyncio.gather(*tasks)
 
-    async def process_data(self, df):
+    async def process_data(self, df, batch_size=100, delay=5):
         """Fetch track info and return a dataframe with Spotify data joined."""
-        # Fetch track info for all rows
-        spotify_data = await self.fetch_all_track_info(df)
+        # # Fetch track info for all rows
+        # spotify_data = await self.fetch_all_track_info(df)
 
-        # Filter out None values and create a new dataframe with the Spotify data
-        spotify_data_filtered = [track for track in spotify_data if track]
-        spotify_df = pl.DataFrame(spotify_data_filtered)
+        # # Filter out None values and create a new dataframe with the Spotify data
+        # spotify_data_filtered = [track for track in spotify_data if track]
+        # spotify_df = pl.DataFrame(spotify_data_filtered)
+
+        """Fetch track info in batches to avoid API rate limits and return a dataframe with Spotify data."""
+        spotify_data = []
+
+        # Split the dataframe into batches
+        for start in range(0, len(df), batch_size):
+            print(f'Batch {start}')
+            batch = df[start:start + batch_size]
+            tasks = [self.get_track_info(row[self.config_manager.TRACK_TITLE_COLUMN], 
+                                        row[self.config_manager.ARTIST_NAME_COLUMN]) 
+                    for row in batch.iter_rows(named=True)]
+
+            # Await and gather all tasks in the current batch
+            batch_results = await asyncio.gather(*tasks)
+            
+            # Filter out None values and add to the main list
+            spotify_data.extend([track for track in batch_results if track])
+
+            # Add a delay after each batch to reduce pressure on the API
+            await asyncio.sleep(delay)
+
+        # Convert the Spotify data to a DataFrame and merge with the original dataframe
+        spotify_df = pl.DataFrame(spotify_data)
 
         # Merge with the original dataframe
         return spotify_df
