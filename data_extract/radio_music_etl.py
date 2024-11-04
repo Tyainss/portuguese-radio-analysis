@@ -74,7 +74,7 @@ class RadioMusicETL:
         return result
 
 
-    async def run(self):
+    async def run(self, scrape_radios=True):
         # Scrape data from radios
         scrapers = [
             PassouTypeRadioScraper(self.config_manager.WEB_SITES['Comercial'])
@@ -88,11 +88,16 @@ class RadioMusicETL:
 
         for scraper in scrapers:
             # Scrape information
-            tracks_df = scraper.scrape(save_csv=True)
+            if scrape_radios:
+                scraper.scrape(save_csv=True)
             # all_scrape_dfs.append(tracks_df)
 
             # Add csv path to list
             all_scrape_csv_paths.append(scraper.csv_path)
+
+        # # Close browser after extracting data
+        # for scraper in scrapers:
+        #     scraper.close()
 
         # Read all extracted dataframes so far
         for path in all_scrape_csv_paths:
@@ -101,9 +106,6 @@ class RadioMusicETL:
 
         combined_df = pl.concat(all_scrape_dfs)
 
-        # Close browser after extracting data
-        for scraper in scrapers:
-            scraper.close()
 
         already_extracted_data = self.data_storage.read_csv_if_exists(
             path=self.config_manager.TRACK_INFO_CSV_PATH,
@@ -131,7 +133,8 @@ class RadioMusicETL:
             registered_artists=already_extracted_artists
         )
 
-        # print('New artists:', new_artists_df)
+        print('New artists size:', new_artists_df.height)
+        print('New tracks size:', new_tracks_df.height)
 
         spotify_track_df = await self.async_spotify_api.process_data(new_tracks_df)
         print('Spotify \n', spotify_track_df)
@@ -167,11 +170,13 @@ if __name__ == "__main__":
     etl = RadioMusicETL()
     
     async def run_test():
-        result = await etl.run()
+        result = await etl.run(scrape_radios=False)
         print(result)
 
     asyncio.run(run_test())
 
     # TODO:
+    # Batch data in script?
+    # Add tqdm during spotify/MB extraction
     # Don't save empty rows (without track and artist - MegaHits)
     # Check for duplicated scraped data
