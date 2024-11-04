@@ -15,7 +15,7 @@ class DataStorage:
     def _read_schema(self, df, schema):
         # Convert DataFrame columns to the specified data types
         for column, dtype in schema.items():
-            logger.info(f'Column : {column}, dtype : {dtype}')
+            # logger.info(f'Column : {column}, dtype : {dtype}')
             
             if dtype == pl.Date:
                 df = df.with_columns(
@@ -40,7 +40,7 @@ class DataStorage:
     def _output_schema(self, df, schema):
         # Convert DataFrame columns to the specified data types
         for column, dtype in schema.items():
-            logger.info(f'Processing column: {column}, dtype: {dtype}')
+            # logger.info(f'Processing column: {column}, dtype: {dtype}')
 
             if dtype == pl.Date:
                 df = df.with_columns(
