@@ -108,7 +108,7 @@ class RadioMusicETL:
 
         # Get unique tracks and artists that have been scraped so far
         combined_df_unique_tracks = combined_df.unique(
-            subset=[self.config_manager.TRACK_TITLE_COLUMN, self.config_manager.TRACK_TITLE_COLUMN], 
+            subset=[self.config_manager.TRACK_TITLE_COLUMN, self.config_manager.ARTIST_NAME_COLUMN], 
             maintain_order = True
         )
         combined_df_unique_artists = combined_df.unique(
@@ -141,31 +141,38 @@ class RadioMusicETL:
         print('New artists size:', new_artists_df.height)
         print('New tracks size:', new_tracks_df.height)
 
-        spotify_track_df = await self.async_spotify_api.process_data(new_tracks_df)
-        print('Spotify \n', spotify_track_df)
+        if new_tracks_df.is_empty():
+            logger.info('No new track data to process')
+        else:
+            spotify_track_df = await self.async_spotify_api.process_data(new_tracks_df)
+            print('Spotify \n', spotify_track_df)
 
-        # Save track info df
-        track_info_df = spotify_track_df
-        self.data_storage.output_csv(
-            df=track_info_df,
-            path=self.config_manager.TRACK_INFO_CSV_PATH,
-            schema=self.config_manager.TRACK_INFO_SCHEMA
-        )        
+            # Save track info df
+            track_info_df = spotify_track_df
+            self.data_storage.output_csv(
+                df=track_info_df,
+                path=self.config_manager.TRACK_INFO_CSV_PATH,
+                schema=self.config_manager.TRACK_INFO_SCHEMA
+            )
+            print('Saved track dataframe: \n', track_info_df)
 
-        # wikipedia_artist_df = await self.async_wikipedia_api.process_data(new_artists_df)
-        wikipedia_artist_df = self.wikipedia_api.process_data(new_artists_df)
-        print('Wikipedia \n', wikipedia_artist_df)
+        if new_artists_df.is_empty():
+            logger.info('No new artist data to process')
+        else:
+            # wikipedia_artist_df = await self.async_wikipedia_api.process_data(new_artists_df)
+            wikipedia_artist_df = self.wikipedia_api.process_data(new_artists_df)
+            print('Wikipedia \n', wikipedia_artist_df)
 
-        mb_artist_df = self.mb_api.process_data(new_artists_df)
-        print('MusicBrainz \n', mb_artist_df)
+            mb_artist_df = self.mb_api.process_data(new_artists_df)
+            print('MusicBrainz \n', mb_artist_df)
 
-        # Save artist info df
-        artist_info_df = mb_artist_df.join(wikipedia_artist_df, on=[self.config_manager.ARTIST_NAME_COLUMN], how='left')
-        self.data_storage.output_csv(
-            df=artist_info_df,
-            path=self.config_manager.ARTIST_INFO_CSV_PATH,
-            schema=self.config_manager.ARTIST_INFO_SCHEMA
-        )   
+            # Save artist info df
+            artist_info_df = mb_artist_df.join(wikipedia_artist_df, on=[self.config_manager.ARTIST_NAME_COLUMN], how='left')
+            self.data_storage.output_csv(
+                df=artist_info_df,
+                path=self.config_manager.ARTIST_INFO_CSV_PATH,
+                schema=self.config_manager.ARTIST_INFO_SCHEMA
+            )   
 
         # track_combined_df = new_tracks_df.join(spotify_track_df, on=[self.config_manager.TRACK_TITLE_COLUMN, self.config_manager.ARTIST_NAME_COLUMN], how="left")
         return track_info_df, wikipedia_artist_df
@@ -181,8 +188,7 @@ if __name__ == "__main__":
     asyncio.run(run_test())
 
     # TODO:
-    # 1. Check data track/artist data for only unique combinations - Done
-    # 3. Add tqdm during spotify/MB extraction
+    # 1. Rerun script to fill in track_info_csv and artist_csv
     # 4. Don't save empty rows (without track and artist - MegaHits)
     
     # If there are continued problems extracting data, consider extracting by batches
