@@ -21,13 +21,10 @@ class GeniusAPI:
         page = requests.get(song_url)
         soup = BeautifulSoup(page.content, 'html.parser')
         
-        # Genius lyrics are inside <div> tags with a specific class
         lyrics_div = soup.find("div", class_="lyrics")
-        
         if lyrics_div:
             return lyrics_div.get_text(separator="\n").strip()
         
-        # Alternatively, Genius sometimes uses <div> with a custom data-lyrics-container attribute
         lyrics_div = soup.find_all("div", attrs={"data-lyrics-container": "true"})
         if lyrics_div:
             lyrics = "\n".join([div.get_text(separator="\n").strip() for div in lyrics_div])
@@ -61,10 +58,8 @@ class GeniusAPI:
 
         if song_url:
             print(f"Song URL found: {song_url}")
-            
             # Scrape the lyrics
             lyrics = self.scrape_lyrics_from_genius_url(song_url)
-            
             if lyrics:
                 print("Lyrics found")
                 return lyrics
@@ -74,3 +69,5 @@ class GeniusAPI:
         else:
             print("Song not found on Genius.")
             return ''
+        
+    

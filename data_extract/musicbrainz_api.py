@@ -1,15 +1,16 @@
 import requests
 import time
-from datetime import datetime
-import polars as pl  # Assuming you are using Polars DataFrame
+import polars as pl
+from tqdm import tqdm
 
 from helper import Helper
+from config_manager import ConfigManager
 
 class MusicBrainzAPI:
     
     def __init__(self) -> None:
         self.helper = Helper()
-
+        self.config_manager = ConfigManager()
 
     def search_artist_by_name(self, artist_name):
         """
@@ -26,7 +27,7 @@ class MusicBrainzAPI:
         response = requests.get(url, params=params)
         data = response.json()
         
-        if data['artists']:
+        if 'artists' in data and data['artists']:
             # Extract the first artist's mbid
             artist_mbid = data['artists'][0]['id']
             return artist_mbid
@@ -91,7 +92,7 @@ class MusicBrainzAPI:
         """
         artist_info_list = []
 
-        for artist_name in df['artist_name']:  # Assuming the column name is 'artist_name'
+        for artist_name in tqdm(df[self.config_manager.ARTIST_NAME_COLUMN], total=len(df), desc='Processing MusicBrainz Artist info', unit='row'):
             artist_info = self.fetch_artist_info_by_name(artist_name)
             if artist_info:
                 artist_info_list.append(artist_info)

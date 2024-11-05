@@ -1,10 +1,20 @@
+import polars as pl
 import re
 import requests
+from tqdm import tqdm
+
+from config_manager import ConfigManager
+from logger import setup_logging
+
+# Set up logging
+logger = setup_logging()
 
 class WikipediaAPI:
 
     def __init__(self) -> None:
-        pass
+        self.config_manager = ConfigManager()
+        self.wiki_access_token = self.config_manager.WIKI_ACCESS_TOKEN
+        self.wiki_client_secret = self.config_manager.WIKI_CLIENT_SECRET
 
     def _process_artist_name(self, artist_name):
         # This method cleans up an artist name by:
@@ -29,6 +39,12 @@ class WikipediaAPI:
                 'srlimit': 1,
                 'redirects': 1
             }
+            headers = {}
+            if self.wiki_access_token:
+                headers['Authorization'] = f'Bearer {self.wiki_access_token}'
+            elif self.wiki_client_secret:
+                headers['Client-Secret'] = self.wiki_client_secret
+
             search_data = requests.get(wiki_api_url, params=search_params).json()
 
             if search_data['query']['search']:
@@ -73,3 +89,32 @@ class WikipediaAPI:
             # If any error occurs during the process, print it and return "Unknown"
             print(f"Error with artist '{artist_name}': {e}")
             return "Unknown"
+        
+    def get_artist_info(self, artist_name):
+        nationality = self.get_artist_nationality_wikidata(artist_name)
+        result = {
+            self.config_manager.ARTIST_NAME_COLUMN: artist_name
+            , 'wiki_nationality': nationality
+        }
+        return result
+
+    def process_data(self, df):
+        wiki_data = []
+        for row in tqdm(df.iter_rows(named=True), total=len(df), desc='Processing Wikipedia Artist Info', unit='row'):
+            artist_name = row[self.config_manager.ARTIST_NAME_COLUMN]
+            result = self.get_artist_info(artist_name)
+            wiki_data.append(result)
+        
+        wiki_df = pl.DataFrame(wiki_data)
+        return wiki_df
+        
+
+if __name__ == '__main__':
+    wiki = WikipediaAPI()
+    # res = wiki.get_artist_nationality_wikidata(artist_name='Sabrina Carpenter')
+    # print(res)
+    df = pl.DataFrame({
+    'artist_name': ['Dua Lipa', 'Sabrina Carpenter']
+    })
+
+    print(wiki.process_data(df))

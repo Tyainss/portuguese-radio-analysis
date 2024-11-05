@@ -4,11 +4,17 @@ import aiohttp
 import asyncio
 
 from config_manager import ConfigManager
+from logger import setup_logging
+
+# Set up logging
+logger = setup_logging()
 
 class AsyncWikipediaAPI:
 
     def __init__(self) -> None:
         self.config_manager = ConfigManager()
+        self.wiki_access_token = self.config_manager.WIKI_ACCESS_TOKEN
+        self.wiki_client_secret = self.config_manager.WIKI_CLIENT_SECRET
 
     def _process_artist_name(self, artist_name):
         # This method cleans up an artist name by:
@@ -32,11 +38,21 @@ class AsyncWikipediaAPI:
                 'srlimit': 1,
                 'redirects': 1
             }
+            headers = {}
+            if self.wiki_access_token:
+                headers['Authorization'] = f'Bearer {self.wiki_access_token}'
+            elif self.wiki_client_secret:
+                headers['Client-Secret'] = self.wiki_client_secret
 
-            async with aiohttp.ClientSession() as session:
+            async with aiohttp.ClientSession(headers=headers) as session:
                 # Send asynchronous request to Wikipedia API for artist search
                 async with session.get(wiki_api_url, params=search_params) as response:
-                    search_data = await response.json()
+                    if "application/json" in response.headers.get('Content-Type', ''):
+                        search_data = await response.json()
+                    else:
+                        logger.warning(f"Unexpected content type for artist '{artist_name}': {response.headers['Content-Type']}")
+                        return "Unknown"
+
 
                 if search_data['query']['search']:
                     # If a Wikipedia page is found, get its Wikidata ID
@@ -50,17 +66,24 @@ class AsyncWikipediaAPI:
 
                     # Send asynchronous request to get page properties (Wikidata ID)
                     async with session.get(wiki_api_url, params=page_params) as page_response:
-                        page_data = await page_response.json()
+                        if "application/json" in page_response.headers.get('Content-Type', ''):
+                            page_data = await page_response.json()
+                        else:
+                            logger.warning(f"Unexpected content type for artist '{artist_name}': {page_response.headers['Content-Type']}")
+                            return "Unknown"
 
                     pages = list(page_data['query']['pages'].values())
-
                     if 'pageprops' in pages[0] and 'wikibase_item' in pages[0]['pageprops']:
                         wikidata_id = pages[0]['pageprops']['wikibase_item']
                         
                         # Use the Wikidata ID to fetch the artist's data
                         wikidata_api_url = f"https://www.wikidata.org/wiki/Special:EntityData/{wikidata_id}.json"
                         async with session.get(wikidata_api_url) as wikidata_response:
-                            wikidata_data = await wikidata_response.json()
+                            if "application/json" in wikidata_response.headers.get('Content-Type', ''):
+                                wikidata_data = await wikidata_response.json()
+                            else:
+                                logger.warning(f"Unexpected content type for artist '{artist_name}': {wikidata_response.headers['Content-Type']}")
+                                return "Unknown"
 
                         # Look for nationality claims in the Wikidata
                         nationality_claims = wikidata_data['entities'][wikidata_id]['claims'].get('P27', [])
@@ -72,12 +95,10 @@ class AsyncWikipediaAPI:
                             country_api_url = f"https://www.wikidata.org/wiki/Special:EntityData/{country_id}.json"
                             async with session.get(country_api_url) as country_response:
                                 country_data = await country_response.json()
-                            country_name = country_data['entities'][country_id]['labels']['en']['value']
-                            nationalities.append(country_name)
+                                country_name = country_data['entities'][country_id]['labels']['en']['value']
+                                nationalities.append(country_name)
 
-                        # Return the first nationality found, or "Unknown" if none found
-                        if nationalities:
-                            return nationalities[0]
+                    return nationalities[0] if nationalities else "Unknown"
             
             return "Unknown"
         

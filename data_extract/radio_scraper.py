@@ -2,6 +2,7 @@ import os
 import polars as pl
 from datetime import datetime, timedelta, date, time as datetime_time
 import time
+from tqdm import tqdm
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
@@ -22,7 +23,9 @@ class RadioScraper:
         self.schema = self.config_manager.RADIO_SCRAPPER_SCHEMA
         self._initialize_column_names()
         self.wait_time = wait_time if wait_time is not None else self.config_manager.WAIT_DURATION
+        
 
+    def _initiate_driver(self):
         service = Service(executable_path=self.config_manager.CHROME_DRIVER_PATH)
         self.driver = webdriver.Chrome(service=service)
         self.driver.get(self.url)
@@ -35,9 +38,9 @@ class RadioScraper:
         self.TRACK_TITLE_COLUMN = self.config_manager.TRACK_TITLE_COLUMN
         self.ARTIST_NAME_COLUMN = self.config_manager.ARTIST_NAME_COLUMN
 
-    def _get_csv_path(self, radio):
-        csv_path = self.config_manager.CSV_PATH_FORMAT.format(radio=radio)
-        return csv_path
+    # def _get_csv_path(self, radio):
+    #     csv_path = self.config_manager.CSV_PATH_FORMAT.format(radio=radio)
+    #     return csv_path
 
     def _accept_cookies(self, cookies_button_accept_text, cookies_button='qc-cmp2-summary-buttons') -> None:
         try:
@@ -127,6 +130,7 @@ class PassouTypeRadioScraper(RadioScraper):
         self.cookies_button_accept_text = radio_config.get('cookies_button_accept', 'CONCORDO')
         self.day_element_id = radio_config.get('day_element_id', 'day')
         self.search_button_text = radio_config.get('seach_button', 'Procurar')
+        self.csv_path = self.config_manager.get_scraper_csv_path(radio=self.radio_name, path_format=self.config_manager.CSV_PATH_FORMAT)
 
     def _ignore_last_option(self, options):
         """Ignore last option since it shows the same values as "Today" """
@@ -166,14 +170,14 @@ class PassouTypeRadioScraper(RadioScraper):
 
         
     def scrape(self, max_days=None, save_csv=True):
+        self._initiate_driver()
         self._accept_cookies(self.cookies_button_accept_text)
         self._select_radio(radio_name=self.radio_name)
         # day_values = self._get_days_list()
         day_values = self._ignore_last_option(self._get_option_list(self.day_element_id))
 
-        csv_path = self._get_csv_path(radio=self.radio_name)
 
-        last_time_played = self._get_last_time_played(csv_path, self.schema)
+        last_time_played = self._get_last_time_played(self.csv_path, self.schema)
         if last_time_played:
             day_values = [day for day in day_values if day >= last_time_played[self.DAY_COLUMN]]
 
@@ -181,14 +185,16 @@ class PassouTypeRadioScraper(RadioScraper):
             day_values = day_values[:min(max_days, len(day_values))]
 
         all_data = []
-        for day_value in day_values:
+        for day_value in tqdm(day_values, total=len(day_values), desc=f'Scraping from radio {self.radio_name}', unit='day'):
             day_track_data = self._extract_day_data(day_value=day_value, last_time_played=last_time_played)
             if day_track_data:
                 all_data.extend(day_track_data)
 
         df_all_data = pl.DataFrame(all_data)
-        if save_csv:
-            self.data_storage.output_csv(path=csv_path, df=df_all_data, schema=self.schema, append=True)
+        if save_csv and not df_all_data.is_empty():
+            self.data_storage.output_csv(path=self.csv_path, df=df_all_data, schema=self.schema, append=True)
+
+        self.close()
         return df_all_data
 
 
@@ -211,6 +217,7 @@ class RFMRadioScraper(RadioScraper):
         self.hour_element_id = radio_config.get('hour_element_id', 'dp-hora')
         self.search_button_text = radio_config.get('search_button', 'pesquisa_quemusicaera')
         self.ad_wait_time = radio_config.get('ad_wait_time', 1)
+        self.csv_path = self.config_manager.get_scraper_csv_path(radio=self.radio_name, path_format=self.config_manager.CSV_PATH_FORMAT)
 
     def _ignore_first_option(self, options):
         """Ignore first option since it's the label of the element selection and not a real option"""
@@ -259,12 +266,12 @@ class RFMRadioScraper(RadioScraper):
         day_track_data = []
 
         period_values = self._ignore_first_option(self._get_option_list(self.period_element_id))
-        for period in period_values:
+        for period in tqdm(period_values, desc=f'Processing period for radio {self.radio_name}', unit='period'):
             period_select = Select(self.driver.find_element(By.ID, self.period_element_id))
             period_select.select_by_value(period)
 
             hour_values = self._ignore_first_option(self._get_option_list(self.hour_element_id))
-            for hour in hour_values:
+            for hour in tqdm(hour_values, desc='Processing hours', unit='hour', leave=False):
                 hour_select = Select(self.driver.find_element(By.ID, self.hour_element_id))
                 hour_select.select_by_value(hour)
 
@@ -296,13 +303,14 @@ class RFMRadioScraper(RadioScraper):
         return day_track_data
 
     def scrape(self, max_days=None, save_csv=True):
+        self._initiate_driver()
         self._accept_cookies(self.cookies_button_accept_text)
         self._wait_for_ad_to_finish()
         day_values = self._ignore_first_option(self._get_option_list(self.day_element_id))[::-1]
         
-        csv_path = self._get_csv_path(radio=self.radio_name)
+        # csv_path = self._get_csv_path(radio=self.radio_name)
 
-        last_time_played = self._get_last_time_played(csv_path, self.schema)
+        last_time_played = self._get_last_time_played(self.csv_path, self.schema)
         if last_time_played:
             day_values = [day for day in day_values if day >= last_time_played[self.DAY_COLUMN]]
 
@@ -310,14 +318,16 @@ class RFMRadioScraper(RadioScraper):
             day_values = day_values[:min(max_days, len(day_values))]
 
         all_data = []
-        for day_value in day_values:
+        for day_value in tqdm(day_values, total=len(day_values), desc=f'Scraping from radio {self.radio_name}', unit='day'):
             day_track_data = self._extract_day_data(day_value=day_value, last_time_played=last_time_played)
             if day_track_data:
                 all_data.extend(day_track_data)
     
         df_all_data = pl.DataFrame(all_data)
-        if save_csv:
-            self.data_storage.output_csv(path=csv_path, df=df_all_data, schema=self.schema, append=True)
+        if save_csv and not df_all_data.is_empty():
+            self.data_storage.output_csv(path=self.csv_path, df=df_all_data, schema=self.schema, append=True)
+
+        self.close()
         return df_all_data
     
 class MegaHitsRadioScraper(RadioScraper):
@@ -339,84 +349,104 @@ class MegaHitsRadioScraper(RadioScraper):
         self.search_minute = radio_config.get('search_minute', 'txtMinutoPesq')
         self.search_button_text = radio_config.get('search_button_text', 'pesquisa')
         self.max_retries = radio_config.get('max_retries', 3)
+        self.csv_path = self.config_manager.get_scraper_csv_path(radio=self.radio_name, path_format=self.config_manager.CSV_PATH_FORMAT)
 
     def _extract_day_data(self, day_value, last_time_played=None):
         day_select = Select(self.driver.find_element(By.ID, self.day_element_id))
         day_select.select_by_value(day_value)
         day = self._get_day_value(day_text=day_value)
         
+        min_hour_range = 0
+        if day == last_time_played[self.DAY_COLUMN]:
+            min_hour_range = int(last_time_played[self.TIME_PLAYED_COLUMN].split(':')[0])
+
         day_track_data = []
-        for hour in range(24):
-            for minute in [15, 45]:
-                for attempt in range (self.max_retries):
-                    try:
-                        # Clear and enter hour
-                        hour_input = self.wait.until(EC.visibility_of_element_located((By.ID, self.search_hour)))
-                        hour_input.clear()
-                        hour_input.send_keys(f"{hour:02}")
+        with tqdm(total=24 - min_hour_range, desc=f'Day {day}: Processing Hours', unit='hour', position=1, leave=False) as hour_bar:
+            for hour in range(min_hour_range, 24):
+                for minute in [15, 45]:
+                    for attempt in range (self.max_retries):
+                        try:
+                            # Clear and enter hour
+                            hour_input = self.wait.until(EC.visibility_of_element_located((By.ID, self.search_hour)))
+                            hour_input.clear()
+                            hour_input.send_keys(f"{hour:02}")
+                            
+                            # Clear and enter minute
+                            minute_input = self.wait.until(EC.visibility_of_element_located((By.ID, self.search_minute)))
+                            minute_input.clear()
+                            minute_input.send_keys(f"{minute:02}")
+
+                            search_button = self.wait.until(EC.element_to_be_clickable((By.ID, self.search_button_text)))
+                            search_button.click()
+                            time.sleep(1)
+                            
+                            times_played = self.driver.find_elements(By.CLASS_NAME, self.time_played_name)
+                            tracks_title = self.driver.find_elements(By.CLASS_NAME, self.track_name)
+                            artists_name = self.driver.find_elements(By.CLASS_NAME, self.artist_name)
+
+                            for time_played, track_title, artist_name in zip(times_played, tracks_title, artists_name):
+                                if last_time_played and day == last_time_played[self.DAY_COLUMN] and time_played.text <= last_time_played[self.TIME_PLAYED_COLUMN]:
+                                    continue
+                                track_data = {
+                                    self.RADIO_COLUMN: self.radio_name,
+                                    self.DAY_COLUMN: day,
+                                    self.TIME_PLAYED_COLUMN: time_played.text,
+                                    self.TRACK_TITLE_COLUMN: track_title.text,
+                                    self.ARTIST_NAME_COLUMN: artist_name.text
+                                }
+                                day_track_data.append(track_data)
+                            
+                            # Break out of retry loop if successful
+                            break
+
+                        except StaleElementReferenceException:
+                            print(f"Stale element reference at {hour}:{minute}, retrying {attempt + 1}/{self.max_retries}")
+                            time.sleep(1) 
+
+                        except TimeoutException:
+                            print(f"Timeout at {hour}:{minute}, skipping to next time.")
+                            break  # Skip to next time if timeout occurs
                         
-                        # Clear and enter minute
-                        minute_input = self.wait.until(EC.visibility_of_element_located((By.ID, self.search_minute)))
-                        minute_input.clear()
-                        minute_input.send_keys(f"{minute:02}")
+                        except Exception as e:
+                            print(f"An error occurred while extracting data: {e}")
+                            break
 
-                        search_button = self.wait.until(EC.element_to_be_clickable((By.ID, self.search_button_text)))
-                        search_button.click()
-                        time.sleep(1)
-                        
-                        times_played = self.driver.find_elements(By.CLASS_NAME, self.time_played_name)
-                        tracks_title = self.driver.find_elements(By.CLASS_NAME, self.track_name)
-                        artists_name = self.driver.find_elements(By.CLASS_NAME, self.artist_name)
-
-                        for time_played, track_title, artist_name in zip(times_played, tracks_title, artists_name):
-                            if last_time_played and day == last_time_played[self.DAY_COLUMN] and time_played.text <= last_time_played[self.TIME_PLAYED_COLUMN]:
-                                continue
-                            track_data = {
-                                self.RADIO_COLUMN: self.radio_name,
-                                self.DAY_COLUMN: day,
-                                self.TIME_PLAYED_COLUMN: time_played.text,
-                                self.TRACK_TITLE_COLUMN: track_title.text,
-                                self.ARTIST_NAME_COLUMN: artist_name.text
-                            }
-                            day_track_data.append(track_data)
-                        
-                        # Break out of retry loop if successful
-                        break
-
-                    except StaleElementReferenceException:
-                        print(f"Stale element reference at {hour}:{minute}, retrying {attempt + 1}/{self.max_retries}")
-                        time.sleep(1) 
-
-                    except TimeoutException:
-                        print(f"Timeout at {hour}:{minute}, skipping to next time.")
-                        break  # Skip to next time if timeout occurs
-                    
-                    except Exception as e:
-                        print(f"An error occurred while extracting data: {e}")
-                        break
+                hour_bar.update(1)  # Update the hour progress bar for each completed hour
         
         return day_track_data
 
     def scrape(self, max_days=None, save_csv=True):
+        self._initiate_driver()
         self._accept_cookies(self.cookies_button_accept_text)
         day_values = self._get_option_list(self.day_element_id)[::-1]
 
-        csv_path = self._get_csv_path(radio=self.radio_name)
-
-        last_time_played = self._get_last_time_played(csv_path, self.schema)
+        last_time_played = self._get_last_time_played(self.csv_path, self.schema)
         if last_time_played:
-            day_values = [day for day in day_values if day >= last_time_played[self.DAY_COLUMN]]
+            day_values = [day for day in day_values if self._get_day_value(day) >= last_time_played[self.DAY_COLUMN]]
 
         if max_days:
             day_values = day_values[:min(max_days, len(day_values))]
 
         all_data = []
-        for day_value in day_values:
+        for day_value in tqdm(day_values, total=len(day_values), desc=f'Scraping from radio {self.radio_name}', unit='day'):
             day_track_data = self._extract_day_data(day_value=day_value, last_time_played=last_time_played)
             if day_track_data:
                 all_data.extend(day_track_data)
     
         df_all_data = pl.DataFrame(all_data)
-        if save_csv:
-            self.data_storage.output_csv(path=csv_path, df=df_all_data, schema=self.schema, append=True)
+        if save_csv and not df_all_data.is_empty():
+            self.data_storage.output_csv(path=self.csv_path, df=df_all_data, schema=self.schema, append=True)
+
+        self.close()
         return df_all_data
+    
+
+if __name__ == '__main__':
+    cm = ConfigManager()
+    ds = DataStorage()
+    mh = MegaHitsRadioScraper(cm.WEB_SITES['MegaHits'])
+    print(mh._get_last_time_played(mh.csv_path, mh.schema))
+    
+    existing_data = ds.read_csv(path=mh.csv_path, schema=mh.schema)
+    last_time_played = mh._get_most_recent_date_and_time(existing_data)
+    print(last_time_played)

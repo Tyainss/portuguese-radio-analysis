@@ -15,7 +15,7 @@ class DataStorage:
     def _read_schema(self, df, schema):
         # Convert DataFrame columns to the specified data types
         for column, dtype in schema.items():
-            logger.info(f'Column : {column}, dtype : {dtype}')
+            # logger.info(f'Column : {column}, dtype : {dtype}')
             
             if dtype == pl.Date:
                 df = df.with_columns(
@@ -40,24 +40,19 @@ class DataStorage:
     def _output_schema(self, df, schema):
         # Convert DataFrame columns to the specified data types
         for column, dtype in schema.items():
-            logger.info(f'Processing column: {column}, dtype: {dtype}')
+            # logger.info(f'Processing column: {column}, dtype: {dtype}')
 
             if dtype == pl.Date:
-                # Only attempt conversion of non-null values and preserver nulls
                 df = df.with_columns(
-                        pl.when(pl.col(column).is_not_null())
-                          .then(pl.col(column).str.strptime(pl.Date, format='%Y-%m-%d', strict=False))
-                          .otherwise(pl.lit(None, dtype=pl.Date))
+                        pl.col(column).cast(pl.Utf8)
+                          .str.strptime(pl.Date, format='%Y-%m-%d', strict=False)
                           .alias(column)
-                    # pl.col(column).str.strptime(pl.Date, format="%Y-%m-%d").cast(dtype, strict=False)
                 )
             elif dtype == pl.Time:
                 df = df.with_columns(
-                        pl.when(pl.col(column).is_not_null())
-                          .then(pl.col(column).str.strptime(pl.Time, format="%H:%M", strict=False))
-                          .otherwise(pl.lit(None, dtype=pl.Time))
+                        pl.col(column).cast(pl.Utf8)
+                          .str.strptime(pl.Time, format="%H:%M", strict=False)
                           .alias(column)
-                    # pl.col(column).str.strptime(pl.Time, format="%H:%M").cast(dtype, strict=False)
                 )
             elif dtype == pl.Utf8:
                 # Fill nulls with empty string to match String dtype
@@ -69,19 +64,6 @@ class DataStorage:
 
         return df
 
-    def read_excel(self, path: str, schema: Optional[Dict[str, pl.DataType]] = None) -> pl.DataFrame:
-        logger.info(f'Reading Excel from: {path}')
-
-        if not os.path.exists(path):
-            logger.warning(f'Excel file not found: {path}')
-            return pl.DataFrame()
-        
-        df = pl.read_excel(path)
-
-        if schema:
-            df = self._read_schema(df, schema)
-
-        return df
 
     def read_csv(self, path: str, schema: Optional[Dict[str, pl.DataType]] = None) -> pl.DataFrame:
         logger.info(f'Reading CSV from: {path}')
@@ -97,35 +79,16 @@ class DataStorage:
         
         return df
 
-    def output_excel(self, path: str, df: pl.DataFrame, schema: Optional[Dict[str, pl.DataType]] = None, append: bool = False) -> None:
-        logger.info(f'Outputting Excel to: {path}')
-        
-        # Ensure the directory exists
-        os.makedirs(os.path.dirname(path), exist_ok=True)
-        
-        if schema:
-            df = self._output_schema(df, schema)
-        
-        if os.path.exists(path) and append:
-            try:
-                existing_df = self.read_excel(path=path, schema=schema)
-                df = pl.concat([existing_df, df])
-            except Exception as e:
-                logger.error(f"Error reading existing Excel for appending: {e}")
-                # Continue with writing the new data even if appending fails
-        
-        try:
-            df.write_excel(path)
-            logger.info('Successfully updated Excel')
-        except Exception as e:
-            logger.error(f"Error writing Excel: {e}")
-            raise
-
-    def output_csv(self, path: str, df: pl.DataFrame, schema: Optional[Dict[str, pl.DataType]] = None, append: bool = False) -> None:
+    def output_csv(self, path: str, df: pl.DataFrame, schema: Optional[Dict[str, pl.DataType]] = None, append: bool = True) -> None:
         logger.info(f'Outputting CSV to: {path}')
         
         # Ensure the directory exists
         os.makedirs(os.path.dirname(path), exist_ok=True)
+
+        # Ensure dataframe is not empty:
+        if df.is_empty():
+            logger.info('Dataframe is empty. Skipping outputting')
+            return
         
         if schema:
             df = self._output_schema(df, schema)
@@ -144,3 +107,33 @@ class DataStorage:
         except Exception as e:
             logger.error(f"Error writing CSV: {e}")
             raise
+
+    def read_csv_if_exists(self, path, schema, columns):
+        """
+        Reads a CSV file if it exists and selects specified columns.
+
+        Parameters:
+        data_storage (DataStorage): The data storage instance to read CSV.
+        path (str): The path to the CSV file.
+        schema (dict): The schema of the CSV file.
+        columns (list): The columns to select.
+
+        Returns:
+        pl.DataFrame: The resulting DataFrame with selected columns or an empty DataFrame.
+        """
+        try:
+            if os.path.exists(path):
+                df = self.read_csv(path=path, schema=schema).select(columns)
+            else:
+                logger.warning(f"File {path} does not exist. Returning an empty DataFrame.")
+                df = pl.DataFrame(schema={col: schema[col] for col in columns if col in schema})
+
+        except pl.exceptions.ColumnNotFoundError as e:
+            logger.error(f"Column not found in {path}: {e}")
+            df = pl.DataFrame(schema={col: schema[col] for col in columns if col in schema})
+
+        except Exception as e:
+            logger.error(f"Error reading {path}: {e}")
+            df = pl.DataFrame(schema={col: schema[col] for col in columns if col in schema})
+
+        return df
