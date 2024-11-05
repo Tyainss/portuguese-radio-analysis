@@ -2,6 +2,7 @@ import os
 import polars as pl
 from datetime import datetime, timedelta, date, time as datetime_time
 import time
+from tqdm import tqdm
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
@@ -184,7 +185,7 @@ class PassouTypeRadioScraper(RadioScraper):
             day_values = day_values[:min(max_days, len(day_values))]
 
         all_data = []
-        for day_value in day_values:
+        for day_value in tqdm(day_values, total=len(day_values), desc=f'Scraping from radio {self.radio_name}', unit='day'):
             day_track_data = self._extract_day_data(day_value=day_value, last_time_played=last_time_played)
             if day_track_data:
                 all_data.extend(day_track_data)
@@ -265,12 +266,12 @@ class RFMRadioScraper(RadioScraper):
         day_track_data = []
 
         period_values = self._ignore_first_option(self._get_option_list(self.period_element_id))
-        for period in period_values:
+        for period in tqdm(period_values, desc=f'Processing period for radio {self.radio_name}', unit='period'):
             period_select = Select(self.driver.find_element(By.ID, self.period_element_id))
             period_select.select_by_value(period)
 
             hour_values = self._ignore_first_option(self._get_option_list(self.hour_element_id))
-            for hour in hour_values:
+            for hour in tqdm(hour_values, desc='Processing hours', unit='hour', leave=False):
                 hour_select = Select(self.driver.find_element(By.ID, self.hour_element_id))
                 hour_select.select_by_value(hour)
 
@@ -317,7 +318,7 @@ class RFMRadioScraper(RadioScraper):
             day_values = day_values[:min(max_days, len(day_values))]
 
         all_data = []
-        for day_value in day_values:
+        for day_value in tqdm(day_values, total=len(day_values), desc=f'Scraping from radio {self.radio_name}', unit='day'):
             day_track_data = self._extract_day_data(day_value=day_value, last_time_played=last_time_played)
             if day_track_data:
                 all_data.extend(day_track_data)
@@ -360,54 +361,57 @@ class MegaHitsRadioScraper(RadioScraper):
             min_hour_range = int(last_time_played[self.TIME_PLAYED_COLUMN].split(':')[0])
 
         day_track_data = []
-        for hour in range(min_hour_range, 24):
-            for minute in [15, 45]:
-                for attempt in range (self.max_retries):
-                    try:
-                        # Clear and enter hour
-                        hour_input = self.wait.until(EC.visibility_of_element_located((By.ID, self.search_hour)))
-                        hour_input.clear()
-                        hour_input.send_keys(f"{hour:02}")
+        with tqdm(total=24 - min_hour_range, desc=f'Day {day}: Processing Hours', unit='hour', position=1, leave=False) as hour_bar:
+            for hour in range(min_hour_range, 24):
+                for minute in [15, 45]:
+                    for attempt in range (self.max_retries):
+                        try:
+                            # Clear and enter hour
+                            hour_input = self.wait.until(EC.visibility_of_element_located((By.ID, self.search_hour)))
+                            hour_input.clear()
+                            hour_input.send_keys(f"{hour:02}")
+                            
+                            # Clear and enter minute
+                            minute_input = self.wait.until(EC.visibility_of_element_located((By.ID, self.search_minute)))
+                            minute_input.clear()
+                            minute_input.send_keys(f"{minute:02}")
+
+                            search_button = self.wait.until(EC.element_to_be_clickable((By.ID, self.search_button_text)))
+                            search_button.click()
+                            time.sleep(1)
+                            
+                            times_played = self.driver.find_elements(By.CLASS_NAME, self.time_played_name)
+                            tracks_title = self.driver.find_elements(By.CLASS_NAME, self.track_name)
+                            artists_name = self.driver.find_elements(By.CLASS_NAME, self.artist_name)
+
+                            for time_played, track_title, artist_name in zip(times_played, tracks_title, artists_name):
+                                if last_time_played and day == last_time_played[self.DAY_COLUMN] and time_played.text <= last_time_played[self.TIME_PLAYED_COLUMN]:
+                                    continue
+                                track_data = {
+                                    self.RADIO_COLUMN: self.radio_name,
+                                    self.DAY_COLUMN: day,
+                                    self.TIME_PLAYED_COLUMN: time_played.text,
+                                    self.TRACK_TITLE_COLUMN: track_title.text,
+                                    self.ARTIST_NAME_COLUMN: artist_name.text
+                                }
+                                day_track_data.append(track_data)
+                            
+                            # Break out of retry loop if successful
+                            break
+
+                        except StaleElementReferenceException:
+                            print(f"Stale element reference at {hour}:{minute}, retrying {attempt + 1}/{self.max_retries}")
+                            time.sleep(1) 
+
+                        except TimeoutException:
+                            print(f"Timeout at {hour}:{minute}, skipping to next time.")
+                            break  # Skip to next time if timeout occurs
                         
-                        # Clear and enter minute
-                        minute_input = self.wait.until(EC.visibility_of_element_located((By.ID, self.search_minute)))
-                        minute_input.clear()
-                        minute_input.send_keys(f"{minute:02}")
+                        except Exception as e:
+                            print(f"An error occurred while extracting data: {e}")
+                            break
 
-                        search_button = self.wait.until(EC.element_to_be_clickable((By.ID, self.search_button_text)))
-                        search_button.click()
-                        time.sleep(1)
-                        
-                        times_played = self.driver.find_elements(By.CLASS_NAME, self.time_played_name)
-                        tracks_title = self.driver.find_elements(By.CLASS_NAME, self.track_name)
-                        artists_name = self.driver.find_elements(By.CLASS_NAME, self.artist_name)
-
-                        for time_played, track_title, artist_name in zip(times_played, tracks_title, artists_name):
-                            if last_time_played and day == last_time_played[self.DAY_COLUMN] and time_played.text <= last_time_played[self.TIME_PLAYED_COLUMN]:
-                                continue
-                            track_data = {
-                                self.RADIO_COLUMN: self.radio_name,
-                                self.DAY_COLUMN: day,
-                                self.TIME_PLAYED_COLUMN: time_played.text,
-                                self.TRACK_TITLE_COLUMN: track_title.text,
-                                self.ARTIST_NAME_COLUMN: artist_name.text
-                            }
-                            day_track_data.append(track_data)
-                        
-                        # Break out of retry loop if successful
-                        break
-
-                    except StaleElementReferenceException:
-                        print(f"Stale element reference at {hour}:{minute}, retrying {attempt + 1}/{self.max_retries}")
-                        time.sleep(1) 
-
-                    except TimeoutException:
-                        print(f"Timeout at {hour}:{minute}, skipping to next time.")
-                        break  # Skip to next time if timeout occurs
-                    
-                    except Exception as e:
-                        print(f"An error occurred while extracting data: {e}")
-                        break
+                hour_bar.update(1)  # Update the hour progress bar for each completed hour
         
         return day_track_data
 
@@ -424,7 +428,7 @@ class MegaHitsRadioScraper(RadioScraper):
             day_values = day_values[:min(max_days, len(day_values))]
 
         all_data = []
-        for day_value in day_values:
+        for day_value in tqdm(day_values, total=len(day_values), desc=f'Scraping from radio {self.radio_name}', unit='day'):
             day_track_data = self._extract_day_data(day_value=day_value, last_time_played=last_time_played)
             if day_track_data:
                 all_data.extend(day_track_data)
