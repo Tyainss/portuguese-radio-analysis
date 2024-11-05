@@ -79,7 +79,7 @@ class DataStorage:
         
         return df
 
-    def output_csv(self, path: str, df: pl.DataFrame, schema: Optional[Dict[str, pl.DataType]] = None, append: bool = False) -> None:
+    def output_csv(self, path: str, df: pl.DataFrame, schema: Optional[Dict[str, pl.DataType]] = None, append: bool = True) -> None:
         logger.info(f'Outputting CSV to: {path}')
         
         # Ensure the directory exists
