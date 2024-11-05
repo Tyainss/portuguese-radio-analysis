@@ -1,0 +1,932 @@
+track_title,artist_name,spotify_album,spotify_release_date,spotify_duration_ms,spotify_popularity,spotify_genres,spotify_danceability,spotify_energy,spotify_valence,spotify_acousticness,spotify_instrumentalness,spotify_liveness,spotify_speechiness,spotify_tempo,spotify_mode,spotify_loudness,spotify_time_signature
+VER-TE DORMIR,CARLAO,Ver-te Dormir,2024-06-05,187669,30,hip hop tuga,0.868,0.763,0.617,0.118,0.00011,0.108,0.115,145.04,0,-4.871,4
+In My Feelings,Drake,Scorpion,2018-06-29,217925,71,canadian hip hop,0.835,0.626,0.35,0.0589,0.00006,0.396,0.125,91.03,1,-5.833,4
+SOMETHING JUST LIKE THIS,"THE CHAINSMOKERS, COLDPLAY",Memories...Do Not Open,2017-04-07,247160,86,pop,0.617,0.635,0.446,0.0498,0.0000144,0.164,0.0317,103.019,0,-6.769,4
+Stereo Love,Edward Maya,Stereo Love,2009-01-01,185120,70,romanian house,0.775,0.726,0.206,0.0399,0.0235,0.11,0.0369,126.999,1,-5.629,4
+COLD HEART (PNAU REMIX),"ELTON JOHN, DUA LIPA",The Lockdown Sessions,2021-10-22,202735,67,glam rock,0.795,0.8,0.934,0.0354,0.0000725,0.0915,0.0309,116.032,1,-6.32,4
+DANCING WITH A STRANGER,SAM SMITH & NORMANI,Love Goes,2020-10-30,171029,75,pop,0.741,0.52,0.347,0.447,1.97e-6,0.222,0.0656,102.998,1,-7.513,4
+CLOSER,THE CHAINSMOKERS [+] HALSEY,Closer,2016-07-29,244960,84,pop,0.748,0.524,0.661,0.414,0.0,0.111,0.0338,95.01,1,-5.599,4
+MÃE,D.A.M.A,Game Of Thrones: Season 6 (Music from the HBO Series),2016-06-24,172664,33,german soundtrack,0.151,0.0532,0.0348,0.754,0.679,0.102,0.0368,75.239,0,-20.311,4
+WHERE SHE GOES,Bad Bunny,WHERE SHE GOES,2023-05-18,231704,74,reggaeton,0.652,0.8,0.234,0.143,0.629,0.112,0.0614,143.978,0,-4.019,4
+Work,Charlotte Day Wilson,CDW,2016-08-26,224481,61,alternative r&b,0.623,0.296,0.158,0.522,0.211,0.0801,0.0311,129.949,1,-8.036,3
+PERFUME,CALEMA,Perfume,2023-11-24,220833,54,musica santomense,0.488,0.818,0.512,0.21,0.0,0.321,0.163,96.169,0,-6.784,4
+disease,lady gaga,Disease,2024-10-25,229997,84,art pop,0.562,0.917,0.501,0.0513,0.0,0.488,0.117,100.987,0,-2.768,4
+Conversations in the Dark,John Legend,Bigger Love,2020-06-19,235653,56,neo soul,0.361,0.357,0.153,0.704,0.0,0.219,0.0312,122.962,0,-8.423,4
+Trevo,"Anavitória, Diogo Piçarra",Trevo (Tu),2017-10-13,206181,42,folk brasileiro,0.638,0.467,0.473,0.765,0.0,0.132,0.0256,99.805,1,-7.946,4
+LOCKED OUT OF HEAVEN,BRUNO MARS,Unorthodox Jukebox,2012-12-07,233478,87,dance pop,0.726,0.698,0.867,0.049,0.0,0.309,0.0431,143.994,1,-4.165,4
+O Regresso,The Gift,Coral,2022-11-04,185400,29,portuguese rock,0.528,0.362,0.185,0.691,0.00205,0.138,0.0384,122.085,1,-11.784,4
+Aquamarine,Addison Rae,Aquamarine,2024-10-25,162814,75,social media pop,0.568,0.827,0.685,0.0765,0.0243,0.096,0.0326,112.035,0,-8.266,4
+ROCKSTAR,LISA,Rockstar,2024-06-27,138213,84,k-pop,0.668,0.628,0.568,0.129,0.0,0.0293,0.046,140.053,1,-4.692,4
+Uh la la la,Lon3r Johny,ANTI$$OCIAL,2023-04-01,180300,52,hip hop tuga,0.855,0.551,0.547,0.104,0.192,0.382,0.153,119.979,1,-7.655,4
+Hall of Fame,"The Script , will.i.am",#3,2012-09-10,202533,69,celtic rock,0.421,0.873,0.629,0.0654,0.0,0.123,0.0564,84.786,1,-4.343,4
+MONTERO (CALL ME BY YOUR NAME),LIL NAS X,MONTERO,2021-09-17,137704,76,lgbtq+ hip hop,0.593,0.503,0.71,0.293,0.0,0.405,0.22,178.781,0,-6.725,4
+BROKEN WINGS,MR MISTER,Welcome To The Real World,1985-11-27,343933,68,album rock,0.286,0.5,0.443,0.134,0.0000457,0.108,0.0357,99.162,0,-14.281,4
+NADA MUDA,MATHEUS PARAIZO,Nada muda,2024-07-12,146896,14,"",0.666,0.408,0.416,0.641,1.28e-6,0.117,0.126,115.927,1,-8.688,4
+Unstoppable,Sia,This Is Acting (Deluxe Version),2016-10-21,217746,77,pop,0.468,0.779,0.26,0.112,0.000373,0.101,0.0779,173.799,1,-4.839,4
+Novo Balanço,Veigh,Dos Prédios Deluxe,2023-05-19,140322,70,trap brasileiro,0.836,0.499,0.65,0.669,0.0,0.134,0.0563,124.05,0,-5.82,4
+Hawái,Maluma,PAPI JUANCHO,2020-08-21,199112,78,latin pop,0.783,0.727,0.558,0.185,0.0000246,0.0626,0.389,180.067,0,-3.454,4
+BUBBLY,COLBIE CAILLAT,Coco,2007-01-01,196280,65,dance pop,0.697,0.474,0.249,0.603,0.0,0.11,0.0351,127.904,1,-6.663,4
+Bad Romance,Lady Gaga,The Fame Monster (Deluxe Edition),2009-11-05,294573,82,art pop,0.695,0.921,0.714,0.00314,0.0000526,0.0842,0.0363,119.007,1,-3.752,4
+Domino,Jessie J,Who You Are (Platinum Edition),2011-01-01,231693,66,dance pop,0.757,0.547,0.793,0.0115,0.0,0.0445,0.0355,126.974,1,-4.572,4
+Amor d'Água Fresca,Dina,Guardado Em Mim,2002-06-20,173253,28,classic portuguese pop,0.673,0.894,0.804,0.253,0.000328,0.297,0.0271,140.018,0,-4.046,4
+Breakeven,The Script,The Script,2008-07-14,261426,78,celtic rock,0.63,0.696,0.491,0.144,0.0,0.0835,0.0242,94.034,1,-4.501,4
+The Lazy Song,Bruno Mars,Doo-Wops & Hooligans,2010-05-11,189109,71,dance pop,0.794,0.711,0.955,0.3,0.0,0.0955,0.0699,174.915,0,-5.124,4
+How to Save a Life,The Fray,How To Save A Life,2005-09-13,262533,80,neo mellow,0.64,0.743,0.361,0.269,0.0,0.101,0.0379,122.035,1,-4.08,4
+FORGET ME,LEWIS CAPALDI,Broken By Desire To Be Heavenly Sent,2023-05-19,203666,72,pop,0.451,0.754,0.674,0.327,0.0,0.332,0.0864,203.894,0,-3.749,4
+HATE IT OR LOVE IT,THE GAME feat. 50 CENT,The Documentary,2005-01-01,206400,78,detroit hip hop,0.802,0.785,0.435,0.14,0.0,0.123,0.207,99.998,1,-4.781,4
+Starlight,Sofia Camara,Starlight,2024-10-11,229314,52,"",0.375,0.453,0.0647,0.202,0.0,0.1,0.0299,173.828,1,-6.744,4
+MAMACITA,BLACK EYED PEAS x OZUNA x J. REY SOUL,MAMACITA REMIXES,2020-06-17,232599,13,dance pop,0.873,0.585,0.621,0.416,0.0000912,0.0724,0.139,105.006,1,-6.145,4
+PSYCHO,POST MALONE feat. TY DOLLA $IGN,beerbongs & bentleys,2018-04-27,221440,73,dfw rap,0.75,0.56,0.459,0.546,0.0,0.111,0.105,140.06,1,-8.094,4
+Firework,Katy Perry,Teenage Dream,2010-01-01,227893,70,pop,0.638,0.831,0.649,0.142,0.0,0.113,0.049,124.071,1,-5.039,4
+Stan,"Eminem, Dido",The Marshall Mathers LP,2000-05-23,404106,79,detroit hip hop,0.78,0.768,0.507,0.0371,2.34e-6,0.518,0.238,80.063,0,-4.325,4
+As It Was,Harry Styles,Harry's House,2022-05-20,167303,87,pop,0.52,0.731,0.662,0.342,0.00101,0.311,0.0557,173.93,0,-5.338,4
+Love Yourself,Justin Bieber,Purpose (Deluxe),2015-11-13,233720,83,canadian pop,0.609,0.378,0.515,0.835,0.0,0.28,0.438,100.43,1,-9.828,4
+How Would You Feel (Paean),Ed Sheeran,÷ (Deluxe),2017-03-03,280533,62,pop,0.617,0.439,0.242,0.424,0.0,0.127,0.0269,139.979,1,-5.63,4
+CIRCUS,BRITNEY SPEARS,Circus (Deluxe Version),2008-12-02,192360,77,dance pop,0.791,0.733,0.761,0.147,0.000381,0.0713,0.052,114.98,0,-5.215,4
+Life for Rent,Dido,Life For Rent,2003-09-03,221053,39,dance pop,0.487,0.519,0.154,0.191,0.0,0.134,0.0296,82.947,1,-7.249,4
+Onde Vais,"Bárbara Bandeira, Carminho",Onde Vais (feat. Carminho),2021-10-08,238305,47,portuguese pop,0.471,0.25,0.438,0.894,0.0,0.171,0.0342,140.227,1,-7.921,3
+Forget Me,Lewis Capaldi,Broken By Desire To Be Heavenly Sent,2023-05-19,203666,72,pop,0.451,0.754,0.674,0.327,0.0,0.332,0.0864,203.894,0,-3.749,4
+THE SCIENTIST,COLDPLAY,A Rush of Blood to the Head,2002-08-27,309600,85,permanent wave,0.557,0.442,0.213,0.731,0.0000146,0.11,0.0243,146.277,1,-7.224,4
+Too Little Too Late,JoJo,The High Road,2006-10-17,221720,63,dance pop,0.421,0.799,0.731,0.00871,0.0000163,0.0794,0.0562,82.407,0,-5.183,4
+With You,Chris Brown,Exclusive (Expanded Edition),2007-11-06,252120,74,r&b,0.662,0.693,0.655,0.134,0.0,0.145,0.0698,86.009,1,-4.298,4
+Sagrado Profano,Luísa Sonza ,Escândalo Íntimo,2024-05-28,196601,72,funk carioca,0.665,0.717,0.638,0.497,0.0,0.0998,0.249,129.882,1,-5.554,4
+Ritmo (Bad Boys for Life),Black Eyed Peas,RITMO (Bad Boys For Life),2019-10-12,221714,67,dance pop,0.721,0.716,0.667,0.0334,0.00084,0.237,0.0657,104.994,0,-7.037,4
+DESPECHA,Rosalía,MOTOMAMI +,2022-09-09,156787,77,pop,0.914,0.622,0.77,0.146,0.0000168,0.0632,0.0892,130.04,1,-6.538,4
+Happy,Pharrell Williams,G I R L,2014-03-03,232720,79,dance pop,0.647,0.822,0.962,0.219,0.0,0.0908,0.183,160.019,0,-4.662,4
+Planeta,Bispo,Planeta,2023-03-24,167012,55,hip hop tuga,0.777,0.443,0.404,0.712,0.0000283,0.103,0.473,75.307,1,-8.864,4
+Circo de Feras,Resistência,Resistência Ao Vivo no Atlântico - 25 Anos,2020-11-20,216693,5,portuguese rock,0.609,0.793,0.515,0.288,0.0014,0.693,0.0263,94.575,1,-6.397,4
+OUTROS PLANOS,RITA ROCHA,Outros Planos,2022-11-24,221096,38,"",0.609,0.34,0.246,0.776,0.0000155,0.104,0.0323,100.093,1,-9.675,4
+Unwritten,Natasha Bedingfield,Unwritten,2004-08-30,259333,85,dance pop,0.706,0.8,0.629,0.00584,0.0,0.0822,0.0399,100.011,1,-6.333,4
+She's so High,Kurt Nilsen,I,2003-09-04,248746,44,classic norwegian pop,0.506,0.822,0.465,0.033,0.0,0.116,0.0355,123.026,1,-4.119,4
+Attention,Charlie Puth,Voicenotes,2018-05-11,208786,80,pop,0.775,0.613,0.797,0.109,0.0000233,0.134,0.0542,100.066,0,-4.586,4
+The Scientist,Coldplay,A Rush of Blood to the Head,2002-08-27,309600,85,permanent wave,0.557,0.442,0.213,0.731,0.0000146,0.11,0.0243,146.277,1,-7.224,4
+CHINATOWN,YANG,Guess How Much?,2023-05-12,177733,19,deep comedy,0.621,0.676,0.254,0.901,0.0,0.885,0.956,77.607,1,-12.478,3
+CALL OUT MY NAME,THE WEEKND,"My Dear Melancholy,",2018-03-30,228373,83,canadian contemporary r&b,0.461,0.593,0.174,0.165,0.0,0.307,0.0356,134.165,1,-4.954,3
+Put Your Records On,Corinne Bailey Rae,Corinne Bailey Rae,2006-01-01,215360,77,british soul,0.739,0.511,0.542,0.167,1.34e-6,0.133,0.0362,96.038,1,-7.844,4
+TIGINNI,JIMMY P. & KIKIMOTELEBA,Tiginni,2024-09-12,170986,33,hip hop tuga,0.743,0.805,0.484,0.0723,0.0,0.29,0.0623,134.923,0,-5.494,4
+SORRY,JUSTIN BIEBER,Purpose (Deluxe),2015-11-13,200786,83,canadian pop,0.655,0.76,0.409,0.0797,0.0,0.299,0.045,99.947,0,-3.669,4
+Eu Quero,Heróis do Mar,Heróis Do Mar,1988-01-01,277400,5,portuguese rock,0.704,0.565,0.902,0.074,1.17e-6,0.0178,0.0331,118.085,1,-12.613,4
+Felices los 4,Maluma,F.A.M.E.,2018-05-18,230000,71,latin pop,0.766,0.756,0.716,0.213,0.0,0.349,0.132,94.027,1,-5.861,4
+Just Like a Pill,Pink,M!ssundaztood (Expanded Edition),2001-01-01,236600,66,dance pop,0.689,0.774,0.25,0.0000872,0.0,0.0941,0.0278,102.054,1,-4.528,4
+HOLD ME WHILE YOU WAIT,LEWIS CAPALDI,Divinely Uninspired To A Hellish Extent,2019-05-17,205686,75,pop,0.688,0.53,0.162,0.443,0.0,0.0995,0.0333,106.958,1,-5.507,4
+Make You Feel My Love,Adele,19,2008-01-28,212040,70,british soul,0.317,0.172,0.0963,0.907,0.000383,0.105,0.0326,65.18,1,-10.636,3
+PARAISO,DIOGO PIÇARRA,Abrigo - EP,2018-05-28,236000,42,portuguese pop,0.624,0.391,0.416,0.781,0.0,0.0714,0.0327,120.148,1,-8.068,4
+Re-Tratamento,Da Weasel,Re-Definições,2004-06-11,245693,50,hip hop tuga,0.841,0.475,0.451,0.0743,0.000506,0.115,0.0685,174.963,1,-7.512,4
+Dancing on My Own,Calum Scott,Only Human (Deluxe),2018-03-09,260285,77,pop,0.681,0.174,0.231,0.837,0.0000335,0.0983,0.0315,112.672,1,-8.745,4
+Hips Don't Lie,"Shakira, Wyclef Jean","Oral Fixation, Vol. 2 (Expanded Edition)",2005-11-28,218093,84,colombian pop,0.778,0.824,0.758,0.284,0.0,0.405,0.0707,100.024,0,-5.892,4
+Hapiness,U2,Anhedonia,2023-05-05,124500,0,"",0.172,0.354,0.0387,0.235,0.953,0.31,0.0364,137.725,1,-11.894,4
+CARRIE,EUROPE,The Final Countdown (Expanded Edition),1986-01-01,272133,67,album rock,0.455,0.487,0.139,0.114,2.43e-6,0.358,0.0264,136.482,1,-7.112,4
+Deixa-te Levar,Carolina de Deus,Dores de Crescimento,2023-05-12,155586,27,"",0.764,0.382,0.445,0.797,0.0,0.189,0.0428,116.106,1,-8.229,4
+Underneath Your Clothes,Shakira,Laundry Service,2001-11-13,224066,59,colombian pop,0.616,0.597,0.362,0.691,0.0,0.104,0.0415,165.508,1,-5.328,4
+Moscow Mule,Bad Bunny,Un Verano Sin Ti,2022-05-06,245939,79,reggaeton,0.804,0.674,0.292,0.294,1.18e-6,0.115,0.0333,99.968,0,-5.453,4
+What If?,Coldplay,X&Y,2005-06-07,298519,53,permanent wave,0.304,0.502,0.204,0.313,0.0011,0.138,0.035,136.779,0,-6.707,4
+TOUGH,QUAVO & LANA DEL REY,Tough,2024-07-03,188828,80,atl hip hop,0.582,0.557,0.211,0.452,0.0000187,0.121,0.101,84.989,0,-7.981,4
+THE BUSINESS,TIESTO,The Business,2020-09-16,164000,72,big room,0.798,0.62,0.235,0.414,0.0192,0.112,0.232,120.031,0,-7.079,4
+Someone Like You,Adele,21,2011-01-24,285240,77,british soul,0.556,0.319,0.294,0.893,0.0,0.0996,0.0281,135.187,1,-8.251,4
+MOTH TO A FLAME,SWEDISH HOUSE MAFIA with THE WEEKND,Paradise Again,2022-04-15,234000,78,edm,0.553,0.659,0.105,0.0027,0.0,0.105,0.0391,120.146,1,-7.295,4
+Trouble,Coldplay,Parachutes,2000-07-10,273426,72,permanent wave,0.565,0.546,0.195,0.189,0.0015,0.17,0.0314,139.757,0,-7.496,4
+Qué Pena,Maluma,Qué Pena,2019-09-27,212711,55,latin pop,0.635,0.661,0.858,0.102,0.0,0.336,0.364,126.15,0,-6.425,5
+Unfaithful,Rihanna,A Girl Like Me,2006-04-10,226973,68,barbadian pop,0.588,0.391,0.349,0.839,0.0,0.227,0.0334,144.069,0,-8.607,4
+APT.,"Rosé, Bruno Mars",APT.,2024-10-18,169917,96,k-pop,0.777,0.783,0.939,0.0283,0.0,0.355,0.26,149.027,0,-4.477,4
+Therefore I Am,Billie Eilish,Happier Than Ever,2021-07-30,173539,72,art pop,0.879,0.365,0.663,0.227,0.135,0.0583,0.0924,94.016,1,-7.781,4
+Dani California,Red Hot Chili Peppers,Stadium Arcadium,2006-05-09,282160,76,alternative rock,0.556,0.913,0.73,0.0193,8.59e-6,0.346,0.0437,96.184,1,-2.36,4
+In a little While,U2,All That You Can't Leave Behind,2000-01-01,216973,41,irish rock,0.645,0.596,0.52,0.458,0.0,0.176,0.0271,92.048,1,-7.071,4
+Hey there Delilah,Plain White T's,All That We Needed,2005-01-01,232533,76,modern rock,0.658,0.291,0.295,0.872,0.0,0.114,0.0292,103.962,1,-10.572,4
+Unforgettable,French Montana,Jungle Rules,2017-07-14,233901,85,hip hop,0.726,0.769,0.733,0.0293,0.0101,0.104,0.123,97.985,1,-5.043,4
+As Regras da Sensatez,Rui Veloso,Avenidas,1998-01-01,219440,29,portuguese rock,0.589,0.282,0.326,0.936,0.155,0.108,0.0281,112.085,1,-10.141,4
+Power Over Me,Dermot Kennedy,Dermot Kennedy,2019-01-04,206960,67,folk-pop,0.42,0.843,0.494,0.0528,0.0,0.106,0.12,173.815,0,-4.231,3
+Love Again,Richie Campbell,Heartbreak & Other Stories,2023-03-17,208068,48,hip hop tuga,0.792,0.649,0.392,0.358,0.0000154,0.114,0.12,96.962,1,-8.795,4
+CORACAO DE GELO,WIU,Manual de Como Amar Errado,2022-11-29,168000,66,trap brasileiro,0.732,0.671,0.836,0.124,0.0,0.128,0.082,159.907,0,-4.276,4
+"QUEVEDO: BZRP MUSIC SESSIONS, VOL. 52",BIZARRAP & QUEVEDO,"Quevedo: Bzrp Music Sessions, Vol. 52",2022-07-06,198937,80,argentine hip hop,0.621,0.782,0.55,0.0125,0.033,0.23,0.044,128.033,1,-5.548,4
+SENORITA,SHAWN MENDES & CAMILA CABELLO,Shawn Mendes (Deluxe),2019-06-19,190799,78,canadian pop,0.759,0.548,0.75,0.0379,0.0,0.0828,0.0289,116.963,0,-6.049,4
+The Man who Can't Be Moved,The Script,The Script,2008-07-14,241373,80,celtic rock,0.605,0.629,0.308,0.437,0.0,0.097,0.0279,99.894,1,-5.051,4
+PILLOWTALK,ZAYN,Mind Of Mine (Deluxe Edition),2016-03-25,202746,79,pop,0.584,0.7,0.438,0.117,0.0,0.0939,0.0456,124.944,1,-4.275,4
+POCPOC,PEDRO SAMPAIO,POCPOC,2023-11-23,127384,67,funk carioca,0.837,0.636,0.857,0.239,0.0,0.0683,0.0521,129.891,0,-4.206,4
+Outside,"Calvin Harris, Ellie Goulding",Motion,2014-10-31,227266,82,dance pop,0.646,0.823,0.418,0.213,0.0,0.322,0.0394,128.035,0,-4.123,4
+CLOSER,THE CHAINSMOKERS feat. HALSEY,Closer,2016-07-29,244960,84,pop,0.748,0.524,0.661,0.414,0.0,0.111,0.0338,95.01,1,-5.599,4
+Para Sempre [unplugged],"Dengaz, Seu Jorge",Para Sempre + Para Sempre (Unplugged),2016-11-18,233223,34,hip hop tuga,0.458,0.24,0.268,0.697,0.000446,0.118,0.053,169.815,0,-13.94,4
+Foi Feitiço [acústico],André Sardet,Acústico,2006-07-01,284880,14,classic portuguese pop,0.443,0.635,0.371,0.823,0.000216,0.724,0.049,103.04,1,-9.241,4
+Wake Me Up when September Ends,Green Day,American Idiot,2004-09-21,285653,77,modern rock,0.546,0.814,0.146,0.023,0.0,0.0972,0.0314,104.98,1,-5.146,4
+"Tomorrow (A Better You, Better Me)","Quincy Jones, Tevin Campbell",Back On The Block,1989-01-01,286866,39,soul jazz,0.336,0.636,0.387,0.671,0.00379,0.105,0.0378,81.986,1,-6.185,4
+Is It Over Now (Taylor's Version) (From The Vault),Taylor Swift,1989 (Taylor's Version),2023-10-26,229477,75,pop,0.599,0.651,0.153,0.0486,0.0,0.126,0.035,100.001,1,-7.343,4
+ONE EYE OPEN,MIMI WEBB,One Eye Open,2024-10-25,212994,57,alt z,0.606,0.547,0.506,0.0595,0.0,0.109,0.0582,162.951,1,-5.416,4
+Creepin',Metro Boomin,HEROES & VILLAINS,2022-12-02,221520,81,rap,0.716,0.613,0.157,0.391,0.0,0.0813,0.0522,97.914,0,-6.018,4
+CHAMADA NÃO ATENDIDA,BÁRBARA TINOCO,Bichinho,2023-04-21,207173,48,portuguese pop,0.578,0.34,0.152,0.851,0.0000131,0.137,0.0758,86.506,0,-9.09,4
+Ouvi Dizer,Melim,Melim,2018-06-08,210889,63,mpb,0.641,0.614,0.727,0.0745,0.0,0.093,0.0532,81.011,1,-7.847,4
+HALL OF FAME,THE SCRIPT [+] WILL.I.AM,#3,2012-09-10,202533,69,celtic rock,0.421,0.873,0.629,0.0654,0.0,0.123,0.0564,84.786,1,-4.343,4
+Jar of Hearts,Christina Perri,lovestrong.,2011-05-10,246587,69,pop,0.349,0.348,0.0886,0.726,0.0,0.12,0.0316,74.541,1,-6.142,4
+Só Gosto de Ti,Heróis do Mar,Heróis Do Mar Vol. II (1982-1984),1992-01-01,270066,36,portuguese rock,0.777,0.616,0.898,0.325,0.0601,0.0636,0.0269,97.91,1,-12.67,4
+Brutos Diamantes,Syro,11 11,2023-11-11,176320,56,portuguese pop,0.597,0.568,0.591,0.601,0.0,0.111,0.0753,159.795,0,-5.747,4
+Malvadão 3,Xamã,Malvadão 3,2021-11-30,141769,60,brazilian hip hop,0.821,0.609,0.516,0.378,0.0,0.136,0.268,133.133,0,-6.541,4
+Home,Michael Bublé,It's Time,2005-02-07,225906,60,adult standards,0.608,0.37,0.349,0.844,0.0000187,0.112,0.0306,127.631,1,-9.207,4
+YOU GIVE ME SOMETHING,JAMES MORRISON,Undiscovered,2006-01-01,212933,50,neo mellow,0.559,0.671,0.577,0.21,0.0,0.0869,0.1,79.493,1,-7.109,4
+MELHOR DE MIM,MARIZA,Mundo,2016-09-09,246813,20,fado,0.752,0.377,0.337,0.657,0.0,0.0967,0.031,97.455,1,-7.804,3
+OLD TOWN ROAD,LIL NAS X,7 EP,2019-06-21,157066,72,lgbtq+ hip hop,0.878,0.619,0.639,0.0533,0.0,0.113,0.102,136.041,1,-5.56,4
+All the Right Moves,OneRepublic,Waking Up,2009-01-01,238000,64,piano rock,0.529,0.948,0.65,0.258,9.35e-6,0.283,0.0474,146.024,1,-3.527,4
+Asas Delta,Clã,O Melhor dos Clã,2016-07-20,173080,20,portuguese rock,0.788,0.695,0.91,0.132,0.0,0.871,0.0402,117.98,1,-3.906,4
+I Feel It Coming,The Weeknd,Starboy,2016-11-25,269186,75,canadian contemporary r&b,0.773,0.819,0.585,0.428,0.0,0.0679,0.118,92.987,0,-5.946,4
+Onde Anda,Calema,Onde Anda (French Version),2023-01-20,177533,41,musica santomense,0.561,0.703,0.59,0.347,0.0,0.27,0.291,99.223,0,-7.707,4
+Lady (Hear Me Tonight),Modjo,Modjo (Remastered),2001-01-01,307153,77,disco house,0.72,0.808,0.869,0.00793,0.0293,0.0634,0.0379,126.041,1,-5.627,4
+The Monster,"Eminem, Rihanna",The Marshall Mathers LP2,2013-11-05,250188,78,detroit hip hop,0.781,0.853,0.626,0.0526,0.0,0.12,0.0714,110.046,0,-3.68,4
+CREEPIN,METRO BOOMIN feat. THE WEEKND & 21 SAVAGE,Creepin' (Remix),2023-03-17,232800,51,rap,0.71,0.643,0.197,0.454,0.0,0.087,0.0724,97.931,0,-6.034,4
+How You Remind Me,Nickelback,Silver Side Up,2001-09-11,223840,83,alternative metal,0.446,0.764,0.543,0.00135,0.0,0.099,0.033,172.094,1,-5.042,4
+KNOCK YOU DOWN,KERI HILSON feat. KANYE WEST & NE-YO,In A Perfect World...,2009-01-01,326186,64,dance pop,0.588,0.877,0.645,0.00952,0.0,0.171,0.16,155.165,1,-4.78,4
+Listen,Beyoncé,B'Day Deluxe Edition,2007-05-29,219546,54,pop,0.432,0.637,0.187,0.416,0.0,0.113,0.0475,122.394,1,-3.905,4
+ONLY GIRL (IN THE WORLD),RIHANNA,Loud (Japan Version),2010-01-01,235493,82,barbadian pop,0.789,0.706,0.638,0.112,0.0000171,0.0586,0.0429,125.918,0,-4.233,4
+Me Gusta,Anitta,Me Gusta (with Cardi B & Myke Towers),2020-09-18,180788,55,funk pop,0.91,0.604,0.807,0.448,0.0,0.0863,0.082,110.075,0,-4.392,4
+NÃO TE ODEIO,DIOGO PIÇARRA,SNTMNTL,2024-03-01,134960,37,portuguese pop,0.565,0.549,0.531,0.187,0.0,0.426,0.0387,149.079,1,-5.7,4
+Don't Worry,"Madcon, Ray Dalton",Don't Worry (feat. Ray Dalton),2015-07-30,214789,52,norwegian hip hop,0.811,0.699,0.733,0.0726,1.38e-6,0.148,0.114,122.987,1,-5.211,4
+Mad World,"Gary Jules, Michael Andrews",Trading Snakeoil for Wolftickets,2001-01-01,189506,65,neo mellow,0.344,0.0585,0.323,0.976,0.000362,0.103,0.0373,174.149,1,-17.212,4
+Seya,Gims ,Seya,2023-10-06,188484,73,"",0.798,0.681,0.434,0.219,0.00197,0.137,0.0722,101.005,0,-4.818,4
+We Don't Talk Anymore,"Charlie Puth, Selena Gomez",Nine Track Mind (Special Edition),2015-11-05,217706,81,pop,0.728,0.563,0.352,0.621,0.0,0.179,0.134,100.017,0,-8.053,4
+WITH YOU,CHRIS BROWN,Exclusive (Expanded Edition),2007-11-06,252120,74,r&b,0.662,0.693,0.655,0.134,0.0,0.145,0.0698,86.009,1,-4.298,4
+MOVE,ADAM PORT,Move,2024-06-07,177598,87,melodic house,0.727,0.782,0.655,0.0563,0.336,0.225,0.042,119.992,0,-8.529,4
+Dilemma,"Nelly, Kelly Rowland",Nellyville,2002-06-25,289160,77,dance pop,0.727,0.552,0.607,0.226,0.00016,0.198,0.14,168.19,0,-8.074,4
+Everybody's Changing,Keane,Hopes And Fears,2004-01-01,215160,64,neo mellow,0.517,0.832,0.45,0.0015,0.000208,0.101,0.0292,94.02,1,-3.564,4
+Left outside Alone,Anastacia,Anastacia,2004-01-01,257426,62,pop soul,0.663,0.746,0.325,0.0697,0.0,0.0929,0.0321,102.847,0,-3.567,4
+LATE NIGHT TALKING,HARRY STYLES,Harry's House,2022-05-20,177954,77,pop,0.714,0.728,0.901,0.298,0.0,0.106,0.0468,114.996,1,-4.595,4
+Maria Joana,"Nuno Ribeiro, Mariza, Calema",Maria Joana,2023-04-14,227807,55,portuguese pop,0.489,0.807,0.464,0.15,0.0,0.436,0.0712,93.417,0,-7.75,4
+Stuck,Thirty Seconds to Mars,It’s The End Of The World But It’s A Beautiful Day,2023-09-15,182746,58,modern rock,0.62,0.756,0.507,0.0427,3.42e-6,0.426,0.0557,123.067,0,-5.326,4
+DJ GOT US FALLIN IN LOVE,USHER feat. PITBULL,Raymond v Raymond (Expanded Edition),2010-03-30,220800,81,atl hip hop,0.663,0.861,0.654,0.0338,0.0,0.082,0.109,119.963,0,-3.398,4
+What Was I Made For?,Billie Eilish,"What Was I Made For? [From The Motion Picture ""Barbie""]",2023-07-13,222369,85,art pop,0.391,0.084,0.111,0.953,0.0,0.0983,0.0317,79.449,1,-17.843,4
+One,"Mary J. Blige, U2",The Breakthrough,2005-01-01,260466,61,dance pop,0.342,0.875,0.259,0.0827,0.0,0.129,0.0792,185.948,1,-3.164,4
+Solamente Tú,Pablo Alborán,Pablo Alboran (Deluxe),2011-02-01,247186,68,latin arena pop,0.519,0.419,0.266,0.457,0.0,0.161,0.033,140.033,1,-6.276,4
+Tá OK,Dennis,Tá OK (Remix),2023-08-03,171760,69,funk carioca,0.882,0.934,0.611,0.292,0.0024,0.0549,0.0501,130.032,0,-1.479,4
+Say You Won't Let Go,James Arthur,Back from the Edge,2016-10-28,211466,84,pop,0.358,0.557,0.494,0.695,0.0,0.0902,0.059,85.043,1,-7.398,4
+Não Me Deixes Partir,HMB,Hmb,2016-02-17,324160,18,portuguese pop,0.746,0.331,0.171,0.581,0.000263,0.0857,0.0369,107.981,0,-11.324,3
+No Te Enamores [remix],Milly ,No Te Enamores (Remix),2020-11-20,289933,59,reggaeton flow,0.824,0.837,0.58,0.573,0.0000166,0.271,0.107,100.021,1,-4.603,4
+When Love Takes Over,"David Guetta, Kelly Rowland",One Love (Deluxe),2009-08-21,191000,56,big room,0.675,0.862,0.498,0.0165,0.000427,0.169,0.0253,129.967,1,-4.614,4
+Gravity,John Mayer,Continuum,2006-09-11,245826,70,neo mellow,0.753,0.326,0.237,0.731,0.00131,0.24,0.0342,123.799,1,-9.883,3
+Moça,Ivandro,Trovador,2024-02-16,180491,52,hip hop tuga,0.486,0.441,0.29,0.639,0.000277,0.102,0.364,176.147,1,-9.068,4
+Superheroes,The Script,No Sound Without Silence,2014-09-15,245466,71,celtic rock,0.49,0.885,0.64,0.00218,0.0,0.0741,0.0396,166.996,1,-4.121,4
+Closer to the Edge,Thirty Seconds to Mars,This Is War (Deluxe),2009-01-01,273466,60,modern rock,0.502,0.948,0.102,0.0101,4.49e-6,0.0809,0.12,139.979,1,-3.717,4
+HOPELESSLY DEVOTED TO YOU,OLIVIA NEWTON-JOHN,20th Century Masters: The Millennium Collection: Best Of Olivia Newton-John,2002-02-05,186000,58,adult standards,0.574,0.514,0.352,0.313,0.00362,0.274,0.028,111.005,0,-8.02,3
+BELIEVER,IMAGINE DRAGONS,Evolve,2017-06-23,204346,85,modern rock,0.776,0.78,0.666,0.0622,0.0,0.081,0.128,124.949,0,-4.374,4
+ACORDAR,PLUTONIO,Acordar,2024-05-24,197862,56,hip hop tuga,0.793,0.747,0.533,0.285,0.000218,0.0873,0.0931,100.011,0,-6.632,4
+The only Exception,Paramore,Brand New Eyes,2009-09-28,267653,74,candy pop,0.452,0.563,0.209,0.144,0.0,0.143,0.0272,137.715,1,-6.607,3
+A THOUSAND YEARS,CHRISTINA PERRI,a thousand years,2011-10-18,285120,80,pop,0.421,0.407,0.161,0.309,0.000961,0.11,0.0267,139.028,1,-7.445,3
+ALEJANDRO,LADY GAGA,The Fame Monster (Deluxe Edition),2009-08-05,274213,70,art pop,0.626,0.799,0.37,0.00036,0.00155,0.36,0.0461,98.993,0,-6.612,4
+DIAS CINZENTOS,NUNO RIBEIRO,Dias Cinzentos,2022-02-18,177843,45,portuguese pop,0.345,0.484,0.348,0.624,0.0,0.118,0.04,154.982,1,-6.641,4
+Take Me To The Beach,"Imagine Dragons, Baker Boy",Take Me to the Beach (feat. Baker Boy),2024-10-11,185352,69,modern rock,0.826,0.71,0.867,0.0408,0.0,0.123,0.0999,105.05,1,-5.054,4
+Perdoname,"Pablo Alborán, Carminho",Pablo Alboran (Deluxe),2011-02-01,256435,48,latin arena pop,0.667,0.463,0.337,0.577,0.0,0.107,0.033,115.414,1,-8.772,4
+I'm Good (Blue),"David Guetta, Bebe Rexha",I'm Good (Blue),2022-08-26,175238,85,big room,0.561,0.965,0.304,0.00383,7.07e-6,0.371,0.0343,128.04,0,-3.673,4
+WICKED GAME,CHRIS ISAAK,Heart Shaped World,1989-06-13,289066,79,mellow gold,0.663,0.296,0.359,0.68,0.00837,0.0879,0.0294,112.306,1,-18.09,4
+DIZ-SE AÍ (DOIS PARES DE BOTAS),"NENA, JOANA ALMEIRANTE",Diz-se aí ... (Dois Pares de Botas),2024-10-11,197586,34,portuguese pop,0.57,0.626,0.673,0.613,0.0,0.245,0.0463,169.671,0,-6.305,4
+SI ANTES TE HUBIERA CONOCIDO,KAROL G.,Si Antes Te Hubiera Conocido,2024-06-21,195824,93,reggaeton,0.924,0.668,0.787,0.446,0.000594,0.0678,0.0469,128.027,1,-6.795,4
+Try,Colbie Caillat,Gypsy Heart,2014-09-30,224573,54,dance pop,0.603,0.376,0.538,0.807,0.0,0.108,0.0288,139.995,1,-9.77,4
+Burning Down,Alex Warren,"You'll Be Alright, Kid (Chapter 1)",2024-09-27,179437,75,gen z singer-songwriter,0.499,0.674,0.442,0.0745,0.0,0.0645,0.0389,171.892,0,-3.866,4
+Nosso Quadro,"AgroPlay, Ana Castela",Agroplay Verão,2023-08-18,173698,65,agronejo,0.694,0.709,0.606,0.334,0.0,0.329,0.196,160.042,1,-4.821,4
+BE ALRIGHT,DEAN LEWIS,A Place We Knew,2019-03-22,196493,76,australian pop,0.551,0.537,0.493,0.705,0.0,0.0802,0.034,126.421,1,-7.595,4
+The Hardest Part,Coldplay,X&Y,2005-06-07,262880,60,permanent wave,0.5,0.844,0.445,0.0228,0.00398,0.455,0.0368,123.721,1,-5.883,4
+CANT HOLD US,MACKLEMORE & RYAN LEWIS feat. RAY DALTON,The Heist,2012-10-09,258431,82,pop rap,0.633,0.927,0.88,0.0267,0.0,0.0986,0.0839,146.097,1,-4.468,4
+TOXIC,BRITNEY SPEARS,In The Zone,2003-11-13,198800,83,dance pop,0.774,0.838,0.924,0.0249,0.025,0.242,0.114,143.04,0,-3.914,4
+So What,Pink,Funhouse (Expanded Edition),2008-10-24,215160,74,dance pop,0.534,0.87,0.462,0.000334,0.0,0.241,0.0425,126.019,0,-3.078,4
+Don't Know Why,Norah Jones,Come Away With Me (Super Deluxe Edition),2002-02-26,186251,75,contemporary vocal jazz,0.745,0.219,0.635,0.851,0.000018,0.0678,0.0276,88.609,1,-11.216,4
+Loco Contigo,DJ Snake,Carte Blanche,2019-07-25,185194,71,dance pop,0.827,0.757,0.374,0.283,1.56e-6,0.102,0.0564,95.983,0,-2.985,4
+You Say,Lauren Daigle,Look Up Child,2018-09-07,274693,72,ccm,0.494,0.632,0.0797,0.682,0.0,0.0869,0.0342,147.873,1,-6.89,4
+This Is the Life,Amy MacDonald,This Is The Life (eDeluxe),2007-01-01,184413,74,scottish singer-songwriter,0.628,0.882,0.853,0.259,0.0,0.065,0.0323,95.083,0,-5.024,4
+It Wasn't Me,Shaggy,Hot Shot,2000-08-08,227600,77,dance pop,0.853,0.606,0.653,0.0561,0.0,0.313,0.072,94.753,1,-4.596,4
+Mercy,Shawn Mendes,Illuminate (Deluxe),2017-04-20,208733,78,canadian pop,0.554,0.662,0.338,0.126,0.0,0.111,0.0821,148.122,0,-4.957,4
+Tonight,Reamonn,Wish,2006-01-01,214666,46,german pop rock,0.54,0.7,0.208,0.319,0.0,0.164,0.0282,145.092,0,-4.327,4
+Teenage Dream,Katy Perry,Teenage Dream,2010-01-01,227741,73,pop,0.719,0.798,0.591,0.0162,2.34e-6,0.134,0.0361,120.012,1,-4.582,4
+I Don't Care,"Ed Sheeran, Justin Bieber",No.6 Collaborations Project,2019-07-12,219946,78,pop,0.798,0.676,0.843,0.0902,0.0,0.0894,0.0442,101.956,1,-5.041,4
+I'm Not the only One,Sam Smith,In The Lonely Hour,2014-05-26,239316,82,pop,0.678,0.484,0.493,0.529,0.0000201,0.0766,0.0361,82.004,1,-5.795,4
+Outros Planos,Rita Rocha,Outros Planos,2022-11-24,221096,38,"",0.609,0.34,0.246,0.776,0.0000155,0.104,0.0323,100.093,1,-9.675,4
+Otherside,Red Hot Chili Peppers,Californication (Deluxe Edition),1999-06-08,255373,79,alternative rock,0.458,0.795,0.513,0.00316,0.000202,0.0756,0.0574,123.229,1,-3.265,4
+THUNDER,IMAGINE DRAGONS,Evolve,2017-06-23,187146,84,modern rock,0.604,0.822,0.288,0.00672,0.134,0.147,0.0438,167.997,1,-4.833,4
+BODY MOVING,ELIZA ROSE & CALVIN HARRIS,Body Moving,2023-11-17,154215,61,house,0.788,0.906,0.811,0.0222,0.00283,0.0822,0.0382,128.004,0,-5.863,4
+Makes Me Wonder,Maroon 5,It Won't Be Soon Before Long.,2007-01-01,211080,55,pop,0.803,0.852,0.878,0.00484,0.000331,0.0576,0.0357,113.998,1,-2.429,4
+HATE THAT I LOVE YOU,RIHANNA feat. NE-YO,Good Girl Gone Bad: The Remixes,2009-01-01,238613,19,barbadian pop,0.631,0.906,0.585,0.00133,0.00369,0.356,0.0287,121.982,1,-3.825,4
+Tití Me Preguntó,Bad Bunny,Un Verano Sin Ti,2022-05-06,243716,79,reggaeton,0.65,0.715,0.187,0.0993,0.000291,0.126,0.253,106.672,0,-5.198,4
+Foi assim que Aconteceu,Marisa Liz,Foi Assim Que Aconteceu,2023-03-09,205898,38,"",0.523,0.347,0.114,0.732,3.07e-6,0.24,0.034,119.233,1,-8.842,3
+HOW YOU REMIND ME,NICKELBACK,Silver Side Up,2001-09-11,223840,83,alternative metal,0.446,0.764,0.543,0.00135,0.0,0.099,0.033,172.094,1,-5.042,4
+Here I Am,Bryan Adams,Spirit: Stallion Of The Cimarron (Music From The Original Motion Picture),2002-05-04,284066,56,canadian pop,0.581,0.777,0.162,0.0078,0.0000404,0.0891,0.0296,98.963,1,-7.122,4
+In Your Eyes [remix],The Weeknd,In Your Eyes (Remix),2020-05-21,237911,59,canadian contemporary r&b,0.679,0.731,0.727,0.00518,0.000127,0.0614,0.0319,99.984,0,-5.522,4
+SAFE AND SOUND,CAPITAL CITIES,In A Tidal Wave of Mystery,2013-06-04,192789,83,metropopolis,0.655,0.818,0.767,0.000182,0.00399,0.104,0.0319,117.956,1,-4.852,5
+HURT,CHRISTINA AGUILERA,Back To Basics,2006-08-14,243373,62,dance pop,0.327,0.295,0.143,0.775,0.0,0.107,0.0313,148.574,0,-6.907,4
+WE FOUND LOVE,RIHANNA feat. CALVIN HARRIS,We Found Love (The Remixes),2011-09-22,357226,33,barbadian pop,0.64,0.781,0.592,0.00022,0.298,0.0647,0.0482,128.993,1,-3.375,4
+No One,Alicia Keys,No One (Remixes),2007-10-09,254523,75,neo soul,0.641,0.552,0.152,0.027,4.63e-6,0.148,0.0283,90.098,0,-5.423,4
+Rockstar,DaBaby,BLAME IT ON BABY,2020-04-17,181733,73,hip hop,0.746,0.69,0.497,0.247,0.0,0.101,0.164,89.977,1,-7.956,4
+Wherever You Will Go,The Calling,Camino Palmero,2001-01-01,208600,74,neo mellow,0.558,0.719,0.371,0.0367,0.0,0.115,0.0267,112.027,1,-5.113,4
+Te Boté [remix],Casper Magico ,Te Boté (Remix),2018-04-13,417920,71,reggaeton,0.903,0.675,0.442,0.542,0.0000128,0.0595,0.214,96.507,0,-3.445,4
+Antes da Noite Acabar,Bianca Barros,Antes Da Noite Acabar,2022-10-25,212410,34,portuguese pop,0.587,0.48,0.269,0.307,0.0,0.104,0.033,105.814,1,-7.148,4
+Don't Lie,Black Eyed Peas,Monkey Business,2005-01-01,219000,45,dance pop,0.662,0.785,0.602,0.166,0.0,0.0784,0.186,89.882,1,-5.299,4
+MOMENTO,PEDRO ABRUNHOSA,Corpo i Alma,2020-11-27,282506,20,portuguese pop,0.776,0.33,0.621,0.697,0.000963,0.104,0.0403,110.877,0,-9.867,4
+NÓS OS DOIS,BÁRBARA BANDEIRA,Nós os Dois,2019-11-06,204648,45,portuguese pop,0.423,0.24,0.564,0.882,0.0,0.11,0.0367,138.269,1,-9.086,4
+Hold Me Closer,"Elton John, Britney Spears",Hold Me Closer,2022-08-26,202245,70,glam rock,0.667,0.75,0.486,0.0746,0.000198,0.197,0.0906,126.041,1,-4.602,4
+Die For You (Remix),The Weeknd,Starboy (Deluxe),2023-03-14,232857,77,canadian contemporary r&b,0.568,0.485,0.517,0.276,0.0,0.323,0.0582,66.961,0,-7.635,4
+Starboy,"The Weeknd, Daft Punk",Starboy,2016-11-25,230453,87,canadian contemporary r&b,0.679,0.587,0.486,0.141,6.35e-6,0.137,0.276,186.003,1,-7.015,4
+QUEM ME DERA,MARIZA,Mariza,2018-05-25,256920,43,fado,0.495,0.43,0.0772,0.495,0.0,0.113,0.0368,97.525,0,-5.97,4
+Starboy,The Weeknd,Starboy,2016-11-25,230453,87,canadian contemporary r&b,0.679,0.587,0.486,0.141,6.35e-6,0.137,0.276,186.003,1,-7.015,4
+CANÇÃO DO ELEVADOR,AFONSO DUBRAZ,Barulho de Fundo,2024-05-17,202368,31,"",0.604,0.5,0.889,0.214,0.0,0.162,0.0415,170.165,1,-8.353,4
+BEAUTIFUL,CHRISTINA AGUILERA,Stripped,2002-07-19,238560,66,dance pop,0.456,0.573,0.0992,0.578,3.05e-6,0.114,0.0275,76.19,0,-3.866,4
+A Máquina (Acordou),Amor Electro,Cai o Carmo e a Trindade,2011-04-28,320066,37,portuguese pop,0.616,0.63,0.177,0.269,0.00485,0.157,0.0539,164.06,1,-7.692,4
+Let Me Love You,Mario,Turning Point,2004-12-06,249093,70,dance pop,0.622,0.593,0.607,0.163,0.0,0.0979,0.0916,94.364,0,-8.352,4
+Star,Reamonn,Beautiful Sky,2003-01-01,255040,40,german pop rock,0.568,0.651,0.32,0.0466,7.81e-6,0.118,0.0253,149.955,0,-5.379,4
+Lovin On Me,Jack Harlow,Lovin On Me,2023-11-10,138411,80,deep underground hip hop,0.943,0.558,0.606,0.0026,2.19e-6,0.0937,0.0568,104.983,1,-4.911,4
+Heartless,Richie Campbell,Heartbreak & Other Stories,2023-03-17,164706,48,hip hop tuga,0.786,0.563,0.269,0.292,0.0,0.11,0.229,119.975,0,-7.807,4
+NOUBLIEZ JAMAIS,JOE COCKER,Across from Midnight,1997-08-29,283106,28,album rock,0.586,0.484,0.351,0.136,0.0,0.0598,0.0246,86.872,1,-8.395,4
+Titanium,"David Guetta, Sia",Nothing but the Beat 2.0,2011-08-24,245040,68,big room,0.604,0.788,0.301,0.0678,0.153,0.127,0.103,126.06,0,-3.673,4
+Complicated,Avril Lavigne,Let Go,2002-06-04,244506,81,canadian pop,0.585,0.776,0.427,0.0572,7.74e-6,0.3,0.0459,77.987,1,-5.898,4
+Billie Jean,Michael Jackson,Thriller,1982-11-30,294226,82,r&b,0.932,0.457,0.884,0.0173,0.0436,0.0414,0.0541,117.002,0,-9.62,4
+Paciência,"João Pedro Pais, Mafalda Veiga",Lado a lado,2007-11-05,222986,20,classic portuguese pop,0.349,0.537,0.132,0.515,0.00169,0.931,0.0506,111.51,1,-8.86,4
+ALIBI,SEVDALIZA with PABLLO VITTAR & YSEULT,Alibi (with Pabllo Vittar & Yseult),2024-06-28,161655,68,alternative r&b,0.741,0.754,0.717,0.00526,8.21e-6,0.125,0.0327,126.98,0,-5.412,4
+SHUT UP AND DANCE,WALK THE MOON,TALKING IS HARD,2014-12-02,199080,84,dance rock,0.578,0.866,0.619,0.00701,0.0,0.257,0.0619,128.038,1,-3.804,4
+"YOUNG, WILD & FREE",WIZ KHALIFA feat. SNOOP DOGG & BRUNO MARS,"Young, Wild & Free (feat. Bruno Mars)",2011-10-11,207333,74,g funk,0.715,0.655,0.531,0.0525,0.0,0.115,0.137,95.078,1,-6.425,4
+Haja o que Houver,Madredeus,O Paraiso [14 Canções],1997-10-20,273893,39,fado,0.478,0.266,0.193,0.961,0.348,0.116,0.0306,130.433,1,-13.097,4
+Video Games,Lana Del Rey,Born To Die – Paradise Edition (Special Version),2012-01-01,281946,70,art pop,0.39,0.252,0.181,0.808,0.0,0.0887,0.0298,122.053,0,-9.666,4
+Party Rock Anthem,"LMFAO, Lauren Bennett , Goonrock",Sorry For Party Rocking,2011-01-01,262173,67,dance pop,0.75,0.727,0.359,0.0188,0.0,0.266,0.142,129.992,0,-4.21,4
+I AINT WORRIED,ONEREPUBLIC,Artificial Paradise (Deluxe),2024-07-12,148485,78,piano rock,0.713,0.792,0.81,0.103,0.00052,0.0698,0.0467,139.976,1,-5.957,4
+Visiting Hours,Ed Sheeran,=,2021-10-25,215506,65,pop,0.471,0.396,0.263,0.77,0.0,0.0729,0.0336,149.609,1,-6.654,4
+Monaco,Bad Bunny ,nadie sabe lo que va a pasar mañana,2023-10-13,267194,77,reggaeton,0.787,0.621,0.13,0.15,0.000402,0.58,0.068,139.056,0,-5.009,4
+Don't Stop the Music,Rihanna,Good Girl Gone Bad,2007-01-01,267080,69,barbadian pop,0.834,0.669,0.547,0.0341,0.0000718,0.0535,0.0637,122.669,0,-5.582,4
+Could've Been,"H.E.R., Bryson Tiller",I Used To Know Her,2019-08-30,252746,75,r&b,0.45,0.352,0.408,0.649,3.8e-6,0.249,0.267,102.679,0,-11.733,4
+Poblado [remix],J Balvin ,Poblado (Remix),2021-06-18,393280,64,reggaeton,0.813,0.809,0.646,0.102,1.37e-6,0.377,0.0846,93.005,0,-5.382,4
+Mamacita,Black Eyed Peas,MAMACITA,2020-04-10,249142,60,dance pop,0.894,0.635,0.428,0.193,0.00105,0.0823,0.0473,105.013,1,-6.929,4
+Firestone,"Kygo, Conrad",Cloud Nine,2016-05-13,271640,75,edm,0.704,0.634,0.411,0.393,0.0000317,0.0952,0.0428,113.927,0,-7.374,4
+CAVALINHO,PEDRO SAMPAIO & GASPARZINHO,CAVALINHO,2024-01-25,138591,65,funk carioca,0.761,0.833,0.949,0.117,5.72e-6,0.0981,0.0512,142.022,0,-2.936,4
+WHERE ARE YOU NOW,LOST FREQUENCIES & CALUM SCOTT,All Stand Together,2023-11-10,149066,81,belgian edm,0.762,0.632,0.282,0.51,0.000205,0.18,0.085,121.031,0,-8.312,4
+WHATEVER,"KYGO, AVA MAX",Whatever,2024-01-19,178273,77,edm,0.58,0.777,0.589,0.104,0.0,0.342,0.0655,108.005,1,-5.69,4
+HEATHENS,TWENTY ONE PILOTS,Heathens,2016-06-16,195920,82,modern rock,0.732,0.396,0.548,0.0841,0.0000358,0.105,0.0286,90.024,0,-9.348,4
+I Kissed a Girl,Katy Perry,One Of The Boys,2008-06-17,179640,68,pop,0.702,0.76,0.696,0.00226,0.0,0.132,0.0684,129.996,1,-3.174,4
+Chakras,Ivandro,Trovador,2024-02-16,195764,53,hip hop tuga,0.787,0.84,0.574,0.804,0.0007,0.105,0.0696,100.03,0,-5.923,4
+CALM DOWN,REMA & SELENA GOMEZ,Calm Down (with Selena Gomez),2022-08-25,239317,79,afrobeats,0.801,0.806,0.802,0.382,0.000669,0.114,0.0381,106.999,1,-5.206,4
+ADORE YOU,HARRY STYLES,Fine Line,2019-12-13,207133,79,pop,0.676,0.771,0.569,0.0237,7e-6,0.102,0.0483,99.048,1,-3.675,4
+GIRLFRIEND,AVRIL LAVIGNE,The Best Damn Thing (Expanded Edition),2007-04-17,216600,73,canadian pop,0.56,0.959,0.669,0.000722,0.000221,0.209,0.102,163.983,1,-2.433,4
+CANT GET YOU OUT OF MY HEAD,KYLIE MINOGUE,Fever,2001-10-01,230640,77,australian dance,0.766,0.563,0.964,0.0263,0.683,0.115,0.0339,126.007,0,-7.516,4
+Stand by Me,Seal,Soul,2008-10-31,243773,36,british soul,0.734,0.409,0.779,0.246,0.0,0.128,0.028,107.453,1,-7.596,4
+ANOTHER LOVE (TIESTO REMIX),TOM ODELL,Another Love (Tiësto Remix),2022-05-13,185365,69,chill pop,0.79,0.764,0.473,0.0836,0.0871,0.132,0.0737,123.046,0,-4.685,4
+360,CHARLI XCX,BRAT,2024-06-07,133805,82,art pop,0.857,0.62,0.796,0.646,0.244,0.0934,0.0472,120.042,1,-8.13,4
+FAMILY AFFAIR,MARY J. BLIGE,No More Drama,2001-08-28,265866,78,dance pop,0.911,0.551,0.969,0.133,0.0000435,0.0863,0.045,92.887,0,-3.75,4
+Uptown Funk,"Mark Ronson, Bruno Mars",Uptown Special,2015-01-12,269666,83,pop soul,0.856,0.609,0.928,0.00801,0.0000815,0.0344,0.0824,114.988,1,-7.223,4
+POCPOC,Pedro Sampaio ,POCPOC,2023-11-23,127384,67,funk carioca,0.837,0.636,0.857,0.239,0.0,0.0683,0.0521,129.891,0,-4.206,4
+SNAP,ROSA LINN,SNAP,2022-03-19,179551,79,alt z,0.565,0.636,0.526,0.107,9.9e-6,0.447,0.0622,170.027,1,-8.198,4
+CASA,FERNANDO DANIEL,V.H.S (vol.1),2023-05-26,206700,51,portuguese pop,0.547,0.392,0.324,0.761,0.0,0.129,0.0312,143.134,0,-7.45,4
+Si No Estás,Iñigo Quintero,Si No Estás,2022-09-23,184061,80,"",0.537,0.421,0.524,0.827,0.0,0.138,0.0285,98.224,1,-8.72,4
+Fast Car,Luke Combs,Gettin' Old,2023-03-24,265493,82,contemporary country,0.712,0.603,0.67,0.186,0.0,0.115,0.0262,97.994,1,-5.52,4
+Impossible,James Arthur,James Arthur (Deluxe),2013-11-04,209440,75,pop,0.376,0.695,0.302,0.135,0.0,0.11,0.0933,169.533,0,-4.782,4
+APPLE,CHARLI XCX,BRAT,2024-06-07,151739,85,art pop,0.804,0.957,0.962,0.125,0.0174,0.114,0.034,126.035,1,-5.452,4
+Tu Sabes,"Diana Lima, Murta",TU SABES,2023-11-16,186699,44,hip hop tuga,0.517,0.508,0.532,0.787,4.6e-6,0.109,0.0757,81.975,1,-7.394,4
+I LIKE THE WAY YOU KISS ME,ARTEMAS,i like the way you kiss me,2024-03-19,142514,85,"",0.599,0.946,0.747,0.000938,0.0106,0.0826,0.0447,151.647,1,-4.263,4
+DISEASE,LADY GAGA,Disease,2024-10-25,229997,84,art pop,0.562,0.917,0.501,0.0513,0.0,0.488,0.117,100.987,0,-2.768,4
+WE BELONG,PAT BENATAR,Tropico,1984-01-01,221133,66,album rock,0.706,0.322,0.305,0.529,2.41e-6,0.576,0.0467,135.155,1,-14.108,4
+BURN,ELLIE GOULDING,Halcyon Nights,2012-10-12,231213,73,indietronica,0.313,0.76,0.343,0.3,0.0,0.105,0.0616,86.735,0,-5.049,4
+Señorita,Shawn Mendes,Shawn Mendes (Deluxe),2019-06-19,190799,78,canadian pop,0.759,0.548,0.75,0.0379,0.0,0.0828,0.0289,116.963,0,-6.049,4
+ELASTIC HEART,SIA,1000 Forms Of Fear (Deluxe Version),2015-05-04,257200,66,pop,0.421,0.791,0.499,0.0117,0.0000148,0.146,0.0496,130.075,1,-4.998,4
+What about Us,Pink,Beautiful Trauma,2017-10-13,269600,72,dance pop,0.491,0.588,0.193,0.0281,2.01e-6,0.0906,0.0506,113.608,1,-6.177,4
+"Whenever, Wherever",Shakira,Laundry Service,2001-11-13,196160,75,colombian pop,0.794,0.832,0.871,0.237,0.0000114,0.203,0.0407,107.657,0,-4.862,4
+RUNAWAY (U & I),GALANTIS,Pharmacy,2015-06-05,227073,74,dance pop,0.506,0.805,0.383,0.00711,0.00193,0.0856,0.0469,126.008,1,-4.119,4
+NORMAL,NENNY,Normal,2024-07-05,172453,36,hip hop tuga,0.527,0.641,0.265,0.0304,0.0,0.0763,0.193,129.88,0,-7.748,5
+Não Posso Mais,Pedro Abrunhosa,Viagens,1994-01-01,298093,28,portuguese pop,0.804,0.581,0.581,0.00929,0.141,0.241,0.0672,122.942,1,-10.642,4
+Cafeína,DJ Dadda,Cafeína,2018-07-24,187741,42,hip hop tuga,0.798,0.787,0.39,0.41,0.0,0.0931,0.106,123.952,0,-5.931,4
+Someone that Cannot Love,David Fonseca,Sing Me Something New,2003-01-01,304213,32,portuguese rock,0.46,0.528,0.43,0.28,0.0000703,0.131,0.0268,151.207,1,-7.249,3
+MAMIII,BECKY G & KAROL G,ESQUEMAS,2022-05-13,226093,78,latin pop,0.836,0.703,0.902,0.0845,0.0,0.138,0.0657,94.048,0,-3.554,4
+WHATEVER IT TAKES,IMAGINE DRAGONS,Evolve,2017-06-23,201240,81,modern rock,0.672,0.655,0.555,0.0362,0.0,0.117,0.031,134.948,0,-5.021,4
+Dynamite,BTS,BE,2020-11-20,199053,78,k-pop,0.746,0.765,0.737,0.0112,0.0,0.0936,0.0993,114.044,0,-4.41,4
+Vambora [ao vivo],Adriana Calcanhotto,Público,2000-04-17,302133,49,bossa nova,0.381,0.411,0.139,0.725,2.2e-6,0.0846,0.0285,129.376,0,-7.86,4
+ONE,"MARY J. BLIGE, U2",The Breakthrough,2005-01-01,260466,61,dance pop,0.342,0.875,0.259,0.0827,0.0,0.129,0.0792,185.948,1,-3.164,4
+OBSESSED,OLIVIA RODRIGO,GUTS (spilled),2024-03-22,170541,78,pop,0.68,0.581,0.63,0.0181,1.07e-6,0.276,0.106,119.974,1,-5.166,4
+In My Place,Coldplay,A Rush of Blood to the Head,2002-08-27,226680,72,permanent wave,0.424,0.588,0.193,0.0553,4.95e-6,0.298,0.0278,144.636,1,-5.455,4
+P'ra Frente É que É Lisboa,Os Quatro e Meia,Pontos nos Is,2017-06-30,262987,42,portuguese folk,0.629,0.731,0.608,0.243,7.19e-6,0.107,0.0641,75.929,1,-8.471,4
+Call Out My Name,The Weeknd,"My Dear Melancholy,",2018-03-30,228373,83,canadian contemporary r&b,0.461,0.593,0.174,0.165,0.0,0.307,0.0356,134.165,1,-4.954,3
+BESO,Rosalía,RR,2023-03-24,194543,76,pop,0.768,0.644,0.53,0.736,0.000837,0.173,0.136,95.05,0,-6.671,4
+Relación [remix],Sech,Relación (Remix),2020-09-04,247308,65,panamanian pop,0.793,0.771,0.835,0.0337,1.51e-6,0.284,0.0959,171.943,1,-3.417,4
+Fortnight,Taylor Swift,THE TORTURED POETS DEPARTMENT,2024-04-18,228965,85,pop,0.504,0.386,0.281,0.502,0.0000153,0.0961,0.0308,192.004,1,-10.976,4
+Dusk till Dawn,"Zayn, Sia",Icarus Falls,2018-12-14,239000,80,pop,0.259,0.437,0.0951,0.102,1.32e-6,0.106,0.0386,180.042,0,-6.589,4
+Never Be Yours,Kali Uchis,Never Be Yours,2024-06-21,196025,68,colombian pop,0.386,0.534,0.147,0.598,0.00206,0.0899,0.0385,94.953,1,-9.401,4
+IM YOURS,JASON MRAZ,We Sing. We Dance. We Steal Things. (Bonus Tracks Version),2008-05-01,242946,77,acoustic pop,0.703,0.444,0.712,0.559,0.0,0.0973,0.0417,150.96,1,-9.331,4
+Bad Liar,Selena Gomez,Bad Liar,2017-05-18,214647,63,pop,0.965,0.414,0.729,0.189,0.0,0.0767,0.0712,121.032,1,-6.408,4
+FEEL THIS MOMENT,PITBULL [+] CHRISTINA AGUILERA,Global Warming: Meltdown (Deluxe Version),2012-01-01,229506,77,dance pop,0.673,0.758,0.542,0.039,0.0,0.341,0.158,135.956,1,-3.632,4
+LET IT GO,JAMES BAY,Chaos And The Calm,2015-03-23,260532,63,neo mellow,0.536,0.311,0.246,0.82,0.0000165,0.107,0.0288,147.486,1,-10.396,4
+WHAT DO YOU MEAN,JUSTIN BIEBER,Purpose (Deluxe),2015-11-13,205680,79,canadian pop,0.845,0.567,0.793,0.59,0.00142,0.0811,0.0956,125.02,0,-8.118,4
+SEVEN,JUNG KOOK feat. LATTO,GOLDEN,2023-11-03,183550,84,k-pop,0.79,0.831,0.872,0.312,0.0,0.0797,0.044,124.987,1,-4.185,4
+TUSA,KAROL G. x NICKI MINAJ,X 100pre Hits Latinos,2023-07-03,201920,0,reggaeton,0.796,0.701,0.619,0.308,0.0000782,0.0516,0.283,100.954,1,-3.275,4
+LOVE LIKE THIS,ZAYN,Love Like This,2023-07-21,173303,59,pop,0.71,0.631,0.458,0.164,3.57e-6,0.0718,0.05,129.991,1,-4.453,4
+A Marte,João Só e Abandonados,João Só e Abandonados,2009-09-28,209320,13,musica portuguesa contemporanea,0.563,0.495,0.324,0.0331,3.33e-6,0.177,0.0266,135.097,1,-8.951,4
+Hold Me while You Wait,Lewis Capaldi,Divinely Uninspired To A Hellish Extent,2019-05-17,205686,75,pop,0.688,0.53,0.162,0.443,0.0,0.0995,0.0333,106.958,1,-5.507,4
+just wanna rock,lil uzi vert ,Pink Tape,2023-06-30,123890,74,hip hop,0.485,0.545,0.0385,0.0651,0.00547,0.0642,0.0336,150.185,1,-7.924,4
+Like You'll Never See Me Again,Alicia Keys,As I Am (Expanded Edition),2007-11-09,315360,52,neo soul,0.562,0.657,0.266,0.173,0.000272,0.102,0.0315,127.808,1,-8.074,4
+TE AMO,CALEMA,Yellow,2020-02-07,258223,55,musica santomense,0.523,0.689,0.485,0.241,0.000174,0.367,0.136,126.148,0,-8.764,5
+Pink + White,Frank Ocean,Blonde,2016-08-20,184516,87,lgbtq+ hip hop,0.545,0.545,0.549,0.667,0.0000548,0.417,0.107,159.94,1,-7.362,3
+Adorn,Miguel,Kaleidoscope Dream,2012-09-28,193146,70,r&b,0.625,0.576,0.235,0.0543,0.0000407,0.187,0.175,179.063,0,-5.693,4
+TO BE WITH YOU,MR BIG,Lean Into It (30th Anniversary Edition),1991-01-01,208080,65,glam metal,0.688,0.284,0.482,0.359,0.0,0.127,0.0574,83.433,1,-13.577,4
+Give Me Everything,"Pitbull, Ne-Yo",Planet Pit (Deluxe Version),2011-06-17,252306,84,dance pop,0.671,0.939,0.53,0.191,0.0,0.298,0.161,129.024,1,-3.206,4
+THE NIGHTS,AVICII,The Days / Nights,2014-01-01,176658,82,dance pop,0.527,0.835,0.654,0.0166,0.0,0.249,0.0433,125.983,1,-5.298,4
+DONT LET THE SUN GO DOWN ON ME,ELTON JOHN [+] GEORGE MICHAEL,Love Songs,1995-11-06,347666,53,glam rock,0.437,0.596,0.274,0.414,0.0000147,0.701,0.0319,138.447,1,-8.01,4
+The Real Slim Shady,Eminem,The Marshall Mathers LP,2000-05-23,284200,84,detroit hip hop,0.949,0.661,0.76,0.0302,0.0,0.0454,0.0572,104.504,0,-4.244,4
+Chandelier (Piano Version),Sia,1000 Forms Of Fear (Deluxe Version),2015-05-04,241693,52,pop,0.411,0.227,0.306,0.938,0.0,0.158,0.0468,79.875,1,-8.068,4
+WISH YOU THE BEST,LEWIS CAPALDI,Broken By Desire To Be Heavenly Sent,2023-05-19,210880,74,pop,0.675,0.48,0.491,0.547,0.0,0.0943,0.0316,107.86,1,-3.658,4
+Novidade na Área,MC Livinho,Novidade na Área,2023-06-23,120014,65,funk carioca,0.625,0.34,0.36,0.763,0.0000499,0.354,0.0873,130.231,1,-12.004,4
+Another Perfect Day,American Hi-Fi,American Hi-Fi,2001-02-27,218293,29,neon pop punk,0.475,0.716,0.285,0.0267,0.0,0.331,0.0358,87.228,1,-4.437,4
+Sexy Love,Ne-Yo,In My Own Words,2006-01-01,220853,70,dance pop,0.693,0.513,0.49,0.296,0.00013,0.0604,0.0415,94.021,1,-6.447,4
+Provenza,Karol G ,MAÑANA SERÁ BONITO,2023-02-24,207626,80,reggaeton,0.863,0.502,0.567,0.61,0.00765,0.11,0.0496,111.029,1,-7.912,4
+ROXANNE,ARIZONA ZERVAS,ROXANNE,2019-10-10,163636,72,indie pop rap,0.621,0.601,0.457,0.0522,0.0,0.46,0.148,116.735,0,-5.616,5
+Back to Black,Amy Winehouse,Back To Black (Deluxe Edition),2006-01-01,241293,81,british soul,0.434,0.422,0.377,0.134,0.0000205,0.0861,0.0375,123.201,0,-13.964,4
+Girls Like You,Maroon 5,Red Pill Blues (Deluxe),2018-06-15,235545,63,pop,0.779,0.541,0.447,0.566,0.0,0.13,0.0658,124.939,1,-6.824,4
+A THOUSAND MILES,VANESSA CARLTON,Be Not Nobody,2002-04-30,237493,75,lilith,0.56,0.825,0.268,0.323,0.0,0.161,0.0379,94.931,1,-3.862,4
+Burn,Ellie Goulding,Halcyon Nights,2012-10-12,231213,73,indietronica,0.313,0.76,0.343,0.3,0.0,0.105,0.0616,86.735,0,-5.049,4
+IN THE STARS,BENSON BOONE,Fireworks & Rollerblades,2024-04-05,216410,81,singer-songwriter pop,0.362,0.54,0.3,0.338,0.0,0.139,0.0528,78.007,1,-6.031,3
+EGO,HALSEY,The Great Impersonator,2024-10-25,198498,63,electropop,0.59,0.961,0.349,0.00508,0.0,0.339,0.113,104.969,1,-2.491,4
+By the Way,Red Hot Chili Peppers,By the Way (Deluxe Edition),2002-07-09,216933,76,alternative rock,0.451,0.97,0.198,0.0264,0.00355,0.102,0.107,122.444,1,-4.938,4
+VAMOS SER,SYRO,Vamos Ser,2024-05-03,208500,33,portuguese pop,0.378,0.551,0.228,0.574,0.0,0.117,0.0347,114.571,1,-5.509,4
+IF WE EVER BROKE UP,MAE STEPHENS,If We Ever Broke Up,2023-02-10,142758,69,singer-songwriter pop,0.898,0.734,0.94,0.587,5.18e-6,0.0912,0.0427,115.948,1,-4.028,4
+SUBSTITUTION,PURPLE DISCO MACHINE & KUNGS,Substitution (feat. Julian Perretta),2023-03-30,181477,69,deep house,0.69,0.89,0.713,0.00903,0.0000161,0.188,0.0507,124.018,0,-4.866,4
+Done with You,Aurea,Done With You,2018-02-02,244078,4,portuguese pop,0.219,0.415,0.22,0.115,3.86e-6,0.0939,0.0338,201.888,1,-9.51,4
+TA TUDO BEM,T-Rex,COR D'ÁGUA,2023-01-20,272637,53,hip hop tuga,0.833,0.388,0.128,0.135,2.5e-6,0.0845,0.376,169.945,0,-5.723,3
+Já Não Sou Bom A Mentir,HMB,Neste Deserto Nascem Flores,2024-03-15,216720,18,portuguese pop,0.364,0.503,0.373,0.154,0.0,0.125,0.0326,119.743,1,-5.923,4
+IF I WERE A BOY,BEYONCÉ,I AM...SASHA FIERCE,2008-11-14,249146,62,pop,0.632,0.518,0.427,0.107,0.0,0.354,0.0313,90.007,1,-6.126,4
+LADY (HEAR ME TONIGHT),MODJO,Modjo (Remastered),2001-01-01,307153,77,disco house,0.72,0.808,0.869,0.00793,0.0293,0.0634,0.0379,126.041,1,-5.627,4
+The One,Kodaline,Coming Up for Air (Expanded Edition),2015-02-09,232520,56,irish pop,0.43,0.587,0.335,0.652,0.0000886,0.158,0.0349,156.006,1,-8.003,4
+AMIGOS,"PABLO ALBORAN, MARIA BECERRA",La cuarta hoja,2022-12-01,233755,62,latin arena pop,0.721,0.814,0.944,0.28,0.0,0.0531,0.045,157.002,0,-3.459,4
+Walking Away,Craig David,Born to Do It,2000-08-14,204866,61,british soul,0.596,0.688,0.817,0.196,0.0,0.121,0.0345,172.837,0,-6.367,4
+Better Now,Post Malone,beerbongs & bentleys,2018-04-27,231266,77,dfw rap,0.674,0.578,0.34,0.331,0.0,0.135,0.0408,145.07,1,-5.804,4
+POKER FACE,LADY GAGA,The Fame,2008-01-01,237200,76,art pop,0.851,0.806,0.774,0.119,1.72e-6,0.121,0.0787,119.001,1,-4.618,4
+Human,The Killers,Day & Age (Bonus Tracks),2008-11-18,245373,73,alternative rock,0.557,0.8,0.582,0.00132,0.0012,0.0906,0.0601,135.47,1,-8.477,4
+O Sol,Vitor Kley,Adrenalizou,2018-10-18,211447,62,"",0.62,0.694,0.631,0.0303,0.0,0.117,0.0261,97.483,0,-4.253,4
+Viagens,Pedro Abrunhosa,Viagens,1994-01-01,425800,24,portuguese pop,0.765,0.417,0.309,0.205,0.000123,0.75,0.0399,119.851,0,-12.668,4
+Lovers Rock,Sade,Lovers Rock,2000-11-13,253106,58,british soul,0.744,0.447,0.78,0.0194,0.00103,0.0771,0.0437,145.855,1,-11.735,4
+When I Was Your Man,Bruno Mars,Unorthodox Jukebox,2012-12-07,213826,87,dance pop,0.612,0.28,0.387,0.932,0.0,0.088,0.0434,72.795,1,-8.648,4
+DO YOU NO WRONG,RICHIE CAMPBELL,Lisboa,2017-12-21,243180,50,hip hop tuga,0.678,0.375,0.268,0.482,1.34e-6,0.0971,0.0366,80.967,0,-6.094,3
+HEY SOUL SISTER,TRAIN,"Save Me, San Francisco (Golden Gate Edition)",2010-12-01,216773,83,dance pop,0.673,0.886,0.795,0.185,0.0,0.0826,0.0431,97.012,0,-4.44,4
+FEATHER,SABRINA CARPENTER,emails i can’t send fwd:,2023-03-17,185552,85,pop,0.791,0.694,0.826,0.0736,1.75e-6,0.0958,0.0335,123.508,0,-4.332,4
+July,Noah Cyrus,THE END OF EVERYTHING,2020-05-15,156106,83,alt z,0.708,0.186,0.322,0.868,0.0,0.0779,0.042,72.541,0,-8.953,4
+PORTAS DO SOL,NENA,ao fundo da rua,2022-11-18,227446,45,portuguese pop,0.522,0.278,0.323,0.684,0.0,0.112,0.0326,148.202,1,-9.009,3
+Blinding Lights,The Weeknd,After Hours,2020-03-20,200040,88,canadian contemporary r&b,0.513,0.73,0.334,0.00143,0.0000954,0.0897,0.0598,171.001,1,-5.94,4
+ANTES DELA DIZER QUE SIM,BÁRBARA TINOCO,Antes Dela Dizer Que Sim,2019-04-15,185196,37,portuguese pop,0.409,0.329,0.521,0.826,0.0,0.12,0.0787,180.386,1,-10.031,3
+ACORDAR,SYRO,Genesis + Deluxe Tracks,2022-11-04,202999,33,portuguese pop,0.465,0.664,0.331,0.151,4.6e-6,0.655,0.0828,156.462,1,-7.659,4
+CALL ME MAYBE,CARLY RAE JEPSEN,Kiss (Deluxe),2012-01-01,193400,71,canadian pop,0.782,0.58,0.66,0.0114,2.28e-6,0.108,0.0407,120.021,1,-6.548,4
+Hot n Cold,Katy Perry,One Of The Boys,2008-06-17,220226,70,pop,0.706,0.842,0.861,0.0000773,0.0,0.0688,0.0417,132.032,1,-3.956,4
+HOW TO SAVE A LIFE,THE FRAY,How To Save A Life,2005-09-13,262533,80,neo mellow,0.64,0.743,0.361,0.269,0.0,0.101,0.0379,122.035,1,-4.08,4
+Dilúvio,A Garota Não,Dilúvio,2022-03-11,243794,33,portuguese rock,0.27,0.502,0.24,0.606,0.000162,0.377,0.0636,68.171,1,-8.797,3
+Saturn,SZA,Saturn,2024-02-22,186191,85,pop,0.411,0.619,0.337,0.62,0.0,0.11,0.0368,177.937,1,-6.834,4
+Como Tu,Bárbara Bandeira,Finda,2023-10-06,207873,51,portuguese pop,0.562,0.671,0.43,0.665,5.86e-6,0.4,0.437,187.57,0,-8.672,4
+Moth to a Flame,"Swedish House Mafia, The Weeknd",Paradise Again,2022-04-15,234000,78,edm,0.553,0.659,0.105,0.0027,0.0,0.105,0.0391,120.146,1,-7.295,4
+Sure Thing,Miguel,All I Want Is You,2010-11-26,195373,85,r&b,0.684,0.607,0.498,0.0267,0.000307,0.191,0.1,81.001,0,-8.127,4
+Like I'm Gonna Lose You,Jasmine Thompson,Like I'm Gonna Lose You,2015-10-09,232338,60,viral pop,0.398,0.174,0.153,0.958,4.16e-6,0.158,0.0364,172.152,1,-11.16,3
+Tunnel Vision,Kodak Black ,Painting Pictures,2017-03-31,268186,70,florida drill,0.497,0.489,0.231,0.0576,0.0000991,0.122,0.294,171.853,0,-7.724,4
+Stillness of Heart,Lenny Kravitz,Lenny,2001-01-01,255693,56,permanent wave,0.541,0.505,0.398,0.0000731,0.00362,0.266,0.0237,77.119,0,-7.226,4
+PERFECT,ED SHEERAN & BEYONCE,Perfect Duet (Ed Sheeran & Beyoncé),2017-11-30,259550,66,pop,0.587,0.299,0.356,0.779,0.0,0.123,0.0263,94.992,1,-7.365,3
+In Your Hands,Craig David,In Your Hands,2024-09-27,197690,48,british soul,0.729,0.692,0.707,0.0198,0.0,0.165,0.0296,124.016,0,-5.287,4
+Love Someone,Lukas Graham,3 (The Purple Album),2018-10-26,205440,67,danish pop,0.538,0.409,0.265,0.172,0.0,0.11,0.0505,171.838,0,-6.581,4
+Where Are You Now,Lost Frequencies,All Stand Together,2023-11-10,149066,81,belgian edm,0.762,0.632,0.282,0.51,0.000205,0.18,0.085,121.031,0,-8.312,4
+CHANDELIER,SIA,1000 Forms Of Fear (Deluxe Version),2015-05-04,216120,69,pop,0.399,0.787,0.572,0.0197,0.0000607,0.0685,0.0499,117.089,1,-2.88,5
+Guerra Nuclear,Marisa Liz,Girassóis E Tempestades,2023-03-31,209653,29,"",0.686,0.652,0.232,0.211,0.0000449,0.346,0.0348,109.964,1,-8.125,4
+This Is what You Came For,"Calvin Harris, Rihanna",This Is What You Came For,2016-04-29,222160,77,dance pop,0.631,0.927,0.465,0.199,0.119,0.148,0.0332,123.962,0,-2.787,4
+WE CAN DO BETTER,MATT SIMONS,After The Landslide,2019-04-05,179895,49,neo-singer-songwriter,0.635,0.689,0.728,0.0373,0.0000258,0.0665,0.0611,91.013,1,-4.852,4
+HOLD ME CLOSER,ELTON JOHN & BRITNEY SPEARS,Hold Me Closer,2022-08-26,202245,70,glam rock,0.667,0.75,0.486,0.0746,0.000198,0.197,0.0906,126.041,1,-4.602,4
+SAVE YOUR TEARS,THE WEEKND,After Hours,2020-03-20,215626,84,canadian contemporary r&b,0.679,0.825,0.644,0.0212,0.0000121,0.543,0.0309,118.049,1,-5.487,4
+THE POWER OF LOVE,FRANKiE GOES TO HOLLYWOOD,Welcome To The Pleasuredome,1984-10-20,332506,59,dance rock,0.464,0.162,0.104,0.376,0.0000125,0.181,0.0337,122.793,0,-17.142,4
+Fingers Crossed,Lauren Spencer-Smith,Mirror,2023-07-14,175344,71,alt z,0.56,0.473,0.441,0.618,0.0,0.31,0.0533,109.414,1,-7.23,4
+Dog Days Are Over,Florence and the Machine,Lungs (Deluxe Edition),2009-01-01,251840,73,baroque pop,0.492,0.81,0.245,0.0416,0.00379,0.117,0.0847,149.954,1,-5.315,4
+Broken-Hearted Girl,Beyoncé,I AM...SASHA FIERCE,2008-11-14,277626,52,pop,0.336,0.424,0.159,0.503,0.0,0.273,0.0353,82.149,1,-7.203,4
+GET LUCKY,DAFT PUNK [+] PHARRELL WILLIAMS,Random Access Memories,2013-05-20,369626,73,electro,0.81,0.793,0.863,0.0378,1.77e-6,0.072,0.0403,116.05,0,-9.404,4
+One Day in Your Life,Anastacia,Pieces of A Dream,1999-01-01,209773,45,pop soul,0.695,0.711,0.348,0.063,0.000171,0.0682,0.0471,118.893,0,-4.367,4
+Que Tire pa Lante,Daddy Yankee ,Que Tire Pa Lante,2019-10-18,210520,62,latin hip hop,0.658,0.901,0.708,0.0478,0.0,0.12,0.0357,93.979,1,-2.814,4
+ANGEL NUMBERS / TEN TOES,CHRIS BROWN,11:11,2023-11-10,306847,76,r&b,0.406,0.5,0.0905,0.192,0.0,0.175,0.0501,157.984,0,-8.452,4
+LA BACHATA,MANUEL TURIZO,2000,2023-03-17,162637,83,colombian pop,0.835,0.679,0.85,0.583,1.98e-6,0.218,0.0364,124.98,0,-5.329,4
+FELICES LOS 4,MALUMA,F.A.M.E.,2018-05-18,230000,71,latin pop,0.766,0.756,0.716,0.213,0.0,0.349,0.132,94.027,1,-5.861,4
+COLD HEART,ELTON JOHN & DUA LIPA,The Lockdown Sessions,2021-10-22,202735,67,glam rock,0.795,0.8,0.934,0.0354,0.0000725,0.0915,0.0309,116.032,1,-6.32,4
+Cry Me a River,Justin Timberlake,Justified,2002-11-04,288333,75,dance pop,0.624,0.654,0.564,0.577,0.0,0.104,0.183,73.898,0,-6.582,4
+Toxic,Britney Spears,In The Zone,2003-11-13,198800,83,dance pop,0.774,0.838,0.924,0.0249,0.025,0.242,0.114,143.04,0,-3.914,4
+MIA,Bad Bunny ,X 100PRE,2018-12-23,210367,73,reggaeton,0.816,0.538,0.156,0.0142,0.000485,0.099,0.0617,97.055,0,-6.354,4
+SEXYBACK,JUSTIN TIMBERLAKE,FutureSex/LoveSounds,2006-09-12,242733,79,dance pop,0.967,0.583,0.964,0.0584,0.0,0.0519,0.0789,117.0,0,-5.562,4
+BEHIND BLUE EYES,LIMP BIZKIT,Results May Vary,2003-01-01,269973,73,alternative metal,0.595,0.489,0.0902,0.497,0.0,0.119,0.0271,120.312,1,-6.66,4
+Need You Now,Lady Antebellum,Need You Now,2010-01-01,277573,69,contemporary country,0.588,0.622,0.229,0.0906,0.000633,0.2,0.0303,107.942,1,-5.535,4
+A Thousand Miles,Vanessa Carlton,Be Not Nobody,2002-04-30,237493,75,lilith,0.56,0.825,0.268,0.323,0.0,0.161,0.0379,94.931,1,-3.862,4
+Sex on Fire,Kings of Leon,Only By The Night,2008-09-23,203346,83,modern rock,0.542,0.905,0.374,0.00172,0.0104,0.136,0.054,153.398,1,-5.653,4
+Só Fé,Grelo ,É o Grelo,2024-07-19,203337,78,"",0.872,0.696,0.62,0.511,0.000386,0.195,0.0357,138.004,0,-8.565,4
+Stop and Stare,OneRepublic,Dreaming Out Loud,2007-01-01,223853,58,piano rock,0.492,0.859,0.251,0.0659,0.0,0.0756,0.0332,92.474,1,-4.274,4
+II Most Wanted,"Miley Cyrus, Beyoncé",COWBOY CARTER,2024-03-29,208521,65,pop,0.533,0.355,0.256,0.497,0.0,0.174,0.0289,137.986,1,-6.132,4
+FANTASY,JADE,Fantasy,2024-10-18,216588,66,"",0.669,0.751,0.546,0.0249,0.000357,0.141,0.0449,120.004,0,-4.378,4
+The Truth,India.Arie,Voyage To India - Special Edition,2002-09-24,209853,49,neo soul,0.643,0.472,0.289,0.284,0.0000177,0.101,0.205,95.976,0,-10.168,4
+lullaby,the cure,Disintegration (Deluxe Edition),1989-05-02,249880,59,new wave,0.718,0.557,0.586,0.185,0.707,0.055,0.0328,94.095,1,-10.679,4
+Before You Go,Lewis Capaldi,Divinely Uninspired To A Hellish Extent (Extended Edition),2019-11-22,215106,81,pop,0.459,0.574,0.183,0.608,0.0,0.0885,0.0577,111.881,1,-4.857,4
+A Place To Dream (Falling Down),Miguel Dias,A Place to Dream (Falling Down),2024-10-25,218088,33,"",0.556,0.729,0.411,0.158,3.74e-6,0.0797,0.0524,85.017,1,-4.722,4
+Bússola,Nenny,Aura,2020-03-02,272577,37,hip hop tuga,0.802,0.565,0.82,0.735,0.0,0.184,0.324,94.952,0,-7.492,4
+BABY BOY,BEYONCE feat. SEAN PAUL,Dangerously In Love,2003-06-24,244826,66,pop,0.655,0.488,0.791,0.0825,1.16e-6,0.221,0.22,91.025,1,-9.17,4
+Swallow My Tears,Gwen Stefani,Swallow My Tears,2024-10-25,174213,56,dance pop,0.584,0.74,0.375,0.0595,0.0000205,0.158,0.0356,138.012,1,-5.844,4
+A Woman's Worth,Alicia Keys,Songs In A Minor,2001-06-05,303333,55,neo soul,0.652,0.41,0.495,0.333,0.0,0.064,0.158,75.09,0,-8.323,4
+Slide,Calvin Harris,Funk Wav Bounces Vol.1,2017-06-30,230813,74,dance pop,0.736,0.795,0.511,0.498,1.21e-6,0.254,0.0545,104.066,0,-3.299,4
+Who Knew,Pink,I'm Not Dead,2006-04-04,208493,74,dance pop,0.688,0.734,0.46,0.00462,0.0,0.0756,0.0274,140.004,1,-4.569,4
+Somewhere only We Know,Keane,Hopes And Fears,2004-01-01,236160,73,neo mellow,0.453,0.655,0.366,0.0794,7.06e-6,0.0849,0.0257,172.01,1,-4.22,4
+APOLOGIZE,TIMBALAND feat. ONEREPUBLIC,Anti-Valentine,2018-02-02,186426,24,dance pop,0.657,0.5,0.103,0.0326,0.0,0.097,0.0297,118.022,1,-9.213,4
+Rise & Fall,"Craig David, Sting",Slicker than Your Average,2002-11-19,287226,58,british soul,0.405,0.589,0.808,0.252,0.0,0.661,0.0586,83.373,0,-7.51,4
+SAILOR SONG,GIGI PEREZ,Sailor Song,2024-07-26,211978,92,bedroom pop,0.494,0.413,0.273,0.682,0.0000672,0.193,0.0254,94.938,1,-10.432,4
+JUST DANCE,LADY GAGA [+] COLBY O`DONIS,The Fame,2008-01-01,241933,74,art pop,0.822,0.739,0.745,0.0264,0.0000428,0.181,0.0311,118.99,0,-4.541,4
+IMPOSSIBLE,JAMES ARTHUR,James Arthur (Deluxe),2013-11-04,209440,75,pop,0.376,0.695,0.302,0.135,0.0,0.11,0.0933,169.533,0,-4.782,4
+WHAT ABOUT US,PINK,Beautiful Trauma,2017-10-13,269600,72,dance pop,0.491,0.588,0.193,0.0281,2.01e-6,0.0906,0.0506,113.608,1,-6.177,4
+O Sopro do Coração,Clã,Lustro,2000-01-01,270626,35,portuguese rock,0.583,0.563,0.223,0.16,0.163,0.1,0.028,89.512,1,-9.577,4
+Beggin',Madcon,Conquest,2009-01-01,218706,56,norwegian hip hop,0.715,0.796,0.431,0.0284,0.0,0.0658,0.0534,129.04,0,-4.889,4
+Negras Como A Noite,Xutos & Pontapés,35,2014-12-01,311080,23,portuguese rock,0.235,0.68,0.132,0.0347,0.00295,0.868,0.0352,168.98,0,-5.295,3
+Sunrise,Norah Jones,Feels Like Home,2004-01-01,200626,74,contemporary vocal jazz,0.526,0.299,0.679,0.941,0.097,0.106,0.031,156.848,1,-13.797,4
+FUMACA,BARBARA BANDEIRA FEAT. VEIGH,Fumaça (feat. Veigh),2024-05-17,202474,54,portuguese pop,0.485,0.585,0.552,0.713,0.0,0.108,0.185,119.595,0,-8.061,5
+STILL INTO YOU,CYRIL & MARYJO,Still Into You,2024-10-25,151875,64,"",0.955,0.571,0.681,0.0147,0.0000103,0.0986,0.254,128.066,1,-7.045,4
+E Agora?,"Mikkel Solnado, Joana Alegre",Daisy Chains,2014-11-24,210000,26,musica portuguesa contemporanea,0.313,0.267,0.136,0.693,0.0,0.0999,0.0322,79.304,1,-11.085,4
+LEMBRAS-TE DE MIM,"NENA, CAROLINA DE DEUS",Lembras-te de mim? (feat. Carolina de Deus),2024-04-26,194200,48,portuguese pop,0.589,0.319,0.181,0.749,0.0000467,0.105,0.0315,127.757,1,-10.26,4
+A NOSSA DANÇA,CALEMA,A Nossa Dança,2023-04-06,182500,58,musica santomense,0.664,0.692,0.579,0.271,0.0,0.343,0.222,97.926,1,-6.802,4
+Die With A Smile,Lady Gaga,Die With A Smile,2024-08-16,251667,100,art pop,0.521,0.592,0.535,0.308,0.0,0.122,0.0304,157.969,0,-7.777,3
+Eu Deixei,Carolina Deslandes,Eu Deixei,2024-10-24,208615,41,portuguese pop,0.68,0.72,0.558,0.734,0.0000105,0.0966,0.243,86.727,0,-6.509,5
+Recomeçar,Fernando Daniel,Recomeçar,2020-05-25,218760,31,portuguese pop,0.363,0.495,0.257,0.386,0.0000286,0.115,0.0302,74.418,1,-7.033,4
+I'm Not The Only One,"Sam Smith, Alicia Keys",In The Lonely Hour (10th Anniversary Edition),2024-08-02,220253,56,pop,0.449,0.444,0.138,0.755,0.0000688,0.267,0.0416,81.222,1,-7.248,4
+FEELSLIKEIMFALLINGINLOVE,COLDPLAY,feelslikeimfallinginlove,2024-06-21,237803,79,permanent wave,0.629,0.515,0.339,0.0448,0.00751,0.117,0.0272,121.154,1,-7.503,4
+Perigo,Trovante,Um Destes Dias,1990-01-01,308440,1,fado,0.551,0.313,0.14,0.698,0.000211,0.0988,0.027,95.08,1,-10.666,4
+Cater 2 U,Destiny's Child,Destiny Fulfilled,2004-11-16,245400,58,dance pop,0.605,0.584,0.464,0.286,0.0,0.235,0.197,125.802,0,-7.043,4
+TACONES ROJOS,SEBASTIAN YATRA,Dharma,2022-01-28,189333,72,colombian pop,0.746,0.844,0.934,0.062,0.0,0.149,0.0359,123.014,0,-3.499,4
+Primeiro Beijo,Cabeças no Ar,Cabeças No Ar,2002-11-25,231080,30,fado,0.38,0.268,0.179,0.979,0.0247,0.122,0.0327,179.932,1,-6.349,3
+I'm Good (Blue),David Guetta,I'm Good (Blue),2022-08-26,175238,85,big room,0.561,0.965,0.304,0.00383,7.07e-6,0.371,0.0343,128.04,0,-3.673,4
+SUCKER,JONAS BROTHERS,Happiness Begins,2019-06-07,181026,76,boy band,0.842,0.734,0.952,0.0427,0.0,0.106,0.0588,137.958,0,-5.065,4
+Raise Your Glass,Pink,Raise Your Glass,2010-10-05,202960,77,dance pop,0.7,0.709,0.624,0.0048,0.0,0.029,0.0838,122.019,1,-5.006,4
+Amiga da Minha Mulher,Seu Jorge,"Musica para Churrasco, Vol. 1",2011-10-01,248080,65,mpb,0.788,0.916,0.828,0.714,0.0,0.0867,0.121,104.013,0,-5.152,4
+Closer,Ne-Yo,Year Of The Gentleman (Bonus Track Edition),2008-01-01,234360,65,dance pop,0.711,0.754,0.59,0.028,0.0000296,0.152,0.0763,126.05,0,-6.461,4
+HOW WOULD YOU FEEL,ED SHEERAN,÷ (Deluxe),2017-03-03,280533,62,pop,0.617,0.439,0.242,0.424,0.0,0.127,0.0269,139.979,1,-5.63,4
+SO SICK,NE-YO,In My Own Words,2006-01-01,207186,78,dance pop,0.452,0.574,0.578,0.245,0.0,0.189,0.311,92.795,1,-8.336,4
+Viagem,Tiago Bettencourt,2019 - Rumo ao Eclipse,2020-10-30,266925,29,fado,0.638,0.378,0.148,0.45,0.151,0.0909,0.028,114.032,1,-10.138,4
+Ready or Not,Fugees,The Score (Expanded Edition),1996-02-13,226933,71,east coast hip hop,0.544,0.428,0.524,0.245,0.0,0.0899,0.514,89.129,0,-13.392,4
+COMO TU,BARBARA BANDEIRA feat. IVANDRO,Finda,2023-10-06,207873,51,portuguese pop,0.562,0.671,0.43,0.665,5.86e-6,0.4,0.437,187.57,0,-8.672,4
+DAYLIGHT,DAVID KUSHNER,Daylight,2023-04-14,212953,82,gen z singer-songwriter,0.508,0.43,0.324,0.83,0.000441,0.093,0.0335,130.09,0,-9.475,4
+MOÇA,IVANDRO,Trovador,2024-02-16,180491,52,hip hop tuga,0.486,0.441,0.29,0.639,0.000277,0.102,0.364,176.147,1,-9.068,4
+aroeira,branko,Soma ∞,2024-10-18,144538,24,moombahton,0.872,0.796,0.419,0.0252,0.018,0.192,0.0591,135.027,0,-5.848,4
+WAYS TO GO,"ALEC BENJAMIN, KHALID",12 Notes,2024-05-10,154705,52,alt z,0.652,0.621,0.747,0.635,0.0,0.069,0.0386,80.033,0,-4.91,4
+A Nossa Vez,Calema,A.N.V.,2017-10-20,217853,49,musica santomense,0.737,0.635,0.716,0.466,0.0,0.0718,0.0399,103.457,1,-6.781,4
+Snow (Hey Oh),Red Hot Chili Peppers,Stadium Arcadium,2006-05-09,334666,76,alternative rock,0.427,0.9,0.599,0.116,0.0000175,0.119,0.0499,104.655,1,-3.674,4
+IF I AINT GOT YOU,ALICIA KEYS,The Diary Of Alicia Keys,2003-12-02,228706,82,neo soul,0.609,0.444,0.166,0.603,6.86e-6,0.104,0.106,118.402,1,-9.129,3
+Zorro,António Zambujo,Guia,2010-09-21,197933,21,fado,0.705,0.229,0.244,0.942,0.516,0.108,0.0623,117.779,1,-14.34,4
+Burn,Usher,Confessions (Expanded Edition),2004-03-23,231933,70,atl hip hop,0.796,0.477,0.685,0.314,0.0,0.12,0.108,119.928,1,-7.161,4
+Cheerleader [Felix Jaehn remix radio edit],Omi,Me 4 U,2015-10-16,180560,64,reggae fusion,0.78,0.68,0.594,0.141,0.000012,0.138,0.0305,118.026,1,-6.081,4
+Destiny,"Zero 7, Sia, Sophie Barker",Simple Things,2001-01-01,338279,55,downtempo,0.63,0.576,0.471,0.217,0.686,0.129,0.0304,138.009,0,-9.046,4
+BLINDING LIGHTS,THE WEEKND,After Hours,2020-03-20,200040,88,canadian contemporary r&b,0.513,0.73,0.334,0.00143,0.0000954,0.0897,0.0598,171.001,1,-5.94,4
+TA TUDO BEM,T-REX,COR D'ÁGUA,2023-01-20,272637,53,hip hop tuga,0.833,0.388,0.128,0.135,2.5e-6,0.0845,0.376,169.945,0,-5.723,3
+ILLUSION,DUA LIPA,Radical Optimism,2024-05-03,188143,72,dance pop,0.679,0.772,0.709,0.0277,2.59e-6,0.106,0.0472,126.964,0,-4.721,4
+GOOD 4 U,OLIVIA RODRIGO,SOUR,2021-05-21,178146,82,pop,0.563,0.664,0.688,0.335,0.0,0.0849,0.154,166.928,1,-5.044,4
+APT.,ROSE & BRUNO MARS,APT.,2024-10-18,169917,96,k-pop,0.777,0.783,0.939,0.0283,0.0,0.355,0.26,149.027,0,-4.477,4
+Pulso,"Left, Jüra",Pulso,2024-10-29,200781,14,"",0.705,0.368,0.44,0.717,0.000582,0.0964,0.244,141.026,0,-8.878,4
+Afterglow,Ed Sheeran,Afterglow,2020-12-21,185486,66,pop,0.641,0.324,0.273,0.698,0.0,0.328,0.0299,110.184,1,-5.851,4
+OVERDRIVE,"OFENBACH, NORMA JEAN MARTINE",Overdrive (feat. Norma Jean Martine),2023-10-06,155905,81,pop dance,0.611,0.757,0.279,0.00257,0.0,0.058,0.03,126.963,1,-3.546,4
+WOW,POST MALONE,Hollywood's Bleeding,2019-09-06,149546,77,dfw rap,0.829,0.538,0.389,0.137,1.88e-6,0.103,0.212,99.952,0,-7.359,4
+COMPLICATED,AVRIL LAVIGNE,Let Go,2002-06-04,244506,81,canadian pop,0.585,0.776,0.427,0.0572,7.74e-6,0.3,0.0459,77.987,1,-5.898,4
+LET ME LOVE YOU,"DJ SNAKE, JUSTIN BIEBER",Encore,2016-08-05,205946,83,dance pop,0.475,0.715,0.159,0.0863,0.0000267,0.135,0.058,199.892,1,-5.371,4
+Who You Love,"John Mayer, Katy Perry",Paradise Valley,2013-08-20,249933,59,neo mellow,0.694,0.351,0.691,0.813,0.00165,0.097,0.0382,145.907,1,-10.92,4
+Slowly,Richie Campbell,Lisboa,2017-12-21,264105,40,hip hop tuga,0.753,0.617,0.158,0.143,0.000373,0.146,0.079,110.021,0,-7.537,4
+THE LAZY SONG,BRUNO MARS,Doo-Wops & Hooligans,2010-05-11,189109,71,dance pop,0.794,0.711,0.955,0.3,0.0,0.0955,0.0699,174.915,0,-5.124,4
+PIECE OF MY HEART,WIZKID feat. BRENT FAIYAZ,Piece of My Heart (feat. Brent Faiyaz),2024-10-18,259354,77,afrobeats,0.737,0.648,0.746,0.252,6.92e-6,0.105,0.138,93.2,1,-5.493,4
+Hold On,Adele,30,2021-11-19,366004,62,british soul,0.366,0.364,0.459,0.858,0.0000115,0.165,0.0433,165.902,1,-7.814,4
+Freedom Of The Night,Sophie Ellis-Bextor,Murder In The Night,2024-10-29,192466,40,dance pop,0.658,0.713,0.539,0.00388,0.0,0.393,0.0369,123.963,1,-4.968,4
+LUNCH,BILLIE EILISH,HIT ME HARD AND SOFT,2024-05-17,179586,87,art pop,0.893,0.4,0.945,0.0452,0.0823,0.0632,0.0643,124.987,0,-7.981,4
+Best Part,"H.E.R., Daniel Caesar",Freudian,2017-08-25,209831,84,canadian contemporary r&b,0.524,0.364,0.436,0.808,0.0,0.1,0.0367,75.24,1,-10.209,4
+Go Crazy,"Chris Brown, Young Thug",Slime & B,2020-05-08,176960,72,r&b,0.755,0.578,0.581,0.316,0.0,0.25,0.145,94.148,0,-8.932,4
+TRUST ME MATE,DEAN LEWIS,Trust Me Mate,2023-09-28,178408,60,australian pop,0.529,0.591,0.27,0.599,0.0,0.109,0.034,97.742,1,-4.223,4
+SORTE A NOSSA,CATARINA FILIPE,Sorte A Nossa,2024-09-07,146666,40,"",0.794,0.409,0.518,0.769,0.0,0.169,0.0551,108.031,1,-9.443,4
+A Nossa Dança,Calema ,A Nossa Dança,2023-04-06,182500,58,musica santomense,0.664,0.692,0.579,0.271,0.0,0.343,0.222,97.926,1,-6.802,4
+DIAMONDS,RIHANNA,Unapologetic (Edited Version),2012-01-01,225146,70,barbadian pop,0.562,0.709,0.401,0.00124,0.0,0.109,0.0424,91.958,0,-4.92,4
+VELHA INFANCIA,TRIBALISTAS,Tribalistas,2002-01-01,250440,69,brazilian rock,0.442,0.616,0.565,0.457,0.000168,0.144,0.0353,113.02,0,-8.128,4
+SCARED TO START,MICHAEL MARCAGI feat. JOY OLADOKUN,Scared To Start (feat. Joy Oladokun),2024-05-10,159636,52,"",0.584,0.488,0.365,0.242,0.0,0.348,0.0303,147.892,1,-9.615,4
+(You Want to) Make a Memory,Bon Jovi,Lost Highway,2007-01-01,276453,47,glam metal,0.51,0.417,0.145,0.111,0.0000636,0.116,0.0263,148.01,1,-7.583,4
+FOR LIFE,KYGO FEAT. ZAK ABEL & NILE RODGERS,For Life (feat. Nile Rodgers),2024-04-19,175803,71,edm,0.571,0.791,0.585,0.0494,0.0,0.0612,0.0741,122.085,1,-5.935,4
+"TAKE MY BREATH AWAY (LOVE THEME FROM ""TOP GUN"")",BERLIN,Top Gun - Motion Picture Soundtrack (Special Expanded Edition),1999-01-01,255733,71,new romantic,0.497,0.719,0.547,0.0613,0.0,0.411,0.0266,95.769,1,-9.397,4
+Feel This Moment,Pitbull,Global Warming: Meltdown (Deluxe Version),2012-01-01,229506,77,dance pop,0.673,0.758,0.542,0.039,0.0,0.341,0.158,135.956,1,-3.632,4
+BONES,IMAGINE DRAGONS,Mercury - Acts 1 & 2,2022-07-01,165264,81,modern rock,0.772,0.75,0.587,0.0201,0.0,0.074,0.0455,114.061,0,-3.67,4
+Nosso Quadro,AgroPlay,Agroplay Verão,2023-08-18,173698,65,agronejo,0.694,0.709,0.606,0.334,0.0,0.329,0.196,160.042,1,-4.821,4
+One Kiss,Calvin Harris,One Kiss (with Dua Lipa),2018-04-06,214846,78,dance pop,0.791,0.862,0.592,0.037,0.0000219,0.0814,0.11,123.994,0,-3.24,4
+El Merengue,Marshmello,Sugar Papi,2023-11-03,189668,80,brostep,0.777,0.774,0.661,0.0895,0.000401,0.0909,0.0553,123.982,0,-3.079,4
+Liger,Young Thug ,Young Martha,2017-09-22,208629,33,atl hip hop,0.757,0.71,0.646,0.339,0.0,0.189,0.213,139.898,1,-5.283,4
+Fast Car,"Jonas Blue, Dakota",Blue,2018-11-09,212424,74,pop,0.672,0.578,0.548,0.469,0.0,0.312,0.0569,113.945,1,-6.621,4
+EMPIRE STATE OF MIND,JAY-Z feat. ALICIA KEYS,The Blueprint 3,2009-09-08,276920,80,east coast hip hop,0.491,0.956,0.811,0.0295,0.0,0.46,0.392,173.585,1,-1.538,4
+Photograph,Nickelback,All The Right Reasons (15th Anniversary Expanded Edition),2005-01-01,258893,64,alternative metal,0.516,0.874,0.437,0.000819,0.000095,0.125,0.0299,145.958,1,-3.811,4
+Havana,Camila Cabello,Camila,2018-01-12,217306,80,dance pop,0.765,0.523,0.394,0.184,0.0000356,0.132,0.03,104.988,1,-4.333,4
+WHITE FLAG,DIDO,Life For Rent,2003-09-03,240600,59,dance pop,0.509,0.538,0.284,0.306,5.03e-6,0.091,0.0379,170.111,1,-6.835,4
+Team,Lorde,Pure Heroine,2013-09-27,193058,74,art pop,0.691,0.578,0.412,0.167,0.0,0.305,0.106,99.984,1,-7.436,4
+Levitating,Dua Lipa,Future Nostalgia,2020-03-27,203064,78,dance pop,0.702,0.825,0.915,0.00883,0.0,0.0674,0.0601,102.977,0,-3.787,4
+Pode Tentar,Maninho,Pode Tentar,2021-05-28,155307,50,portuguese pop,0.798,0.71,0.82,0.517,0.0,0.167,0.171,130.037,0,-5.078,4
+TATTOO,LOREEN,Tattoo,2023-02-25,183374,79,europop,0.545,0.779,0.303,0.243,1.66e-6,0.123,0.0751,150.002,0,-6.235,4
+Bam Bam,Camila Cabello,Familia,2022-04-07,206070,69,dance pop,0.756,0.697,0.956,0.182,0.0,0.333,0.0401,94.996,1,-6.377,4
+MON AMOUR,ZZOILO & AITANA,Mon Amour (Remix),2021-08-18,179940,74,latin pop,0.748,0.761,0.362,0.122,6.56e-6,0.0984,0.102,116.041,1,-6.621,4
+P.I.M.P.,50 Cent ,Get Rich Or Die Tryin',2003-02-06,249466,67,east coast hip hop,0.699,0.758,0.889,0.0443,0.0000128,0.0401,0.342,78.705,0,-3.012,4
+Moth to a Flame,Swedish House Mafia,Paradise Again,2022-04-15,234000,78,edm,0.553,0.659,0.105,0.0027,0.0,0.105,0.0391,120.146,1,-7.295,4
+TELEPHONE,LADY GAGA [+] BEYONCE,The Fame Monster (Deluxe Edition),2009-08-05,220626,75,art pop,0.825,0.832,0.713,0.00587,0.000733,0.114,0.0403,122.021,0,-5.862,4
+COOLER THAN ME,MIKE POSNER,31 Minutes to Takeoff,2010-08-09,213293,76,dance pop,0.768,0.82,0.625,0.179,0.0,0.689,0.0474,129.965,0,-4.63,4
+TQG,Karol G,MAÑANA SERÁ BONITO,2023-02-24,197933,81,reggaeton,0.587,0.647,0.686,0.619,0.0,0.106,0.327,90.123,0,-3.385,4
+WE PRAY,"COLDPLAY FEAT. LITTLE SIMZ, BURNA BOY, ELYANNA & TINI",Best of Pop 2024,2024-09-13,233406,8,permanent wave,0.742,0.509,0.683,0.0655,0.0000467,0.0738,0.0643,135.961,0,-7.923,4
+Yellow,Coldplay,Parachutes,2000-07-10,266773,88,permanent wave,0.429,0.661,0.285,0.00239,0.000121,0.234,0.0281,173.372,1,-7.227,4
+COMO É LINDA,CAROLINA DESLANDES,Como É Linda,2024-05-23,177908,47,portuguese pop,0.465,0.295,0.602,0.857,2.35e-6,0.134,0.144,95.147,1,-9.758,4
+LAY LOW,TIESTO,DRIVE,2023-04-21,153442,71,big room,0.554,0.884,0.418,0.065,0.0000774,0.342,0.212,121.895,0,-4.424,4
+"GOOD LUCK, BABE!",CHAPPELL ROAN,"Good Luck, Babe!",2024-04-05,218423,94,indie pop,0.7,0.582,0.785,0.0502,0.0,0.0881,0.0356,116.712,0,-5.96,4
+MINHA VIDA E UM FILME,TETO,Minha Vida é um Filme,2023-04-01,186666,60,trap baiano,0.855,0.75,0.59,0.154,9.12e-6,0.312,0.0676,99.001,0,-5.392,4
+Someday,Nickelback,The Long Road,2003-09-23,207466,70,alternative metal,0.455,0.858,0.597,0.000616,0.000247,0.226,0.0391,163.118,0,-5.659,4
+Lover [remix],"Taylor Swift, Shawn Mendes",Lover (Remix) [feat. Shawn Mendes],2019-11-13,221306,65,pop,0.448,0.603,0.422,0.433,0.0,0.0862,0.064,205.272,1,-7.176,3
+GOODBYES,POST MALONE feat. YOUNG THUG,Hollywood's Bleeding,2019-09-06,174853,74,dfw rap,0.547,0.653,0.163,0.456,0.0,0.103,0.081,150.097,1,-3.875,4
+Am I Wrong,Nico & Vinz,Black Star Elephant,2014-01-01,245866,75,afrobeats,0.729,0.675,0.779,0.175,1.58e-6,0.55,0.0312,119.968,1,-6.003,4
+Do I Wanna Know?,Arctic Monkeys,AM,2013-09-09,272394,84,garage rock,0.548,0.532,0.405,0.186,0.000263,0.217,0.0323,85.03,1,-7.596,4
+These Walls,Dua Lipa,Radical Optimism,2024-05-03,217783,71,dance pop,0.731,0.725,0.739,0.0361,0.0000249,0.106,0.0349,123.01,1,-5.117,4
+SUMMERS BACK,ALOK & JESS GLYNNE,Summer's Back,2024-06-21,147619,66,electro house,0.703,0.914,0.863,0.000642,0.0221,0.36,0.127,126.028,1,-4.75,4
+EL MERENGUE,MARSHMELLO & MANUEL TURIZO,Sugar Papi,2023-11-03,189668,80,brostep,0.777,0.774,0.661,0.0895,0.000401,0.0909,0.0553,123.982,0,-3.079,4
+TRUE,SPANDAU BALLET,True (Special Edition),1983-02-25,393386,68,new romantic,0.777,0.521,0.335,0.359,0.11,0.0594,0.0277,97.623,1,-8.443,4
+BREAKING NEWS,FLOWEROVLOVE,breaking news,2024-07-19,161075,66,modern indie pop,0.686,0.796,0.937,0.254,0.0,0.354,0.0298,129.935,0,-3.088,4
+HALLELUJAH,ALEXANDRA BURKE,Overcome,2009-01-01,217826,57,talent show,0.177,0.425,0.0942,0.654,0.0,0.195,0.0291,182.571,0,-6.211,3
+IS IT OVER NOW,TAYLOR SWIFT,1989 (Taylor's Version),2023-10-26,229477,75,pop,0.599,0.651,0.153,0.0486,0.0,0.126,0.035,100.001,1,-7.343,4
+Drops of Jupiter (Tell Me),Train,Drops Of Jupiter,2001-03-27,259933,80,dance pop,0.481,0.638,0.497,0.153,0.0,0.154,0.0276,79.064,1,-5.862,4
+Just Give Me a Reason,"Pink, Nate Ruess",The Truth About Love,2012-09-18,242733,83,dance pop,0.778,0.547,0.442,0.344,0.000306,0.132,0.0489,95.0,1,-7.273,4
+Brutos Diamantes,"Bispo, Syro",11 11,2023-11-11,176320,56,portuguese pop,0.597,0.568,0.591,0.601,0.0,0.111,0.0753,159.795,0,-5.747,4
+This One's for You,David Guetta,This One's for You (feat. Zara Larsson) [Official Song UEFA EURO 2016],2016-05-13,207272,68,big room,0.367,0.915,0.365,0.0022,0.0000581,0.0905,0.0488,110.169,0,-3.456,4
+DYNAMITE,BTS,BE,2020-11-20,199053,78,k-pop,0.746,0.765,0.737,0.0112,0.0,0.0936,0.0993,114.044,0,-4.41,4
+DOURADO,HAROLD,Dourado,2024-10-09,184668,22,hip hop tuga,0.6,0.473,0.433,0.549,0.224,0.11,0.0498,119.867,0,-9.062,5
+TROVADOR,IVANDRO,Trovador,2024-02-16,226005,38,hip hop tuga,0.789,0.468,0.455,0.736,0.000447,0.112,0.0928,113.906,0,-6.963,4
+On My Mind [acoustic],"Jorja Smith, Preditah",On My Mind (acoustic),2017-10-03,176919,50,bass house,0.559,0.352,0.548,0.847,1.5e-6,0.103,0.0362,134.253,1,-6.807,4
+Pray for Me,The Weeknd,The Highlights,2021-02-05,211420,75,canadian contemporary r&b,0.732,0.678,0.196,0.0867,0.0000241,0.112,0.0886,100.626,1,-4.977,4
+HERE WITH ME,D4VD,Petals to Thorns,2023-05-26,242484,83,bedroom pop,0.575,0.45,0.263,0.531,0.0000659,0.124,0.0259,132.039,1,-9.306,4
+ONE MORE TIME,DAFT PUNK,Discovery,2001-03-12,320357,75,electro,0.613,0.697,0.476,0.0194,0.0,0.332,0.133,122.746,1,-8.618,4
+Nada Muda,Matheus Paraizo,Nada muda,2024-07-12,146896,14,"",0.666,0.408,0.416,0.641,1.28e-6,0.117,0.126,115.927,1,-8.688,4
+The Boy Is Mine (Remix),"Ariana Grande, Brandy, Monica",the boy is mine (Remix),2024-06-21,213384,60,pop,0.709,0.67,0.493,0.296,0.0,0.0749,0.0423,97.942,0,-5.584,4
+O Amor É Assim,"HMB, Carminho",+,2017-02-10,266152,36,portuguese pop,0.833,0.634,0.838,0.393,0.0,0.0761,0.0448,111.996,1,-3.864,4
+Wonderful World,James Morrison,Undiscovered,2006-01-01,209786,32,neo mellow,0.484,0.675,0.609,0.0571,0.0,0.0962,0.028,79.036,1,-5.207,4
+PROMISES,CALVIN HARRIS & SAM SMITH,Promises (with Sam Smith),2018-08-17,213309,69,dance pop,0.781,0.768,0.486,0.0119,4.91e-6,0.325,0.0394,123.07,1,-5.991,4
+Houdini,Dua Lipa,Radical Optimism,2024-05-03,185917,80,dance pop,0.744,0.789,0.866,0.0036,0.00144,0.0947,0.059,116.985,0,-4.876,4
+Best of You,Foo Fighters,In Your Honor,2005-06-14,255626,73,alternative metal,0.366,0.94,0.369,0.000769,0.0000942,0.188,0.0696,130.198,0,-5.119,4
+Foolish,Ashanti,Ashanti,2002-01-01,227386,72,dance pop,0.665,0.695,0.707,0.347,0.0,0.106,0.0532,90.119,1,-5.763,4
+Without You,"David Guetta, Usher",Nothing but the Beat 2.0,2011-08-24,208133,63,big room,0.608,0.614,0.402,0.227,3.82e-6,0.157,0.0285,127.885,1,-3.727,4
+BREAKEVEN,THE SCRIPT,The Script,2008-07-14,261426,78,celtic rock,0.63,0.696,0.491,0.144,0.0,0.0835,0.0242,94.034,1,-4.501,4
+Monaco,Bad Bunny,nadie sabe lo que va a pasar mañana,2023-10-13,267194,77,reggaeton,0.787,0.621,0.13,0.15,0.000402,0.58,0.068,139.056,0,-5.009,4
+HIGHER POWER,COLDPLAY,Higher Power,2021-05-07,211294,67,permanent wave,0.507,0.828,0.489,0.00711,0.0000244,0.261,0.0449,178.032,1,-6.023,4
+"Saudade, Saudade",Maro,Festival Da Canção 2022,2022-01-21,181226,52,musica portuguesa contemporanea,0.644,0.337,0.376,0.681,0.000208,0.108,0.0357,82.992,0,-11.261,3
+STRANGERS,KENYA GRACE,Strangers,2023-09-01,172964,78,singer-songwriter pop,0.628,0.523,0.416,0.701,0.00274,0.219,0.0946,169.982,0,-8.307,4
+When We Were Young,Adele,25,2015-11-20,290900,71,british soul,0.376,0.595,0.265,0.303,0.0,0.095,0.0496,144.361,1,-5.936,4
+Emily,James Arthur,Emily,2021-09-24,201657,49,pop,0.581,0.519,0.267,0.0137,0.0000686,0.0808,0.0946,83.998,1,-6.649,4
+ESTRADA,PEDRO MAFAMA,Estava No Abismo Mas Dei Um Passo Em Frente,2023-05-26,204625,29,portuguese indie,0.651,0.807,0.562,0.0166,0.000011,0.268,0.0652,112.051,0,-4.302,4
+VALERIE,MARK RONSON [+] AMY WINEHOUSE,Version,2007-04-16,219413,80,pop soul,0.699,0.83,0.889,0.00243,0.00024,0.0995,0.0633,105.809,1,-4.898,4
+Bad Liar,Imagine Dragons,Origins (Deluxe),2018-11-09,260773,78,modern rock,0.307,0.637,0.0805,0.0732,0.0,0.368,0.0569,88.693,1,-6.993,4
+ONE MORE NIGHT,MAROON 5,Overexposed (Deluxe),2012-01-01,219466,70,pop,0.718,0.82,0.613,0.0444,0.0,0.0846,0.0323,92.998,0,-3.453,4
+Love Tonight,Shouse,Love Tonight (David Guetta Remix),2021-06-11,158095,74,aussietronica,0.621,0.989,0.0348,0.015,0.357,0.184,0.0434,126.002,0,-4.225,4
+No Chão Novinha,Anitta,NO CHÃO NOVINHA,2021-12-09,136901,58,funk pop,0.703,0.806,0.704,0.06,0.00661,0.375,0.0594,141.984,1,-3.563,4
+Save Your Tears,The Weeknd,After Hours,2020-03-20,215626,84,canadian contemporary r&b,0.679,0.825,0.644,0.0212,0.0000121,0.543,0.0309,118.049,1,-5.487,4
+One Kiss,"Calvin Harris, Dua Lipa",One Kiss (with Dua Lipa),2018-04-06,214846,78,dance pop,0.791,0.862,0.592,0.037,0.0000219,0.0814,0.11,123.994,0,-3.24,4
+Girl on Fire,Alicia Keys,Girl on Fire (Remixes) - EP,2012-11-18,224920,74,neo soul,0.482,0.706,0.144,0.135,0.00106,0.105,0.0607,92.513,1,-5.762,4
+Let's Get It Started,Black Eyed Peas,Elephunk,2003-06-24,217733,71,dance pop,0.783,0.794,0.805,0.105,0.0,0.304,0.12,104.963,0,-2.231,4
+Summer Jam,The Underdog Project,Summer Jam (Jerome Remix),2020-07-31,165233,43,slap house,0.707,0.922,0.299,0.00371,0.0,0.191,0.348,132.962,0,-3.384,4
+Home,Daughtry,Daughtry (Deluxe Edition),2006-01-01,255666,56,alternative metal,0.443,0.853,0.338,0.00217,1.77e-6,0.198,0.0361,143.986,1,-3.885,4
+The Sweet Escape,"Gwen Stefani, Akon",The Sweet Escape,2006-01-01,246466,72,dance pop,0.756,0.769,0.73,0.191,0.0,0.178,0.0344,119.961,1,-3.502,4
+STOLE THE SHOW,KYGO & PARSON JAMES,Cloud Nine,2016-05-13,223186,76,edm,0.64,0.635,0.475,0.271,0.0,0.319,0.226,100.034,0,-7.565,4
+Ride It,Jay Sean,My Own Way,2008-01-01,190053,65,dance pop,0.694,0.651,0.704,0.257,0.0,0.11,0.127,93.887,0,-5.645,4
+KEEP HOLDING ON,AVRIL LAVIGNE,The Best Damn Thing (Expanded Edition),2007-04-17,239906,60,canadian pop,0.162,0.786,0.138,0.0374,0.0,0.143,0.038,161.192,1,-2.353,3
+TENGO,JULIETTE,Ciclone,2023-08-25,129692,64,"",0.729,0.855,0.943,0.25,0.0,0.143,0.0521,129.964,0,-4.405,4
+INDUSTRY BABY,LIL NAS X feat. JACK HARLOW,INDUSTRY BABY (feat. Jack Harlow),2021-07-23,212000,73,lgbtq+ hip hop,0.736,0.704,0.894,0.0203,0.0,0.0501,0.0615,149.995,0,-7.409,4
+Feel so Close,Calvin Harris,18 Months,2012-10-29,206413,82,dance pop,0.707,0.924,0.919,0.000972,0.00703,0.204,0.031,127.937,1,-2.842,4
+Nós os Dois,Bárbara Bandeira,Nós os Dois,2019-11-06,204648,45,portuguese pop,0.423,0.24,0.564,0.882,0.0,0.11,0.0367,138.269,1,-9.086,4
+ADORE U,FRED AGAIN.. & OBONGJAYAR,ten days,2024-09-06,220653,68,edm,0.747,0.867,0.684,0.582,0.00413,0.114,0.088,124.014,1,-7.311,4
+DANCING IN THE FLAMES (PI),THE WEEKND,Karaoke Picks Vol. 154,2024-11-01,199250,0,karaoke,0.685,0.771,0.159,0.00866,0.262,0.0917,0.0387,116.994,1,-7.493,4
+CRUEL SUMMER,TAYLOR SWIFT,Lover,2019-08-23,178426,89,pop,0.552,0.702,0.564,0.117,0.0000206,0.105,0.157,169.994,1,-5.707,4
+JUMP,"TYLA, GUNNA & SKILLIBENG",TYLA,2024-03-22,147071,74,"",0.79,0.716,0.627,0.0297,0.0000187,0.213,0.0929,100.104,0,-3.446,4
+It's a Sin,Years & Years,It’s a sin,2021-05-11,284807,42,glam rock,0.596,0.891,0.2,0.035,4.19e-6,0.186,0.0429,124.986,0,-5.925,4
+Carro,Bárbara Bandeira ,Finda,2023-10-06,202624,56,portuguese pop,0.733,0.53,0.47,0.66,0.0,0.142,0.0338,114.972,0,-7.113,4
+Smells Like Teen Spirit,Nirvana,Nevermind (Remastered),1991-09-26,301920,76,grunge,0.502,0.912,0.72,0.0000255,0.000173,0.106,0.0564,116.761,1,-4.556,4
+NOT MY FAULT,MEGAN THEE STALLION & RENEE RAPP,Mean Girls (Music From The Motion Picture),2024-01-12,170528,69,alt z,0.811,0.792,0.854,0.1,0.0,0.395,0.175,124.01,0,-6.081,4
+Payphone,Maroon 5,Overexposed (Deluxe),2012-01-01,231386,70,pop,0.739,0.756,0.523,0.0136,0.0,0.37,0.0394,110.028,1,-4.828,4
+Coisa mais Bonita,"Carolina Deslandes, António Zambujo",Casa,2018-04-20,115083,33,portuguese pop,0.799,0.327,0.649,0.866,0.0,0.108,0.0549,98.145,1,-9.003,4
+BRING ME TO LIFE,EVANESCENCE,Fallen,2003-03-04,235893,84,alternative metal,0.331,0.943,0.296,0.00721,2.06e-6,0.242,0.0698,94.612,0,-3.188,4
+Say So,Doja Cat,Hot Pink,2019-11-07,237893,73,dance pop,0.787,0.673,0.779,0.264,3.35e-6,0.0904,0.159,110.962,0,-4.583,4
+HEAT WAVES,GLASS ANIMALS,Dreamland,2020-08-07,238805,84,gauze pop,0.761,0.525,0.531,0.44,6.7e-6,0.0921,0.0944,80.87,1,-6.9,4
+Happier,Ed Sheeran,÷ (Deluxe),2017-03-03,207520,74,pop,0.522,0.385,0.236,0.536,0.0,0.135,0.0288,89.792,1,-7.355,4
+Savage Love,Jawsh 685,Savage Love (Laxed - Siren Beat),2020-06-11,171374,70,nz pop,0.767,0.481,0.761,0.234,0.0,0.269,0.0803,150.076,0,-8.52,4
+THE SOUND OF SILENCE,DISTURBED,Immortalized,2015-08-14,248466,73,alternative metal,0.322,0.28,0.175,0.468,1.1e-6,0.102,0.0281,85.794,0,-9.367,4
+Scars to Your Beautiful,Alessia Cara,Know-It-All,2015-11-13,230240,76,canadian contemporary r&b,0.319,0.739,0.449,0.0285,0.0,0.111,0.272,194.169,1,-5.74,4
+No Air,Jordin Sparks,Jordin Sparks,2007-11-20,264373,71,dance pop,0.466,0.759,0.328,0.0521,0.0,0.0587,0.199,160.033,0,-4.978,4
+7 YEARS,LUKAS GRAHAM,Lukas Graham,2016-04-01,237300,79,danish pop,0.765,0.473,0.34,0.287,0.0,0.391,0.0514,119.992,1,-5.829,4
+Faz Bem,Bluay,Faz Bem,2024-01-19,183714,59,trap tuga,0.76,0.787,0.25,0.155,0.00342,0.0918,0.0835,97.993,1,-5.692,4
+SONG FOR GUY,ELTON JOHN,A Single Man,1978-10-01,413866,48,glam rock,0.459,0.165,0.123,0.0175,0.000276,0.0895,0.047,122.861,1,-15.95,4
+"You Know, I'm No Good",Amy Winehouse,Back To Black (Deluxe Edition),2006-01-01,257186,74,british soul,0.694,0.495,0.799,0.0137,0.00351,0.0644,0.0329,103.375,1,-14.222,4
+CHASE IT (MMM DA DA DA),BEBE REXHA,Chase It (Mmm Da Da Da),2024-05-17,154639,60,dance pop,0.75,0.725,0.276,0.0281,0.00322,0.0864,0.0493,131.976,0,-7.055,4
+CYNICAL,TWOCOLORS x SAFRI DUO x CHRIS DE SARANDY,Ballermann Hits Party 2024 (XXL Fan Edition),2023-11-03,191365,12,edm,0.69,0.84,0.493,0.0268,0.0000306,0.363,0.0573,129.935,1,-6.947,4
+gatubela,"karol g, maldy ",MAÑANA SERÁ BONITO,2023-02-24,208013,67,reggaeton,0.872,0.854,0.323,0.234,0.0,0.167,0.212,95.01,0,-2.68,4
+Bored,Billie Eilish,Bored,2017-03-30,180933,79,art pop,0.614,0.318,0.112,0.896,0.00239,0.0795,0.0478,119.959,1,-12.695,4
+HEARTLESS,THE WEEKND,After Hours,2020-03-20,198266,77,canadian contemporary r&b,0.537,0.746,0.252,0.0236,1e-6,0.156,0.15,170.083,0,-5.507,4
+EYES CLOSED,IMAGINE DRAGONS,LOOM,2024-06-28,200026,71,modern rock,0.718,0.68,0.496,0.0401,0.000344,0.0742,0.0682,86.997,0,-7.234,4
+Higher Power,Coldplay,Higher Power,2021-05-07,211294,67,permanent wave,0.507,0.828,0.489,0.00711,0.0000244,0.261,0.0449,178.032,1,-6.023,4
+Flagrante,António Zambujo,Quinto (Deluxe Edition),2012-10-23,208586,16,fado,0.73,0.473,0.741,0.818,0.0192,0.134,0.0872,104.208,1,-8.915,4
+Marvin Gaye,"Charlie Puth, Meghan Trainor",Nine Track Mind,2016-01-29,190453,49,pop,0.795,0.616,0.815,0.417,0.0,0.349,0.06,110.015,0,-5.281,4
+Savage,Megan Thee Stallion,Suga,2020-03-06,155497,65,houston rap,0.843,0.741,0.68,0.0252,0.0,0.096,0.334,168.983,1,-5.609,4
+With Arms Wide Open,Creed,Human Clay,1999-01-01,274800,71,alternative metal,0.41,0.539,0.141,0.00425,0.00089,0.117,0.0302,138.852,1,-8.412,4
+Fix You,Coldplay,X&Y,2005-06-07,295533,82,permanent wave,0.209,0.417,0.124,0.164,0.00196,0.113,0.0338,138.178,1,-8.74,4
+Cowboys Cry Too,"Kelsea Ballerini, Noah Kahan",Cowboys Cry Too (with Noah Kahan),2024-06-28,230600,70,contemporary country,0.442,0.603,0.456,0.602,0.0,0.161,0.0304,86.494,1,-5.719,4
+Party Girl,StaySolidRocky ,Fallin',2020-07-15,147800,72,melodic rap,0.73,0.439,0.615,0.747,0.0,0.0988,0.0609,130.09,0,-9.864,4
+DAMN I WISH I WAS YOUR LOVER,SOPHIE B. HAWKINS,Tongues And Tails,1992-04-06,323266,52,lilith,0.546,0.781,0.539,0.22,0.0000151,0.363,0.0506,95.032,0,-9.439,4
+Healing (Shattered Heart),"Kygo, Jonas Brothers",KYGO,2024-06-21,162051,61,edm,0.666,0.69,0.273,0.0853,8.58e-6,0.0775,0.0583,102.964,0,-6.134,4
+Somos Iguais,Plutónio,"Sacrifício: Sangue, Lágrimas, Suor",2019-11-22,237679,55,hip hop tuga,0.65,0.699,0.568,0.306,0.000282,0.118,0.175,91.837,1,-7.634,4
+Bichota,Karol G,KG0516,2021-03-26,178693,69,reggaeton,0.864,0.658,0.865,0.204,0.000626,0.105,0.154,163.922,0,-4.105,4
+EL MERENGUE,"MARSHMELLO, MANUEL TURIZO",Sugar Papi,2023-11-03,189668,80,brostep,0.777,0.774,0.661,0.0895,0.000401,0.0909,0.0553,123.982,0,-3.079,4
+Everytime,Britney Spears,In The Zone,2003-11-13,230306,63,dance pop,0.398,0.284,0.114,0.966,0.0000857,0.116,0.0337,109.599,1,-12.852,4
+INFINITY,JAYMES YOUNG,Feel Something,2017-06-23,237720,76,indie poptimism,0.671,0.673,0.494,0.148,0.0000529,0.304,0.0444,121.963,0,-6.941,4
+I Need Your Love,"Calvin Harris, Ellie Goulding",18 Months,2012-10-29,234506,71,dance pop,0.695,0.869,0.58,0.41,0.0,0.237,0.0483,124.989,1,-5.066,4
+Breaking Me,"Topic, A7S",Breaking Me,2019-12-19,166793,72,german dance,0.789,0.72,0.664,0.223,0.0,0.129,0.218,122.031,0,-5.652,4
+WHERE SHE GOES,BAD BUNNY,WHERE SHE GOES,2023-05-18,231704,74,reggaeton,0.652,0.8,0.234,0.143,0.629,0.112,0.0614,143.978,0,-4.019,4
+vampire,Olivia Rodrigo,GUTS,2023-09-08,219724,84,pop,0.484,0.53,0.323,0.154,0.0,0.263,0.0538,136.848,1,-5.821,4
+FREE,LIGHTHOUSE FAMILY,Whatever Gets You Through The Day,2001-01-01,316360,47,europop,0.672,0.558,0.376,0.354,0.0,0.111,0.0249,98.28,1,-9.513,4
+Canção de Engate,Delfins,Libertação,1987-07-06,265743,27,portuguese rock,0.698,0.849,0.676,0.176,0.00024,0.168,0.0333,110.137,0,-8.376,4
+POPULAR,"THE WEEKND, PLAYBOI CARTI",Popular (Music from the HBO Original Series),2023-06-02,215466,83,canadian contemporary r&b,0.854,0.674,0.848,0.0517,0.0000853,0.509,0.184,99.022,1,-6.23,4
+HOUDINI,DUA LIPA,Radical Optimism,2024-05-03,185917,80,dance pop,0.744,0.789,0.866,0.0036,0.00144,0.0947,0.059,116.985,0,-4.876,4
+CRAZY IN LOVE,BEYONCÉ FEAT. JAY-Z,Dangerously In Love,2003-06-24,236133,77,pop,0.646,0.77,0.681,0.00249,0.0,0.0715,0.226,99.165,0,-6.596,4
+Always Remember Us this Way,Lady Gaga,A Star Is Born Soundtrack (Without Dialogue),2018-10-05,210200,82,art pop,0.549,0.502,0.291,0.299,0.0,0.764,0.0405,129.842,1,-5.972,4
+Bubbly,Colbie Caillat,Coco,2007-01-01,196280,65,dance pop,0.697,0.474,0.249,0.603,0.0,0.11,0.0351,127.904,1,-6.663,4
+Starlight,Muse,Black Holes and Revelations,2006-06-19,240213,72,alternative rock,0.55,0.874,0.318,0.000436,0.0000102,0.206,0.0321,121.61,1,-4.046,4
+Positions,Ariana Grande,Positions,2020-10-30,172324,78,pop,0.737,0.802,0.682,0.468,0.0,0.0931,0.0878,144.015,1,-4.771,4
+PON THE REPLAY,RIHANNA,Music Of The Sun,2005-08-29,246960,78,barbadian pop,0.779,0.64,0.499,0.000155,0.000766,0.101,0.159,99.017,1,-8.415,4
+Shape of You,Ed Sheeran,÷ (Deluxe),2017-03-03,233712,86,pop,0.825,0.652,0.931,0.581,0.0,0.0931,0.0802,95.977,0,-3.183,4
+One Dance,Drake,Views,2016-05-06,173986,85,canadian hip hop,0.792,0.625,0.37,0.00776,0.0018,0.329,0.0536,103.967,1,-5.609,4
+Apologize,"Timbaland, OneRepublic",Shock Value,2007-01-01,184400,72,dance pop,0.658,0.602,0.0785,0.0363,0.0,0.102,0.0281,118.026,1,-6.006,4
+Levitating,"Dua Lipa, DaBaby",Future Nostalgia,2020-03-27,203064,78,dance pop,0.702,0.825,0.915,0.00883,0.0,0.0674,0.0601,102.977,0,-3.787,4
+WHEN WE WERE YOUNG,ADELE,25,2015-11-20,290900,71,british soul,0.376,0.595,0.265,0.303,0.0,0.095,0.0496,144.361,1,-5.936,4
+Rolling in the Deep,Adele,21,2011-01-24,228093,77,british soul,0.73,0.769,0.507,0.138,0.0,0.0473,0.0298,104.948,1,-5.114,4
+Fala-me a Verdade,"Bia Caboz, Piruka",Fala-me A Verdade,2024-05-10,172804,47,"",0.51,0.519,0.616,0.483,0.0,0.103,0.0723,113.711,0,-9.383,3
+CUPID - TWIN VER.,FIFTY FIFTY,The Beginning,2023-09-22,174116,76,k-pop girl group,0.775,0.646,0.724,0.321,0.000157,0.255,0.0314,120.001,0,-5.72,4
+TEARS IN HEAVEN,ERIC CLAPTON,Rush (Music from the Motion Picture Soundtrack),1992-01-10,271760,68,album rock,0.498,0.242,0.312,0.835,0.536,0.133,0.0257,153.744,1,-12.238,4
+EL CHAPO,WET BED GANG,El Chapo,2024-08-16,241813,43,hip hop tuga,0.699,0.929,0.906,0.0543,1.94e-6,0.0765,0.0597,97.017,0,-4.679,4
+In another Time,Sade,Soldier of Love,2010-02-08,304413,52,british soul,0.62,0.38,0.233,0.574,0.0225,0.108,0.029,147.7,1,-9.32,3
+Mood,24kGoldn,El Dorado,2021-03-26,140533,80,cali rap,0.701,0.716,0.732,0.174,0.0,0.324,0.0361,91.007,0,-3.671,4
+Quando Nós Formos Velhinhos,Rogério Charraz,O Coreto,2021-02-26,235009,20,musica portuguesa contemporanea,0.503,0.186,0.22,0.705,0.00635,0.121,0.0382,95.226,0,-14.175,4
+BLAME,CALVIN HARRIS feat. JOHN NEWMAN,Motion,2014-10-31,212960,79,dance pop,0.414,0.857,0.348,0.0287,0.00574,0.343,0.0808,128.024,0,-4.078,4
+You've Got the Love,Florence and the Machine,Lungs (Deluxe Edition),2009-01-01,168666,63,baroque pop,0.574,0.704,0.368,0.00455,0.0,0.107,0.0319,109.999,1,-4.72,4
+Sunday Morning,Maroon 5,Songs About Jane: 10th Anniversary Edition,2002-01-01,244880,74,pop,0.608,0.768,0.809,0.0913,0.0,0.0629,0.0475,88.059,1,-5.227,4
+7 Years,Lukas Graham,Lukas Graham,2016-04-01,237300,79,danish pop,0.765,0.473,0.34,0.287,0.0,0.391,0.0514,119.992,1,-5.829,4
+TEMPO,VAN ZEE,Tempo,2020-02-12,188735,52,hip hop tuga,0.542,0.229,0.393,0.882,0.000614,0.231,0.207,177.071,1,-14.324,4
+Don't You Remember,Adele,21,2011-01-24,243200,61,british soul,0.644,0.4,0.227,0.214,0.0,0.0866,0.0304,115.025,1,-5.713,4
+A VIDA TODA,CAROLINA DESLANDES,Casa,2018-04-20,246178,42,portuguese pop,0.786,0.294,0.536,0.787,0.0000523,0.104,0.044,128.04,0,-10.006,4
+AMOR DE FERRO,"DIOGO PIÇARRA, PEDRO ABRUNHOSA",Amor de Ferro,2024-02-22,214190,46,portuguese pop,0.62,0.554,0.154,0.124,0.0000106,0.113,0.0518,124.853,1,-7.138,4
+I'm Yours,Jason Mraz,We Sing. We Dance. We Steal Things. (Bonus Tracks Version),2008-05-01,242946,77,acoustic pop,0.703,0.444,0.712,0.559,0.0,0.0973,0.0417,150.96,1,-9.331,4
+Sprinter,Dave,Sprinter,2023-06-01,229133,79,uk hip hop,0.918,0.681,0.706,0.263,0.0,0.0615,0.201,139.057,1,-4.705,4
+Bend and Break,Keane,Hopes And Fears,2004-01-01,220133,44,neo mellow,0.471,0.84,0.497,0.00074,0.0000197,0.163,0.0295,137.924,1,-3.59,4
+Estrela,Carminho,Maria,2018-11-30,279653,4,fado,0.385,0.112,0.133,0.857,0.0,0.111,0.0364,109.74,1,-11.916,4
+There's Nothing Holdin' Me Back,Shawn Mendes,Illuminate (Deluxe),2017-04-20,199440,84,canadian pop,0.866,0.811,0.969,0.375,0.0,0.078,0.0553,121.995,0,-4.063,4
+Cooped Up,Post Malone,Cooped Up / Return Of The Mack,2022-10-21,127253,67,dfw rap,0.726,0.756,0.63,0.00686,2.52e-6,0.197,0.148,95.5,1,-4.735,4
+I See Fire,Ed Sheeran,x (10th Anniversary Edition),2024-06-21,299146,68,pop,0.591,0.176,0.296,0.638,4.81e-6,0.252,0.0396,152.122,0,-11.692,4
+VAMPIRE,OLIVIA RODRIGO,GUTS,2023-09-08,219724,84,pop,0.484,0.53,0.323,0.154,0.0,0.263,0.0538,136.848,1,-5.821,4
+SOMEONE LIKE YOU,ADELE,21,2011-01-24,285240,77,british soul,0.556,0.319,0.294,0.893,0.0,0.0996,0.0281,135.187,1,-8.251,4
+Ponto Para Terminar,Diana Lima,Ponto Para Terminar,2023-07-04,163077,32,portuguese pop,0.849,0.363,0.623,0.466,0.0000676,0.106,0.0407,91.033,0,-8.309,4
+Fireflies,Owl City,Ocean Eyes,2009-01-01,228346,76,indietronica,0.512,0.662,0.472,0.0275,0.0,0.118,0.0439,180.114,1,-6.797,4
+Safe Inside,James Arthur,Back from the Edge,2016-10-28,222173,61,pop,0.317,0.547,0.11,0.187,0.0,0.121,0.0366,117.332,1,-6.549,4
+One more Time,Daft Punk,Discovery,2001-03-12,320357,75,electro,0.613,0.697,0.476,0.0194,0.0,0.332,0.133,122.746,1,-8.618,4
+Hold Back the River,James Bay,Chaos And The Calm,2015-03-23,238746,60,neo mellow,0.715,0.715,0.507,0.0526,0.0,0.0936,0.0902,134.922,1,-7.364,4
+Big Girls Don't Cry,Fergie,The Dutchess,2006-09-13,268120,64,dance pop,0.707,0.642,0.249,0.204,0.0,0.0925,0.0337,113.083,1,-4.271,4
+LOVE LIES,KHALID & NORMANI,Love Lies (with Normani),2018-02-14,201707,70,pop,0.708,0.648,0.338,0.0956,0.0,0.134,0.0449,143.955,1,-5.626,4
+LOVE ON,SELENA GOMEZ,Love On,2024-02-22,181650,66,pop,0.751,0.519,0.534,0.202,1.15e-6,0.08,0.0372,116.023,1,-6.265,4
+Tsunami,Richie Campbell,Heartbreak & Other Stories,2023-03-17,297737,42,hip hop tuga,0.73,0.5,0.332,0.723,0.0000146,0.101,0.116,98.117,0,-9.189,4
+Imortais,Mafalda Veiga,Imortais (feat. Jorge Palma),2018-09-21,213507,13,classic portuguese pop,0.555,0.27,0.368,0.93,0.0,0.279,0.0323,90.435,1,-11.902,4
+Calm Down,"Rema, Selena Gomez",Calm Down (with Selena Gomez),2022-08-25,239317,79,afrobeats,0.801,0.806,0.802,0.382,0.000669,0.114,0.0381,106.999,1,-5.206,4
+Party Of One,"Brandi Carlile, Sam Smith",Party of One (feat. Sam Smith),2018-10-17,259558,48,acoustic pop,0.354,0.206,0.202,0.779,0.00021,0.0959,0.0365,139.056,1,-11.799,4
+ASSOBIA PARA O LADO,CARLAO,Assobia Para O Lado,2020-03-13,191648,35,hip hop tuga,0.95,0.725,0.795,0.384,0.0000966,0.0764,0.051,102.006,1,-5.761,4
+Melancholic Ballad (For the Leftlovers),Fingertips,All 'bout Smoke 'n Mirrors (Deluxe),2003-03-17,268440,33,portuguese rock,0.45,0.341,0.0683,0.444,0.0000345,0.111,0.0349,123.993,1,-9.468,4
+POMPEII,BASTILLE,Bad Blood,2013-01-01,214147,68,metropopolis,0.679,0.715,0.571,0.0755,0.0,0.271,0.0407,127.435,1,-6.383,4
+YOUR SONG,ELLIE GOULDING,Bright Lights (Lights Re-pack / Bonus Version),2010-01-01,191826,61,indietronica,0.551,0.197,0.404,0.941,0.000752,0.144,0.03,134.102,1,-12.003,4
+Photograph,Ed Sheeran,x (Wembley Edition),2013-01-01,258986,67,pop,0.614,0.379,0.201,0.607,0.000464,0.0986,0.0476,107.989,1,-10.48,4
+Set Fire to the Rain,Adele,21,2011-01-24,242973,77,british soul,0.603,0.67,0.446,0.00408,1.68e-6,0.112,0.0249,107.993,0,-3.882,4
+FIX YOU,COLDPLAY,X&Y,2005-06-07,295533,82,permanent wave,0.209,0.417,0.124,0.164,0.00196,0.113,0.0338,138.178,1,-8.74,4
+The Story,Brandi Carlile,The Story,2007-04-03,238493,62,acoustic pop,0.544,0.5,0.177,0.0325,3.78e-6,0.109,0.026,93.621,1,-8.253,4
+BE ALRIGHT,JOEL CORRY,Be Alright,2024-10-25,155697,56,dance pop,0.49,0.818,0.383,0.0568,0.0,0.083,0.15,129.034,0,-4.811,4
+Be without You,Mary J. Blige,The Breakthrough,2005-01-01,246333,66,dance pop,0.726,0.701,0.673,0.0708,0.0,0.262,0.0999,146.575,0,-5.881,4
+A Sky Full of Stars,Coldplay,Ghost Stories,2014-05-19,267866,86,permanent wave,0.545,0.675,0.162,0.00617,0.00197,0.209,0.0279,124.97,1,-6.474,4
+Passionfruit,Drake,More Life,2017-03-18,298940,80,canadian hip hop,0.809,0.463,0.364,0.256,0.085,0.109,0.0396,111.98,1,-11.377,4
+Tacones Rojos,Sebastian Yatra,Dharma,2022-01-28,189333,72,colombian pop,0.746,0.844,0.934,0.062,0.0,0.149,0.0359,123.014,0,-3.499,4
+Snap,Rosa Linn,SNAP,2022-03-19,179551,79,alt z,0.565,0.636,0.526,0.107,9.9e-6,0.447,0.0622,170.027,1,-8.198,4
+WITHOUT YOU,THE KID LAROI,F*CK LOVE 3+: OVER YOU,2021-07-27,161384,73,australian hip hop,0.662,0.413,0.467,0.213,0.0,0.134,0.0299,93.005,1,-7.357,4
+Breaking the Habit,Linkin Park,Meteora,2003-09-16,196133,69,alternative metal,0.58,0.865,0.587,0.105,0.0,0.106,0.0313,100.016,0,-4.359,4
+Look Alive,BlocBoy JB ,Simi,2018-05-04,181414,66,memphis hip hop,0.918,0.58,0.611,0.00108,0.0000612,0.106,0.322,139.977,1,-7.501,4
+If I Were a Boy,Beyoncé,I AM...SASHA FIERCE,2008-11-14,249146,62,pop,0.632,0.518,0.427,0.107,0.0,0.354,0.0313,90.007,1,-6.126,4
+Shut Up,Black Eyed Peas,Elephunk,2003-06-24,296186,67,dance pop,0.805,0.717,0.582,0.0669,0.0,0.248,0.266,112.989,1,-3.956,4
+Paint The Town Red,Doja Cat,Paint The Town Red,2023-08-04,231750,78,dance pop,0.868,0.538,0.732,0.269,3.34e-6,0.0901,0.174,99.968,1,-8.603,4
+Try,Pink,The Truth About Love,2012-09-18,247906,79,dance pop,0.674,0.628,0.552,0.00144,0.0,0.0944,0.03,103.998,1,-7.079,4
+Wow.,Post Malone ,Hollywood's Bleeding,2019-09-06,149546,77,dfw rap,0.829,0.538,0.389,0.137,1.88e-6,0.103,0.212,99.952,0,-7.359,4
+RITINHA,ATOA & GRUPO ACADEMICO SEISTETOS,Ritinha,2024-07-26,156063,45,portuguese pop,0.669,0.548,0.514,0.141,5.04e-6,0.155,0.0314,93.997,1,-9.462,4
+DOWN,JAY SEAN feat. LIL WAYNE,All Or Nothing,2009-01-01,212506,77,dance pop,0.727,0.68,0.728,0.0101,0.0,0.0821,0.0286,132.012,1,-4.498,4
+(Another Song) All Over Again,Justin Timberlake,FutureSex/LoveSounds,2006-09-12,345106,37,dance pop,0.624,0.363,0.213,0.344,0.000179,0.106,0.0359,101.39,1,-7.475,4
+Birds Of A Feather,Billie Eilish ,HIT ME HARD AND SOFT,2024-05-17,210373,97,art pop,0.747,0.507,0.438,0.2,0.0608,0.117,0.0358,104.978,1,-10.171,4
+MY LOVE,JUSTIN TIMBERLAKE feat. T.I.,FutureSex/LoveSounds Deluxe Edition,2006-09-13,276160,77,dance pop,0.771,0.68,0.808,0.277,0.0000118,0.682,0.224,119.952,0,-5.881,4
+PillowTalk,Zayn,Mind Of Mine (Deluxe Edition),2016-03-25,202746,79,pop,0.584,0.7,0.438,0.117,0.0,0.0939,0.0456,124.944,1,-4.275,4
+Lemonade,Internet Money,B4 The Storm,2020-08-28,195428,77,pop rap,0.8,0.658,0.462,0.25,0.0,0.111,0.079,140.042,0,-6.142,4
+Lambreta,António Zambujo,Quinto (Deluxe Edition),2012-10-23,144373,18,fado,0.611,0.168,0.442,0.88,0.0248,0.107,0.14,174.179,1,-12.309,3
+Thriller,Michael Jackson,Thriller 25 Super Deluxe Edition,2008-02-08,357266,78,r&b,0.773,0.859,0.813,0.0855,0.000187,0.914,0.0747,118.459,1,-4.913,4
+About Damn Time,Lizzo,Special,2022-07-15,191937,71,escape room,0.836,0.743,0.723,0.0974,0.0,0.335,0.0653,108.965,0,-6.305,4
+Skinny Love,Birdy,Birdy,2011-11-04,201080,70,neo mellow,0.379,0.29,0.184,0.952,0.000996,0.118,0.0513,165.997,1,-8.487,4
+SATURN,SZA,Saturn,2024-02-22,186191,85,pop,0.411,0.619,0.337,0.62,0.0,0.11,0.0368,177.937,1,-6.834,4
+Ways To Go,"Alec Benjamin, Khalid",12 Notes,2024-05-10,154705,52,alt z,0.652,0.621,0.747,0.635,0.0,0.069,0.0386,80.033,0,-4.91,4
+Lose Yourself,Eminem,Curtain Call: The Hits (Deluxe Edition),2005-12-06,326466,76,detroit hip hop,0.692,0.744,0.0612,0.00868,0.000423,0.359,0.257,171.374,1,-4.565,4
+Viva la Vida,Coldplay,Viva La Vida or Death and All His Friends,2008-05-26,242373,86,permanent wave,0.486,0.617,0.417,0.0954,3.23e-6,0.109,0.0287,138.015,0,-7.115,4
+Não És Tu Sou Eu,Bárbara Tinoco,Bichinho (para onde vai o amor?),2024-05-31,181186,34,portuguese pop,0.603,0.441,0.285,0.778,0.000139,0.12,0.187,130.448,0,-9.039,5
+Bom Rapaz,"Os Quatro e Meia, Carlão",O Tempo Vai Esperar,2020-09-25,175413,37,portuguese folk,0.655,0.747,0.94,0.191,0.0,0.101,0.0306,97.06,1,-6.223,4
+Without You,The Kid Laroi,F*CK LOVE 3+: OVER YOU,2021-07-27,161384,73,australian hip hop,0.662,0.413,0.467,0.213,0.0,0.134,0.0299,93.005,1,-7.357,4
+Crush,David Archuleta,David Archuleta,2008-11-11,213520,64,idol,0.57,0.664,0.487,0.00836,0.000012,0.0719,0.0322,162.084,0,-4.718,4
+Here without You,3 Doors Down,Away From The Sun,2002-11-12,238733,75,alternative metal,0.557,0.533,0.233,0.0492,0.0,0.205,0.0252,143.994,0,-6.817,4
+BURGUESINHA,SEU JORGE,America Brasil,2007-01-01,258186,62,mpb,0.682,0.949,0.96,0.563,0.00403,0.337,0.0422,101.976,1,-5.401,4
+IM GOOD (BLUE),DAVID GUETTA & BEBE REXHA,I'm Good (Blue),2022-08-26,175238,85,big room,0.561,0.965,0.304,0.00383,7.07e-6,0.371,0.0343,128.04,0,-3.673,4
+Where Are You Now,Britney Spears,Oops!... I Did It Again,2000-05-16,279386,36,dance pop,0.636,0.489,0.297,0.337,0.0,0.291,0.0263,125.616,1,-8.098,4
+Lovers on the Sun,"David Guetta, Sam Martin",Listen (Deluxe),2014-11-10,203520,48,big room,0.645,0.891,0.568,0.0932,3.88e-6,0.379,0.0387,124.915,0,-2.505,4
+Sorte Grande,João Só e Abandonados,Ela Só,2012-07-11,215306,36,"",0.517,0.537,0.339,0.416,9.37e-6,0.127,0.0282,150.119,1,-8.278,4
+BUSY (FOR ME),AUREA,Aurea,2010-11-22,237240,29,portuguese pop,0.367,0.425,0.341,0.448,0.0,0.319,0.0298,179.71,1,-4.961,3
+Ghost Town,Benson Boone,Fireworks & Rollerblades,2024-04-05,193733,76,singer-songwriter pop,0.391,0.335,0.116,0.389,0.0,0.102,0.0763,174.185,1,-10.064,3
+Hard for Me,Michele Morrone,Dark Room,2020-02-14,177946,56,"",0.451,0.291,0.158,0.812,0.0,0.0983,0.036,81.326,0,-11.764,4
+Psycho,Post Malone,beerbongs & bentleys,2018-04-27,221440,73,dfw rap,0.75,0.56,0.459,0.546,0.0,0.111,0.105,140.06,1,-8.094,4
+Aqui,Leonor Arroja,Aqui,2024-05-31,162696,18,"",0.78,0.637,0.931,0.505,0.0000942,0.207,0.0422,109.987,0,-5.952,4
+7 RINGS,ARIANA GRANDE,"thank u, next",2019-02-08,178626,81,pop,0.777,0.317,0.33,0.591,0.0,0.0881,0.308,139.848,0,-10.732,4
+Vergonha na Cara,Plutónio,"Sacrifício: Sangue, Lágrimas, Suor",2019-11-22,196864,42,hip hop tuga,0.89,0.654,0.783,0.207,0.000178,0.0593,0.347,125.145,1,-7.648,4
+Andorinhas,Ana Moura,Casa Guilhermina,2022-11-11,177633,38,fado,0.599,0.523,0.316,0.553,0.0000363,0.151,0.0279,95.06,0,-7.2,4
+Recantiga,Miguel Araújo,28 Noites Ao Vivo Nos Coliseus,2018-06-08,152853,30,fado,0.524,0.176,0.209,0.957,0.000132,0.609,0.0658,84.867,1,-12.687,3
+My Universe,Coldplay,Music Of The Spheres,2021-10-15,226198,74,permanent wave,0.573,0.711,0.47,0.0114,0.0,0.328,0.0406,105.006,0,-6.268,4
+Marry You,Bruno Mars,Doo-Wops & Hooligans,2010-05-11,230192,74,dance pop,0.621,0.82,0.452,0.332,0.0,0.104,0.0367,144.905,1,-4.865,4
+Daughters,John Mayer,Heavier Things,2003-09-09,237906,63,neo mellow,0.674,0.413,0.503,0.836,0.0000195,0.098,0.0274,124.893,1,-7.816,3
+ANTES DA NOITE ACABAR,BIANCA BARROS,Antes Da Noite Acabar,2022-10-25,212410,34,portuguese pop,0.587,0.48,0.269,0.307,0.0,0.104,0.033,105.814,1,-7.148,4
+I WONT GIVE UP,JASON MRAZ,Love Is a Four Letter Word (Deluxe Edition),2012-04-13,240165,66,acoustic pop,0.483,0.303,0.139,0.694,0.0,0.115,0.0429,133.406,1,-10.058,3
+GIVE IT TO ME,JUSTIN TIMBERLAKE [+] NELLY FURTADO,Shock Value,2007-04-02,234026,74,dance pop,0.975,0.711,0.815,0.168,0.000552,0.0799,0.0632,110.621,1,-3.904,4
+Highest in the Room,Travis Scott,HIGHEST IN THE ROOM,2019-10-04,175720,85,rap,0.598,0.427,0.0605,0.0546,5.83e-6,0.21,0.0317,76.469,0,-8.764,4
+IGUAL QUE UN ANGEL,"KALI UCHIS, PESO PLUMA",ORQUÍDEAS,2024-01-12,260370,76,colombian pop,0.695,0.592,0.482,0.00449,0.000663,0.185,0.032,108.001,0,-5.34,4
+Get Lucky,"Daft Punk, Pharrell Williams",Random Access Memories,2013-05-20,369626,73,electro,0.81,0.793,0.863,0.0378,1.77e-6,0.072,0.0403,116.05,0,-9.404,4
+BEIJINHO,GUGA,Beijinho,2024-07-12,155100,28,hip hop tuga,0.784,0.704,0.693,0.0675,4.33e-6,0.198,0.0791,137.048,1,-9.346,4
+CARRO,BARBARA BANDEIRA FEAT. DILLAZ,Finda,2023-10-06,202624,56,portuguese pop,0.733,0.53,0.47,0.66,0.0,0.142,0.0338,114.972,0,-7.113,4
+PERTO DE MIM,SYRO,Genesis + Deluxe Tracks,2022-11-04,224999,39,portuguese pop,0.627,0.39,0.317,0.692,0.0,0.059,0.0357,116.022,1,-8.528,4
+PANTEAO,PIRUKA,Panteão,2024-09-13,153249,42,hip hop tuga,0.917,0.606,0.653,0.216,0.0000255,0.0952,0.24,102.015,0,-8.611,4
+BEAUTIFUL,NOBLE,The Great Gatsby - A New Musical (Original Broadway Cast Recording),2024-06-28,171786,41,broadway,0.317,0.173,0.144,0.738,0.0000256,0.302,0.0356,100.011,0,-9.173,3
+Wait For You,Myles Smith,Wait For You,2024-08-23,201533,76,singer-songwriter pop,0.642,0.713,0.302,0.161,0.0,0.137,0.0451,123.943,1,-5.281,4
+UNHEALTHY,ANNE-MARIE FEAT. SHANIA TWAIN,UNHEALTHY (Deluxe),2023-07-28,149653,61,pop,0.621,0.66,0.407,0.00526,0.0,0.072,0.0366,119.937,0,-6.208,4
+Ghost,Justin Bieber,Justice,2021-03-19,153190,83,canadian pop,0.601,0.741,0.441,0.185,0.0000291,0.415,0.0478,153.96,1,-5.569,4
+Não Me Importo,Carolina Deslandes,Não Me Importo,2020-11-24,194862,43,portuguese pop,0.602,0.532,0.481,0.625,0.000183,0.115,0.195,186.02,0,-8.213,4
+ASSOBIA PARA O LADO,CARLÃO,Assobia Para O Lado,2020-03-13,191648,35,hip hop tuga,0.95,0.725,0.795,0.384,0.0000966,0.0764,0.051,102.006,1,-5.761,4
+SOMEWHERE ONLY WE KNOW,KEANE,Hopes And Fears,2004-01-01,236160,73,neo mellow,0.453,0.655,0.366,0.0794,7.06e-6,0.0849,0.0257,172.01,1,-4.22,4
+RUSH,TROYE SIVAN,Something To Give Each Other,2023-10-13,156391,78,australian pop,0.728,0.841,0.402,0.00242,0.0000909,0.106,0.0567,125.991,0,-7.682,4
+Mon Amour [remix],Zzoilo,Mon Amour (Remix),2021-08-18,179940,74,latin pop,0.748,0.761,0.362,0.122,6.56e-6,0.0984,0.102,116.041,1,-6.621,4
+My Immortal,Evanescence,Fallen,2003-03-04,262533,72,alternative metal,0.19,0.265,0.101,0.863,0.0,0.134,0.0356,79.012,1,-9.206,4
+Strip that Down,Liam Payne,LP1,2019-12-06,202061,74,pop,0.873,0.495,0.546,0.199,0.0,0.0805,0.0518,106.033,1,-5.446,4
+Running Up that Hill (A Deal with God),Kate Bush,Hounds Of Love,1985-09-16,298933,79,art pop,0.629,0.545,0.194,0.719,0.00308,0.0604,0.0546,108.376,0,-13.123,4
+Heaven,Cian Ducrot,Victory,2023-08-04,232944,44,irish pop,0.51,0.669,0.655,0.472,0.0,0.168,0.0349,156.05,1,-5.155,4
+Where Is the Love,Black Eyed Peas,Elephunk,2003-06-24,272533,79,dance pop,0.834,0.699,0.809,0.111,0.0,0.131,0.178,94.086,1,-3.222,4
+Watermelon Sugar,Harry Styles,Fine Line,2019-12-13,174000,82,pop,0.548,0.816,0.557,0.122,0.0,0.335,0.0465,95.39,1,-4.209,4
+Lucky,"Jason Mraz, Colbie Caillat",We Sing. We Dance. We Steal Things.,2008-05-12,189613,66,acoustic pop,0.625,0.414,0.669,0.294,0.0,0.151,0.0369,130.088,1,-8.7,4
+Hey Brother,Avicii,True,2013-01-01,255093,76,dance pop,0.545,0.78,0.458,0.0309,0.0000464,0.0828,0.0436,125.014,0,-4.867,4
+Cold Heart [Pnau remix],Elton John,The Lockdown Sessions,2021-10-22,202735,67,glam rock,0.795,0.8,0.934,0.0354,0.0000725,0.0915,0.0309,116.032,1,-6.32,4
+BETTER,KHALID,Suncity,2018-10-19,229320,77,pop,0.695,0.586,0.112,0.102,0.317,0.113,0.0658,98.035,0,-10.315,4
+Thinking Out Loud,Ed Sheeran,x (Deluxe Edition),2014-06-21,281560,80,pop,0.781,0.445,0.591,0.474,0.0,0.184,0.0295,78.998,1,-6.061,4
+Radioactive,Imagine Dragons,Night Visions,2012-09-04,186813,71,modern rock,0.448,0.784,0.237,0.0999,0.000108,0.668,0.0625,136.239,1,-3.686,4
+O AMOR É O SEGREDO,VITOR KLEY,A Bolha,2020-06-18,183542,49,"",0.39,0.57,0.21,0.13,5.54e-6,0.0985,0.0275,100.111,1,-7.363,4
+Bruises,Lewis Capaldi,Divinely Uninspired To A Hellish Extent,2019-05-17,220492,78,pop,0.736,0.308,0.361,0.946,0.0,0.186,0.0677,111.202,1,-7.83,4
+CRISTALIZA,BARBARA BANDEIRA,Finda,2023-10-06,180468,40,portuguese pop,0.593,0.53,0.48,0.746,0.0,0.111,0.306,127.012,0,-8.083,5
+Pepas,Farruko,Pepas,2021-06-24,287120,76,reggaeton,0.762,0.766,0.442,0.00776,0.0000698,0.128,0.0343,130.001,1,-3.955,4
+CONEXOES DE MAFIA,MATUE feat. RICH THE KID,Conexões de Máfia (feat. Rich The Kid),2023-04-30,221538,67,r&b brasileiro,0.771,0.577,0.691,0.393,0.0,0.256,0.0461,116.96,0,-6.944,4
+Blank Space (Taylor's Version),Taylor Swift,1989 (Taylor's Version),2023-10-26,231833,76,pop,0.732,0.719,0.71,0.0901,0.0,0.331,0.0645,96.035,1,-5.469,4
+Young Dumb & Broke,Khalid,American Teen,2017-04-27,202546,79,pop,0.799,0.539,0.394,0.199,0.0000166,0.165,0.0421,136.948,1,-6.351,4
+WHATEVER,KYGO & AVA MAX,Whatever,2024-01-19,178273,77,edm,0.58,0.777,0.589,0.104,0.0,0.342,0.0655,108.005,1,-5.69,4
+Rockstar,Nickelback,All The Right Reasons (15th Anniversary Expanded Edition),2005-01-01,255493,72,alternative metal,0.621,0.913,0.679,0.0477,0.0,0.314,0.0385,144.073,1,-3.352,4
+Touch My Body,Mariah Carey,E=MC2 (Deluxe Version),2008-04-04,204733,71,dance pop,0.714,0.665,0.842,0.0996,0.0,0.226,0.0509,78.515,0,-7.736,4
+Seven Days in Sunny June,Jamiroquai,Dynamite,2005-06-15,237866,62,dance pop,0.707,0.797,0.633,0.2,0.0,0.302,0.0435,105.397,1,-7.143,4
+Podíamos Ser Nós,Irma,TWALA KUMOXI,2024-09-27,144000,21,musica portuguesa contemporanea,0.657,0.607,0.871,0.436,0.0000672,0.0905,0.22,104.879,0,-7.637,4
+Bleeding Love,Leona Lewis,Spirit,2007-01-01,262466,74,british soul,0.638,0.656,0.225,0.188,0.0,0.146,0.0357,104.036,1,-5.886,4
+Coracão De Gelo,Wiu,Manual de Como Amar Errado,2022-11-29,168000,66,trap brasileiro,0.732,0.671,0.836,0.124,0.0,0.128,0.082,159.907,0,-4.276,4
+PURPLE RAIN,PRINCE AND THE REVOLUTION,Purple Rain,1984-06-25,521866,72,funk,0.373,0.452,0.179,0.0354,0.00227,0.689,0.0321,113.212,1,-10.417,4
+BOYFRIEND,DOVE CAMERON,Boyfriend,2022-02-11,153000,71,pop,0.345,0.612,0.232,0.232,0.0,0.194,0.0608,179.773,0,-6.543,3
+IDIOTA,JAO,PIRATA,2021-10-20,181626,63,pop nacional,0.669,0.785,0.84,0.0685,0.0,0.566,0.0421,131.957,0,-6.093,4
+Californication,Red Hot Chili Peppers,Californication (Deluxe Edition),1999-06-08,329733,82,alternative rock,0.592,0.767,0.328,0.0021,0.00165,0.127,0.027,96.483,0,-2.788,4
+Better,Khalid,Suncity,2018-10-19,229320,77,pop,0.695,0.586,0.112,0.102,0.317,0.113,0.0658,98.035,0,-10.315,4
+COSE DELLA VITA,EROS RAMAZZOTTI,Eros,1997-10-22,291133,54,italian adult pop,0.69,0.72,0.699,0.101,0.000729,0.347,0.0485,90.024,0,-8.522,4
+WOMAN,DOJA CAT,Planet Her,2021-06-25,172626,82,dance pop,0.824,0.764,0.881,0.0888,0.00294,0.117,0.0854,107.998,0,-4.175,4
+Laura,Khiaro,10:56 (Branco),2024-10-25,176243,26,"",0.662,0.609,0.572,0.527,6.75e-6,0.132,0.106,167.995,0,-7.907,4
+I'm Like a Bird,Nelly Furtado,"Whoa, Nelly! (Expanded Edition)",2000-01-01,243160,71,canadian latin,0.623,0.607,0.614,0.147,3.29e-6,0.227,0.0353,89.654,1,-5.113,4
+DESPECHA,ROSALIA,MOTOMAMI +,2022-09-09,156787,77,pop,0.914,0.622,0.77,0.146,0.0000168,0.0632,0.0892,130.04,1,-6.538,4
+Benção,Mizzy Miles,Bênção,2024-03-01,205934,62,hip hop tuga,0.671,0.529,0.322,0.495,0.0000469,0.209,0.0675,90.055,0,-7.15,4
+Devia Ir (versão da Bárbara),Bárbara Tinoco,Desalinhados,2021-04-29,282933,36,portuguese pop,0.639,0.69,0.544,0.826,1.88e-6,0.129,0.399,92.084,0,-6.669,4
+BAD DREAMS,TEDDY SWIMS,Bad Dreams,2024-09-13,184577,83,"",0.707,0.68,0.62,0.274,0.0,0.0932,0.0884,125.058,1,-6.203,4
+I HAD SOME HELP,POST MALONE & MORGAN WALLEN,F-1 Trillion,2024-08-15,178205,85,dfw rap,0.644,0.874,0.753,0.0113,0.0,0.227,0.0265,128.017,1,-4.723,4
+Whataya Want from Me,Adam Lambert,For Your Entertainment,2009-11-23,227320,59,dance pop,0.44,0.683,0.445,0.00706,0.0,0.0593,0.0489,185.948,0,-4.732,4
+What Goes Around.../...Comes Around,Justin Timberlake,FutureSex/LoveSounds,2006-09-12,448573,71,dance pop,0.687,0.723,0.432,0.122,0.00102,0.573,0.0709,76.0,1,-4.751,4
+Control,Zoe Wees,Control,2020-03-13,230880,69,german pop,0.6,0.465,0.0682,0.643,1.48e-6,0.149,0.0314,113.81,1,-4.951,4
+DROPS OF JUPITER (TELL ME),TRAIN,Drops Of Jupiter,2001-03-27,259933,80,dance pop,0.481,0.638,0.497,0.153,0.0,0.154,0.0276,79.064,1,-5.862,4
+I'd Rather Pretend,Bryant Barnes,VANITY,2024-07-26,184560,76,bedroom r&b,0.56,0.346,0.271,0.926,0.0256,0.116,0.0293,129.901,1,-9.798,4
+Halo,Beyoncé,I AM...SASHA FIERCE,2008-11-14,261640,64,pop,0.508,0.72,0.472,0.272,0.0,0.0563,0.0628,79.983,0,-5.908,4
+Low,Flo Rida ,Mail on Sunday,2008-03-17,231400,80,dance pop,0.918,0.609,0.304,0.0928,0.0,0.139,0.0791,128.008,0,-5.64,4
+THEREFORE I AM,BILLIE EILISH,Happier Than Ever,2021-07-30,173539,72,art pop,0.879,0.365,0.663,0.227,0.135,0.0583,0.0924,94.016,1,-7.781,4
+We Found Love,"Rihanna, Calvin Harris",Talk That Talk,2011-11-18,215226,81,barbadian pop,0.735,0.766,0.6,0.025,0.00141,0.108,0.0384,127.975,1,-4.485,4
+Talk,Coldplay,X&Y,2005-06-07,311291,64,permanent wave,0.415,0.554,0.163,0.00541,0.00202,0.155,0.0334,120.318,0,-10.839,4
+La Rompe Corazones,Daddy Yankee ,La Rompe Corazones,2017-01-13,204520,68,latin hip hop,0.685,0.859,0.891,0.116,0.0,0.317,0.0553,176.018,0,-2.595,4
+HIGHEST IN THE ROOM,TRAVIS SCOTT,HIGHEST IN THE ROOM,2019-10-04,175720,85,rap,0.598,0.427,0.0605,0.0546,5.83e-6,0.21,0.0317,76.469,0,-8.764,4
+O SOL,VITOR KLEY,Adrenalizou,2018-10-18,211447,62,"",0.62,0.694,0.631,0.0303,0.0,0.117,0.0261,97.483,0,-4.253,4
+COLD,MAROON 5 feat. FUTURE,Red Pill Blues (Deluxe),2018-06-15,234308,62,pop,0.692,0.717,0.412,0.138,0.0,0.0464,0.107,99.838,0,-6.346,4
+BECAUSE OF YOU,NE-YO,Because Of You,2007-01-01,266840,74,dance pop,0.81,0.538,0.832,0.53,0.0,0.0951,0.0357,109.97,0,-5.783,4
+HEY YA,OUTKAST,Speakerboxxx/The Love Below,2003-01-01,235213,81,atl hip hop,0.727,0.974,0.965,0.103,0.000532,0.174,0.0664,79.526,0,-2.261,4
+Magic,Coldplay,Ghost Stories,2014-05-19,285014,72,permanent wave,0.738,0.482,0.352,0.0266,0.621,0.106,0.0402,93.457,0,-8.917,4
+Perfect Strangers,"Jonas Blue, JP Cooper",Blue,2018-11-09,196613,74,pop,0.73,0.861,0.704,0.39,0.0,0.213,0.0451,117.965,1,-4.1,4
+Big Yellow Taxi,Counting Crows,Hard Candy,2002-07-08,225573,60,neo mellow,0.678,0.866,0.842,0.00295,0.0,0.16,0.048,88.041,1,-4.341,4
+amor de ganga,miguel luz,Amor De Ganga,2024-10-22,206908,50,hip hop tuga,0.658,0.793,0.454,0.208,0.0,0.0797,0.0609,156.974,1,-9.526,4
+All I Ask,Adele,25,2015-11-20,271800,68,british soul,0.591,0.28,0.348,0.889,0.0,0.124,0.0283,141.916,1,-5.494,4
+Ordinary Love,U2,Songs Of Experience (Deluxe Edition),2017-12-01,227173,54,irish rock,0.617,0.621,0.378,0.0207,0.000038,0.0879,0.0306,124.992,1,-10.233,4
+Lua,Ivandro ,Trovador,2024-02-16,192417,56,hip hop tuga,0.641,0.395,0.372,0.837,0.0000864,0.119,0.0512,151.97,0,-7.708,4
+HALO,BEYONCÉ,I AM...SASHA FIERCE,2008-11-14,261640,64,pop,0.508,0.72,0.472,0.272,0.0,0.0563,0.0628,79.983,0,-5.908,4
+Stay,The Kid Laroi,F*CK LOVE 3+: OVER YOU,2021-07-27,141805,82,australian hip hop,0.591,0.764,0.478,0.0383,0.0,0.103,0.0483,169.928,1,-5.484,4
+Adventure of a Lifetime,Coldplay,A Head Full of Dreams,2015-12-04,263786,79,permanent wave,0.638,0.924,0.53,0.00205,0.000175,0.149,0.036,111.995,1,-3.887,4
+Save Room,John Legend,Once Again,2006-10-24,235666,58,neo soul,0.69,0.572,0.375,0.0451,0.0,0.0969,0.0264,111.92,1,-6.131,4
+Numb / Encore,"Linkin Park, Jay Z",Numb / Encore: MTV Ultimate Mash-Ups Presents Collision Course,2004-11-30,205733,78,east coast hip hop,0.687,0.793,0.751,0.0603,0.0,0.582,0.166,107.045,1,-4.254,4
+SATELLITE,HARRY STYLES,Harry's House,2022-05-20,218577,72,pop,0.576,0.457,0.301,0.143,0.0000305,0.0917,0.0304,138.984,1,-6.473,4
+ALWAYS,GAVIN JAMES,Only Ticket Home,2018-10-26,247842,41,irish pop,0.381,0.481,0.162,0.0509,0.0,0.1,0.0365,123.09,1,-5.82,4
+Let Me Love You,DJ Snake,Encore,2016-08-05,205946,83,dance pop,0.475,0.715,0.159,0.0863,0.0000267,0.135,0.058,199.892,1,-5.371,4
+Vayorken,Capicua,Sereia louca,2014-03-10,261027,29,hip hop tuga,0.742,0.615,0.429,0.0952,9.87e-6,0.304,0.186,99.288,1,-9.14,4
+AO TEU OUVIDO,"BUBA ESPINHO, BÁRBARA TINOCO",Ao Teu Ouvido (feat. Bárbara Tinoco),2023-09-01,216706,41,tuna,0.838,0.253,0.359,0.758,0.0000458,0.111,0.0559,119.957,1,-13.578,4
+POINTLESS,LEWIS CAPALDI,Broken By Desire To Be Heavenly Sent,2023-05-19,231120,66,pop,0.443,0.613,0.342,0.0663,0.0,0.113,0.047,120.865,1,-4.214,4
+Baby I Love U!,Jennifer Lopez,The Reel Me,2003-11-18,251560,34,dance pop,0.837,0.632,0.825,0.014,6.87e-6,0.335,0.0578,111.978,1,-8.471,3
+Tusa,Karol G,Tusa,2019-11-07,200960,72,reggaeton,0.803,0.715,0.574,0.295,0.000134,0.0574,0.298,101.085,1,-3.28,4
+Chamadas,Ivandro ,Trovador,2024-02-16,155456,52,hip hop tuga,0.494,0.638,0.447,0.778,0.000159,0.316,0.254,98.528,0,-7.873,4
+Just Dance,"Lady Gaga, Colby Odonis",The Fame,2008-01-01,241933,74,art pop,0.822,0.739,0.745,0.0264,0.0000428,0.181,0.0311,118.99,0,-4.541,4
+LA TORTURA,SHAKIRA [+] ALEJANDRO SANZ,"Fijación Oral, Vol. 1",2005-06-03,212893,74,colombian pop,0.74,0.783,0.812,0.0297,0.000308,0.123,0.0427,100.011,1,-5.367,4
+YELLOW,COLDPLAY,Parachutes,2000-07-10,266773,88,permanent wave,0.429,0.661,0.285,0.00239,0.000121,0.234,0.0281,173.372,1,-7.227,4
+JAR OF HEARTS,CHRISTINA PERRI,lovestrong.,2011-05-10,246587,69,pop,0.349,0.348,0.0886,0.726,0.0,0.12,0.0316,74.541,1,-6.142,4
+I'm Sorry,Mizzy Miles,I'm Sorry,2022-11-18,202280,49,hip hop tuga,0.62,0.671,0.23,0.193,0.0,0.143,0.143,126.644,1,-5.815,5
+GREEDY,TATE McRAE,greedy,2023-09-15,131872,86,pop,0.749,0.729,0.816,0.261,0.0,0.113,0.0321,111.004,0,-3.19,1
+BECAUSE OF YOU,KELLY CLARKSON,Breakaway,2004-01-17,219493,64,dance pop,0.583,0.584,0.136,0.254,0.0,0.123,0.0314,140.039,0,-5.362,4
+"Friends, Lovers or Nothing",John Mayer,Battle Studies,2009-11-13,359240,44,neo mellow,0.526,0.672,0.388,0.0266,0.014,0.133,0.029,134.332,1,-7.89,4
+Rehab,Amy Winehouse,Back To Black (Deluxe Edition),2006-01-01,214946,73,british soul,0.407,0.558,0.777,0.0537,1.42e-6,0.34,0.0552,71.815,1,-13.609,4
+I WILL WAIT,MUMFORD & SONS,Babel (Deluxe Version),2012-09-21,276720,64,modern folk rock,0.48,0.756,0.449,0.00993,0.00704,0.312,0.0333,131.127,1,-5.399,4
+Waiting for Love,Avicii,Stories,2015-10-02,230613,78,dance pop,0.579,0.736,0.613,0.31,0.0,0.198,0.0527,127.999,0,-3.863,4
+Keep Holding On,Avril Lavigne,The Best Damn Thing (Expanded Edition),2007-04-17,239906,60,canadian pop,0.162,0.786,0.138,0.0374,0.0,0.143,0.038,161.192,1,-2.353,3
+Tu Não Mentes,Soraia Tavares,Tu Não Mentes,2024-09-27,196000,24,"",0.534,0.81,0.718,0.235,0.00245,0.356,0.123,114.903,0,-5.149,4
+Here With Me,d4vd,Petals to Thorns,2023-05-26,242484,83,bedroom pop,0.575,0.45,0.263,0.531,0.0000659,0.124,0.0259,132.039,1,-9.306,4
+That's So True,Gracie Abrams,The Secret of Us (Deluxe),2024-10-18,166300,87,alt z,0.554,0.808,0.372,0.214,0.0,0.159,0.0368,108.548,1,-4.169,4
+ALL FOR LOVE,BRYAN ADAMS [+] ROD STEWART [+] STING,Anthology,2005-10-18,282773,34,canadian pop,0.506,0.534,0.124,0.197,0.0,0.0907,0.0257,74.846,1,-6.888,4
+UNSTOPPABLE,SIA,This Is Acting (Deluxe Version),2016-10-21,217746,77,pop,0.468,0.779,0.26,0.112,0.000373,0.101,0.0779,173.799,1,-4.839,4
+Superstar,Jamelia,Thank You,2003-06-30,215480,67,bubblegum dance,0.801,0.645,0.824,0.046,0.0,0.0357,0.0356,110.011,1,-6.93,4
+FOI ASSIM QUE ACONTECEU,MARISA LIZ,Foi Assim Que Aconteceu,2023-03-09,205898,38,"",0.523,0.347,0.114,0.732,3.07e-6,0.24,0.034,119.233,1,-8.842,3
+Relación [remix],Sech ,Relación (Remix),2020-09-04,247308,65,panamanian pop,0.793,0.771,0.835,0.0337,1.51e-6,0.284,0.0959,171.943,1,-3.417,4
+Te Felicito,Shakira,Te Felicito,2022-04-21,172235,70,colombian pop,0.695,0.636,0.575,0.234,0.0,0.081,0.317,174.14,1,-4.654,4
+I Gotta Feeling,Black Eyed Peas,THE E.N.D. (THE ENERGY NEVER DIES),2009-01-01,289133,74,dance pop,0.744,0.766,0.61,0.0873,0.0,0.509,0.0265,127.966,1,-6.375,4
+MILES ON IT,MARSHMELLO & KANE BROWN,Miles On It,2024-05-03,168355,82,brostep,0.634,0.761,0.785,0.00537,0.0,0.549,0.0472,129.963,1,-4.752,4
+Por Tua Imensa Saudade,Sétima Legião,De Um Tempo Ausente,2009-02-09,88813,20,portuguese rock,0.544,0.156,0.46,0.956,0.88,0.102,0.0361,89.884,1,-16.229,3
+Rockstar,Post Malone,beerbongs & bentleys,2018-04-27,218146,80,dfw rap,0.585,0.52,0.129,0.124,0.0000775,0.131,0.0713,159.798,0,-6.136,4
+FAZ BEM,"BLUAY, JULINHO KSD",Faz Bem,2024-01-19,183714,59,trap tuga,0.76,0.787,0.25,0.155,0.00342,0.0918,0.0835,97.993,1,-5.692,4
+Bad Day,Daniel Powter,Daniel Powter,2005-02-22,233640,73,canadian pop,0.599,0.785,0.52,0.448,0.00336,0.151,0.0309,140.046,1,-4.013,4
+Acorda Pedrinho,Jovem Dionisio,"Acorda, Pedrinho",2022-03-24,173085,54,indie curitibano,0.876,0.359,0.876,0.187,1.71e-6,0.666,0.341,124.016,0,-11.169,4
+Para os Braços da Minha Mãe,"Pedro Abrunhosa, Camané",Corpo i Alma,2020-11-27,255680,29,portuguese pop,0.379,0.173,0.403,0.932,0.00137,0.122,0.0348,99.804,1,-10.614,4
+See You Again,"Wiz Khalifa, Charlie Puth",See You Again (feat. Charlie Puth),2015-01-01,229525,81,hip hop,0.689,0.481,0.283,0.369,1.03e-6,0.0649,0.0815,80.025,1,-7.503,4
+CALM DOWN,"Rema, Selena Gomez",Calm Down (with Selena Gomez),2022-08-25,239317,79,afrobeats,0.801,0.806,0.802,0.382,0.000669,0.114,0.0381,106.999,1,-5.206,4
+BABY DONT HURT ME,"DAVID GUETTA, ANNE-MARIE, COI LERAY",Baby Don't Hurt Me,2023-04-06,140017,82,big room,0.602,0.91,0.228,0.00126,0.000174,0.12,0.0308,127.944,1,-3.404,4
+Let It Go,James Bay,Chaos And The Calm,2015-03-23,260532,63,neo mellow,0.536,0.311,0.246,0.82,0.0000165,0.107,0.0288,147.486,1,-10.396,4
+Undecided,Chris Brown,Indigo,2019-06-28,185000,57,r&b,0.407,0.612,0.488,0.288,0.0,0.198,0.13,96.943,0,-4.387,4
+CIRCLES,POST MALONE,Hollywood's Bleeding,2019-09-06,215280,84,dfw rap,0.695,0.763,0.551,0.189,0.00242,0.0863,0.0396,120.042,1,-3.497,4
+Por Enquanto,Plutónio,Por Enquanto,2022-06-30,142341,50,hip hop tuga,0.696,0.708,0.699,0.492,0.000726,0.101,0.0666,97.907,1,-6.815,4
+MY GIRL,TEMPTATIONS,The Temptations Sing Smokey,1965-03-22,165000,80,classic soul,0.574,0.418,0.692,0.636,0.0,0.0961,0.0345,104.57,1,-10.739,4
+Who,Jimin ,MUSE,2024-07-19,170887,92,k-pop,0.66,0.756,0.838,0.00289,0.0,0.193,0.032,116.034,0,-3.743,4
+Tipo Gin [ao vivo],Kevin o Chris,Todo Mundo Ama O Chris (Ao Vivo),2021-04-09,159146,50,funk 150 bpm,0.75,0.668,0.786,0.78,3.13e-6,0.338,0.061,94.998,0,-4.49,4
+Desce pro Play (PA PA PA),MC Zaac,Desce Pro Play (PA PA PA),2020-06-26,168507,57,funk carioca,0.935,0.71,0.635,0.0769,1.92e-6,0.173,0.158,100.009,0,-5.085,4
+A Pele que Há em Mim (Quando o Dia Entardeceu),"Márcia, JP Simões",Dá,2011-08-15,234280,33,musica portuguesa contemporanea,0.637,0.158,0.0919,0.924,0.00362,0.111,0.0374,104.502,1,-13.508,3
+Roça Em Mim,Zé Felipe,Roça Em Mim,2022-11-17,158171,63,agronejo,0.846,0.81,0.762,0.222,0.0,0.139,0.0867,135.074,0,-3.332,4
+HYMN FOR THE WEEKEND,COLDPLAY,A Head Full of Dreams,2015-12-04,258266,81,permanent wave,0.491,0.693,0.412,0.211,6.92e-6,0.325,0.0377,90.027,0,-6.487,4
+COLD LITTLE HEART,MICHAEL KIWANUKA,Cold Little Heart (Radio Edit),2017-02-24,210299,72,british soul,0.629,0.58,0.655,0.357,0.000353,0.436,0.0278,110.264,0,-6.208,4
+Passou Tanto Tempo,Jorge Cruz,Passou Tanto Tempo,2024-10-18,194000,16,"",0.553,0.481,0.217,0.798,0.0000111,0.165,0.039,159.955,1,-7.045,4
+O AMOR E MAGICO,EXPENSIVE SOUL,Utopia,2010-05-03,259672,44,portuguese pop,0.691,0.8,0.958,0.00436,0.0257,0.0363,0.0503,121.999,1,-6.304,4
+RIVER,MILEY CYRUS,Endless Summer Vacation,2023-08-18,162973,60,pop,0.613,0.803,0.461,0.000525,0.000333,0.189,0.0367,127.989,1,-5.171,4
+ROCKSTAR,POST MALONE feat. 21 SAVAGE,beerbongs & bentleys,2018-04-27,218146,80,dfw rap,0.585,0.52,0.129,0.124,0.0000775,0.131,0.0713,159.798,0,-6.136,4
+Human,Rag'n'Bone Man,Human (Deluxe),2017-02-10,200186,79,neo soul,0.602,0.707,0.554,0.393,0.0,0.165,0.302,75.087,1,-4.097,4
+Loucos,"Matias Damásio, Heber",Por Amor,2016-09-30,270053,46,kizomba,0.514,0.573,0.355,0.525,0.0000228,0.0942,0.241,90.046,1,-9.093,4
+Shadow of the Day,Linkin Park,Minutes to Midnight,2007-05-14,289906,66,alternative metal,0.529,0.376,0.0581,0.00539,0.0195,0.107,0.0288,110.026,1,-7.913,4
+Treasure,Bruno Mars,Unorthodox Jukebox,2012-12-07,178560,83,dance pop,0.874,0.692,0.937,0.0412,0.0000724,0.324,0.0431,116.017,0,-5.28,4
+OUTSIDE OF LOVE,BECKY HILL,Believe Me Now?,2024-05-31,175628,58,pop dance,0.657,0.895,0.127,0.00903,4.46e-6,0.239,0.0522,126.014,1,-3.978,4
+BREAK FREE,ARIANA GRANDE [+] ZEDD,My Everything (Deluxe),2014-08-22,214840,75,pop,0.686,0.702,0.29,0.00637,0.0000446,0.204,0.0455,129.948,0,-5.325,4
+Sei-te de Cor,Paulo Gonzo,Paulo Gonzo,2006-07-20,244986,38,portuguese rock,0.437,0.462,0.139,0.674,1.35e-6,0.256,0.0321,66.212,1,-6.812,4
+Só Te Faz Bem,Diogo Piçarra,Só Te Faz Bem,2019-06-14,160993,20,portuguese pop,0.343,0.406,0.106,0.528,0.000188,0.107,0.0336,159.506,1,-9.324,3
+The Joker and the Queen,"Ed Sheeran, Taylor Swift",The Joker And The Queen (feat. Taylor Swift),2022-02-11,185422,62,pop,0.528,0.309,0.307,0.924,2.1e-6,0.282,0.0329,133.83,1,-7.398,4
+BAD DAY,DANIEL POWTER,Daniel Powter,2005-02-22,233640,73,canadian pop,0.599,0.785,0.52,0.448,0.00336,0.151,0.0309,140.046,1,-4.013,4
+I CAN DO IT WITH A BROKEN HEART,TAYLOR SWIFT,THE TORTURED POETS DEPARTMENT,2024-04-18,218004,83,pop,0.701,0.751,0.22,0.123,0.0,0.15,0.0502,129.994,1,-8.39,4
+Love Me Like You Do,Ellie Goulding,Fifty Shades Freed (Original Motion Picture Soundtrack),2018-02-09,253520,73,indietronica,0.489,0.597,0.323,0.27,0.0,0.105,0.0292,95.013,0,-6.633,4
+Eu Gosto de Ti,Elas,9,2019-11-29,208700,29,musica portuguesa contemporanea,0.567,0.26,0.381,0.81,0.0000489,0.0972,0.0326,104.859,1,-13.116,4
+DOIS CORAÇÕES PARTIDOS,"JOANA ALMEIRANTE, SAMUEL URIA",Leva-me pra Longe,2023-03-15,204386,30,musica portuguesa contemporanea,0.453,0.159,0.159,0.889,0.0,0.0898,0.0375,100.555,1,-13.031,4
+STRIP THAT DOWN,LIAM PAYNE feat. QUAVO,LP1,2019-12-06,202061,74,pop,0.873,0.495,0.546,0.199,0.0,0.0805,0.0518,106.033,1,-5.446,4
+RAISE YOUR GLASS,PINK,Raise Your Glass,2010-10-05,202960,77,dance pop,0.7,0.709,0.624,0.0048,0.0,0.029,0.0838,122.019,1,-5.006,4
+GLIMPSE OF US,JOJI,Glimpse of Us,2022-06-10,233456,77,viral pop,0.44,0.317,0.268,0.891,4.78e-6,0.141,0.0531,169.914,1,-9.258,3
+Super Freaky Girl,Nicki Minaj ,Queen Radio: Volume 1,2022-08-26,170977,68,hip pop,0.951,0.878,0.923,0.0509,0.0000161,0.321,0.211,133.014,1,-2.565,4
+BLEEDING LOVE,LEONA LEWIS,Spirit,2007-01-01,262466,74,british soul,0.638,0.656,0.225,0.188,0.0,0.146,0.0357,104.036,1,-5.886,4
+CRY ME A RIVER,JUSTIN TIMBERLAKE,Justified,2002-11-04,288333,75,dance pop,0.624,0.654,0.564,0.577,0.0,0.104,0.183,73.898,0,-6.582,4
+ITS A SIN,YEARS & YEARS,It’s a sin,2021-05-11,284807,42,glam rock,0.596,0.891,0.2,0.035,4.19e-6,0.186,0.0429,124.986,0,-5.925,4
+FILL ME UP,LINDA PERRY,In Flight,2005-01-01,301000,31,"",0.458,0.589,0.342,0.176,0.00773,0.092,0.0269,149.224,1,-9.04,4
+Locked Out of Heaven,Bruno Mars,Unorthodox Jukebox,2012-12-07,233478,87,dance pop,0.726,0.698,0.867,0.049,0.0,0.309,0.0431,143.994,1,-4.165,4
+Home Again,Michael Kiwanuka,Home Again,2012-01-01,212373,54,british soul,0.524,0.321,0.27,0.702,0.0,0.124,0.032,85.328,0,-11.452,4
+Tou Bem,ProfJam,#FFFFFF,2019-02-22,191679,45,hip hop tuga,0.637,0.366,0.332,0.411,0.0,0.0991,0.425,131.138,0,-12.863,4
+Yonaguni,Bad Bunny,Yonaguni,2021-06-04,206710,75,reggaeton,0.644,0.648,0.44,0.276,0.0,0.135,0.118,179.951,1,-4.601,4
+The Kill,Thirty Seconds to Mars,A Beautiful Lie,2005-01-01,231533,77,modern rock,0.179,0.912,0.289,0.0014,0.000294,0.582,0.0791,182.99,0,-3.881,3
+Happier,Marshmello,Happier,2018-08-17,214289,82,brostep,0.687,0.792,0.671,0.191,0.0,0.167,0.0452,100.011,1,-2.749,4
+YOUR SONG,ELTON JOHN,Elton John,1970-04-10,241786,79,glam rock,0.552,0.315,0.324,0.828,5.52e-6,0.101,0.0299,128.187,1,-11.028,4
+FORTNIGHT,TAYLOR SWIFT FEAT. POST MALONE,THE TORTURED POETS DEPARTMENT,2024-04-18,228965,85,pop,0.504,0.386,0.281,0.502,0.0000153,0.0961,0.0308,192.004,1,-10.976,4
+Tears Dry on Their Own,Amy Winehouse,Back To Black (Deluxe Edition),2006-01-01,186440,73,british soul,0.634,0.543,0.468,0.525,0.0,0.232,0.182,121.56,0,-13.391,4
+Don't Forget About Us,Mariah Carey,The Emancipation Of Mimi (Ultra Platinum Edition),2005-04-12,233866,56,dance pop,0.699,0.543,0.431,0.0457,0.0,0.1,0.0383,143.635,0,-6.859,4
+ITS NOT FAIR,KENYA GRACE,The After Taste,2024-03-22,162253,49,singer-songwriter pop,0.52,0.49,0.392,0.509,0.00174,0.0901,0.164,172.008,0,-10.605,4
+Rude,Magic!,Don't Kill the Magic,2014-06-25,224840,82,pop,0.773,0.758,0.925,0.0422,0.0,0.305,0.0381,144.033,1,-4.993,4
+SUNFLOWER,POST MALONE & SWAE LEE,Hollywood's Bleeding,2019-09-06,157560,82,dfw rap,0.755,0.522,0.925,0.533,0.0,0.0685,0.0575,89.96,1,-4.368,4
+Thinkin 'bout You,Frank Ocean,channel ORANGE,2012-07-10,200746,83,lgbtq+ hip hop,0.721,0.339,0.2,0.409,0.00153,0.0973,0.0532,129.83,1,-11.195,4
+Put A Little Hurt On Me,Rag'n'Bone Man,What Do You Believe In? (Deluxe),2024-10-18,167382,55,neo soul,0.559,0.84,0.678,0.0887,0.000481,0.192,0.0868,83.913,0,-3.591,4
+Born With A Broken Heart,Damiano David,Born With a Broken Heart,2024-10-25,208956,71,"",0.326,0.834,0.59,0.00108,0.0,0.101,0.0536,171.758,1,-3.189,4
+Don't You Worry Child,Swedish House Mafia,Don't You Worry Child,2012-09-14,212862,78,edm,0.612,0.84,0.438,0.112,0.0,0.116,0.0509,129.042,0,-3.145,4
+HOT IN HERRE,NELLY,Nellyville,2002-06-25,228240,74,dance pop,0.956,0.741,0.911,0.204,0.0,0.0615,0.124,107.075,0,-4.753,4
+Just the Way You Are,Bruno Mars,Doo-Wops & Hooligans,2010-05-11,220734,84,dance pop,0.635,0.841,0.424,0.0134,0.0,0.0622,0.0422,109.021,1,-5.379,4
+PRICELESS,INSTINTO 26 & IVANDRO,Priceless,2024-05-17,212727,35,hip hop tuga,0.533,0.521,0.537,0.698,0.0,0.0837,0.0342,87.976,0,-4.844,4
+Antes Dela Dizer que Sim,Bárbara Tinoco,Antes Dela Dizer Que Sim,2019-04-15,185196,37,portuguese pop,0.409,0.329,0.521,0.826,0.0,0.12,0.0787,180.386,1,-10.031,3
+(Isn't It) Obvious,Alessia Cara,(Isn’t It) Obvious,2024-10-21,231496,61,canadian contemporary r&b,0.685,0.69,0.529,0.00302,0.0317,0.0522,0.0497,171.966,1,-7.594,4
+"Hold On, We're Going Home",Drake,Nothing Was The Same,2013-01-01,227880,70,canadian hip hop,0.777,0.414,0.287,0.00421,0.0000273,0.0724,0.0946,100.002,0,-7.44,4
+In My Blood,Shawn Mendes,Shawn Mendes,2018-05-25,211360,70,canadian pop,0.622,0.711,0.487,0.0573,0.0,0.13,0.0665,140.016,1,-7.321,4
+Galopa,Pedro Sampaio,CHAMA MEU NOME,2022-02-02,140500,63,funk carioca,0.763,0.85,0.77,0.285,0.0,0.104,0.0409,150.009,0,-4.036,4
+Bichota,Karol G ,KG0516,2021-03-26,178693,69,reggaeton,0.864,0.658,0.865,0.204,0.000626,0.105,0.154,163.922,0,-4.105,4
+Faded,Alan Walker,Different World,2018-12-14,212106,79,electro house,0.468,0.627,0.159,0.0281,7.97e-6,0.11,0.0476,179.642,1,-5.085,4
+Os Maridos das Outras,Miguel Araújo,Cinco Dias e Meio,2012-05-21,239880,39,portuguese pop,0.776,0.379,0.88,0.352,0.0,0.104,0.0414,128.164,1,-8.961,4
+I Don't Care,Ed Sheeran,No.6 Collaborations Project,2019-07-12,219946,78,pop,0.798,0.676,0.843,0.0902,0.0,0.0894,0.0442,101.956,1,-5.041,4
+WE CANT BE FRIENDS (WAIT FOR YOUR LOVE),ARIANA GRANDE,eternal sunshine,2024-03-08,228639,86,pop,0.645,0.646,0.295,0.0615,0.0000304,0.074,0.0427,115.842,1,-8.334,4
+Scar Tissue,Red Hot Chili Peppers,Californication (Deluxe Edition),1999-06-08,215906,83,alternative rock,0.595,0.717,0.547,0.0779,0.00274,0.108,0.0295,88.969,1,-4.803,4
+NOITE,IVANDRO & VITOR KLEY,Trovador,2024-02-16,206522,49,hip hop tuga,0.823,0.534,0.634,0.55,0.0000751,0.151,0.117,109.01,0,-7.448,4
+Mamiii,Becky G,ESQUEMAS,2022-05-13,226093,78,latin pop,0.836,0.703,0.902,0.0845,0.0,0.138,0.0657,94.048,0,-3.554,4
+Next To You,JVKE,next to you,2024-10-25,154255,64,modern indie pop,0.315,0.412,0.262,0.651,0.000915,0.105,0.0419,175.842,1,-12.357,3
+UNDER THE INFLUENCE,CHRIS BROWN,Indigo (Extended),2019-10-04,184613,83,r&b,0.755,0.562,0.368,0.0186,0.000231,0.18,0.0355,116.931,0,-8.947,4
+Rosas,Kappa Jotta,ROSAS,2022-05-11,177272,49,hip hop tuga,0.8,0.341,0.751,0.859,0.0,0.144,0.0923,87.915,0,-9.329,4
