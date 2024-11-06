@@ -74,7 +74,7 @@ class RadioMusicETL:
         return result
 
 
-    async def run(self, scrape_radios=True):
+    async def run(self, scrape_radios=True, fetch_info=True):
         # Scrape data from radios
         scrapers = [
             PassouTypeRadioScraper(self.config_manager.WEB_SITES['Comercial'])
@@ -89,6 +89,7 @@ class RadioMusicETL:
         for scraper in scrapers:
             # Scrape information and save it as CSV
             if scrape_radios:
+                logger.info("Not scraping data from radios.")
                 scraper.scrape(save_csv=True)
             # all_scrape_dfs.append(tracks_df)
 
@@ -98,6 +99,10 @@ class RadioMusicETL:
         # # Close browser after extracting data
         # for scraper in scrapers:
         #     scraper.close()
+
+        if not fetch_info:
+            logger.info("Not fetching extra info from APIs. Exiting function gracefully.")
+            return
 
         # Read all extracted data so far
         for path in all_scrape_csv_paths:
@@ -175,15 +180,16 @@ class RadioMusicETL:
             )   
 
         # track_combined_df = new_tracks_df.join(spotify_track_df, on=[self.config_manager.TRACK_TITLE_COLUMN, self.config_manager.ARTIST_NAME_COLUMN], how="left")
-        return track_info_df, wikipedia_artist_df
+        # return track_info_df, wikipedia_artist_df
 
 
 if __name__ == "__main__":
     etl = RadioMusicETL()
     
     async def run_test():
-        result = await etl.run(scrape_radios=False)
-        print(result)
+        await etl.run(scrape_radios=False)
+        # result = await etl.run(scrape_radios=False)
+        # print(result)
 
     asyncio.run(run_test())
 

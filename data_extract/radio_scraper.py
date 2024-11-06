@@ -348,7 +348,7 @@ class MegaHitsRadioScraper(RadioScraper):
         self.search_hour = radio_config.get('search_hour', 'txtHoraPesq')
         self.search_minute = radio_config.get('search_minute', 'txtMinutoPesq')
         self.search_button_text = radio_config.get('search_button_text', 'pesquisa')
-        self.max_retries = radio_config.get('max_retries', 3)
+        self.max_retries = radio_config.get('max_retries', 4)
         self.csv_path = self.config_manager.get_scraper_csv_path(radio=self.radio_name, path_format=self.config_manager.CSV_PATH_FORMAT)
 
     def _extract_day_data(self, day_value, last_time_played=None):
@@ -386,6 +386,9 @@ class MegaHitsRadioScraper(RadioScraper):
 
                             for time_played, track_title, artist_name in zip(times_played, tracks_title, artists_name):
                                 if last_time_played and day == last_time_played[self.DAY_COLUMN] and time_played.text <= last_time_played[self.TIME_PLAYED_COLUMN]:
+                                    continue
+                                # Avoid saving empty rows
+                                if not track_title.text or not artist_name.text:
                                     continue
                                 track_data = {
                                     self.RADIO_COLUMN: self.radio_name,
