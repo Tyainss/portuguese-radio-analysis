@@ -89,16 +89,12 @@ class RadioMusicETL:
         for scraper in scrapers:
             # Scrape information and save it as CSV
             if scrape_radios:
-                logger.info("Not scraping data from radios.")
+                logger.info("Scraping data from radios.")
                 scraper.scrape(save_csv=True)
-            # all_scrape_dfs.append(tracks_df)
 
             # Add csv path to list
             all_scrape_csv_paths.append(scraper.csv_path)
 
-        # # Close browser after extracting data
-        # for scraper in scrapers:
-        #     scraper.close()
 
         if not fetch_info:
             logger.info("Not fetching extra info from APIs. Exiting function gracefully.")
@@ -164,7 +160,6 @@ class RadioMusicETL:
         if new_artists_df.is_empty():
             logger.info('No new artist data to process')
         else:
-            # wikipedia_artist_df = await self.async_wikipedia_api.process_data(new_artists_df)
             wikipedia_artist_df = self.wikipedia_api.process_data(new_artists_df)
             print('Wikipedia \n', wikipedia_artist_df)
 
@@ -179,25 +174,19 @@ class RadioMusicETL:
                 schema=self.config_manager.ARTIST_INFO_SCHEMA
             )   
 
-        # track_combined_df = new_tracks_df.join(spotify_track_df, on=[self.config_manager.TRACK_TITLE_COLUMN, self.config_manager.ARTIST_NAME_COLUMN], how="left")
-        # return track_info_df, wikipedia_artist_df
 
 
 if __name__ == "__main__":
     etl = RadioMusicETL()
     
     async def run_test():
-        await etl.run(scrape_radios=False)
-        # result = await etl.run(scrape_radios=False)
-        # print(result)
+        await etl.run(scrape_radios=True , fetch_info=True)
 
     asyncio.run(run_test())
 
-    # TODO:
-    # 1. Rerun script to fill in track_info_csv and artist_csv
-    # 4. Don't save empty rows (without track and artist - MegaHits)
     
-    # If there are continued problems extracting data, consider extracting by batches
+    # STREAMLIT
+    # 1. Read track/artist with upper case, to keep naming consistent
 
     # Check for duplicated scraped data
     # Delete old commented code

@@ -16,7 +16,7 @@ class MusicBrainzAPI:
         """
         Search for an artist in MusicBrainz by their name and return their mbid.
         """
-        print(f"Searching for artist: {artist_name}")
+        # print(f"Searching for artist: {artist_name}")
         url = "https://musicbrainz.org/ws/2/artist/"
         params = {
             'query': f'artist:{artist_name}',

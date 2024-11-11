@@ -143,14 +143,6 @@ class AsyncSpotifyAPI:
         return await asyncio.gather(*tasks)
 
     async def process_data(self, df, batch_size=100, delay=5):
-        # """Fetch track info and return a dataframe with Spotify data joined."""
-        # # Fetch track info for all rows
-        # spotify_data = await self.fetch_all_track_info(df)
-
-        # # Filter out None values and create a new dataframe with the Spotify data
-        # spotify_data_filtered = [track for track in spotify_data if track]
-        # spotify_df = pl.DataFrame(spotify_data_filtered)
-
         """Fetch track info in batches to avoid API rate limits and return a dataframe with Spotify data."""
         spotify_data = []
 
@@ -196,11 +188,4 @@ if __name__ ==  "__main__":
     'artist_name': ['Dua Lipa', 'Sabrina Carpenter', 'Maroon 5']
     })
 
-    # Run the event loop
-    # asyncio.run(fetch_track())
-
     asyncio.run(process(df))
-
-    # Run the event loop
-    # loop = asyncio.get_event_loop()
-    # loop.run_until_complete(fetch_track())
