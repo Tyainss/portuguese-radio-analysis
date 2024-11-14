@@ -10,6 +10,7 @@ from spotify_api import SpotifyAPI
 from asynchronous_spotify_api import AsyncSpotifyAPI
 from wikipedia_api import WikipediaAPI
 from asynchronous_wikipedia_api import AsyncWikipediaAPI
+from lyrics import LyricsAnalyzer
 
 from logger import setup_logging
 
@@ -30,6 +31,7 @@ class RadioMusicETL:
         self.async_spotify_api = AsyncSpotifyAPI()
         self.wikipedia_api = WikipediaAPI()
         self.async_wikipedia_api = AsyncWikipediaAPI()
+        self.lyrics_analyzer = LyricsAnalyzer()
         self._initialize_column_names()
 
     def _initialize_column_names(self):
@@ -148,8 +150,15 @@ class RadioMusicETL:
             spotify_track_df = await self.async_spotify_api.process_data(new_tracks_df)
             print('Spotify \n', spotify_track_df)
 
+            lyrics_df = self.lyrics_analyzer.process_data(new_tracks_df)
+            print('Lyrics \n', lyrics_df)
+
             # Save track info df
-            track_info_df = spotify_track_df
+            track_info_df = spotify_track_df.join(
+                lyrics_df, 
+                how='left', 
+                on=[self.config_manager.ARTIST_NAME_COLUMN, self.config_manager.TRACK_TITLE_COLUMN]
+            )
             self.data_storage.output_csv(
                 df=track_info_df,
                 path=self.config_manager.TRACK_INFO_CSV_PATH,
@@ -167,7 +176,11 @@ class RadioMusicETL:
             print('MusicBrainz \n', mb_artist_df)
 
             # Save artist info df
-            artist_info_df = mb_artist_df.join(wikipedia_artist_df, on=[self.config_manager.ARTIST_NAME_COLUMN], how='left')
+            artist_info_df = mb_artist_df.join(
+                wikipedia_artist_df, 
+                how='left', 
+                on=[self.config_manager.ARTIST_NAME_COLUMN]
+            )
             self.data_storage.output_csv(
                 df=artist_info_df,
                 path=self.config_manager.ARTIST_INFO_CSV_PATH,
@@ -184,9 +197,10 @@ if __name__ == "__main__":
 
     asyncio.run(run_test())
 
-    
+    # TODO
+    # 1. Add lyrics df to track_info_extract
+
     # STREAMLIT
     # 1. Read track/artist with upper case, to keep naming consistent
 
     # Check for duplicated scraped data
-    # Delete old commented code
