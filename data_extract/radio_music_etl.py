@@ -159,6 +159,7 @@ class RadioMusicETL:
                 how='left', 
                 on=[self.config_manager.ARTIST_NAME_COLUMN, self.config_manager.TRACK_TITLE_COLUMN]
             )
+
             self.data_storage.output_csv(
                 df=track_info_df,
                 path=self.config_manager.TRACK_INFO_CSV_PATH,
@@ -198,7 +199,8 @@ if __name__ == "__main__":
     asyncio.run(run_test())
 
     # TODO
-    # 1. Add lyrics df to track_info_extract
+    # 1. Create a second layer of ETL, with the scraped data unioned and with some treatment to the artist_name/track_title
+    # 2. Transform values into TitleCase when saving track and artist info, for consistency
 
     # STREAMLIT
     # 1. Read track/artist with upper case, to keep naming consistent
