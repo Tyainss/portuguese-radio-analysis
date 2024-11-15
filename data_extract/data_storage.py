@@ -102,7 +102,11 @@ class DataStorage:
         
         try:
             df.write_csv(path)
-            logger.info('Successfully updated CSV')
+            if append:
+                mode = 'by appending to existing CSV'
+            else:
+                mode = 'by OVERWRITING existing CSV'
+            logger.info(f'Successfully updated CSV {mode}')
         except Exception as e:
             logger.error(f"Error writing CSV: {e}")
             raise
