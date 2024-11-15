@@ -150,7 +150,7 @@ class LyricsAnalyzer:
             sentiments = self.classify_lyric_sentiments(lyrics)
             lyrics_info = {
                 'lyrics_language': self.detect_language(lyrics)
-                , 'love_occurrences': self.count_love_occurrences(lyrics)
+                , 'lyrics_love_occurrences': self.count_love_occurrences(lyrics)
                 }
             
             lyrics_info = sentiments | lyrics_info # Append both dictionaries
