@@ -27,8 +27,19 @@ class LyricsAnalyzer:
             return 'unknown'
     
     def translate_text(self, text, src_lang='pt', dest_lang='en'):
-        translation = self.translator.translate(text, src=src_lang, dest=dest_lang)
-        return translation.text
+        if not text or not isinstance(text, str):
+            print('Invalid input for translation. Returning original text.')
+            return text  # Return the original text if input is invalid
+
+        try:
+            translation = self.translator.translate(text, src=src_lang, dest=dest_lang)
+            if translation is None or not hasattr(translation, 'text'):
+                print('Translation failed or returned None. Returning original text.')
+                return text  # Return the original text if translation fails
+            return translation.text
+        except Exception as e:
+            print('Error during translation:', e)
+            return text  # Return the original text in case of an exception
     
     def translate_lyrics(self, lyrics, src_lang=None, dest_lang='en'):
         if not src_lang:
