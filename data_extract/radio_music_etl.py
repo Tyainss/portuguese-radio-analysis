@@ -75,75 +75,70 @@ class RadioMusicETL:
         
         return result
 
-
-    async def run(self, scrape_radios=True, fetch_info=True):
-        # Scrape data from radios
-        scrapers = [
-            PassouTypeRadioScraper(self.config_manager.WEB_SITES['Comercial'])
-            , PassouTypeRadioScraper(self.config_manager.WEB_SITES['CidadeFM'])
-            , RFMRadioScraper(self.config_manager.WEB_SITES['RFM'])
-            , MegaHitsRadioScraper(self.config_manager.WEB_SITES['MegaHits'])
-        ]
-        
-        all_scrape_dfs = []
-        all_scrape_csv_paths = []
-
-        for scraper in scrapers:
-            # Scrape information and save it as CSV
-            if scrape_radios:
-                logger.info("Scraping data from radios.")
-                scraper.scrape(save_csv=True)
-
-            # Add csv path to list
-            all_scrape_csv_paths.append(scraper.csv_path)
-
-
-        if not fetch_info:
-            logger.info("Not fetching extra info from APIs. Exiting function gracefully.")
-            return
-
-        # Read all extracted data so far
-        for path in all_scrape_csv_paths:
-            radio_df = self.data_storage.read_csv(path=path, schema=self.config_manager.RADIO_SCRAPPER_SCHEMA)
-            all_scrape_dfs.append(radio_df)
-
-        combined_df = pl.concat(all_scrape_dfs)
-
-        # Get unique tracks and artists that have been scraped so far
-        combined_df_unique_tracks = combined_df.unique(
-            subset=[self.config_manager.TRACK_TITLE_COLUMN, self.config_manager.ARTIST_NAME_COLUMN], 
-            maintain_order = True
-        )
+    async def artists_extract_process(self, combined_df):
+        # Get unique artists that have been scraped so far
         combined_df_unique_artists = combined_df.unique(
             subset=[self.config_manager.TRACK_TITLE_COLUMN], 
             maintain_order = True
         )
-
-        # Get dataframes of tracks and artists already extracted
-        already_extracted_tracks = self.data_storage.read_csv_if_exists(
-            path=self.config_manager.TRACK_INFO_CSV_PATH,
-            schema=self.config_manager.TRACK_INFO_SCHEMA,
-            columns=[self.TRACK_TITLE_COLUMN, self.ARTIST_NAME_COLUMN]
-        )
+        # Get dataframes of artists already extracted
         already_extracted_artists = self.data_storage.read_csv_if_exists(
             path=self.config_manager.ARTIST_INFO_CSV_PATH,
             schema=self.config_manager.ARTIST_INFO_SCHEMA,
             columns=[self.ARTIST_NAME_COLUMN]
         )
-
-        # Filter for tracks and artist not yet registered
-        new_tracks_df = self._identify_unregistered_tracks(
-            new_track_df=combined_df_unique_tracks,
-            registered_tracks=already_extracted_tracks
-        )
+        
+        # Filter for artists not yet registered
         new_artists_df = self._identify_unregistered_artists(
             new_artist_df=combined_df_unique_artists,
             registered_artists=already_extracted_artists
         )
-
+        
         print('New artists size:', new_artists_df.height)
-        print('New tracks size:', new_tracks_df.height)
 
+        if new_artists_df.is_empty():
+            logger.info('No new artist data to process')
+        else:
+            wikipedia_artist_df = self.wikipedia_api.process_data(new_artists_df)
+            print('Wikipedia \n', wikipedia_artist_df)
+
+            mb_artist_df = self.mb_api.process_data(new_artists_df)
+            print('MusicBrainz \n', mb_artist_df)
+
+            # Save artist info df
+            artist_info_df = mb_artist_df.join(
+                wikipedia_artist_df, 
+                how='left', 
+                on=[self.config_manager.ARTIST_NAME_COLUMN]
+            )
+            self.data_storage.output_csv(
+                df=artist_info_df,
+                path=self.config_manager.ARTIST_INFO_CSV_PATH,
+                schema=self.config_manager.ARTIST_INFO_SCHEMA
+            )   
+
+    async def tracks_extract_process(self, combined_df):
+        # Get unique tracks that have been scraped so far
+        combined_df_unique_tracks = combined_df.unique(
+            subset=[self.config_manager.TRACK_TITLE_COLUMN, self.config_manager.ARTIST_NAME_COLUMN], 
+            maintain_order = True
+        )
+
+        # Get dataframes of tracks already extracted
+        already_extracted_tracks = self.data_storage.read_csv_if_exists(
+            path=self.config_manager.TRACK_INFO_CSV_PATH,
+            schema=self.config_manager.TRACK_INFO_SCHEMA,
+            columns=[self.TRACK_TITLE_COLUMN, self.ARTIST_NAME_COLUMN]
+        )
+
+        # Filter for tracks not yet registered
+        new_tracks_df = self._identify_unregistered_tracks(
+            new_track_df=combined_df_unique_tracks,
+            registered_tracks=already_extracted_tracks
+        )
+
+        print('New tracks size:', new_tracks_df.height)
+        
         if new_tracks_df.is_empty():
             logger.info('No new track data to process')
         else:
@@ -167,26 +162,50 @@ class RadioMusicETL:
             )
             print('Saved track dataframe: \n', track_info_df)
 
-        if new_artists_df.is_empty():
-            logger.info('No new artist data to process')
-        else:
-            wikipedia_artist_df = self.wikipedia_api.process_data(new_artists_df)
-            print('Wikipedia \n', wikipedia_artist_df)
+    
+    async def extract_data(self, scrape_radios=True, fetch_info=True):
+        # Scrape data from radios
+        scrapers = [
+            PassouTypeRadioScraper(self.config_manager.WEB_SITES['Comercial'])
+            , PassouTypeRadioScraper(self.config_manager.WEB_SITES['CidadeFM'])
+            , RFMRadioScraper(self.config_manager.WEB_SITES['RFM'])
+            , MegaHitsRadioScraper(self.config_manager.WEB_SITES['MegaHits'])
+        ]
+        
+        all_scrape_dfs = []
+        all_scrape_csv_paths = []
 
-            mb_artist_df = self.mb_api.process_data(new_artists_df)
-            print('MusicBrainz \n', mb_artist_df)
+        for scraper in scrapers:
+            # Scrape information and save it as CSV
+            if scrape_radios:
+                logger.info("Scraping data from radios.")
+                scraper.scrape(save_csv=True)
 
-            # Save artist info df
-            artist_info_df = mb_artist_df.join(
-                wikipedia_artist_df, 
-                how='left', 
-                on=[self.config_manager.ARTIST_NAME_COLUMN]
-            )
-            self.data_storage.output_csv(
-                df=artist_info_df,
-                path=self.config_manager.ARTIST_INFO_CSV_PATH,
-                schema=self.config_manager.ARTIST_INFO_SCHEMA
-            )   
+            # Add csv path to list
+            all_scrape_csv_paths.append(scraper.csv_path)
+
+        if not fetch_info:
+            logger.info("Not fetching extra info from APIs. Exiting function gracefully.")
+            return
+
+        # Read all extracted data so far
+        for path in all_scrape_csv_paths:
+            radio_df = self.data_storage.read_csv(path=path, schema=self.config_manager.RADIO_SCRAPPER_SCHEMA)
+            all_scrape_dfs.append(radio_df)
+
+        combined_df = pl.concat(all_scrape_dfs)
+
+        await self.tracks_extract_process(combined_df)
+        await self.artists_extract_process(combined_df)
+
+
+    async def transform_data(self):
+        pass
+
+    async def run(self, scrape_radios=True, fetch_info=True):
+        await self.extract_data(scrape_radios, fetch_info)
+
+        await self.transform_data()
 
 
 
