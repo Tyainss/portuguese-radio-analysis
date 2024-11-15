@@ -3,6 +3,7 @@ from googletrans import Translator
 from langdetect import detect
 from textblob import TextBlob
 from transformers import pipeline, AutoTokenizer
+from tqdm import tqdm
 
 from genius_api import GeniusAPI
 from config_manager import ConfigManager
@@ -127,7 +128,7 @@ class LyricsAnalyzer:
         """
         lyrics_info_list = []
 
-        for row in df.iter_rows(named=True):
+        for row in tqdm(df.iter_rows(named=True), total=len(df), desc='Processing Lyrics', unit='track'):
             track_title = row[self.config_manager.TRACK_TITLE_COLUMN]
             artist_name = row[self.config_manager.ARTIST_NAME_COLUMN]
             lyrics = self.genius.get_song_lyrics(song_title=track_title, artist_name=artist_name)
