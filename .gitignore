@@ -1,6 +1,13 @@
 # Ignore config.json file
 /config.json
 
+# Ignore testing files or testing Streamlit folder
+testing_*.py
+streamlit_testing/
+
+# Ignore Streamlit Secrets
+.streamlit/secrets.toml
+
 # Ignore logs
 logs/
 

@@ -3,6 +3,7 @@ from googletrans import Translator
 from langdetect import detect
 from textblob import TextBlob
 from transformers import pipeline, AutoTokenizer
+from tqdm import tqdm
 
 from genius_api import GeniusAPI
 from config_manager import ConfigManager
@@ -20,15 +21,26 @@ class LyricsAnalyzer:
     def detect_language(self, lyrics):
         try:
             language = detect(lyrics)
-            print(f'Detected language: {language}')
+            # print(f'Detected language: {language}')
             return language
         except Exception as e:
             print('Error detecting language:', e)
             return 'unknown'
     
     def translate_text(self, text, src_lang='pt', dest_lang='en'):
-        translation = self.translator.translate(text, src=src_lang, dest=dest_lang)
-        return translation.text
+        if not text or not isinstance(text, str):
+            print('Invalid input for translation. Returning original text.')
+            return text  # Return the original text if input is invalid
+
+        try:
+            translation = self.translator.translate(text, src=src_lang, dest=dest_lang)
+            if translation is None or not hasattr(translation, 'text'):
+                print('Translation failed or returned None. Returning original text.')
+                return text  # Return the original text if translation fails
+            return translation.text
+        except Exception as e:
+            print('Error during translation:', e)
+            return text  # Return the original text in case of an exception
     
     def translate_lyrics(self, lyrics, src_lang=None, dest_lang='en'):
         if not src_lang:
@@ -46,7 +58,7 @@ class LyricsAnalyzer:
             'lieben', 'liebe', 'querer', 'quiero', 'adoro', 'adorar'
         ]
         count = sum(lyrics.lower().count(word) for word in love_words)
-        print(f'"Love" word count: {count}')
+        # print(f'"Love" word count: {count}')
         return count
 
     def classify_basic_sentiments(self, lyrics):
@@ -55,7 +67,7 @@ class LyricsAnalyzer:
         """
         blob = TextBlob(lyrics)
         sentiment = blob.sentiment
-        print(f'Sentiment analysis - Polarity: {sentiment.polarity}, Subjectivity: {sentiment.subjectivity}')
+        # print(f'Sentiment analysis - Polarity: {sentiment.polarity}, Subjectivity: {sentiment.subjectivity}')
         return sentiment
 
     def _split_lyrics_chunks(self, lyrics, max_length=510):
@@ -99,12 +111,12 @@ class LyricsAnalyzer:
         complex_sentiments = self.classify_complex_sentiments(lyrics)
 
         sentiments = {
-            'polarity': basic_sentiments.polarity
-            , 'subjectivity': basic_sentiments.subjectivity
-            , 'joy': complex_sentiments.get('joy')
-            , 'sadness': complex_sentiments.get('sadness')
-            , 'optimism': complex_sentiments.get('optimism')
-            , 'anger': complex_sentiments.get('anger')
+            'lyrics_polarity': basic_sentiments.polarity
+            , 'lyrics_subjectivity': basic_sentiments.subjectivity
+            , 'lyrics_joy': complex_sentiments.get('joy')
+            , 'lyrics_sadness': complex_sentiments.get('sadness')
+            , 'lyrics_optimism': complex_sentiments.get('optimism')
+            , 'lyrics_anger': complex_sentiments.get('anger')
         }
 
         return sentiments
@@ -116,7 +128,7 @@ class LyricsAnalyzer:
         """
         lyrics_info_list = []
 
-        for row in df.iter_rows(named=True):
+        for row in tqdm(df.iter_rows(named=True), total=len(df), desc='Processing Lyrics', unit='track'):
             track_title = row[self.config_manager.TRACK_TITLE_COLUMN]
             artist_name = row[self.config_manager.ARTIST_NAME_COLUMN]
             lyrics = self.genius.get_song_lyrics(song_title=track_title, artist_name=artist_name)
@@ -126,20 +138,20 @@ class LyricsAnalyzer:
                 print(f"No lyrics found for '{track_title}' by '{artist_name}'. Skipping...")
                 lyrics_info_list.append({
                     'lyrics_language': 'unknown',
-                    'love_occurrences': 0,
-                    'polarity': None,
-                    'subjectivity': None,
-                    'joy': None,
-                    'sadness': None,
-                    'optimism': None,
-                    'anger': None,
+                    'lyrics_love_occurrences': 0,
+                    'lyrics_polarity': None,
+                    'lyrics_subjectivity': None,
+                    'lyrics_joy': None,
+                    'lyrics_sadness': None,
+                    'lyrics_optimism': None,
+                    'lyrics_anger': None,
                 })
                 continue
 
             sentiments = self.classify_lyric_sentiments(lyrics)
             lyrics_info = {
                 'lyrics_language': self.detect_language(lyrics)
-                , 'love_occurrences': self.count_love_occurrences(lyrics)
+                , 'lyrics_love_occurrences': self.count_love_occurrences(lyrics)
                 }
             
             lyrics_info = sentiments | lyrics_info # Append both dictionaries

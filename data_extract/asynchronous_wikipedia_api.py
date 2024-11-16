@@ -150,8 +150,3 @@ if __name__ == "__main__":
     })
 
     asyncio.run(process(df))
-    # # Example artist
-    # artist_name = "Ed Sheeran"
-
-    # # Run the event loop
-    # asyncio.run(fetch_artist_nationality(artist_name))

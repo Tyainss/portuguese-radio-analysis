@@ -24,7 +24,15 @@
         "spotify_tempo": "float64",
         "spotify_mode": "int64",
         "spotify_loudness": "float64",
-        "spotify_time_signature": "int64"
+        "spotify_time_signature": "int64",
+        "lyrics_language": "str",
+        "lyrics_love_occurrences": "int64",
+        "lyrics_polarity": "float64",
+        "lyrics_subjectivity": "float64",
+        "lyrics_joy": "float64",
+        "lyrics_sadness": "float64",
+        "lyrics_optimism": "float64",
+        "lyrics_anger": "float64"
     },
     "ARTIST_INFO": {
         "artist_name": "str",

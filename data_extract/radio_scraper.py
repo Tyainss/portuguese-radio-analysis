@@ -38,9 +38,6 @@ class RadioScraper:
         self.TRACK_TITLE_COLUMN = self.config_manager.TRACK_TITLE_COLUMN
         self.ARTIST_NAME_COLUMN = self.config_manager.ARTIST_NAME_COLUMN
 
-    # def _get_csv_path(self, radio):
-    #     csv_path = self.config_manager.CSV_PATH_FORMAT.format(radio=radio)
-    #     return csv_path
 
     def _accept_cookies(self, cookies_button_accept_text, cookies_button='qc-cmp2-summary-buttons') -> None:
         try:
@@ -97,19 +94,6 @@ class RadioScraper:
     def close(self):
         if self.driver:
             self.driver.quit()
-
-# # Usage with context manager
-# with RadioScraper(url="https://example.com") as scraper:
-#     # Perform scraping tasks
-#     pass
-
-# # Usage with explicit cleanup
-# scraper = RadioScraper(url="https://example.com")
-# try:
-#     # Perform scraping tasks
-#     pass
-# finally:
-#     scraper.close()
 
 class PassouTypeRadioScraper(RadioScraper):
     """
@@ -173,7 +157,6 @@ class PassouTypeRadioScraper(RadioScraper):
         self._initiate_driver()
         self._accept_cookies(self.cookies_button_accept_text)
         self._select_radio(radio_name=self.radio_name)
-        # day_values = self._get_days_list()
         day_values = self._ignore_last_option(self._get_option_list(self.day_element_id))
 
 
@@ -307,8 +290,6 @@ class RFMRadioScraper(RadioScraper):
         self._accept_cookies(self.cookies_button_accept_text)
         self._wait_for_ad_to_finish()
         day_values = self._ignore_first_option(self._get_option_list(self.day_element_id))[::-1]
-        
-        # csv_path = self._get_csv_path(radio=self.radio_name)
 
         last_time_played = self._get_last_time_played(self.csv_path, self.schema)
         if last_time_played:
