@@ -175,7 +175,7 @@ class PassouTypeRadioScraper(RadioScraper):
 
         df_all_data = pl.DataFrame(all_data)
         if save_csv and not df_all_data.is_empty():
-            self.data_storage.output_csv(path=self.csv_path, df=df_all_data, schema=self.schema, append=True)
+            self.data_storage.output_csv(path=self.csv_path, df=df_all_data, schema=self.schema, mode='append')
 
         self.close()
         return df_all_data
@@ -306,7 +306,7 @@ class RFMRadioScraper(RadioScraper):
     
         df_all_data = pl.DataFrame(all_data)
         if save_csv and not df_all_data.is_empty():
-            self.data_storage.output_csv(path=self.csv_path, df=df_all_data, schema=self.schema, append=True)
+            self.data_storage.output_csv(path=self.csv_path, df=df_all_data, schema=self.schema, mode='append')
 
         self.close()
         return df_all_data
@@ -419,7 +419,7 @@ class MegaHitsRadioScraper(RadioScraper):
     
         df_all_data = pl.DataFrame(all_data)
         if save_csv and not df_all_data.is_empty():
-            self.data_storage.output_csv(path=self.csv_path, df=df_all_data, schema=self.schema, append=True)
+            self.data_storage.output_csv(path=self.csv_path, df=df_all_data, schema=self.schema, mode='append')
 
         self.close()
         return df_all_data
