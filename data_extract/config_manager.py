@@ -32,6 +32,10 @@ class ConfigManager:
         self.RADIO_SCRAPPER_SCHEMA = self.schema['RADIO_SCRAPPER']
         self.TRACK_INFO_SCHEMA = self.schema['TRACK_INFO']
         self.ARTIST_INFO_SCHEMA = self.schema['ARTIST_INFO']
+        self.SPOTIFY_INFO_SCHEMA = self.schema['SPOTIFY_INFO']
+        self.LYRICS_INFO_SCHEMA = self.schema['LYRICS_INFO']
+        self.MUSICBRAINZ_INFO_SCHEMA = self.schema['MUSICBRAINZ_INFO']
+        self.WIKIPEDIA_INFO_SCHEMA = self.schema['WIKIPEDIA_INFO']
 
     def _initialize_secrets(self) -> None:
         self.SPOTIFY_CLIENT_ID = self.config['SPOTIFY_CLIENT_ID']
@@ -59,8 +63,13 @@ class ConfigManager:
         self.WEB_SITES = self.WEB_SCRAPPER['WEB_SITES']
 
     def _initialize_other_config(self) -> None:
+        self.RADIO_CSV_PATH = self.config['RADIO_CSV_PATH']
         self.TRACK_INFO_CSV_PATH = self.config['TRACK_INFO_CSV_PATH']
         self.ARTIST_INFO_CSV_PATH = self.config['ARTIST_INFO_CSV_PATH']
+        self.SPOTIFY_INFO_CSV_PATH = self.config['SPOTIFY_INFO_CSV_PATH']
+        self.LYRICS_INFO_CSV_PATH = self.config['LYRICS_INFO_CSV_PATH']
+        self.MUSICBRAINZ_INFO_CSV_PATH = self.config['MUSICBRAINZ_INFO_CSV_PATH']
+        self.WIKIPEDIA_INFO_CSV_PATH = self.config['WIKIPEDIA_INFO_CSV_PATH']
 
     def get_scraper_csv_path(self, radio, path_format):
         csv_path = path_format.format(radio=radio)
