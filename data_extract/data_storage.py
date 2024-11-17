@@ -48,10 +48,27 @@ class DataStorage:
                           .alias(column)
                 )
             elif dtype == pl.Time:
+                # df = df.with_columns(
+                #         pl.col(column).cast(pl.Utf8)
+                #           .str.strptime(pl.Time, format="%H:%M", strict=False)
+                #           .alias(column)
+                # )
+                # Handle multiple time formats
                 df = df.with_columns(
+                    pl.when(
                         pl.col(column).cast(pl.Utf8)
-                          .str.strptime(pl.Time, format="%H:%M", strict=False)
-                          .alias(column)
+                            .str.strptime(pl.Time, format="%H:%M", strict=False)
+                            .is_not_null()
+                    )
+                    .then(
+                        pl.col(column).cast(pl.Utf8)
+                            .str.strptime(pl.Time, format="%H:%M", strict=False)
+                    )
+                    .otherwise(
+                        pl.col(column).cast(pl.Utf8)
+                            .str.strptime(pl.Time, format="%H:%M:%S", strict=False)
+                    )
+                    .alias(column)
                 )
             elif dtype == pl.Utf8:
                 # Fill nulls with empty string to match String dtype
@@ -78,7 +95,13 @@ class DataStorage:
         
         return df
 
-    def output_csv(self, path: str, df: pl.DataFrame, schema: Optional[Dict[str, pl.DataType]] = None, append: bool = True) -> None:
+    def output_csv(
+            self, 
+            path: str, 
+            df: pl.DataFrame, 
+            schema: Optional[Dict[str, pl.DataType]] = None, 
+            mode: str = 'append'
+        ) -> None:
         logger.info(f'Outputting CSV to: {path}')
         
         # Ensure the directory exists
@@ -92,21 +115,29 @@ class DataStorage:
         if schema:
             df = self._output_schema(df, schema)
         
-        if os.path.exists(path) and append:
+        print(f'Dataframe to output: \n {df}')
+        if os.path.exists(path):
             try:
                 existing_df = self.read_csv(path=path, schema=schema)
-                df = pl.concat([existing_df, df])
+                
+                if mode == 'append':
+                    df = pl.concat([existing_df, df])
+                elif mode == 'deduplicate_append':
+                    df = pl.concat([existing_df, df]).unique()
+                elif mode == 'overwrite':
+                    logger.info('Overwritting existing CSV with new data')
+                else:
+                    logger.error(f'Invalid mode: {mode}')
+                    raise ValueError(f"Invalid mode: {mode}. Use 'overwrite', 'append', or 'deduplicate_append'.")
+                
             except Exception as e:
                 logger.error(f"Error reading existing CSV for appending: {e}")
-                # Continue with writing the new data even if appending fails
+                if mode != 'overwrite':
+                    raise
         
         try:
             df.write_csv(path)
-            if append:
-                mode = 'by appending to existing CSV'
-            else:
-                mode = 'by OVERWRITING existing CSV'
-            logger.info(f'Successfully updated CSV {mode}')
+            logger.info(f'Successfully updated CSV in {mode} mode')
         except Exception as e:
             logger.error(f"Error writing CSV: {e}")
             raise

@@ -42,6 +42,53 @@
         "mb_artist_career_begin": "date",
         "mb_artist_career_end": "date",
         "mb_artist_career_ended": "bool",
+        "wiki_nationality": "str",
+        "combined_nationality": "str"
+    },
+    "SPOTIFY_INFO": {
+        "track_title": "str",
+        "artist_name": "str",
+        "spotify_album": "str",
+        "spotify_release_date": "date",
+        "spotify_duration_ms": "int64",
+        "spotify_popularity": "int64",
+        "spotify_genres": "str",
+        "spotify_danceability": "float64",
+        "spotify_energy": "float64",
+        "spotify_valence": "float64",
+        "spotify_acousticness": "float64",
+        "spotify_instrumentalness": "float64",
+        "spotify_liveness": "float64",
+        "spotify_speechiness": "float64",
+        "spotify_tempo": "float64",
+        "spotify_mode": "int64",
+        "spotify_loudness": "float64",
+        "spotify_time_signature": "int64"
+    },
+    "LYRICS_INFO": {
+        "track_title": "str",
+        "artist_name": "str",
+        "lyrics_language": "str",
+        "lyrics_love_occurrences": "int64",
+        "lyrics_polarity": "float64",
+        "lyrics_subjectivity": "float64",
+        "lyrics_joy": "float64",
+        "lyrics_sadness": "float64",
+        "lyrics_optimism": "float64",
+        "lyrics_anger": "float64"
+    },
+    "MUSICBRAINZ_INFO": {
+        "artist_name": "str",
+        "mb_artist_country": "str",
+        "mb_artist_main_genre": "str",
+        "mb_artist_type": "str",
+        "mb_artist_career_begin": "date",
+        "mb_artist_career_end": "date",
+        "mb_artist_career_ended": "bool"
+    },
+    "WIKIPEDIA_INFO": {
+        "artist_name": "str",
         "wiki_nationality": "str"
     }
+
 }
