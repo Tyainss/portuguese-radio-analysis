@@ -86,8 +86,8 @@ class RadioMusicETL:
             columns=[self.ARTIST_NAME_COLUMN]
         )
         new_df = self._identify_unregistered_artists(
-            new_track_df=new_artist_df,
-            registered_tracks=already_extracted_df
+            new_artist_df=new_artist_df,
+            registered_artists=already_extracted_df
         )
         return new_df
 
@@ -99,7 +99,7 @@ class RadioMusicETL:
         )
 
         # Wikipedia Process
-        new_wiki_df = self._artist_process_helper(
+        new_wiki_df = await self._artist_process_helper(
             new_artist_df=combined_df_unique_artists,
             csv_path=self.config_manager.WIKIPEDIA_INFO_CSV_PATH,
             schema_path=self.config_manager.WIKIPEDIA_INFO_SCHEMA
@@ -118,7 +118,7 @@ class RadioMusicETL:
             ) 
 
         # MusicBrainz Process
-        new_mb_df = self._artist_process_helper(
+        new_mb_df = await self._artist_process_helper(
             new_artist_df=combined_df_unique_artists,
             csv_path=self.config_manager.MUSICBRAINZ_INFO_CSV_PATH,
             schema_path=self.config_manager.MUSICBRAINZ_INFO_SCHEMA
@@ -156,7 +156,7 @@ class RadioMusicETL:
         )
 
         # Spotify process
-        new_spotify_df = self._track_process_helper(
+        new_spotify_df = await self._track_process_helper(
             new_track_df=combined_df_unique_tracks,
             csv_path=self.config_manager.SPOTIFY_INFO_CSV_PATH,
             schema_path=self.config_manager.SPOTIFY_INFO_SCHEMA
@@ -175,7 +175,7 @@ class RadioMusicETL:
             )
 
         # Lyrics process
-        new_lyrics_df = self._track_process_helper(
+        new_lyrics_df = await self._track_process_helper(
             new_track_df=combined_df_unique_tracks,
             csv_path=self.config_manager.LYRICS_INFO_CSV_PATH,
             schema_path=self.config_manager.LYRICS_INFO_SCHEMA
@@ -196,7 +196,7 @@ class RadioMusicETL:
     async def tracks_transformation(self, scraped_df):
         """ Load and join Spotify and Lyrics track data"""
         join_columns = [self.ARTIST_NAME_COLUMN, self.TRACK_TITLE_COLUMN]
-        tracks_core = scraped_df.select(join_columns)
+        tracks_core = scraped_df.select(join_columns).unique()
         
         spotify_df = self.data_storage.read_csv(
             path=self.config_manager.SPOTIFY_INFO_CSV_PATH,
@@ -232,7 +232,7 @@ class RadioMusicETL:
     async def artists_transformation(self, scraped_df):
         """ Load and join MusicBrainz and Wikipedia artist data"""
         join_columns = [self.ARTIST_NAME_COLUMN]
-        artists_core = scraped_df.select(join_columns)
+        artists_core = scraped_df.select(join_columns).unique()
         
         musicbrainz_df = self.data_storage.read_csv(
             path=self.config_manager.MUSICBRAINZ_INFO_CSV_PATH,
@@ -355,15 +355,9 @@ if __name__ == "__main__":
     # })
 
     async def run_test():
-        await etl.run(scrape_radios=True , fetch_info=True, transform_data=True)
+        await etl.run(scrape_radios=False , fetch_info=False, transform_data=True)
         # await etl.transform_data(df)
 
     asyncio.run(run_test())
 
     # TODO
-    # Manually create raw API csv from already extracted information to avoid excess API calling!!!!
-
-    # STREAMLIT
-    # 1. Read track/artist with upper case, to keep naming consistent
-
-    # Check for duplicated scraped data
