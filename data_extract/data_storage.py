@@ -48,10 +48,27 @@ class DataStorage:
                           .alias(column)
                 )
             elif dtype == pl.Time:
+                # df = df.with_columns(
+                #         pl.col(column).cast(pl.Utf8)
+                #           .str.strptime(pl.Time, format="%H:%M", strict=False)
+                #           .alias(column)
+                # )
+                # Handle multiple time formats
                 df = df.with_columns(
+                    pl.when(
                         pl.col(column).cast(pl.Utf8)
-                          .str.strptime(pl.Time, format="%H:%M", strict=False)
-                          .alias(column)
+                            .str.strptime(pl.Time, format="%H:%M", strict=False)
+                            .is_not_null()
+                    )
+                    .then(
+                        pl.col(column).cast(pl.Utf8)
+                            .str.strptime(pl.Time, format="%H:%M", strict=False)
+                    )
+                    .otherwise(
+                        pl.col(column).cast(pl.Utf8)
+                            .str.strptime(pl.Time, format="%H:%M:%S", strict=False)
+                    )
+                    .alias(column)
                 )
             elif dtype == pl.Utf8:
                 # Fill nulls with empty string to match String dtype
@@ -98,6 +115,7 @@ class DataStorage:
         if schema:
             df = self._output_schema(df, schema)
         
+        print(f'Dataframe to output: \n {df}')
         if os.path.exists(path):
             try:
                 existing_df = self.read_csv(path=path, schema=schema)
