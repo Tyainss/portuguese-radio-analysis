@@ -257,6 +257,14 @@ class RadioMusicETL:
             on=join_columns,
         )
 
+        # Combine both MB and Wiki nationality columns into one
+        artist_info_df = artist_info_df.with_columns(
+            pl.when((pl.col('mb_artist_country').is_not_null()) & (~pl.col('mb_artist_country').is_in(['Unknown', ''])))
+            .then(pl.col('mb_artist_country'))
+            .otherwise(pl.col('wiki_nationality'))
+            .alias('combined_nationality')
+        )
+
         self.data_storage.output_csv(
             df=artist_info_df,
             path=self.config_manager.ARTIST_INFO_CSV_PATH,

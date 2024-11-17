@@ -42,7 +42,8 @@
         "mb_artist_career_begin": "date",
         "mb_artist_career_end": "date",
         "mb_artist_career_ended": "bool",
-        "wiki_nationality": "str"
+        "wiki_nationality": "str",
+        "combined_nationality": "str"
     },
     "SPOTIFY_INFO": {
         "track_title": "str",
