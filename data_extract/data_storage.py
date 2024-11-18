@@ -123,7 +123,7 @@ class DataStorage:
                 if mode == 'append':
                     df = pl.concat([existing_df, df])
                 elif mode == 'deduplicate_append':
-                    df = pl.concat([existing_df, df]).unique()
+                    df = pl.concat([existing_df, df]).unique().sort(df.columns[0])
                 elif mode == 'overwrite':
                     logger.info('Overwritting existing CSV with new data')
                 else:
