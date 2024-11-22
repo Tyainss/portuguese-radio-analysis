@@ -1,0 +1,19 @@
+[[pages]]
+name = "Dashboard"
+icon = ":bar_chart:"
+is_section = true
+
+[[pages]]
+name = "Overview Comparison"
+path = "pages/overview_comparison.py"
+icon = ":book:"
+
+[[pages]]
+name = "Radio Deep Dive"
+path = "pages/radio_deep_dive.py"
+icon = ":radio:"
+
+[[pages]]
+name = "Self Service"
+path = "pages/self_service.py"
+icon = ":construction_worker:"
