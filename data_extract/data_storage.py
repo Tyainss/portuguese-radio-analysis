@@ -2,11 +2,7 @@ import polars as pl
 import os
 from typing import Optional, Dict
 
-# Import the logging configuration
-from logger import setup_logging
-
-# Set up logging
-logger = setup_logging()
+from data_extract import logger
 
 class DataStorage:
     def __init__(self):

@@ -11,10 +11,7 @@ from wikipedia_api import WikipediaAPI
 from asynchronous_wikipedia_api import AsyncWikipediaAPI
 from lyrics import LyricsAnalyzer
 
-from logger import setup_logging
-
-# Set up logging
-logger = setup_logging()
+from data_extract import logger
 
 
 class RadioMusicETL:
@@ -355,7 +352,7 @@ if __name__ == "__main__":
     # })
 
     async def run_test():
-        await etl.run(scrape_radios=False , fetch_info=False, transform_data=True)
+        await etl.run(scrape_radios=True , fetch_info=True, transform_data=True)
         # await etl.transform_data(df)
 
     asyncio.run(run_test())

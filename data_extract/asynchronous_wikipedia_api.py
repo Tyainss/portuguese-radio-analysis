@@ -4,10 +4,8 @@ import aiohttp
 import asyncio
 
 from config_manager import ConfigManager
-from logger import setup_logging
 
-# Set up logging
-logger = setup_logging()
+from data_extract import logger
 
 class AsyncWikipediaAPI:
 
