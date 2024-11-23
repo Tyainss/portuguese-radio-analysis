@@ -1,0 +1,14 @@
+{
+    "CIDADE": {
+        "logo": "dashboard/logo/CidadeFM_logo.png",
+        "name": "CIDADE"
+    },
+    "COMERCIAL": {
+        "logo": "dashboard/logo/RadioComercial_logo.jpg",
+        "name": "Rádio Comercial"
+    },
+    "RFM": {
+        "logo": "dashboard/logo/RFM_logo.png",
+        "name": "RFM"
+    }
+}
