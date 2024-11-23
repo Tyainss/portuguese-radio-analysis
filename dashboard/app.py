@@ -1,7 +1,7 @@
 import polars as pl
 import streamlit as st
 
-from define_pages import define_pages
+from define_pages import define_pages, define_pages_2
 
 
 pg = define_pages()
