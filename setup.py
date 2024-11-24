@@ -14,7 +14,7 @@ setup(
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
     url='https://github.com/Tyainss/radio_song_analysis',
-    packages=find_packages(exclude=["venv*"]),  # Automatically finds Python packages in your project
+    packages=find_packages(exclude=["venv*"], include=['data_extract']),  # Automatically finds Python packages in your project
     # packages=find_packages(), 
     include_package_data=False,  # Ensures non-Python files are included
     install_requires=parse_requirements(),  # Install dependencies from requirements.txt
