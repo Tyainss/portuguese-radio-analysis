@@ -13,41 +13,25 @@ def load_data(path, schema = None):
     data = ds.read_csv(path, schema)
     return data
 
-def calculate_avg_tracks(df: pl.DataFrame) -> float:
-    total_tracks = df.height
-    unique_days = df.select(pl.col(cm.DAY_COLUMN).n_unique())[0, 0]
-    return round(total_tracks / unique_days, 2)
-
-def calculate_avg_hours(df: pl.DataFrame, output_unit: str = "hours") -> float:
-    total_duration_ms = df.select(pl.col('spotify_duration_ms').sum())[0, 0]
-    unique_days = df.select(pl.col(cm.DAY_COLUMN).n_unique())[0, 0]
-    avg_duration_ms = total_duration_ms / unique_days
-
+def _convert_ms(duration_ms, output_unit: str = 'hours') -> float:
     # Convert into the desired duration
     if output_unit == 'seconds':
-        return round(avg_duration_ms / 1000, 2)
+        res = round(duration_ms / 1000, 2)
     elif output_unit == 'minutes':
-        return round(avg_duration_ms / (1000 * 60), 2)
+        res = round(duration_ms / (1000 * 60), 2)
     elif output_unit == 'hours':
-        return round(avg_duration_ms / (1000 * 60 * 60), 2)
+        res = round(duration_ms / (1000 * 60 * 60), 2)
     else:
-        return round(avg_duration_ms, 2)
-    
-def calculate_avg_popularity(df: pl.DataFrame) -> float:
-    avg = df.select(pl.col('spotify_popularity').mean())[0, 0]
-    return round(avg, 2)
+        res = round(duration_ms, 2)
+    return res
 
-
-import polars as pl
-import plotly.express as px
-
-def prepare_hourly_metrics(df: pl.DataFrame, metric: str) -> pl.DataFrame:
+def prepare_hourly_metrics(df: pl.DataFrame, metric: str, **kwargs) -> pl.DataFrame:
     """
     Prepares hourly metrics for plotting.
 
     Args:
         df: Polars DataFrame with 'time' and the relevant columns.
-        metric: One of 'avg_tracks', 'avg_hours_played', or 'avg_popularity'.
+        metric: One of 'avg_tracks', 'avg_time_played', or 'avg_popularity'.
 
     Returns:
         A Polars DataFrame with 'hour' and the calculated metric.
@@ -63,12 +47,23 @@ def prepare_hourly_metrics(df: pl.DataFrame, metric: str) -> pl.DataFrame:
     if metric == "avg_tracks":
         hourly_data = (
             df.group_by("hour")
-            .agg(pl.col(cm.DAY_COLUMN).n_unique().alias("unique_days"))
+            .agg(
+                pl.col(cm.DAY_COLUMN).n_unique().alias("unique_days"),
+                pl.col(cm.DAY_COLUMN).count().alias("tracks"),
+            )
             .with_columns(
-                (df.height / pl.col("unique_days")).alias("avg_tracks")
+                (pl.col("tracks") / pl.col('unique_days')).alias("avg_tracks"),
             )
         )
-    elif metric == "avg_hours_played":
+    elif metric == "avg_time_played":
+        output_unit = kwargs.get('output_unit', 'hours')
+        conversion_factor = {
+            'milliseconds': 1,
+            'seconds': 1 / 1000,
+            'minutes': 1 / (1000 * 60),
+            'hours': 1 / (1000 * 60 * 60)
+        }.get(output_unit, 1)
+
         hourly_data = (
             df.group_by("hour")
             .agg(
@@ -76,7 +71,8 @@ def prepare_hourly_metrics(df: pl.DataFrame, metric: str) -> pl.DataFrame:
                 pl.col(cm.DAY_COLUMN).n_unique().alias("unique_days")
             )
             .with_columns(
-                (pl.col("total_duration_ms") / pl.col("unique_days") / (1000 * 60 * 60)).alias("avg_hours_played")
+                ((pl.col("total_duration_ms") / pl.col("unique_days")) * conversion_factor)
+                .alias("avg_time_played")
             )
         )
     elif metric == "avg_popularity":
@@ -88,7 +84,38 @@ def prepare_hourly_metrics(df: pl.DataFrame, metric: str) -> pl.DataFrame:
         raise ValueError(f"Invalid metric: {metric}")
     
     # Return the selected metric
-    return hourly_data.select(["hour", metric])
+    result = hourly_data.select(["hour", metric]).sort('hour', descending=False)
+    # result = hourly_data
+    return result
+
+
+def calculate_avg_tracks(df: pl.DataFrame, adjusted_calc=True) -> float:
+    total_tracks = df.height
+    if not adjusted_calc:
+        unique_days = df.select(pl.col(cm.DAY_COLUMN).n_unique())[0, 0]
+        avg_tracks = total_tracks / unique_days
+    else:
+        hourly_data = prepare_hourly_metrics(df, metric='avg_tracks')
+        avg_tracks = hourly_data.select(pl.col('avg_tracks').sum())[0,0]
+
+    return round(avg_tracks, 2)
+
+def calculate_avg_time(df: pl.DataFrame, output_unit: str = "hours", adjusted_calc=True) -> float:
+    if not adjusted_calc:
+        total_duration_ms = df.select(pl.col('spotify_duration_ms').sum())[0, 0]
+        unique_days = df.select(pl.col(cm.DAY_COLUMN).n_unique())[0, 0]
+        avg_duration_ms = total_duration_ms / unique_days
+        avg_time = _convert_ms(avg_duration_ms, output_unit=output_unit)
+    else:
+        hourly_data = prepare_hourly_metrics(df, metric='avg_time_played', kwargs=output_unit)
+        avg_time = hourly_data.select(pl.col('avg_time_played').sum())[0, 0]
+
+    return round(avg_time, 2)
+    
+    
+def calculate_avg_popularity(df: pl.DataFrame) -> float:
+    avg = df.select(pl.col('spotify_popularity').mean())[0, 0]
+    return round(avg, 2)
 
 
 def plot_hourly_metrics(df: pl.DataFrame, metric: str):
@@ -157,18 +184,19 @@ for i, (key, val) in enumerate(app_config.items()):
         kpi_1, kpi_2, kpi_3 = st.columns(3)
         kpi_1.metric(
             label='# Avg Tracks per Day',
-            value=calculate_avg_tracks(df=radio_df)
+            value=calculate_avg_tracks(df=radio_df) # Need to revise this metric due data issues - Not all dates have complete information
+            # Do an average of the hourly avg
         )
         kpi_2.metric(
             label='Avg Hours Played',
-            value=calculate_avg_hours(df=radio_df, output_unit='hours')
+            value=calculate_avg_time(df=radio_df, output_unit='hours')
         )
         kpi_3.metric(
             label='Avg Popularity',
             value=calculate_avg_popularity(df=radio_df)
         )
 
-        hourly_data = prepare_hourly_metrics(radio_df, metric='avg_tracks')
+        hourly_data = prepare_hourly_metrics(radio_df, metric='avg_time_played')
         st.write(hourly_data)
         # st.write(plot_hourly_metrics(hourly_data, metric='avg_tracks'))
         st.write(radio_df)
