@@ -1,6 +1,6 @@
 import polars as pl
 import os
-from typing import Optional, Dict
+from typing import Optional, Dict, List
 
 from data_extract import logger
 
@@ -96,7 +96,8 @@ class DataStorage:
             path: str, 
             df: pl.DataFrame, 
             schema: Optional[Dict[str, pl.DataType]] = None, 
-            mode: str = 'append'
+            mode: str = 'append',
+            sort_keys: Optional[List[str]] = None,
         ) -> None:
         logger.info(f'Outputting CSV to: {path}')
         
@@ -120,6 +121,8 @@ class DataStorage:
                     df = pl.concat([existing_df, df])
                 elif mode == 'deduplicate_append':
                     df = pl.concat([existing_df, df]).unique().sort(df.columns[0])
+                    if sort_keys:
+                        df = df.sort(sort_keys)
                 elif mode == 'overwrite':
                     logger.info('Overwritting existing CSV with new data')
                 else:
