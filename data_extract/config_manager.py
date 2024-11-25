@@ -2,10 +2,7 @@ import json
 import polars as pl
 from typing import Dict
 
-from logger import setup_logging
-
-# Set up logging
-logger = setup_logging()
+from data_extract import logger
 
 
 class ConfigManager:

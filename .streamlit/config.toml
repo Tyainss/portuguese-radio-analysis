@@ -3,3 +3,4 @@ runOnSave = true
 
 [theme]
 base="dark"
+layout="wide"

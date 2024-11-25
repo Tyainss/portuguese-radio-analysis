@@ -11,10 +11,7 @@ from wikipedia_api import WikipediaAPI
 from asynchronous_wikipedia_api import AsyncWikipediaAPI
 from lyrics import LyricsAnalyzer
 
-from logger import setup_logging
-
-# Set up logging
-logger = setup_logging()
+from data_extract import logger
 
 
 class RadioMusicETL:
@@ -226,6 +223,7 @@ class RadioMusicETL:
             path=self.config_manager.TRACK_INFO_CSV_PATH,
             schema=self.config_manager.TRACK_INFO_SCHEMA,
             mode='deduplicate_append',
+            sort_keys=[self.ARTIST_NAME_COLUMN, self.TRACK_TITLE_COLUMN], 
         )
         print('Saved track dataframe: \n', track_info_df)
 
@@ -325,12 +323,14 @@ class RadioMusicETL:
             pl.col(self.TRACK_TITLE_COLUMN).str.to_titlecase(),
             pl.col(self.ARTIST_NAME_COLUMN).str.to_titlecase(),
         )
+        
         print(scraped_df)
         self.data_storage.output_csv(
             df=scraped_df,
             path=self.config_manager.RADIO_CSV_PATH,
             schema=self.config_manager.RADIO_SCRAPPER_SCHEMA,
             mode='deduplicate_append',
+            sort_keys=[self.config_manager.RADIO_COLUMN, self.config_manager.DAY_COLUMN, self.config_manager.TIME_PLAYED_COLUMN], 
         )
 
         # Load all raw files from APIs
@@ -355,7 +355,7 @@ if __name__ == "__main__":
     # })
 
     async def run_test():
-        await etl.run(scrape_radios=False , fetch_info=False, transform_data=True)
+        await etl.run(scrape_radios=True , fetch_info=True, transform_data=True)
         # await etl.transform_data(df)
 
     asyncio.run(run_test())
