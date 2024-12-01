@@ -106,7 +106,29 @@ class AsyncSpotifyAPI:
             genres = artist_info.get('genres', [])
             
             # Fetch audio features for the track
-            audio_features = await self._make_request(f'audio-features/{track_id}')
+            # on 27/11/2024 Spotify changed their API to remove access to audio features
+            # the approach below tries to still access the audio features, in case they rollback their decision
+            try:
+                audio_features = await self._make_request(f'audio-features/{track_id}')
+            except Exception as e:
+                # Check if the error is '403 Forbidden'
+                if '403' in str(e):
+                    print(f"403 Forbidden error for audio-features/{track_id}. Setting default values.")
+                    audio_features = {
+                        'danceability': None,
+                        'energy': None,
+                        'valence': None,
+                        'acousticness': None,
+                        'instrumentalness': None,
+                        'liveness': None,
+                        'speechiness': None,
+                        'tempo': None,
+                        'mode': None,
+                        'loudness': None,
+                        'time_signature': None
+                    }
+            else:
+                raise
             
             # Build the track info dictionary
             track_info = {
