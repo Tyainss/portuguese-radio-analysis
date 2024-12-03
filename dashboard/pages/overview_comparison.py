@@ -15,15 +15,14 @@ def load_data(path, schema = None):
 
 def _convert_ms(duration_ms, output_unit: str = 'hours') -> float:
     # Convert into the desired duration
-    if output_unit == 'seconds':
-        res = round(duration_ms / 1000, 2)
-    elif output_unit == 'minutes':
-        res = round(duration_ms / (1000 * 60), 2)
-    elif output_unit == 'hours':
-        res = round(duration_ms / (1000 * 60 * 60), 2)
-    else:
-        res = round(duration_ms, 2)
-    return res
+    conversion_factors = {
+        'milliseconds': 1,
+        'seconds': 1 / 1000,
+        'minutes': 1 / (1000 * 60),
+        'hours': 1 / (1000 * 60 * 60)
+    }
+    factor = conversion_factors.get(output_unit, 1)
+    return round(duration_ms * factor, 2)
 
 def prepare_hourly_metrics(df: pl.DataFrame, metric: str, **kwargs) -> pl.DataFrame:
     """
