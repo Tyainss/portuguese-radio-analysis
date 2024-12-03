@@ -2,6 +2,7 @@ artist_name,mb_artist_country,mb_artist_main_genre,mb_artist_type,mb_artist_care
 "",Unknown,special purpose artist,Other,,,false,Unknown,Unknown
  ,Unknown,special purpose artist,Other,,,false,Unknown,Unknown
 10 Cc,United Kingdom,pop rock,Group,1972-01-01,,false,Unknown,United Kingdom
+116 Feat. Crystal Nicole,United States,"",Person,1983-11-10,,false,Unknown,United States
 21 Savage,United States,hip hop,Person,1992-10-22,,false,United States of America,United States
 24kgoldn,United States,hip hop,Person,2000-11-13,,false,United States of America,United States
 3 Doors Down,United States,alternative rock,Group,1996-01-01,,false,Unknown,United States
@@ -17,6 +18,7 @@ Addison Rae,United States,pop,Person,2000-10-06,,false,United States of America,
 Adele,United Kingdom,pop,Person,1988-05-05,,false,United Kingdom,United Kingdom
 Adriana Calcanhoto,Brazil,1990s,Person,1965-10-03,,false,Brazil,Brazil
 Adriana Calcanhotto,Brazil,1990s,Person,1965-10-03,,false,Brazil,Brazil
+Aespa,"Korea, Republic of",k-pop,Group,2020-10-25,,false,Unknown,"Korea, Republic of"
 Afonso Dubraz,Portugal,singer-songwriter,Person,1929-08-02,1987-02-23,true,Unknown,Portugal
 Agir,Portugal,hip hop,Person,,,false,Unknown,Portugal
 Agroplay,"","","",,,,Mexico,Mexico
@@ -61,11 +63,13 @@ Anita Baker,United States,jazz,Person,1929-12-23,1988-05-13,true,United States o
 Anitta,Brazil,funk,Person,1993-03-30,,false,Brazil,Brazil
 Anitta ,Brazil,funk,Person,1993-03-30,,false,Brazil,Brazil
 "Anjos, Nuno Ribeiro",Portugal,"",Person,,,false,Portugal,Portugal
+Anna Kendrick,United States,hip hop,Person,1987-06-17,,false,United States of America,United States
 Anna Nalick,United States,pop rock,Person,1984-03-30,,false,United States of America,United States
 Anne-Marie Feat. Shania Twain,Canada,country,Person,1965-08-28,,false,Unknown,Canada
 Annie Lennox,United Kingdom,pop,Person,1954-12-25,,false,United Kingdom,United Kingdom
 Antonio José Ft. Diogo Piçarra,Portugal,"",Person,1990-10-19,,false,Unknown,Portugal
 António Zambujo,Portugal,ballade,Person,1975-09-19,,false,Portugal,Portugal
+April Ivy,United States,"",Group,1994-01-01,,false,Portugal,United States
 Aragão,Brazil,mpb,Person,1949-01-03,,false,Brazil,Brazil
 Arctic Monkeys,United Kingdom,indie rock,Group,2002-01-01,,false,Unknown,United Kingdom
 Ariana Grande,United States,pop,Person,1993-06-26,,false,United States of America,United States
@@ -93,6 +97,7 @@ Bad Bunny ,Puerto Rico,latin trap,Person,1994-03-10,,false,United States of Amer
 Bad Bunny & Jhay Cortez,Puerto Rico,reggaeton,Person,1993-04-09,,false,Unknown,Puerto Rico
 Ban,Portugal,"",Group,1981-01-01,,true,Unknown,Portugal
 Band Aid,Unknown,british,Group,1984-01-01,1984-01-01,true,Unknown,Unknown
+Band Aid 40,United Kingdom,reggae,Group,1978-01-01,,false,Unknown,United Kingdom
 Bandidos Do Cante,Unknown,special purpose artist,Other,,,false,Unknown,Unknown
 Barbara Bandeira,Portugal,"",Person,,,false,Portugal,Portugal
 Barbara Bandeira Feat. Dillaz,Unknown,hip hop,Person,1991-05-04,,false,Unknown,Unknown
@@ -146,6 +151,7 @@ Bizarrap,Argentina,pop,Person,1998-01-01,,false,Argentina,Argentina
 Bizarrap & Quevedo,Unknown,latin trap,Person,2001-12-07,,false,Argentina,Argentina
 Bizarrap & Shakira,Colombia,pop,Person,1977-02-02,,false,Unknown,Colombia
 Bl3ss & Camrinwatsin Feat. Bbyclose,Unknown,"","",2022-01-01,,false,Unknown,Unknown
+Black,United Kingdom,heavy metal,Group,1968-09-01,2017-03-07,true,Unknown,United Kingdom
 Black Eyed Peas,United States,hip hop,Group,1995-01-01,,false,Unknown,United States
 Black Eyed Peas X J. Balvin,United States,hip hop,Group,1995-01-01,,false,Unknown,United States
 Black Eyed Peas X Ozuna X J. Rey Soul,United States,hip hop,Group,1995-01-01,,false,Unknown,United States
@@ -157,12 +163,14 @@ Bluay X Julinho Ksd,Portugal,"",Person,,,false,Unknown,Portugal
 "Bluay, Julinho Ksd",Portugal,"",Person,,,false,Unknown,Portugal
 "Blue, Elton John",United Kingdom,pop,Person,1947-03-25,,false,Unknown,United Kingdom
 Bob Sinclar,France,electro house,Person,1967-05-10,,false,France,France
+Bobby Helms,United States,2008 universal fire victim,Person,1933-08-15,1997-06-19,true,United States of America,United States
 Bon Jovi,United States,hard rock,Group,1983-01-01,,false,Unknown,United States
 Bonnie Tyler,United Kingdom,pop rock,Person,1951-06-08,,false,United Kingdom,United Kingdom
 Boyz Ii Men,United States,pop,Group,1988-01-01,,false,Unknown,United States
 Boyzone,Ireland,pop,Group,1993-01-01,,false,Unknown,Ireland
 Brandi Carlile,United States,country,Person,1981-06-01,,false,United States of America,United States
 "Brandi Carlile, Sam Smith",United States,country,Person,1981-06-01,,false,United States of America,United States
+Brandy,United States,pop,Person,1979-02-11,,false,Unknown,United States
 Branko,Unknown,"",Person,,,false,Unknown,Unknown
 Branko Feat. July 7,Unknown,"",Group,,,false,Unknown,Unknown
 Britney Spears,United States,pop,Person,1981-12-02,,false,United States of America,United States
@@ -228,9 +236,11 @@ Casper Magico ,Puerto Rico,latin,Person,1989-06-21,,false,Unknown,Puerto Rico
 Casso X Raye X D-Block Europe,United Kingdom,"",Group,,,false,Unknown,United Kingdom
 Catarina Castanhas,Sweden,soprano,Person,1937-10-18,,false,Unknown,Sweden
 Catarina Filipe,Brazil,"",Person,1987-09-26,,false,Brazil,Brazil
+Celine Dion,Canada,pop,Person,1968-03-30,,false,Canada,Canada
 Century,France,aor,Group,1985-01-01,1989-01-01,true,Unknown,France
 Champaign,United States,r&b,Group,1981-01-01,,false,Unknown,United States
 Chappel Roan,Unknown,"",Person,,,false,United States of America,United States of America
+Chappel Roan ,Unknown,"",Person,,,false,United States of America,United States of America
 Chappell Roan,United States,queer,Person,1998-02-19,,false,United States of America,United States
 Charli Xcx,Unknown,electropop,Person,1992-08-02,,false,United Kingdom,United Kingdom
 Charli Xcx Feat. Billie Eilish,United States,alternative pop,Person,2001-12-18,,false,Unknown,United States
@@ -271,6 +281,7 @@ Craig David,Unknown,art rock,Person,1947-01-08,2016-01-10,true,United Kingdom,Un
 "Craig David, Sting",Unknown,pop,Person,1951-10-02,,false,Unknown,Unknown
 Creed,United States,alternative rock,Group,1995-01-01,,false,Unknown,United States
 Crowded House,Australia,alternative rock,Group,1985-01-01,,false,Unknown,Australia
+Cuca Roseta,Portugal,"",Person,1982-01-01,,false,Portugal,Portugal
 Cyndi Lauper,United States,pop,Person,1953-06-22,,false,United States of America,United States
 Cyril,France,"",Person,1962-01-01,,false,Unknown,France
 Cyril & Maryjo,Unknown,"",Person,,,false,Unknown,Unknown
@@ -310,6 +321,7 @@ David Guetta,France,house,Person,1967-11-07,,false,France,France
 David Guetta & Bebe Rexha,United States,pop,Person,1989-08-30,,false,Unknown,United States
 David Guetta + Onerepublic,United States,pop,Group,2004-01-01,,false,Unknown,United States
 David Guetta X Girl On Couch X Billen Ted,Unknown,"",Group,,,false,Unknown,Unknown
+"David Guetta, Alphaville & Ava Max",Germany,synth-pop,Group,1983-01-01,,false,Unknown,Germany
 "David Guetta, Anne-Marie, Coi Leray",United States,pop rap,Person,1997-05-11,,false,United States of America,United States
 "David Guetta, Bebe Rexha",United States,pop,Person,1989-08-30,,false,Unknown,United States
 "David Guetta, Kelly Rowland",United States,contemporary r&b,Person,1981-02-11,,false,Unknown,United States
@@ -327,8 +339,10 @@ Demi Lovato,United States,pop,Person,1992-08-20,,false,United States of America,
 "Dengaz, Seu Jorge",Brazil,brazilian,Person,1970-06-08,,false,Unknown,Brazil
 Dennis,Jamaica,reggae,Person,1957-02-01,1999-07-01,true,Unknown,Jamaica
 Dennis X Mc Kevin O Chris,Unknown,fixme,Person,2000-02-22,,false,Unknown,Unknown
+Depresno,Norway,norwegian,Person,,,false,Norway,Norway
 Dermot Kennedy,Ireland,pop,Person,1991-12-13,,false,Ireland,Ireland
 Destiny'S Child,United States,pop,Group,1990-01-01,2006-01-01,true,Unknown,United States
+Destinys Child,Unknown,has german audiobooks,Person,,,false,Unknown,Unknown
 Diana Castro,Portugal,"",Person,,,false,United States of America,Portugal
 Diana Krall,Canada,jazz,Person,1964-11-16,,false,Canada,Canada
 Diana Lima,Germany,"",Person,,,false,Unknown,Germany
@@ -372,6 +386,7 @@ Elas,Portugal,"",Group,2019-09-29,2020-06-07,true,Unknown,Portugal
 Eliza Rose & Calvin Harris,Unknown,dance-pop,Person,1984-01-17,,false,United Kingdom,United Kingdom
 Ella Henderson,United Kingdom,pop,Person,1996-01-12,,false,United Kingdom,United Kingdom
 Ella Henderson Feat. Rudimental,United Kingdom,drum and bass,Group,2010-01-01,,false,Unknown,United Kingdom
+Ella Henderson X Aj Mitchell,United States,alternative r&b,Person,2001-05-17,,false,United Kingdom,United States
 Ella Mai,United Kingdom,pop,Person,1994-11-03,,false,United Kingdom,United Kingdom
 Ellie Goulding,United Kingdom,electropop,Person,1986-12-30,,false,United Kingdom,United Kingdom
 Elton John,United Kingdom,pop,Person,1947-03-25,,false,United Kingdom,United Kingdom
@@ -471,7 +486,9 @@ Green Day,United States,punk rock,Group,1989-01-01,,false,Unknown,United States
 Grelo,Unknown,"",Person,,,false,Canada,Canada
 Grelo ,Unknown,"",Person,,,false,Canada,Canada
 Guga,Brazil,"",Person,,,false,Unknown,Brazil
+Gui Aly,Portugal,"",Person,2001-03-22,,false,Unknown,Portugal
 Gwen Stefani,United States,pop,Person,1969-10-03,,false,United States of America,United States
+Gwen Stefani Feat. Blake Shelton,United States,country,Person,1976-06-18,,false,Unknown,United States
 "Gwen Stefani, Akon",Senegal,hip hop,Person,1973-04-16,,false,Unknown,Senegal
 Gym Class Heroes [+] Patrick Stump,United States,hip hop,Group,1997-01-01,2019-01-01,true,Unknown,United States
 H.E.R.,United States,alternative r&b,Person,1997-06-27,,false,United States of America,United States
@@ -496,6 +513,7 @@ Imagine Dragons,United States,alternative rock,Group,2008-01-01,,false,Unknown,U
 "Imagine Dragons, Baker Boy",United States,alternative rock,Group,2008-01-01,,false,Unknown,United States
 "Imagine Dragons, Elisa [It]",United States,alternative rock,Group,2008-01-01,,false,Unknown,United States
 India.Arie,United States,acoustic,Person,1975-10-03,,false,United States of America,United States
+"Ingrid Michaelson, Jason Mraz",United States,pop rock,Person,1977-06-23,,false,United States of America,United States
 Instinto 26,Portugal,"",Group,,,false,Unknown,Portugal
 Instinto 26 & Ivandro,Portugal,"",Person,1998-07-26,,false,Unknown,Portugal
 Internet Money,Unknown,emo rap,Group,,,false,Unknown,Unknown
@@ -554,6 +572,7 @@ Jaymes Young,Canada,folk rock,Person,1945-11-12,,false,United States of America,
 Jeff Buckley,United States,alternative rock,Person,1966-11-17,1997-05-29,true,United States of America,United States
 Jennie,"Korea, Republic of",k-pop,Person,1996-01-16,,false,Unknown,"Korea, Republic of"
 Jennifer Lopez,United States,pop,Person,1969-07-24,,false,United States of America,United States
+Jess Glynne,United Kingdom,dance-pop,Person,1989-10-20,,false,United Kingdom,United Kingdom
 Jessie J,United Kingdom,author,Person,1965-07-31,,false,United Kingdom,United Kingdom
 "Jessie Murph, Teddy Swims",United States,alternative rock,Person,1992-09-25,,false,Unknown,United States
 Jessie Ware,United Kingdom,contemporary r&b,Person,1984-10-15,,false,United Kingdom,United Kingdom
@@ -574,6 +593,8 @@ John Mayer,United States,acoustic rock,Person,1977-10-16,,false,United States of
 Johnny Cash,United States,country,Person,1932-02-26,2003-09-12,true,United States of America,United States
 Joji,United States,ballad,Person,1992-09-18,,false,Japan,United States
 Jojo,United States,jojo,Person,1990-12-20,,false,United States of America,United States
+Jojo Feat. Pj Morton,United States,soul,Person,1981-03-29,,false,United States of America,United States
+Jon Bon Jovi,United States,hard rock,Group,1983-01-01,,false,United States of America,United States
 "Jonas Blue, Dakota",Germany,"",Person,,,false,England,Germany
 "Jonas Blue, Jp Cooper",United Kingdom,funk,Person,1981-11-01,,false,Unknown,United Kingdom
 Jonas Brothers,United States,teen pop,Group,2005-01-01,,false,Unknown,United States
@@ -619,6 +640,7 @@ Karol G ,Germany,schlager,Person,1949-12-04,,false,Colombia,Germany
 Karol G.,Germany,schlager,Person,1949-12-04,,false,Colombia,Germany
 Karol G. X Nicki Minaj,United States,hip hop,Person,1982-12-08,,false,Unknown,United States
 "Karol G., Feid, Dfzm, Ovy On The Drums, J Balvin, Maluma, Blessed & Ryan Castro",Colombia,latin,Person,,,false,Unknown,Colombia
+Kaskade Feat. Erika,United States,southern rock,Group,1969-01-01,,false,Israel,United States
 Kate Bush,Unknown,art pop,Person,1958-07-30,,false,United Kingdom,United Kingdom
 Kate Hudson,United States,acoustic blues,Person,1904-01-08,1981-03-19,true,United States of America,United States
 Kate Winslet,United Kingdom,actor,Person,1975-10-05,,false,United Kingdom,United Kingdom
@@ -629,6 +651,8 @@ Kc & The Sunshine Band,United States,dance-pop,Group,1973-01-01,,false,Unknown,U
 Keane,United Kingdom,alternative rock,Group,1995-01-01,,false,Unknown,United Kingdom
 Kehlani,United States,alternative r&b,Person,1995-04-24,,false,United States of America,United States
 Kelly Clarkson,United States,pop,Person,1982-04-24,,false,United States of America,United States
+Kelly Clarkson Feat Arianna Grande,United States,pop,Person,1982-04-24,,false,United States of America,United States
+Kelly Rowland,United States,contemporary r&b,Person,1981-02-11,,false,United States of America,United States
 "Kelsea Ballerini, Noah Kahan",United States,folk pop,Person,1997-01-01,,false,Unknown,United States
 Kendrick Lamar,United States,hip hop,Person,1987-06-17,,false,United States of America,United States
 Kenya Grace,United Kingdom,pop,Person,,,false,United Kingdom,United Kingdom
@@ -680,6 +704,7 @@ Leonor Arroja,Brazil,"",Person,,,false,Unknown,Brazil
 Leslie Odom Jr.,United States,"",Person,1981-08-06,,false,United States of America,United States
 Lewis Capaldi,United Kingdom,pop,Person,1996-10-17,,false,United Kingdom,United Kingdom
 Liam Payne,Unknown,death by fall,Person,1993-08-29,2024-10-16,true,United Kingdom,United Kingdom
+Liam Payne & Dixie Damelio,United States,pop,Person,2001-08-12,,false,United States of America,United States
 Liam Payne Feat. Quavo,United States,hip hop,Person,1991-04-02,,false,Unknown,United States
 Lifehouse,United States,alternative rock,Group,1996-01-01,,false,Unknown,United States
 Lighthouse Family,United Kingdom,pop,Group,1993-01-01,,false,Unknown,United Kingdom
@@ -696,6 +721,7 @@ Lionel Richie,United States,contemporary r&b,Person,1949-06-20,,false,United Sta
 Liquideep,Unknown,house,Group,,,false,Unknown,Unknown
 Lisa,Japan,anime,Person,1987-06-24,,false,Unknown,Japan
 Lisa [Th],United Kingdom,rock,Group,1977-01-01,1995-01-01,true,Thailand,United Kingdom
+Little Mix,United Kingdom,pop,Group,2011-08-01,,false,Unknown,United Kingdom
 Lizzo,United States,hip hop,Person,1988-04-27,,false,United States of America,United States
 Ll Cool J Feat. Eminem,United States,hip hop,Person,1972-10-17,,false,Unknown,United States
 "Lmfao, Lauren Bennett , Goonrock",United States,"",Person,1975-04-18,,false,United Kingdom,United States
@@ -735,10 +761,12 @@ Mafalda Veiga,Portugal,folk,Person,1965-12-24,,false,Portugal,Portugal
 Magic!,Japan,synthpop,Group,1978-01-01,,false,United States of America,Japan
 Major Lazer,Jamaica,dancehall,Group,2008-01-01,,false,Unknown,Jamaica
 Maluma,Colombia,reggaeton,Person,1994-01-28,,false,Colombia,Colombia
+Maluma ,Colombia,reggaeton,Person,1994-01-28,,false,Colombia,Colombia
 Maneskin,Italy,pop rock,Group,2016-01-01,,false,Unknown,Italy
 Maninho,Unknown,"","",,,false,Mozambique,Mozambique
 "Maninho, Marisa Liz",Portugal,"",Person,1982-01-01,,false,Unknown,Portugal
 Manuel Turizo,Colombia,latin,Person,2000-04-12,,false,Colombia,Colombia
+Mar,Germany,"",Person,1966-01-01,,false,Unknown,Germany
 Mariah Carey,United States,pop,Person,1969-03-27,,false,United States of America,United States
 Mariana Pereira,Brazil,film score composer,Person,1957-11-29,,false,Portugal,Brazil
 Mario,United States,"",Person,1921-01-31,1959-10-07,true,Mushroom Kingdom,United States
@@ -769,6 +797,7 @@ Matias Damásio,Angola,kizomba,Person,1982-05-09,,false,Angola,Angola
 "Matias Damásio, D.A.M.A.",Angola,kizomba,Person,1982-05-09,,false,Unknown,Angola
 "Matias Damásio, Heber",Angola,kizomba,Person,1982-05-09,,false,Angola,Angola
 Matt Simons,United States,"",Person,1987-02-20,,false,United States of America,United States
+Matt Terry,Unknown,audio drama,Person,1948-04-28,2015-03-12,true,United Kingdom,United Kingdom
 Matue,Brazil,hip hop,Person,1993-10-11,,false,Brazil,Brazil
 Matue & Veigh,Brazil,hip hop,Person,2001-09-12,,false,Unknown,Brazil
 Matue Feat. Rich The Kid,United States,hip hop,Person,1992-07-13,,false,Brazil,United States
@@ -778,6 +807,7 @@ Mc Daniel,Argentina,conductor,Person,1942-11-15,,false,United States of America,
 Mc Davi,Unknown,"",Person,,,false,Brazil,Brazil
 Mc Livinho,Brazil,"",Person,1994-11-11,,false,Brazil,Brazil
 Mc Livinho & Dj Matt D,Brazil,"",Person,1994-11-11,,false,Unknown,Brazil
+"Mc Menor Jp, Ramonmix & The Ironix",Unknown,"","",,,false,Unknown,Unknown
 Mc Tuto,Unknown,"","",,,false,Unknown,Unknown
 Mc Tuto & Dj G,Unknown,"","",,,false,Unknown,Unknown
 Mc Zaac,Greece,"",Person,,,false,Unknown,Greece
@@ -793,9 +823,11 @@ Metro Boomin Feat. The Weeknd & 21 Savage,Canada,r&b,Person,1990-02-16,,false,Un
 "Metro Boomin, The Weeknd & 21 Savage",Canada,r&b,Person,1990-02-16,,false,Unknown,Canada
 "Metro Boomin, The Weeknd, 21 Savage",Canada,r&b,Person,1990-02-16,,false,Unknown,Canada
 "Metro Boomin, The Weeknd, 21 Savage ",Canada,r&b,Person,1990-02-16,,false,Unknown,Canada
+Mia Jo,Norway,has german audiobooks,Person,1960-03-29,,false,Canada,Norway
 Mia Rose,United States,"",Person,,,false,Portugal,United States
 Michael Bolton,United States,pop,Person,1953-02-26,,false,United States of America,United States
 Michael Buble,Canada,jazz,Person,1975-09-09,,false,Canada,Canada
+Michael Bublã‰,United States,pop,Person,1958-08-29,2009-06-25,true,Unknown,United States
 Michael Bublé,Canada,jazz,Person,1975-09-09,,false,Canada,Canada
 Michael Jackson,United States,pop,Person,1958-08-29,2009-06-25,true,United States of America,United States
 Michael Kiwanuka,United Kingdom,soul,Person,1987-05-03,,false,United Kingdom,United Kingdom
@@ -850,6 +882,7 @@ Murta Feat Jura,United States,southern rock,Group,1969-01-01,,false,Unknown,Unit
 Murta Feat. Jura,United States,southern rock,Group,1969-01-01,,false,Unknown,United States
 "Murta, Jüra",Portugal,"",Person,,,false,Unknown,Portugal
 Muse,United Kingdom,alternative rock,Group,1994-01-01,,false,Unknown,United Kingdom
+Musica De Natal Rc - 2022,Japan,likedis auto,Group,1969-01-01,1991-01-01,true,Unknown,Japan
 Musiq Soulchild,United States,contemporary r&b,Person,1977-09-16,,false,United States of America,United States
 Myke Towers,Puerto Rico,latin,Person,1994-01-15,,false,United States of America,Puerto Rico
 Myke Towers Feat. Benny Blanco,United States,pop,Person,1988-03-08,,false,United States of America,United States
@@ -861,6 +894,7 @@ Música De Natal - 2019,Unknown,special purpose artist,Other,,,false,Brazil,Braz
 Música De Natal - 2021,Unknown,special purpose artist,Other,,,false,Brazil,Brazil
 Música De Natal - 2022,Unknown,special purpose artist,Other,,,false,Brazil,Brazil
 Música De Natal - 2023,Unknown,special purpose artist,Other,,,false,Brazil,Brazil
+"Música De Natal - 2024, Vasco Palmeirim",Unknown,"","",,,false,Unknown,Unknown
 Naill Horan,Ireland,pop,Person,1993-09-13,,false,Unknown,Ireland
 Natasha Bedingfield,United Kingdom,pop,Person,1981-11-26,,false,United Kingdom,United Kingdom
 Natiruts [+] Monica Ferraz,Portugal,"",Person,1980-03-23,,false,Unknown,Portugal
@@ -926,6 +960,7 @@ Pabllo Vittar & Duda Beat,Brazil,drag queen,Person,1994-11-01,,false,Unknown,Bra
 Pablo Alborán,Spain,pop,Person,1989-05-31,,false,Spain,Spain
 "Pablo Alborán, Carminho",Spain,pop,Person,1989-05-31,,false,Unknown,Spain
 "Pablo Alborán, Maria Becerra",Spain,pop,Person,1989-05-31,,false,Spain,Spain
+Paloma Faith & Gregory Porter,United States,jazz,Person,1971-11-04,,false,Unknown,United States
 Panic! At The Disco,United States,pop punk,Group,2004-01-01,2023-03-10,true,Unknown,United States
 Papillon ,Canada,"",Person,1969-01-01,,false,Unknown,Canada
 Paramore,United States,pop rock,Group,2004-01-01,,false,Unknown,United States
@@ -960,6 +995,7 @@ Phil Collins,United Kingdom,soft rock,Person,1951-01-30,,false,United Kingdom,Un
 Pikika,Portugal,"",Person,,,false,Unknown,Portugal
 Pink,Unknown,progressive rock,Group,1965-01-01,2014-01-01,true,Unknown,Unknown
 Pink & Willow Sage Heart,United States,rock,Group,1973-01-01,,false,United States of America,United States
+Pink Sweat$ & Donny Hathaway,United States,soul,Person,1945-10-01,1979-01-13,true,United States of America,United States
 Pink [+] Nate Ruess,United States,indie pop,Person,1982-02-26,,false,United States of America,United States
 "Pink, Nate Ruess",United States,indie pop,Person,1982-02-26,,false,United States of America,United States
 "Pink, Willow Sage Hart",United States,"",Person,2011-06-02,,false,Unknown,United States
@@ -974,6 +1010,7 @@ Pitbull [+] Christina Aguilera,United States,pop,Person,1980-12-18,,false,Unknow
 Plain White T'S,United States,alternative rock,Group,1997-01-01,,false,Unknown,United States
 Plutonio,Portugal,"",Person,,,false,Portugal,Portugal
 Plutónio,Portugal,"",Person,,,false,Portugal,Portugal
+Plutónio ,Portugal,"",Person,,,false,Portugal,Portugal
 Polo G,Germany,schlager,Person,1949-12-04,,false,United States of America,Germany
 Pop Smoke ,United States,hip hop,Person,1999-07-20,2020-02-19,true,United States of America,United States
 Post Malone,United States,hip hop,Person,1995-07-04,,false,United States of America,United States
@@ -992,6 +1029,7 @@ Profjam,Portugal,"",Person,,,false,Portugal,Portugal
 "Profjam, Lhast",Portugal,"",Person,,,false,Portugal,Portugal
 Purple Disco Machine & Kungs,Germany,dance,Person,1980-02-12,,false,Germany,Germany
 Quavo & Lana Del Rey,United States,indie pop,Person,1985-06-21,,false,Unknown,United States
+Queen,United Kingdom,rock,Group,1970-06-27,,true,Unknown,United Kingdom
 "Quincy Jones, Tevin Campbell",United States,soul,Person,1976-11-12,,false,United States of America,United States
 R. City [+] Adam Levine,United States,pop,Person,1979-03-18,,false,United States of America,United States
 Rachel Platen,Unknown,"","",,,false,United States of America,United States of America
@@ -1000,6 +1038,7 @@ Rag'N'Bone Man,Unknown,blues,Person,1985-01-29,,false,United Kingdom,United King
 "Rag'N'Bone Man, Pink",Unknown,progressive rock,Group,1965-01-01,2014-01-01,true,United Kingdom,United Kingdom
 "Raissa, Rahim Redcar",France,electropop,Person,1988-06-01,,false,Unknown,France
 Rauw Alejandro,Puerto Rico,latin,Person,1993-01-10,,false,United States of America,Puerto Rico
+Rauw Alejandro Feat. Bad Bunny,Puerto Rico,latin trap,Person,1994-03-10,,false,Unknown,Puerto Rico
 Raye Feat. 070 Shake,United States,2010s,Person,1997-06-13,,false,Unknown,United States
 Reamonn,Germany,pop rock,Group,1999-01-01,2012-01-01,true,Unknown,Germany
 Red Hot Chili Peppers,United States,alternative rock,Group,1983-01-01,,false,Unknown,United States
@@ -1028,13 +1067,17 @@ Riton X Nightcrawlers Feat. Mufasa & Hypeman,Unknown,"",Group,,,false,Unknown,Un
 Riton X Nightcrawlers Ft. Mufasa E Hypeman,Unknown,"",Group,,,false,Unknown,Unknown
 "Riton, Nightcrawlers, Mufasa, Hyperman",United Kingdom,british,Group,1992-01-01,,false,Unknown,United Kingdom
 Robbie Williams,United Kingdom,pop,Person,1974-02-13,,false,United Kingdom,United Kingdom
+"Robbie Williams, Bryan Adams",Canada,rock,Person,1959-11-05,,false,United Kingdom,Canada
 "Robbie Williams, Jamie Cullum",United Kingdom,jazz,Person,1979-08-20,,false,United Kingdom,United Kingdom
+Rodge Feat. Meerah,United States,southern rock,Group,1969-01-01,,false,Unknown,United States
 Rogério Charraz,Brazil,"",Person,1958-09-02,,false,Unknown,Brazil
 Rosa Linn,Armenia,eurovision 2022 artists,Person,2000-03-20,,false,Armenia,Armenia
 Rosalia,Spain,flamenco,Person,1992-09-25,,false,Spain,Spain
 Rosalía,Spain,flamenco,Person,1992-09-25,,false,Spain,Spain
+Rose,United States,"",Person,,,false,Unknown,United States
 Rose & Bruno Mars,United States,pop,Person,1985-10-08,,false,Unknown,United States
 "Rose, Bruno Mars",United States,pop,Person,1985-10-08,,false,Unknown,United States
+"Rosie O'Donnell, Elton John",United Kingdom,pop,Person,1947-03-25,,false,Unknown,United Kingdom
 Rosé,United States,"",Person,,,false,Unknown,United States
 "Rosé, Bruno Mars",United States,pop,Person,1985-10-08,,false,Unknown,United States
 Roxy Music,United Kingdom,art rock,Group,1971-01-01,,false,Unknown,United Kingdom
@@ -1060,6 +1103,7 @@ Sam The Kid,Portugal,"",Person,1979-07-17,,false,Portugal,Portugal
 Sara Bareilles,United States,classic pop and rock,Person,1979-12-07,,false,United States of America,United States
 Sara Correia,Portugal,"",Person,1993-05-27,,false,Portugal,Portugal
 Sara Tavares,United States,disco,Group,1959-01-01,,false,Portugal,United States
+Sarah Mclachlan,Canada,pop,Person,1968-01-28,,false,Canada,Canada
 Seal,United Kingdom,pop,Person,1963-02-19,,false,Unknown,United Kingdom
 Sean Kingston,Jamaica,pop,Person,1990-02-03,,false,Jamaica,Jamaica
 Sebastian Yatra,Colombia,latin pop,Person,1994-10-15,,false,Colombia,Colombia
@@ -1070,6 +1114,7 @@ Seu Jorge,Brazil,brazilian,Person,1970-06-08,,false,Brazil,Brazil
 "Seu Jorge, Ana Carolina",Brazil,"",Person,1974-09-09,,false,Unknown,Brazil
 Sevdaliza,Netherlands,alternative r&b,Person,1987-09-01,,false,Kingdom of the Netherlands,Netherlands
 Sevdaliza With Pabllo Vittar & Yseult,Brazil,drag queen,Person,1994-11-01,,false,Unknown,Brazil
+Sevyn Streeter,United States,"",Person,1986-07-07,,false,United States of America,United States
 Shaboozey,United States,country,Person,1995-05-09,,false,United States of America,United States
 Shaggy,Jamaica,dancehall,Person,1968-10-22,,false,Unknown,Jamaica
 Shaggy Feat. Rayvon,Unknown,dancehall,Person,1968-01-01,,false,Unknown,Unknown
@@ -1082,6 +1127,7 @@ Shawn Mendes & Camila Cabello,United States,pop,Person,1997-03-03,,false,Unknown
 Shawn Mendes Ft. Camila Cabello,United States,pop,Person,1997-03-03,,false,Unknown,United States
 "Shawn Mendes, Camila Cabello",United States,pop,Person,1997-03-03,,false,Unknown,United States
 Shawn Mullins,United States,alternative rock,Person,1968-03-08,,false,United States of America,United States
+Sheppard,Australia,indie pop,Group,2009-01-01,,false,Unknown,Australia
 Sheryl Crow,United States,pop,Person,1962-02-11,,false,United States of America,United States
 Shouse,Unknown,dance,Group,,,false,Unknown,Unknown
 Sia,Australia,pop,Person,1975-12-18,,false,Australia,Australia
@@ -1107,6 +1153,7 @@ Spandau Ballet,United Kingdom,new wave,Group,1979-01-01,1990-01-01,true,Unknown,
 Staysolidrocky ,Unknown,english,Person,,,false,United States of America,United States of America
 "Stephen Sanchez, Em Beihold",United States,pop,Person,1999-01-21,,false,United States of America,United States
 Stevie Wonder,United States,soul,Person,1950-05-13,,false,United States of America,United States
+Summer Walker,United States,r&b,Person,1996-04-11,,false,United States of America,United States
 Swedish House Mafia,Sweden,house,Group,2008-01-01,,false,Unknown,Sweden
 Swedish House Mafia Ft. The Weeknd,Canada,r&b,Person,1990-02-16,,false,Unknown,Canada
 Swedish House Mafia With The Weeknd,Canada,r&b,Person,1990-02-16,,false,Unknown,Canada
@@ -1150,6 +1197,7 @@ The Killers,United States,alternative rock,Group,2001-01-01,,false,Unknown,Unite
 The Lumineers,United States,americana,Group,2008-12-31,,false,Unknown,United States
 The Paper Kites,Australia,folk,Group,2010-01-01,,false,Unknown,Australia
 The Pogues [+] Kirsty Maccoll,United Kingdom,uk,Person,1959-10-10,2000-12-18,true,United Kingdom,United Kingdom
+"The Pogues, Kirsty Maccoll",United Kingdom,uk,Person,1959-10-10,2000-12-18,true,United Kingdom,United Kingdom
 The Pussycat Dolls,United States,dance-pop,Group,2003-01-01,2021-01-01,true,Unknown,United States
 The Script,Ireland,breakeven,Group,2001-01-01,,false,Unknown,Ireland
 "The Script , Will.I.Am",United States,hip hop,Person,1975-03-15,,false,Unknown,United States
@@ -1180,6 +1228,7 @@ Timbaland,United States,contemporary r&b,Person,1972-03-10,,false,United States 
 Timbaland Feat. Onerepublic,United States,pop,Group,2004-01-01,,false,Unknown,United States
 Timbaland [+] Onerepublic,United States,pop,Group,2004-01-01,,false,United States of America,United States
 "Timbaland, Onerepublic",United States,pop,Group,2004-01-01,,false,Unknown,United States
+Timi Dakolo Feat. Eric Benet,United States,contemporary r&b,Person,1966-10-15,,false,Unknown,United States
 Tinashe,United States,alternative r&b,Person,1993-02-06,,false,United States of America,United States
 Tom Grennan,United Kingdom,indie pop,Person,1995-06-08,,false,United Kingdom,United Kingdom
 Tom Odell,United Kingdom,indie folk,Person,1990-11-24,,false,United Kingdom,United Kingdom
@@ -1237,12 +1286,14 @@ Walk The Moon,United States,pop rock,Group,2008-03-06,,false,Unknown,United Stat
 Wet Bed Gang,Portugal,hip hop,Group,2014-01-01,,false,Unknown,Portugal
 Wet Bed Gang X Lhast,Portugal,hip hop,Group,2014-01-01,,false,Portugal,Portugal
 Wham,United Kingdom,pop,Group,1981-01-01,1986-01-01,true,Unknown,United Kingdom
+Wham!,United Kingdom,pop,Group,1981-01-01,1986-01-01,true,Unknown,United Kingdom
 Whitney Houston,United States,contemporary r&b,Person,1963-08-09,2012-02-11,true,United States of America,United States
 Why Dont We,Germany,"",Group,,,false,Unknown,Germany
 Wiu,Brazil,hip hop,Person,2002-02-16,,false,Unknown,Brazil
 Wiu & Teto,Japan,"",Group,2016-01-01,2022-01-01,true,Unknown,Japan
 Wiz Khalifa Feat. Snoop Dogg & Bruno Mars,United States,hip hop,Person,1971-10-20,,false,Unknown,United States
 "Wiz Khalifa, Charlie Puth",United States,pop,Person,1991-12-02,,false,Unknown,United States
+Wizkid,Nigeria,afropop,Person,1990-07-16,,false,Nigeria,Nigeria
 Wizkid Feat. Brent Faiyaz,United States,r&b,Person,1995-09-19,,false,Unknown,United States
 Xamã,Brazil,"",Person,,,false,Brazil,Brazil
 Xavi ,Unknown,"",Person,,,false,Unknown,Unknown
