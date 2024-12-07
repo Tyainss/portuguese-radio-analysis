@@ -137,14 +137,14 @@ class LyricsAnalyzer:
             if not lyrics:
                 print(f"No lyrics found for '{track_title}' by '{artist_name}'. Skipping...")
                 lyrics_info_list.append({
-                    'lyrics_language': 'unknown',
-                    'lyrics_love_occurrences': 0,
                     'lyrics_polarity': None,
                     'lyrics_subjectivity': None,
                     'lyrics_joy': None,
                     'lyrics_sadness': None,
                     'lyrics_optimism': None,
                     'lyrics_anger': None,
+                    'lyrics_language': 'unknown',
+                    'lyrics_love_occurrences': 0,
                 })
                 continue
 
