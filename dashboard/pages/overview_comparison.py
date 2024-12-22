@@ -141,31 +141,35 @@ for i, (key, val) in enumerate(app_config.items()):
             title='by Hour'
         )
 
+        total_tracks = radio_df.height
+        st.write('Total Tracks Played:', total_tracks)
         track_col, artist_col = st.columns(2)
+        
         with track_col:
             unique_tracks = radio_df.select([pl.col(cm.TRACK_TITLE_COLUMN), pl.col(cm.ARTIST_NAME_COLUMN)]).unique().height
-            total_tracks = radio_df.height
             percent_unique_tracks = f'{(unique_tracks / total_tracks * 100):.2f}%' if total_tracks > 0 else "N/A"
+            avg_plays_per_track = f'{(total_tracks / unique_tracks if unique_tracks > 0 else 0):.2f}'
             with st.container(border=True):
                 st.metric(
                     label='% Unique Tracks',
                     value=percent_unique_tracks,
                     # label_visibility='hidden'
                 )
-                st.write(f'{unique_tracks} unique tracks out of {total_tracks} played')
-                st.write('i.e. Each track is played X times on average')
+                st.write(f'{unique_tracks} unique tracks')
+                st.write(f'Each track is played {avg_plays_per_track} times on average')
 
         with artist_col:
             unique_artists = radio_df.select(pl.col(cm.ARTIST_NAME_COLUMN)).unique().height
-            total_artists = radio_df.height
-            percent_unique_artists = f'{(unique_artists / total_artists * 100):.2f}%' if total_artists > 0 else "N/A"
+            percent_unique_artists = f'{(unique_artists / total_tracks * 100):.2f}%' if total_tracks > 0 else "N/A"
+            avg_plays_per_artist = f'{(total_tracks / unique_artists if unique_artists > 0 else 0):.2f}'
             with st.container(border=True):
                 st.metric(
                     label='% Unique Artists',
                     value=percent_unique_artists,
                     # label_visibility='hidden'
                 )
-                st.write(f'{unique_artists} unique artists out of {total_artists} played')
+                st.write(f'{unique_artists} unique artists')
+                st.write(f'Each artists has {avg_plays_per_artist} tracks played times on average')
 
         
         
