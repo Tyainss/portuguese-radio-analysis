@@ -5,7 +5,7 @@ import plotly.express as px
 from data_extract.data_storage import DataStorage
 from data_extract.config_manager import ConfigManager
 
-from utils.helper import (
+from utils.calculations_helper import (
     calculate_avg_tracks, calculate_avg_popularity, calculate_avg_time,
     prepare_weekday_metrics, prepare_hourly_metrics, plot_metrics
 )
