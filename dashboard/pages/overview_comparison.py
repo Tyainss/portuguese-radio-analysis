@@ -9,6 +9,9 @@ from utils.calculations_helper import (
     calculate_avg_tracks, calculate_avg_popularity, calculate_avg_time,
     prepare_weekday_metrics, prepare_hourly_metrics, plot_metrics
 )
+from utils.helper import (
+    country_to_flag, nationality_to_flag
+)
 
 ds = DataStorage()
 cm = ConfigManager()
@@ -158,6 +161,52 @@ for i, (key, val) in enumerate(app_config.items()):
                 st.write(f'{unique_tracks} unique tracks')
                 st.write(f'Each track is played {avg_plays_per_track} times on average')
 
+            unique_tracks_by_language = (
+                radio_df
+                .select([pl.col(cm.TRACK_TITLE_COLUMN), pl.col(cm.ARTIST_NAME_COLUMN), pl.col('lyrics_language')])
+                .unique()
+                .group_by('lyrics_language')
+                .count()
+                .sort(by='count', descending=False)
+                .tail(5)
+            )
+            unique_tracks_by_language = unique_tracks_by_language.with_columns(
+                (pl.col('count') / unique_tracks_by_language['count'].sum() * 100).alias('percentage')
+            )
+
+            unique_tracks_df = unique_tracks_by_language.to_pandas()
+
+            # Plot top 5 languages for unique tracks
+            # st.subheader('Top 5 Languages by Unique Tracks')
+            fig = px.bar(
+                unique_tracks_df,
+                x="count",
+                y=unique_tracks_by_language['lyrics_language'].map_elements(country_to_flag),
+                text="percentage",
+                title="Top 5 Languages by Unique Tracks",
+                orientation='h',
+                # labels={"count": "Unique Tracks", "lyrics_language": "Language"}
+            )
+            # Apply conditional coloring for "Portugal" or "PT"
+            colors = [
+                "#1f77b4" if lang != "pt" else "#ff7f0e"  # Default color vs highlight color
+                for lang in unique_tracks_df["lyrics_language"]
+            ]
+            fig.update_traces(
+                marker_color=colors, # Apply colors manually
+                texttemplate="%{text:.1f}%", 
+                textposition="outside",
+                cliponaxis=False  # Prevent labels from being clipped
+            )
+            fig.update_layout(
+                xaxis_title=None,  # Remove x-axis label
+                yaxis_title=None,  # Remove y-axis label
+                margin=dict(l=10, r=30, t=30, b=0),  # Add padding around the plot
+                # showlegend=False,  # Hide legend if applicable
+                # title=dict(x=0.5)  # Center the title
+            )
+            st.plotly_chart(fig, use_container_width=True)
+
         with artist_col:
             unique_artists = radio_df.select(pl.col(cm.ARTIST_NAME_COLUMN)).unique().height
             percent_unique_artists = f'{(unique_artists / total_tracks * 100):.2f}%' if total_tracks > 0 else "N/A"
@@ -170,6 +219,49 @@ for i, (key, val) in enumerate(app_config.items()):
                 )
                 st.write(f'{unique_artists} unique artists')
                 st.write(f'Each artists has {avg_plays_per_artist} tracks played times on average')
+
+            unique_artists_by_country = (
+                radio_df
+                .select([pl.col(cm.ARTIST_NAME_COLUMN), pl.col('combined_nationality')])
+                .unique()
+                .group_by('combined_nationality')
+                .count()
+                .sort(by='count', descending=False)
+                .tail(5)
+            )
+            unique_artists_by_country = unique_artists_by_country.with_columns(
+                (pl.col('count') / unique_artists_by_country['count'].sum() * 100).alias('percentage')
+            )
+
+            unique_artists_df = unique_artists_by_country.to_pandas()
+
+            # Plot top 5 countries for unique artists
+            # st.subheader('Top 5 Countries by Unique Artists')
+            fig = px.bar(
+                unique_artists_df,
+                x="count",
+                y=unique_artists_by_country['combined_nationality'].map_elements(nationality_to_flag),
+                text="percentage",
+                title="Top 5 Countries by Unique Artists",
+                orientation='h',
+            )
+            # Apply conditional coloring for "Portugal" or "PT"
+            colors = [
+                "#1f77b4" if country != "Portugal" else "#ff7f0e"  # Default color vs highlight color
+                for country in unique_artists_df["combined_nationality"]
+            ]
+            fig.update_traces(
+                marker_color=colors,
+                texttemplate="%{text:.1f}%", 
+                textposition="outside",
+                cliponaxis=False  # Prevent labels from being clipped
+            )
+            fig.update_layout(
+                xaxis_title=None,  # Remove x-axis label
+                yaxis_title=None,  # Remove y-axis label
+                margin=dict(l=10, r=30, t=30, b=0),  # Add padding around the plot
+            )
+            st.plotly_chart(fig, use_container_width=True)
 
         
         
