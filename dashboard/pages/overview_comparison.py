@@ -50,6 +50,7 @@ df_joined = df_radio_data.join(
 # Calculate global min and max values
 metrics = ['avg_tracks', 'avg_time_played', 'avg_popularity']
 metric_ranges = {}
+
 # Initialize config for each radio
 for i, (key, val) in enumerate(app_config.items()):
     app_config[key]['radio_df'] = df_joined.filter(
@@ -88,12 +89,12 @@ graph_metric_map = {
 }
 selected_metric = graph_metric_map[graph_otion]
 
-# Main Layout
+### Header KPIs + Logo
 ncols = len(app_config)
-cols = st.columns(ncols)
+header_cols = st.columns(ncols)
 
 for i, (key, val) in enumerate(app_config.items()):
-    with cols[i]:
+    with header_cols[i]:
         radio_name = val.get('name')
         logo = val.get('logo')
         radio_df = val.get('radio_df')
@@ -113,51 +114,102 @@ for i, (key, val) in enumerate(app_config.items()):
                 value=calculate_avg_popularity(df=radio_df)
             )
 
-        # Prepare the selected Weekday Metric
-        weekday_df = prepare_weekday_metrics(radio_df, metric=selected_metric)
-        hourly_df = prepare_hourly_metrics(radio_df, metric=selected_metric)
-        st.subheader(f'{graph_otion}')
-        plot_metrics(
-            weekday_df,
-            metric=selected_metric,
-            radio_name=radio_name,
-            x_axis_column='weekday_name',
-            x_axis_label='Day of Week',
-            y_axis_range=(
-                metric_ranges[selected_metric]['weekday']['min'] * 0.99,
-                metric_ranges[selected_metric]['weekday']['max'] * 1.01
-            ),
-            title='by Weekday'
-        )
-        plot_metrics(
-            hourly_df,
-            metric=selected_metric,
-            radio_name=radio_name,
-            x_axis_column='hour',
-            x_axis_label='Hour of Day',
-            y_axis_range=(
-                metric_ranges[selected_metric]['hour']['min'] * 0.95,
-                metric_ranges[selected_metric]['hour']['max'] * 1.05
-            ),
-            title='by Hour'
-        )
+
+# Time Series Plots Expander
+expander = st.expander(label=f'Time Series plots - *{graph_otion}*', expanded=True, icon='📈')
+with expander:
+    ### WeekDay Graphs
+    st.subheader(f'{graph_otion} by weekday', divider="gray")
+    weekday_graph_cols = st.columns(ncols)
+
+    for i, (key, val) in enumerate(app_config.items()):
+        with weekday_graph_cols[i]:
+            radio_name = val.get('name')
+            radio_df = val.get('radio_df')
+            # Prepare the selected Weekday Metric
+            weekday_df = prepare_weekday_metrics(radio_df, metric=selected_metric)
+            # st.subheader(f'{graph_otion}')
+            plot_metrics(
+                weekday_df,
+                metric=selected_metric,
+                radio_name=radio_name,
+                x_axis_column='weekday_name',
+                x_axis_label='Day of Week',
+                y_axis_range=(
+                    metric_ranges[selected_metric]['weekday']['min'] * 0.95,
+                    metric_ranges[selected_metric]['weekday']['max'] * 1.05
+                ),
+                title=''
+            )
+
+    ### Hourly Graphs
+    st.subheader(f'{graph_otion} by hour', divider="gray")
+    hour_graph_cols = st.columns(ncols)
+
+    for i, (key, val) in enumerate(app_config.items()):
+        with hour_graph_cols[i]:
+            radio_name = val.get('name')
+            radio_df = val.get('radio_df')
+            hourly_df = prepare_hourly_metrics(radio_df, metric=selected_metric)
+            plot_metrics(
+                hourly_df,
+                metric=selected_metric,
+                radio_name=radio_name,
+                x_axis_column='hour',
+                x_axis_label='Hour of Day',
+                y_axis_range=(
+                    metric_ranges[selected_metric]['hour']['min'] * 0.95,
+                    metric_ranges[selected_metric]['hour']['max'] * 1.05
+                ),
+                title=''
+            )
+
+### Song Statistics
+st.header(f':musical_note: Song Statistics', divider="gray")
+track_kpis_cols = st.columns(ncols)
+
+for i, (key, val) in enumerate(app_config.items()):
+    with track_kpis_cols[i]:
+        radio_name = val.get('name')
+        radio_df = val.get('radio_df')
 
         total_tracks = radio_df.height
-        st.write('Total Tracks Played:', total_tracks)
-        track_col, artist_col = st.columns(2)
-        
-        with track_col:
+   
+        # Track KPIs
+        track_kpi_total, track_kpi_percent = st.columns(2, border=True)
+        with track_kpi_total:
+            st.metric(
+                label='Total Tracks',
+                value=total_tracks
+            )
             unique_tracks = radio_df.select([pl.col(cm.TRACK_TITLE_COLUMN), pl.col(cm.ARTIST_NAME_COLUMN)]).unique().height
-            percent_unique_tracks = f'{(unique_tracks / total_tracks * 100):.2f}%' if total_tracks > 0 else "N/A"
-            avg_plays_per_track = f'{(total_tracks / unique_tracks if unique_tracks > 0 else 0):.2f}'
-            with st.container(border=True):
-                st.metric(
-                    label='% Unique Tracks',
-                    value=percent_unique_tracks,
-                    # label_visibility='hidden'
-                )
-                st.write(f'{unique_tracks} unique tracks')
-                st.write(f'Each track is played {avg_plays_per_track} times on average')
+            # st.write(f'{unique_tracks} unique tracks')
+            # st.metric(
+            #     label='Unique Tracks',
+            #     value=unique_tracks
+            # )
+        percent_unique_tracks = f'{(unique_tracks / total_tracks * 100):.2f}%' if total_tracks > 0 else "N/A"
+        with track_kpi_percent:
+            st.metric(
+                label='% Unique Tracks',
+                value=percent_unique_tracks
+            )
+        
+        avg_plays_per_track = f'{(total_tracks / unique_tracks if unique_tracks > 0 else 0):.2f}'
+        st.write(f'That means each track is played **{avg_plays_per_track}** times on average')
+
+
+# Track Plots Expander
+track_plots_expander = st.expander(label=f'Song Plots', expanded=True, icon='📊')
+with track_plots_expander:
+    ### Song Language Statistics
+    st.subheader(f':earth_africa: Top 5 Languages by Unique Tracks', divider=False)
+    track_plots_cols = st.columns(ncols)
+
+    for i, (key, val) in enumerate(app_config.items()):
+        with track_plots_cols[i]:
+            radio_name = val.get('name')
+            radio_df = val.get('radio_df')
 
             unique_tracks_by_language = (
                 radio_df
@@ -184,7 +236,7 @@ for i, (key, val) in enumerate(app_config.items()):
                 # y=unique_tracks_by_language['lyrics_language'].map_elements(country_to_flag),
                 y='flag',
                 text="percentage",
-                title="Top 5 Languages by Unique Tracks",
+                title="",
                 orientation='h',
                 # labels={"count": "Unique Tracks", "lyrics_language": "Language"}
             )
@@ -208,6 +260,16 @@ for i, (key, val) in enumerate(app_config.items()):
             )
             st.plotly_chart(fig, use_container_width=True, key=f'{radio_name}_unique_tracks_by_language')
 
+    st.divider()
+
+    ### Song Language Statistics
+    st.subheader(f':date: Unique Tracks by *decade*', divider=False)
+    track_decade_cols = st.columns(ncols)
+
+    for i, (key, val) in enumerate(app_config.items()):
+        with track_decade_cols[i]:
+            radio_name = val.get('name')
+            radio_df = val.get('radio_df')
             # Ensure spotify_release_date is parsed as a date in Polars
             df_tracks_with_date = radio_df.filter(~pl.col("spotify_release_date").is_null())
 
@@ -237,7 +299,7 @@ for i, (key, val) in enumerate(app_config.items()):
                 df_tracks_decade_pandas,
                 x="decade_label",
                 y="count",
-                title="Unique Tracks by Decade",
+                title="",
                 labels={"decade_label": "Decade", "count": "Unique Tracks"},
                 orientation='v',
                 text="count",  # Display the count on the bars
@@ -252,22 +314,51 @@ for i, (key, val) in enumerate(app_config.items()):
 
             unique_2024_tracks = radio_df.filter(pl.col('spotify_release_date').dt.year() == 2024).select([pl.col(cm.TRACK_TITLE_COLUMN), pl.col(cm.ARTIST_NAME_COLUMN)]).unique().height
             total_2024_tracks = radio_df.filter(pl.col('spotify_release_date').dt.year() == 2024).height
-            st.write(f'{unique_2024_tracks} unique tracks released in 2024, played {total_2024_tracks} times')
-            st.write(f'i.e. {(total_2024_tracks / unique_2024_tracks):.1f} times per track')
+            st.markdown(
+                f'''**{unique_2024_tracks}** unique tracks released in :blue[2024], and were played a total of **{total_2024_tracks}** times
+                \ni.e. **{(total_2024_tracks / unique_2024_tracks):.1f}** times per track'''
+            )
+            # st.write(f'i.e. {(total_2024_tracks / unique_2024_tracks):.1f} times per track')
 
-        with artist_col:
+
+### Artist Statistics
+st.header(f':microphone: Artist Statistics', divider="gray")
+artist_kpis_cols = st.columns(ncols)
+
+for i, (key, val) in enumerate(app_config.items()):
+    with artist_kpis_cols[i]:
+        radio_name = val.get('name')
+        radio_df = val.get('radio_df')
+        total_tracks = radio_df.height
+
+         # Artists KPIs
+        artist_kpi_total, artist_kpi_percent = st.columns(2, border=True)
+        with artist_kpi_total:
             unique_artists = radio_df.select(pl.col(cm.ARTIST_NAME_COLUMN)).unique().height
+            st.metric(
+                label='Unique Artists',
+                value=unique_artists
+            )
+            
+        with artist_kpi_percent:
             percent_unique_artists = f'{(unique_artists / total_tracks * 100):.2f}%' if total_tracks > 0 else "N/A"
             avg_plays_per_artist = f'{(total_tracks / unique_artists if unique_artists > 0 else 0):.2f}'
-            with st.container(border=True):
-                st.metric(
-                    label='% Unique Artists',
-                    value=percent_unique_artists,
-                    # label_visibility='hidden'
-                )
-                st.write(f'{unique_artists} unique artists')
-                st.write(f'Each artists has {avg_plays_per_artist} tracks played times on average')
+            st.metric(
+                label='Avg Songs per Artist',
+                value=avg_plays_per_artist
+            )
 
+# Artist Plots Expander
+artist_plots_expander = st.expander(label=f'Artists Plots', expanded=True, icon='📊')
+with artist_plots_expander:
+    ### Artists Country Statistics
+    st.header(f':earth_africa: Artists Statistics', divider="gray")
+    artist_plots_cols = st.columns(ncols)
+
+    for i, (key, val) in enumerate(app_config.items()):
+        with artist_plots_cols[i]:
+            radio_name = val.get('name')
+            radio_df = val.get('radio_df')
             unique_artists_by_country = (
                 radio_df
                 .select([pl.col(cm.ARTIST_NAME_COLUMN), pl.col('combined_nationality')])
@@ -285,14 +376,12 @@ for i, (key, val) in enumerate(app_config.items()):
             unique_artists_df['flag'] = unique_artists_df['combined_nationality'].map(nationality_to_flag)
 
             # Plot top 5 countries for unique artists
-            # st.subheader('Top 5 Countries by Unique Artists')
             fig = px.bar(
                 unique_artists_df,
                 x="count",
-                # y=unique_artists_by_country['combined_nationality'].map_elements(nationality_to_flag),
                 y='flag',
                 text="percentage",
-                title="Top 5 Countries by Unique Artists",
+                title="",
                 orientation='h',
             )
             # Apply conditional coloring for "Portugal" or "PT"
@@ -312,7 +401,15 @@ for i, (key, val) in enumerate(app_config.items()):
                 margin=dict(l=10, r=30, t=30, b=0),  # Add padding around the plot
             )
             st.plotly_chart(fig, use_container_width=True, key=f'{radio_name}_unique_artists_by_country')
+    
+    ### Artists Country Statistics
+    st.header(f':date: Unique Artists by *decade*', divider="gray")
+    artist_decade_cols = st.columns(ncols)
 
+    for i, (key, val) in enumerate(app_config.items()):
+        with artist_decade_cols[i]:
+            radio_name = val.get('name')
+            radio_df = val.get('radio_df')
             # Ensure spotify_release_date is parsed as a date in Polars
             df_artists_with_date = radio_df.filter(~pl.col("mb_artist_career_begin").is_null())
 
@@ -341,7 +438,7 @@ for i, (key, val) in enumerate(app_config.items()):
                 df_artists_decade_pandas,
                 x="decade_year",
                 y="count",
-                title="Unique Artists by Decade",
+                title="",
                 labels={"decade_year": "Decade", "count": "Unique Artists"},
                 orientation='v',
                 text="count",  # Display the count on the bars
@@ -353,6 +450,17 @@ for i, (key, val) in enumerate(app_config.items()):
                 xaxis=dict(type='category', categoryorder='array', categoryarray=df_artists_decade_pandas["decade_year"].tolist()),  # Ensure proper ordering
             )
             st.plotly_chart(fig_tracks, use_container_width=True, key=f'{radio_name}_unique_artists_by_decade')
+
+
+
+### Song Duration
+st.subheader(f':clock4: Song Duration (minutes)', divider="gray")
+track_duration_cols = st.columns(ncols)
+
+for i, (key, val) in enumerate(app_config.items()):
+    with track_duration_cols[i]:
+        radio_name = val.get('name')
+        radio_df = val.get('radio_df')
 
         # Ensure spotify_duration_ms is not null
         df_tracks_with_duration = radio_df.filter(~pl.col("spotify_duration_ms").is_null())
@@ -374,8 +482,6 @@ for i, (key, val) in enumerate(app_config.items()):
             .sort("duration_minutes")
         )
 
-        # st.write(df_duration_tracks)
-
         # Convert to Pandas for Plotly
         df_duration_pandas = df_duration_tracks.to_pandas()
 
@@ -393,7 +499,7 @@ for i, (key, val) in enumerate(app_config.items()):
             df_duration_pandas,
             x="duration_minutes",
             y="count",
-            title="Unique Tracks by Track Duration (Minutes)",
+            title="",
             labels={"duration_minutes": "Track Duration (Minutes)", "count": "Number of Unique Tracks"},
             orientation='v',
             text="label",  # Use the custom label
@@ -412,6 +518,15 @@ for i, (key, val) in enumerate(app_config.items()):
         )
         st.plotly_chart(fig_duration, use_container_width=True, key=f"{radio_name}_unique_tracks_by_duration")
 
+
+### Genres
+st.subheader(f':musical_score: Top 10 Genres', divider="gray")
+genre_cols = st.columns(ncols)
+
+for i, (key, val) in enumerate(app_config.items()):
+    with genre_cols[i]:
+        radio_name = val.get('name')
+        radio_df = val.get('radio_df')
         # Extract and group genres
         # Ensure spotify_genres column is not null
         df_genres_cleaned = (
@@ -438,7 +553,7 @@ for i, (key, val) in enumerate(app_config.items()):
             df_genres_pandas,
             x="count",
             y="spotify_genres",
-            title=f"Top Genres Played on {radio_name}",
+            title="",
             labels={"count": "Track Count", "spotify_genres": "Genre"},
             orientation="h",
             text="count",  # Show count on bars
@@ -468,3 +583,9 @@ for i, (key, val) in enumerate(app_config.items()):
 # Allow choosing to see metric of number of unique tracks or number of total tracks
 # For graph by Track Duration allow to see by number of total tracks or by percentage
 # Reduce file size with helper functions, if possible
+
+# Consider using tabs for Songs/Artists statistics
+# Format Total Tracks with separator
+# Add a button to choose between 'Total Tracks' or 'Unique Tracks'
+# Improve graph tooltips
+# Improve texts with markdown format
