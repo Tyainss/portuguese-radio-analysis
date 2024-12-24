@@ -371,10 +371,19 @@ for i, (key, val) in enumerate(app_config.items()):
             .sort("duration_minutes")
         )
 
-        st.write(df_duration_tracks)
+        # st.write(df_duration_tracks)
 
         # Convert to Pandas for Plotly
         df_duration_pandas = df_duration_tracks.to_pandas()
+
+        # Calculate Percentage
+        total_tracks = df_duration_pandas["count"].sum()
+        df_duration_pandas["percentage"] = (df_duration_pandas["count"] / total_tracks) * 100
+
+        # Create a label column with "number (percentage)"
+        df_duration_pandas["label"] = df_duration_pandas.apply(
+            lambda row: f"{row['count']:.0f} ({row['percentage']:.1f}%)", axis=1
+        )
 
         # Plot unique tracks by truncated duration
         fig_duration = px.bar(
@@ -382,13 +391,13 @@ for i, (key, val) in enumerate(app_config.items()):
             x="duration_minutes",
             y="count",
             title="Unique Tracks by Track Duration (Minutes)",
-            labels={"duration_minutes": "Track Duration (Minutes)", "count": "Unique Tracks"},
+            labels={"duration_minutes": "Track Duration (Minutes)", "count": "Number of Unique Tracks"},
             orientation='v',
-            text="count",  # Display the count on the bars
+            text="label",  # Use the custom label
         )
         fig_duration.update_traces(
             marker_color="#d3d3d3",  # Light gray for bars
-            texttemplate="%{text:,}", 
+            texttemplate="%{text}", 
             textposition="outside"
         )
         fig_duration.update_layout(
@@ -399,7 +408,6 @@ for i, (key, val) in enumerate(app_config.items()):
             yaxis=dict(title="Number of Unique Tracks", tickformat=",")
         )
         st.plotly_chart(fig_duration, use_container_width=True, key=f"{radio_name}_unique_tracks_by_duration")
-
 
         st.write(radio_df)
         
@@ -412,3 +420,4 @@ for i, (key, val) in enumerate(app_config.items()):
 # Don't have 2 columns for track/artist but instead 1 column with artists following tracks
 # Allow choosing to see metric of number of unique tracks or number of total tracks
 # For graph by Track Duration allow to see by number of total tracks or by percentage
+# Reduce file size with helper functions, if possible
