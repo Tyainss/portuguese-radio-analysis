@@ -219,4 +219,4 @@ def plot_metrics(
     if y_axis_range:
         fig.update_yaxes(range=y_axis_range)
 
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, use_container_width=True, key=f'{radio_name}_{metric}_{x_axis_column}')
