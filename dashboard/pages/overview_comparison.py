@@ -45,7 +45,6 @@ df_joined = df_radio_data.join(
 #     pl.col('day') <= datetime(2024, 12, 20),
 # )
 
-# st.write(df)
 
 # Calculate global min and max values
 metrics = ['avg_tracks', 'avg_time_played', 'avg_popularity']
@@ -71,13 +70,12 @@ for i, (key, val) in enumerate(app_config.items()):
         metric_ranges[metric]['hour']['min'] = min(metric_ranges[metric]['hour']['min'], hour_metric_df[metric].min())
         metric_ranges[metric]['hour']['max'] = max(metric_ranges[metric]['hour']['max'], hour_metric_df[metric].max())
 
-# st.write(metric_ranges)
 
 # Sidebar Settings
 with st.sidebar:
     st.title(':gear: Page Settings')
     graph_otion = st.radio(
-        'Select Graph to Display:',
+        '📈 Select Time Series to display:',
         ['Avg Tracks', 'Avg Hours Played', 'Avg Popularity'],
         index=0
     )
@@ -118,30 +116,6 @@ for i, (key, val) in enumerate(app_config.items()):
 # Time Series Plots Expander
 expander = st.expander(label=f'Time Series plots - *{graph_otion}*', expanded=True, icon='📈')
 with expander:
-    ### WeekDay Graphs
-    st.subheader(f'{graph_otion} by weekday', divider="gray")
-    weekday_graph_cols = st.columns(ncols)
-
-    for i, (key, val) in enumerate(app_config.items()):
-        with weekday_graph_cols[i]:
-            radio_name = val.get('name')
-            radio_df = val.get('radio_df')
-            # Prepare the selected Weekday Metric
-            weekday_df = prepare_weekday_metrics(radio_df, metric=selected_metric)
-            # st.subheader(f'{graph_otion}')
-            plot_metrics(
-                weekday_df,
-                metric=selected_metric,
-                radio_name=radio_name,
-                x_axis_column='weekday_name',
-                x_axis_label='Day of Week',
-                y_axis_range=(
-                    metric_ranges[selected_metric]['weekday']['min'] * 0.95,
-                    metric_ranges[selected_metric]['weekday']['max'] * 1.05
-                ),
-                title=''
-            )
-
     ### Hourly Graphs
     st.subheader(f'{graph_otion} by hour', divider="gray")
     hour_graph_cols = st.columns(ncols)
@@ -164,6 +138,30 @@ with expander:
                 title=''
             )
 
+    ### WeekDay Graphs
+    st.subheader(f'{graph_otion} by weekday', divider="gray")
+    weekday_graph_cols = st.columns(ncols)
+
+    for i, (key, val) in enumerate(app_config.items()):
+        with weekday_graph_cols[i]:
+            radio_name = val.get('name')
+            radio_df = val.get('radio_df')
+            # Prepare the selected Weekday Metric
+            weekday_df = prepare_weekday_metrics(radio_df, metric=selected_metric)
+            plot_metrics(
+                weekday_df,
+                metric=selected_metric,
+                radio_name=radio_name,
+                x_axis_column='weekday_name',
+                x_axis_label='Day of Week',
+                y_axis_range=(
+                    metric_ranges[selected_metric]['weekday']['min'] * 0.95,
+                    metric_ranges[selected_metric]['weekday']['max'] * 1.05
+                ),
+                title=''
+            )
+
+
 ### Song Statistics
 st.header(f':musical_note: Song Statistics', divider="gray")
 track_kpis_cols = st.columns(ncols)
@@ -183,11 +181,7 @@ for i, (key, val) in enumerate(app_config.items()):
                 value=total_tracks
             )
             unique_tracks = radio_df.select([pl.col(cm.TRACK_TITLE_COLUMN), pl.col(cm.ARTIST_NAME_COLUMN)]).unique().height
-            # st.write(f'{unique_tracks} unique tracks')
-            # st.metric(
-            #     label='Unique Tracks',
-            #     value=unique_tracks
-            # )
+
         percent_unique_tracks = f'{(unique_tracks / total_tracks * 100):.2f}%' if total_tracks > 0 else "N/A"
         with track_kpi_percent:
             st.metric(
@@ -229,16 +223,13 @@ with track_plots_expander:
             unique_tracks_df['flag'] = unique_tracks_df['lyrics_language'].map(country_to_flag)
 
             # Plot top 5 languages for unique tracks
-            # st.subheader('Top 5 Languages by Unique Tracks')
             fig = px.bar(
                 unique_tracks_df,
                 x="count",
-                # y=unique_tracks_by_language['lyrics_language'].map_elements(country_to_flag),
                 y='flag',
                 text="percentage",
                 title="",
                 orientation='h',
-                # labels={"count": "Unique Tracks", "lyrics_language": "Language"}
             )
             # Apply conditional coloring for "Portugal" or "PT"
             colors = [
@@ -255,8 +246,6 @@ with track_plots_expander:
                 xaxis_title=None,  # Remove x-axis label
                 yaxis_title=None,  # Remove y-axis label
                 margin=dict(l=10, r=30, t=30, b=0),  # Add padding around the plot
-                # showlegend=False,  # Hide legend if applicable
-                # title=dict(x=0.5)  # Center the title
             )
             st.plotly_chart(fig, use_container_width=True, key=f'{radio_name}_unique_tracks_by_language')
 
@@ -294,7 +283,6 @@ with track_plots_expander:
 
             # Plot unique tracks by decade
             df_tracks_decade_pandas = df_decades_tracks.to_pandas()
-            # st.write(df_tracks_decade_pandas)
             fig_tracks = px.bar(
                 df_tracks_decade_pandas,
                 x="decade_label",
@@ -318,7 +306,6 @@ with track_plots_expander:
                 f'''**{unique_2024_tracks}** unique tracks released in :blue[2024], and were played a total of **{total_2024_tracks}** times
                 \ni.e. **{(total_2024_tracks / unique_2024_tracks):.1f}** times per track'''
             )
-            # st.write(f'i.e. {(total_2024_tracks / unique_2024_tracks):.1f} times per track')
 
 
 ### Artist Statistics
@@ -433,7 +420,6 @@ with artist_plots_expander:
 
             # Plot unique tracks by decade
             df_artists_decade_pandas = df_decades_artists.to_pandas()
-            # st.write(df_artists_decade_pandas)
             fig_tracks = px.bar(
                 df_artists_decade_pandas,
                 x="decade_year",
@@ -574,18 +560,15 @@ for i, (key, val) in enumerate(app_config.items()):
         st.write(radio_df)
         
 
-# Perhaps make Avg Hours as the first/main graph
 # Create logos for radios of the same size
-# Use only 1 title for each section, instead of having it repeat for every column
 # Improve visual by trying to add some borders or background colors
 # Color PT bar differently
-# Don't have 2 columns for track/artist but instead 1 column with artists following tracks. With dividers
-# Allow choosing to see metric of number of unique tracks or number of total tracks
-# For graph by Track Duration allow to see by number of total tracks or by percentage
+
+# Allow selecting metric of number of unique tracks or number of total tracks
 # Reduce file size with helper functions, if possible
 
-# Consider using tabs for Songs/Artists statistics
 # Format Total Tracks with separator
 # Add a button to choose between 'Total Tracks' or 'Unique Tracks'
 # Improve graph tooltips
 # Improve texts with markdown format
+# Reduce white space between graphs and headers if possible
