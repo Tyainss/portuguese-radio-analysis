@@ -175,13 +175,16 @@ for i, (key, val) in enumerate(app_config.items()):
             )
 
             unique_tracks_df = unique_tracks_by_language.to_pandas()
+            # Map the flags in Pandas instead of Polars
+            unique_tracks_df['flag'] = unique_tracks_df['lyrics_language'].map(country_to_flag)
 
             # Plot top 5 languages for unique tracks
             # st.subheader('Top 5 Languages by Unique Tracks')
             fig = px.bar(
                 unique_tracks_df,
                 x="count",
-                y=unique_tracks_by_language['lyrics_language'].map_elements(country_to_flag),
+                # y=unique_tracks_by_language['lyrics_language'].map_elements(country_to_flag),
+                y='flag',
                 text="percentage",
                 title="Top 5 Languages by Unique Tracks",
                 orientation='h',
@@ -205,7 +208,49 @@ for i, (key, val) in enumerate(app_config.items()):
                 # showlegend=False,  # Hide legend if applicable
                 # title=dict(x=0.5)  # Center the title
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, use_container_width=True, key=f'{radio_name}_unique_tracks_by_language')
+
+            # Ensure spotify_release_date is parsed as a date in Polars
+            df_tracks_with_date = radio_df.filter(~pl.col("spotify_release_date").is_null())
+
+            # Extract decades for tracks
+            df_decades_tracks = (
+                df_tracks_with_date
+                .with_columns([
+                    (pl.col("spotify_release_date").dt.year() // 10 * 10).alias("decade_year"),  # Full year of the decade
+                    ((pl.col("spotify_release_date").dt.year() % 100) // 10 * 10).alias("decade_label"),  # Label for the graph (e.g., 80, 90)
+                ])
+                .select([
+                    pl.col("decade_year"),
+                    pl.col("decade_label"),
+                    pl.col("track_title"),
+                    pl.col("artist_name"),
+                ])
+                .unique()
+                .group_by(["decade_year", "decade_label"])
+                .count()
+                .sort("decade_year")
+            )
+
+            # Plot unique tracks by decade
+            df_tracks_decade_pandas = df_decades_tracks.to_pandas()
+            # st.write(df_tracks_decade_pandas)
+            fig_tracks = px.bar(
+                df_tracks_decade_pandas,
+                x="decade_label",
+                y="count",
+                title="Unique Tracks by Decade",
+                labels={"decade_label": "Decade", "count": "Unique Tracks"},
+                orientation='v',
+                text="count",  # Display the count on the bars
+            )
+            fig_tracks.update_layout(
+                xaxis_title=None,
+                yaxis_title=None,
+                margin=dict(l=10, r=30, t=30, b=0),
+                xaxis=dict(type='category', categoryorder='array', categoryarray=df_tracks_decade_pandas["decade_label"].tolist()),  # Ensure proper ordering
+            )
+            st.plotly_chart(fig_tracks, use_container_width=True, key=f'{radio_name}_unique_tracks_by_decade')
 
         with artist_col:
             unique_artists = radio_df.select(pl.col(cm.ARTIST_NAME_COLUMN)).unique().height
@@ -234,13 +279,15 @@ for i, (key, val) in enumerate(app_config.items()):
             )
 
             unique_artists_df = unique_artists_by_country.to_pandas()
+            unique_artists_df['flag'] = unique_artists_df['combined_nationality'].map(nationality_to_flag)
 
             # Plot top 5 countries for unique artists
             # st.subheader('Top 5 Countries by Unique Artists')
             fig = px.bar(
                 unique_artists_df,
                 x="count",
-                y=unique_artists_by_country['combined_nationality'].map_elements(nationality_to_flag),
+                # y=unique_artists_by_country['combined_nationality'].map_elements(nationality_to_flag),
+                y='flag',
                 text="percentage",
                 title="Top 5 Countries by Unique Artists",
                 orientation='h',
@@ -261,12 +308,107 @@ for i, (key, val) in enumerate(app_config.items()):
                 yaxis_title=None,  # Remove y-axis label
                 margin=dict(l=10, r=30, t=30, b=0),  # Add padding around the plot
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, use_container_width=True, key=f'{radio_name}_unique_artists_by_country')
 
-        
-        
+            # Ensure spotify_release_date is parsed as a date in Polars
+            df_artists_with_date = radio_df.filter(~pl.col("mb_artist_career_begin").is_null())
+
+            # Extract decades for tracks
+            df_decades_artists = (
+                df_artists_with_date
+                .with_columns([
+                    (pl.col("mb_artist_career_begin").dt.year() // 10 * 10).alias("decade_year"),  # Full year of the decade
+                    ((pl.col("mb_artist_career_begin").dt.year() % 100) // 10 * 10).alias("decade_label"),  # Label for the graph (e.g., 80, 90)
+                ])
+                .select([
+                    pl.col("decade_year"),
+                    pl.col("decade_label"),
+                    pl.col("artist_name"),
+                ])
+                .unique()
+                .group_by(["decade_year", "decade_label"])
+                .count()
+                .sort("decade_year")
+            )
+
+            # Plot unique tracks by decade
+            df_artists_decade_pandas = df_decades_artists.to_pandas()
+            # st.write(df_artists_decade_pandas)
+            fig_tracks = px.bar(
+                df_artists_decade_pandas,
+                x="decade_year",
+                y="count",
+                title="Unique Artists by Decade",
+                labels={"decade_year": "Decade", "count": "Unique Artists"},
+                orientation='v',
+                text="count",  # Display the count on the bars
+            )
+            fig_tracks.update_layout(
+                xaxis_title=None,
+                yaxis_title=None,
+                margin=dict(l=10, r=30, t=30, b=0),
+                xaxis=dict(type='category', categoryorder='array', categoryarray=df_artists_decade_pandas["decade_year"].tolist()),  # Ensure proper ordering
+            )
+            st.plotly_chart(fig_tracks, use_container_width=True, key=f'{radio_name}_unique_artists_by_decade')
+
+        # Ensure spotify_duration_ms is not null
+        df_tracks_with_duration = radio_df.filter(~pl.col("spotify_duration_ms").is_null())
+
+        # Convert duration to minutes (truncated)
+        df_duration_tracks = (
+            df_tracks_with_duration
+            .with_columns([
+                (pl.col("spotify_duration_ms") / 60000).floor().cast(int).alias("duration_minutes")  # Convert to minutes and truncate
+            ])
+            .select([
+                pl.col("duration_minutes"),
+                pl.col("track_title"),
+                pl.col("artist_name"),
+            ])
+            .unique()
+            .group_by("duration_minutes")
+            .count()
+            .sort("duration_minutes")
+        )
+
+        st.write(df_duration_tracks)
+
+        # Convert to Pandas for Plotly
+        df_duration_pandas = df_duration_tracks.to_pandas()
+
+        # Plot unique tracks by truncated duration
+        fig_duration = px.bar(
+            df_duration_pandas,
+            x="duration_minutes",
+            y="count",
+            title="Unique Tracks by Track Duration (Minutes)",
+            labels={"duration_minutes": "Track Duration (Minutes)", "count": "Unique Tracks"},
+            orientation='v',
+            text="count",  # Display the count on the bars
+        )
+        fig_duration.update_traces(
+            marker_color="#d3d3d3",  # Light gray for bars
+            texttemplate="%{text:,}", 
+            textposition="outside"
+        )
+        fig_duration.update_layout(
+            xaxis_title=None,
+            yaxis_title=None,
+            margin=dict(l=10, r=30, t=30, b=0),
+            xaxis=dict(type='category'),  # Ensure durations are treated as categories
+            yaxis=dict(title="Number of Unique Tracks", tickformat=",")
+        )
+        st.plotly_chart(fig_duration, use_container_width=True, key=f"{radio_name}_unique_tracks_by_duration")
+
 
         st.write(radio_df)
         
 
 # Perhaps make Avg Hours as the first/main graph
+# Create logos for radios of the same size
+# Use only 1 title for each section, instead of having it repeat for every column
+# Improve visual by trying to add some borders or background colors
+# Color PT bar differently
+# Don't have 2 columns for track/artist but instead 1 column with artists following tracks
+# Allow choosing to see metric of number of unique tracks or number of total tracks
+# For graph by Track Duration allow to see by number of total tracks or by percentage
