@@ -97,23 +97,21 @@ for i, (key, val) in enumerate(app_config.items()):
         radio_name = val.get('name')
         logo = val.get('logo')
         radio_df = val.get('radio_df')
-        st.image(logo, use_container_width=True)
-        # st.title(radio_name)
-
-        
-        kpi_1, kpi_2, kpi_3 = st.columns(3)
-        kpi_1.metric(
-            label='# Avg Tracks per Day',
-            value=calculate_avg_tracks(df=radio_df)
-        )
-        kpi_2.metric(
-            label='Avg Hours Played',
-            value=calculate_avg_time(df=radio_df, output_unit='hours')
-        )
-        kpi_3.metric(
-            label='Avg Popularity',
-            value=calculate_avg_popularity(df=radio_df)
-        )
+        # st.image(logo, use_container_width=True)
+        with st.container(border=True):
+            kpi_1, kpi_2, kpi_3 = st.columns(3)
+            kpi_1.metric(
+                label='# Avg Tracks per Day',
+                value=calculate_avg_tracks(df=radio_df)
+            )
+            kpi_2.metric(
+                label='Avg Hours Played',
+                value=calculate_avg_time(df=radio_df, output_unit='hours')
+            )
+            kpi_3.metric(
+                label='Avg Popularity',
+                value=calculate_avg_popularity(df=radio_df)
+            )
 
         # Prepare the selected Weekday Metric
         weekday_df = prepare_weekday_metrics(radio_df, metric=selected_metric)
