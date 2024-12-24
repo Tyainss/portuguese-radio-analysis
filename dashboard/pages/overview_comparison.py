@@ -252,6 +252,11 @@ for i, (key, val) in enumerate(app_config.items()):
             )
             st.plotly_chart(fig_tracks, use_container_width=True, key=f'{radio_name}_unique_tracks_by_decade')
 
+            unique_2024_tracks = radio_df.filter(pl.col('spotify_release_date').dt.year() == 2024).select([pl.col(cm.TRACK_TITLE_COLUMN), pl.col(cm.ARTIST_NAME_COLUMN)]).unique().height
+            total_2024_tracks = radio_df.filter(pl.col('spotify_release_date').dt.year() == 2024).height
+            st.write(f'{unique_2024_tracks} unique tracks released in 2024, played {total_2024_tracks} times')
+            st.write(f'i.e. {(total_2024_tracks / unique_2024_tracks):.1f} times per track')
+
         with artist_col:
             unique_artists = radio_df.select(pl.col(cm.ARTIST_NAME_COLUMN)).unique().height
             percent_unique_artists = f'{(unique_artists / total_tracks * 100):.2f}%' if total_tracks > 0 else "N/A"
@@ -409,6 +414,50 @@ for i, (key, val) in enumerate(app_config.items()):
         )
         st.plotly_chart(fig_duration, use_container_width=True, key=f"{radio_name}_unique_tracks_by_duration")
 
+        # Extract and group genres
+        # Ensure spotify_genres column is not null
+        df_genres_cleaned = (
+            radio_df
+            .filter(
+                (~pl.col("spotify_genres").is_null())
+                & (pl.col("spotify_genres") != ""),
+            )
+            .with_columns([
+                pl.col("spotify_genres").str.split(", ").alias("split_genres")  # Split comma-separated genres into lists
+            ])
+            .explode("split_genres")  # Explode the lists into rows
+            .group_by("split_genres")
+            .count()
+            .sort("count", descending=False)
+            .tail(10)  # Show top 10 genres
+        )
+
+        # Convert to Pandas for Plotly
+        df_genres_pandas = df_genres_cleaned.rename({"split_genres": "spotify_genres"}).to_pandas()
+
+        # Plot horizontal bar chart
+        fig_genres = px.bar(
+            df_genres_pandas,
+            x="count",
+            y="spotify_genres",
+            title=f"Top Genres Played on {radio_name}",
+            labels={"count": "Track Count", "spotify_genres": "Genre"},
+            orientation="h",
+            text="count",  # Show count on bars
+        )
+        fig_genres.update_traces(
+            texttemplate="%{text}", 
+            textposition="outside",
+            cliponaxis=False  # Prevent labels from being clipped
+        )
+        fig_genres.update_layout(
+            xaxis_title=None,
+            yaxis_title=None,
+            margin=dict(l=150, r=30, t=30, b=10),  # Adjust for long genre names
+        )
+        st.plotly_chart(fig_genres, use_container_width=True, key=f"{radio_name}_top_genres")
+
+
         st.write(radio_df)
         
 
@@ -417,7 +466,7 @@ for i, (key, val) in enumerate(app_config.items()):
 # Use only 1 title for each section, instead of having it repeat for every column
 # Improve visual by trying to add some borders or background colors
 # Color PT bar differently
-# Don't have 2 columns for track/artist but instead 1 column with artists following tracks
+# Don't have 2 columns for track/artist but instead 1 column with artists following tracks. With dividers
 # Allow choosing to see metric of number of unique tracks or number of total tracks
 # For graph by Track Duration allow to see by number of total tracks or by percentage
 # Reduce file size with helper functions, if possible
