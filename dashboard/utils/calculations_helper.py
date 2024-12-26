@@ -148,6 +148,8 @@ def prepare_weekday_metrics(df: pl.DataFrame, metric: str, output_unit: str = 'h
     return weekday_data.select(["weekday_name", metric])
 
 def calculate_avg_tracks(df: pl.DataFrame, adjusted_calc=True) -> float:
+    if df.is_empty():
+        return 0.0
     if not adjusted_calc:
         total_tracks = df.height
         unique_days = df.select(pl.col(cm.DAY_COLUMN).n_unique())[0, 0]
@@ -159,6 +161,8 @@ def calculate_avg_tracks(df: pl.DataFrame, adjusted_calc=True) -> float:
     return round(avg_tracks, 2)
 
 def calculate_avg_time(df: pl.DataFrame, output_unit: str = "hours", adjusted_calc=True) -> float:
+    if df.is_empty():
+        return 0.0
     if not adjusted_calc:
         total_duration_ms = df.select(pl.col('spotify_duration_ms').sum())[0, 0]
         unique_days = df.select(pl.col(cm.DAY_COLUMN).n_unique())[0, 0]
@@ -172,6 +176,8 @@ def calculate_avg_time(df: pl.DataFrame, output_unit: str = "hours", adjusted_ca
     
     
 def calculate_avg_popularity(df: pl.DataFrame) -> float:
+    if df.is_empty():
+        return 0.0
     avg = df.select(pl.col('spotify_popularity').mean())[0, 0]
     return round(avg, 2)
 

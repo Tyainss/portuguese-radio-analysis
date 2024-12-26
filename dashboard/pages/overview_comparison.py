@@ -1,6 +1,7 @@
 import polars as pl
 import streamlit as st
 import plotly.express as px
+from datetime import datetime
 
 from data_extract.data_storage import DataStorage
 from data_extract.config_manager import ConfigManager
@@ -38,13 +39,43 @@ df_joined = df_radio_data.join(
         how='left',
     )
 
-# Filter df for data validation checks
-# from datetime import datetime
-# df_joined = df_joined.filter(
-#     pl.col('day') >= datetime(2024, 12, 14),
-#     pl.col('day') <= datetime(2024, 12, 20),
-# )
+min_date = df_joined[cm.DAY_COLUMN].min()
+max_date = df_joined[cm.DAY_COLUMN].max()
 
+# Sidebar Settings
+with st.sidebar:
+    st.title(':gear: Page Settings')
+    date_period = st.date_input(
+        label = ':calendar: Select the time period',
+        value=(
+            min_date,
+            max_date
+        ),
+        min_value=df_joined[cm.DAY_COLUMN].min(),
+        max_value=df_joined[cm.DAY_COLUMN].max()
+    )
+
+    graph_otion = st.radio(
+        '📈 Select Time Series to display:',
+        ['Avg Tracks', 'Avg Hours Played', 'Avg Popularity'],
+        index=0
+    )
+
+
+
+# Validate and filter data
+if len(date_period) == 2:
+    start_date, end_date = date_period
+elif len(date_period) == 1:
+    start_date = date_period[0]
+    end_date = max_date
+else:
+    start_date, end_date = min_date, max_date
+
+df_joined = df_joined.filter(
+    pl.col('day') >= start_date,
+    pl.col('day') <= end_date,
+)
 
 # Calculate global min and max values
 metrics = ['avg_tracks', 'avg_time_played', 'avg_popularity']
@@ -63,22 +94,42 @@ for i, (key, val) in enumerate(app_config.items()):
                 'weekday': {'min': float('inf'), 'max': float('-inf')},
                 'hour': {'min': float('inf'), 'max': float('-inf')},
             }
-        # Update weekday min/max
-        metric_ranges[metric]['weekday']['min'] = min(metric_ranges[metric]['weekday']['min'], weekday_metric_df[metric].min())
-        metric_ranges[metric]['weekday']['max'] = max(metric_ranges[metric]['weekday']['max'], weekday_metric_df[metric].max())
-        # Update hour min/max
-        metric_ranges[metric]['hour']['min'] = min(metric_ranges[metric]['hour']['min'], hour_metric_df[metric].min())
-        metric_ranges[metric]['hour']['max'] = max(metric_ranges[metric]['hour']['max'], hour_metric_df[metric].max())
+        
+        # Update weekday min/max if data exists
+        if not weekday_metric_df.is_empty():
+            weekday_min = weekday_metric_df[metric].min()
+            weekday_max = weekday_metric_df[metric].max()
 
+            if weekday_min is not None:
+                metric_ranges[metric]['weekday']['min'] = min(
+                    metric_ranges[metric]['weekday']['min'], weekday_min
+                )
+            if weekday_max is not None:
+                metric_ranges[metric]['weekday']['max'] = max(
+                    metric_ranges[metric]['weekday']['max'], weekday_max
+                )
 
-# Sidebar Settings
-with st.sidebar:
-    st.title(':gear: Page Settings')
-    graph_otion = st.radio(
-        '📈 Select Time Series to display:',
-        ['Avg Tracks', 'Avg Hours Played', 'Avg Popularity'],
-        index=0
-    )
+        # Update hour min/max if data exists
+        if not hour_metric_df.is_empty():
+            hour_min = hour_metric_df[metric].min()
+            hour_max = hour_metric_df[metric].max()
+
+            if hour_min is not None:
+                metric_ranges[metric]['hour']['min'] = min(
+                    metric_ranges[metric]['hour']['min'], hour_min
+                )
+            if hour_max is not None:
+                metric_ranges[metric]['hour']['max'] = max(
+                    metric_ranges[metric]['hour']['max'], hour_max
+                )
+                
+        # # Update weekday min/max
+        # metric_ranges[metric]['weekday']['min'] = min(metric_ranges[metric]['weekday']['min'], weekday_metric_df[metric].min())
+        # metric_ranges[metric]['weekday']['max'] = max(metric_ranges[metric]['weekday']['max'], weekday_metric_df[metric].max())
+        # # Update hour min/max
+        # metric_ranges[metric]['hour']['min'] = min(metric_ranges[metric]['hour']['min'], hour_metric_df[metric].min())
+        # metric_ranges[metric]['hour']['max'] = max(metric_ranges[metric]['hour']['max'], hour_metric_df[metric].max())
+
 
 graph_metric_map = {
     'Avg Tracks': 'avg_tracks',
@@ -302,9 +353,14 @@ with track_plots_expander:
 
             unique_2024_tracks = radio_df.filter(pl.col('spotify_release_date').dt.year() == 2024).select([pl.col(cm.TRACK_TITLE_COLUMN), pl.col(cm.ARTIST_NAME_COLUMN)]).unique().height
             total_2024_tracks = radio_df.filter(pl.col('spotify_release_date').dt.year() == 2024).height
+            # Avoid division by zero
+            if unique_2024_tracks > 0:
+                average_plays_per_track = total_2024_tracks / unique_2024_tracks
+            else:
+                average_plays_per_track = 0.0
             st.markdown(
                 f'''**{unique_2024_tracks}** unique tracks released in :blue[2024], and were played a total of **{total_2024_tracks}** times
-                \ni.e. **{(total_2024_tracks / unique_2024_tracks):.1f}** times per track'''
+                \ni.e. **{average_plays_per_track:.1f}** times per track'''
             )
 
 
@@ -339,7 +395,7 @@ for i, (key, val) in enumerate(app_config.items()):
 artist_plots_expander = st.expander(label=f'Artists Plots', expanded=True, icon='📊')
 with artist_plots_expander:
     ### Artists Country Statistics
-    st.header(f':earth_africa: Artists Statistics', divider="gray")
+    st.header(f':earth_africa: Top 5 countries', divider="gray")
     artist_plots_cols = st.columns(ncols)
 
     for i, (key, val) in enumerate(app_config.items()):
@@ -572,3 +628,8 @@ for i, (key, val) in enumerate(app_config.items()):
 # Improve graph tooltips
 # Improve texts with markdown format
 # Reduce white space between graphs and headers if possible
+
+# Add a Date filter on the sidebar
+# Add a 'Others' country at the bottom of the top 5 countries/languages
+
+# Add a reset filters button
