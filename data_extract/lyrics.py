@@ -70,8 +70,8 @@ class LyricsAnalyzer:
         # print(f'Sentiment analysis - Polarity: {sentiment.polarity}, Subjectivity: {sentiment.subjectivity}')
         return sentiment
 
-    def _split_lyrics_chunks(self, lyrics, max_length=510):
-        """ Split the lyrics into chunks of 510 tokens, this way avoiding limit of the classifier model"""
+    def _split_lyrics_chunks(self, lyrics, max_length=500):
+        """ Split the lyrics into chunks of 500 tokens, this way avoiding limit of the classifier model"""
         tokens = self.tokenizer(lyrics, return_tensors='pt', truncation=False).input_ids[0]
         for i in range(0, len(tokens), max_length):
             yield self.tokenizer.decode(tokens[i:i + max_length], skip_special_tokens=True)
