@@ -2,5 +2,5 @@
 runOnSave = true
 
 [theme]
-base="dark"
+base="light"
 layout="wide"
