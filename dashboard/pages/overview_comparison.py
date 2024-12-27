@@ -266,23 +266,41 @@ with track_plots_expander:
         with track_plots_cols[i]:
             radio_name = val.get('name')
             radio_df = val.get('radio_df')
-
-            unique_tracks_by_language = (
+            
+            # Calculate counts and percentages for all languages
+            language_counts = (
                 radio_df
                 .select([pl.col(cm.TRACK_TITLE_COLUMN), pl.col(cm.ARTIST_NAME_COLUMN), pl.col('lyrics_language')])
                 .unique()
                 .group_by('lyrics_language')
                 .count()
-                .sort(by='count', descending=False)
-                .tail(5)
-            )
-            unique_tracks_by_language = unique_tracks_by_language.with_columns(
-                (pl.col('count') / unique_tracks_by_language['count'].sum() * 100).alias('percentage')
+                .sort(by='count', descending=True)
             )
 
-            unique_tracks_df = unique_tracks_by_language.to_pandas()
-            # Map the flags in Pandas instead of Polars
+            # Separate top 5 and others
+            top_5 = language_counts.head(5)
+            others = language_counts.tail(language_counts.shape[0] - 5)
+            others_aggregated = others.select(
+                pl.lit('Others').alias('lyrics_language'),
+                pl.sum('count').alias('count')
+            )
+            all_languages = top_5.vstack(others_aggregated)
+
+            # Calculate percentage
+            all_languages = all_languages.with_columns(
+                (pl.col('count') / all_languages['count'].sum() * 100).alias('percentage')
+            )
+
+            # Convert to pandas for Plotly and map flags
+            unique_tracks_df = all_languages.to_pandas()
             unique_tracks_df['flag'] = unique_tracks_df['lyrics_language'].map(country_to_flag)
+
+            # Ensure "Others" is always last in the plot
+            unique_tracks_df['order'] = unique_tracks_df['lyrics_language'].apply(
+                lambda x: 1 if x == "Others" else 0
+            )
+            unique_tracks_df = unique_tracks_df.sort_values(by=['order', 'count'], ascending=[False, True])
+
 
             # Plot top 5 languages for unique tracks
             fig = px.bar(
@@ -370,7 +388,7 @@ with track_plots_expander:
             else:
                 average_plays_per_track = 0.0
             st.markdown(
-                f'''**{unique_2024_tracks}** unique tracks released in :blue[2024], and were played a total of **{total_2024_tracks}** times
+                f'''**{unique_2024_tracks}** unique tracks released in :blue-background[2024], and were played a total of **{total_2024_tracks}** times
                 \ni.e. **{average_plays_per_track:.1f}** times per track'''
             )
 
@@ -413,21 +431,56 @@ with artist_plots_expander:
         with artist_plots_cols[i]:
             radio_name = val.get('name')
             radio_df = val.get('radio_df')
-            unique_artists_by_country = (
+            
+            country_counts = (
                 radio_df
                 .select([pl.col(cm.ARTIST_NAME_COLUMN), pl.col('combined_nationality')])
                 .unique()
                 .group_by('combined_nationality')
                 .count()
-                .sort(by='count', descending=False)
-                .tail(5)
+                .sort(by='count', descending=True)
+                # .head(5)
             )
-            unique_artists_by_country = unique_artists_by_country.with_columns(
-                (pl.col('count') / unique_artists_by_country['count'].sum() * 100).alias('percentage')
+            # st.write(country_counts)
+            # Separate top 5 and others
+            top_5 = country_counts.head(5)
+            others = country_counts.tail(country_counts.shape[0] - 5)
+            others_aggregated = others.select(
+                pl.lit('Others').alias('combined_nationality'),
+                pl.sum('count').alias('count')
+            )
+            all_countries = top_5.vstack(others_aggregated)
+
+            # Calculate percentage
+            all_countries = all_countries.with_columns(
+                (pl.col('count') / all_countries['count'].sum() * 100).alias('percentage')
             )
 
-            unique_artists_df = unique_artists_by_country.to_pandas()
-            unique_artists_df['flag'] = unique_artists_df['combined_nationality'].map(nationality_to_flag)
+            # Convert to pandas for Plotly and map flags
+            unique_artists_df = all_countries.to_pandas()
+            unique_artists_df['flag'] = unique_artists_df['combined_nationality'].map(country_to_flag)
+
+            # Ensure "Others" is always last in the plot
+            unique_artists_df['order'] = unique_artists_df['combined_nationality'].apply(
+                lambda x: 1 if x == "Others" else 0
+            )
+            unique_artists_df = unique_artists_df.sort_values(by=['order', 'count'], ascending=[False, True])
+
+            # unique_artists_by_country = (
+            #     radio_df
+            #     .select([pl.col(cm.ARTIST_NAME_COLUMN), pl.col('combined_nationality')])
+            #     .unique()
+            #     .group_by('combined_nationality')
+            #     .count()
+            #     .sort(by='count', descending=False)
+            #     .tail(5)
+            # )
+            # unique_artists_by_country = unique_artists_by_country.with_columns(
+            #     (pl.col('count') / unique_artists_by_country['count'].sum() * 100).alias('percentage')
+            # )
+
+            # unique_artists_df = unique_artists_by_country.to_pandas()
+            # unique_artists_df['flag'] = unique_artists_df['combined_nationality'].map(nationality_to_flag)
 
             # Plot top 5 countries for unique artists
             fig = px.bar(
@@ -636,9 +689,7 @@ for i, (key, val) in enumerate(app_config.items()):
 
 # Format Total Tracks with separator
 # Add a button to choose between 'Total Tracks' or 'Unique Tracks'
+# Also add a button to choose 5 or more top countries/languages
 # Improve graph tooltips
-# Improve texts with markdown format
+# Improve texts with markdown format - It's possible to add background color! :red-background
 # Reduce white space between graphs and headers if possible
-
-# Add a Date filter on the sidebar
-# Add a 'Others' country at the bottom of the top 5 countries/languages
