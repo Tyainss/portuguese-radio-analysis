@@ -42,40 +42,51 @@ df_joined = df_radio_data.join(
 min_date = df_joined[cm.DAY_COLUMN].min()
 max_date = df_joined[cm.DAY_COLUMN].max()
 
+if 'date_period' not in st.session_state:
+    st.session_state['date_period'] = (min_date, max_date)
+if 'ts_graph' not in st.session_state:
+    st.session_state['ts_graph'] = 'Avg Tracks'
+
+def reset_settings():
+    st.session_state['date_period'] = (min_date, max_date)
+    st.session_state['ts_graph'] = 'Avg Tracks'
+
 # Sidebar Settings
 with st.sidebar:
     st.title(':gear: Page Settings')
-    date_period = st.date_input(
-        label = ':calendar: Select the time period',
-        value=(
-            min_date,
-            max_date
-        ),
-        min_value=df_joined[cm.DAY_COLUMN].min(),
-        max_value=df_joined[cm.DAY_COLUMN].max()
-    )
 
-    graph_otion = st.radio(
+    new_date_period = st.date_input(
+        label = ':calendar: Select the time period',
+        value=st.session_state.get('date_period', (min_date, max_date)),
+        min_value=min_date,
+        max_value=max_date,
+        key='date_period'
+    )
+    new_graph_option  = st.radio(
         '📈 Select Time Series to display:',
         ['Avg Tracks', 'Avg Hours Played', 'Avg Popularity'],
-        index=0
+        index=0,
+        key='ts_graph'
     )
 
+    # Reset settings button
+    st.button('Reset settings', on_click=reset_settings)
 
 
-# Validate and filter data
-if len(date_period) == 2:
-    start_date, end_date = date_period
-elif len(date_period) == 1:
-    start_date = date_period[0]
-    end_date = max_date
+# Apply Date Filter Only After Both Dates Are Selected
+if len(st.session_state['date_period']) == 2:
+    start_date, end_date = st.session_state['date_period']
+    df_filtered = df_joined.filter(
+        (pl.col(cm.DAY_COLUMN) >= start_date) & (pl.col(cm.DAY_COLUMN) <= end_date)
+    )
+elif len(st.session_state['date_period']) == 1:
+    start_date = st.session_state['date_period'][0]
+    df_filtered = df_joined.filter(
+        pl.col(cm.DAY_COLUMN) >= start_date
+    )
 else:
-    start_date, end_date = min_date, max_date
+    df_filtered = df_joined  # Keep unfiltered data if only one date is selected
 
-df_joined = df_joined.filter(
-    pl.col('day') >= start_date,
-    pl.col('day') <= end_date,
-)
 
 # Calculate global min and max values
 metrics = ['avg_tracks', 'avg_time_played', 'avg_popularity']
@@ -83,7 +94,7 @@ metric_ranges = {}
 
 # Initialize config for each radio
 for i, (key, val) in enumerate(app_config.items()):
-    app_config[key]['radio_df'] = df_joined.filter(
+    app_config[key]['radio_df'] = df_filtered.filter(
             pl.col(cm.RADIO_COLUMN) == val.get('name')
         )
     for metric in metrics:
@@ -136,7 +147,7 @@ graph_metric_map = {
     'Avg Hours Played': 'avg_time_played',
     'Avg Popularity': 'avg_popularity'
 }
-selected_metric = graph_metric_map[graph_otion]
+selected_metric = graph_metric_map[st.session_state['ts_graph']]
 
 ### Header KPIs + Logo
 ncols = len(app_config)
@@ -165,10 +176,10 @@ for i, (key, val) in enumerate(app_config.items()):
 
 
 # Time Series Plots Expander
-expander = st.expander(label=f'Time Series plots - *{graph_otion}*', expanded=True, icon='📈')
+expander = st.expander(label=f'Time Series plots - *{st.session_state['ts_graph']}*', expanded=True, icon='📈')
 with expander:
     ### Hourly Graphs
-    st.subheader(f'{graph_otion} by hour', divider="gray")
+    st.subheader(f'{st.session_state['ts_graph']} by hour', divider="gray")
     hour_graph_cols = st.columns(ncols)
 
     for i, (key, val) in enumerate(app_config.items()):
@@ -190,7 +201,7 @@ with expander:
             )
 
     ### WeekDay Graphs
-    st.subheader(f'{graph_otion} by weekday', divider="gray")
+    st.subheader(f'{st.session_state['ts_graph']} by weekday', divider="gray")
     weekday_graph_cols = st.columns(ncols)
 
     for i, (key, val) in enumerate(app_config.items()):
@@ -631,5 +642,3 @@ for i, (key, val) in enumerate(app_config.items()):
 
 # Add a Date filter on the sidebar
 # Add a 'Others' country at the bottom of the top 5 countries/languages
-
-# Add a reset filters button
