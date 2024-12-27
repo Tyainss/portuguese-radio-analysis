@@ -11,7 +11,7 @@ from utils.calculations_helper import (
     prepare_weekday_metrics, prepare_hourly_metrics, plot_metrics
 )
 from utils.helper import (
-    country_to_flag, nationality_to_flag
+    country_to_flag, nationality_to_flag, number_formatter
 )
 
 ds = DataStorage()
@@ -57,7 +57,7 @@ with st.sidebar:
 
     new_date_period = st.date_input(
         label = ':calendar: Select the time period',
-        value=st.session_state.get('date_period', (min_date, max_date)),
+        value=(min_date, max_date),
         min_value=min_date,
         max_value=max_date,
         key='date_period'
@@ -240,7 +240,7 @@ for i, (key, val) in enumerate(app_config.items()):
         with track_kpi_total:
             st.metric(
                 label='Total Tracks',
-                value=total_tracks
+                value=number_formatter(total_tracks)
             )
             unique_tracks = radio_df.select([pl.col(cm.TRACK_TITLE_COLUMN), pl.col(cm.ARTIST_NAME_COLUMN)]).unique().height
 
@@ -388,7 +388,7 @@ with track_plots_expander:
             else:
                 average_plays_per_track = 0.0
             st.markdown(
-                f'''**{unique_2024_tracks}** unique tracks released in :blue-background[2024], and were played a total of **{total_2024_tracks}** times
+                f'''**{unique_2024_tracks}** unique tracks released in :blue-background[2024], and were played a total of **{number_formatter(total_2024_tracks)}** times
                 \ni.e. **{average_plays_per_track:.1f}** times per track'''
             )
 
@@ -409,7 +409,7 @@ for i, (key, val) in enumerate(app_config.items()):
             unique_artists = radio_df.select(pl.col(cm.ARTIST_NAME_COLUMN)).unique().height
             st.metric(
                 label='Unique Artists',
-                value=unique_artists
+                value=number_formatter(unique_artists)
             )
             
         with artist_kpi_percent:
@@ -458,7 +458,7 @@ with artist_plots_expander:
 
             # Convert to pandas for Plotly and map flags
             unique_artists_df = all_countries.to_pandas()
-            unique_artists_df['flag'] = unique_artists_df['combined_nationality'].map(country_to_flag)
+            unique_artists_df['flag'] = unique_artists_df['combined_nationality'].map(nationality_to_flag)
 
             # Ensure "Others" is always last in the plot
             unique_artists_df['order'] = unique_artists_df['combined_nationality'].apply(
@@ -687,7 +687,6 @@ for i, (key, val) in enumerate(app_config.items()):
 # Allow selecting metric of number of unique tracks or number of total tracks
 # Reduce file size with helper functions, if possible
 
-# Format Total Tracks with separator
 # Add a button to choose between 'Total Tracks' or 'Unique Tracks'
 # Also add a button to choose 5 or more top countries/languages
 # Improve graph tooltips

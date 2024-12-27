@@ -73,3 +73,21 @@ def nationality_to_flag(nationality: str) -> str:
         "Unknown": "?"
     }
     return nationality_to_flag.get(nationality, nationality)
+
+def number_formatter(number, decimal_places: int = 2) -> str:
+    """
+    Formats a number with a comma as a thousand separator.
+
+    Parameters:
+    number (int, float, or str): The number to format.
+
+    Returns:
+    str: The formatted number as a string with comma separators.
+    """
+    try:
+        # Convert the input to float to handle both integers and floats
+        number = float(number)
+        # Format the number with comma separator
+        return f"{number:,.0f}" if number.is_integer() else f"{number:,.{decimal_places}f}"
+    except (ValueError, TypeError):
+        raise ValueError("Input must be a valid number.")
