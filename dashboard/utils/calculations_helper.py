@@ -287,3 +287,73 @@ def calculate_column_counts(
         raise ValueError(f"Unsupported metric_type: {metric_type}. Choose 'unique', 'total', or 'average'.")
 
     return result.sort(by="metric", descending=True)
+
+def calculate_decade_metrics(
+    df: pl.DataFrame,
+    date_column: str,
+    count_columns: List[str],
+    metric_type: str = "unique"
+) -> pl.DataFrame:
+    """
+    Calculate decade-based metrics (Unique Tracks, Total Tracks, Avg Tracks).
+
+    Args:
+        df (pl.DataFrame): Input DataFrame.
+        date_column (str): Column with date information (e.g., 'mb_artist_career_begin').
+        count_columns (str): Columns to count (e.g., 'artist_name').
+        metric_type (str, optional): Metric type ('unique', 'total', 'average'). Defaults to 'unique'.
+
+    Returns:
+        pl.DataFrame: Decade-level metrics with 'decade_year', 'decade_label', and a 'metric' column.
+    """
+    # Filter out rows with null dates
+    df_with_date = df.filter(~pl.col(date_column).is_null())
+
+    # Extract decades
+    df_with_date = df_with_date.with_columns([
+        (pl.col(date_column).dt.year() // 10 * 10).alias("decade_year"),  # Full year of the decade
+        ((pl.col(date_column).dt.year() % 100) // 10 * 10).alias("decade_label")  # Decade label (e.g., 80, 90)
+    ])
+
+    if metric_type == "unique":
+        # Unique metric: Count unique combinations of decade and group_by_column
+        result = (
+            df_with_date
+            .select(["decade_year", "decade_label"] + count_columns)
+            .unique()
+            .group_by(["decade_year", "decade_label"])
+            .count()
+            .rename({"count": "metric"})
+        )
+    elif metric_type == "total":
+        # Total metric: Count all rows grouped by decade
+        result = (
+            df_with_date
+            .group_by(["decade_year", "decade_label"])
+            .count()
+            .rename({"count": "metric"})
+        )
+    elif metric_type == "average":
+        # Average metric: Compute total divided by unique
+        unique_counts = (
+            df_with_date
+            .select(["decade_year", "decade_label"] + count_columns)
+            .unique()
+            .group_by(["decade_year", "decade_label"])
+            .count()
+            .rename({"count": "unique_count"})
+        )
+        total_counts = (
+            df_with_date
+            .group_by(["decade_year", "decade_label"])
+            .count()
+            .rename({"count": "total_count"})
+        )
+        result = unique_counts.join(total_counts, on=["decade_year", "decade_label"])
+        result = result.with_columns(
+            (pl.col("total_count") / pl.col("unique_count")).alias("metric")
+        ).select(["decade_year", "decade_label", "metric"])
+    else:
+        raise ValueError(f"Unsupported metric_type: {metric_type}. Choose 'unique', 'total', or 'average'.")
+
+    return result.sort("decade_year")

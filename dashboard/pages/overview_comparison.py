@@ -9,7 +9,8 @@ from data_extract.config_manager import ConfigManager
 
 from utils.calculations_helper import (
     calculate_avg_tracks, calculate_avg_popularity, calculate_avg_time,
-    prepare_weekday_metrics, prepare_hourly_metrics, plot_metrics, calculate_column_counts
+    prepare_weekday_metrics, prepare_hourly_metrics, plot_metrics, 
+    calculate_column_counts, calculate_decade_metrics
 )
 from utils.helper import (
     country_to_flag, nationality_to_flag, number_formatter
@@ -384,38 +385,30 @@ with track_plots_expander:
         with track_decade_cols[i]:
             radio_name = val.get('name')
             radio_df = val.get('radio_df')
-            # Ensure spotify_release_date is parsed as a date in Polars
-            df_tracks_with_date = radio_df.filter(~pl.col("spotify_release_date").is_null())
 
-            # Extract decades for tracks
-            df_decades_tracks = (
-                df_tracks_with_date
-                .with_columns([
-                    (pl.col("spotify_release_date").dt.year() // 10 * 10).alias("decade_year"),  # Full year of the decade
-                    ((pl.col("spotify_release_date").dt.year() % 100) // 10 * 10).alias("decade_label"),  # Label for the graph (e.g., 80, 90)
-                ])
-                .select([
-                    pl.col("decade_year"),
-                    pl.col("decade_label"),
-                    pl.col("track_title"),
-                    pl.col("artist_name"),
-                ])
-                .unique()
-                .group_by(["decade_year", "decade_label"])
-                .count()
-                .sort("decade_year")
+            df_decades_tracks = calculate_decade_metrics(
+                df=radio_df,
+                date_column='spotify_release_date',
+                count_columns=[cm.TRACK_TITLE_COLUMN, cm.ARTIST_NAME_COLUMN],
+                metric_type=metric_type_map.get(tracks_metric_type)
             )
 
             # Plot unique tracks by decade
             df_tracks_decade_pandas = df_decades_tracks.to_pandas()
+
+            # Apply number_formatter to the 'metric' column for labels
+            df_tracks_decade_pandas["formatted_metric"] = df_tracks_decade_pandas["metric"].apply(
+                lambda x: number_formatter(x)
+            )
+
             fig_tracks = px.bar(
                 df_tracks_decade_pandas,
                 x="decade_label",
-                y="count",
+                y="metric",
                 title="",
-                labels={"decade_label": "Decade", "count": "Unique Tracks"},
+                labels={"decade_label": "Decade", "metric": "Tracks"},
                 orientation='v',
-                text="count",  # Display the count on the bars
+                text="formatted_metric",  # Display the count on the bars
             )
             fig_tracks.update_layout(
                 xaxis_title=None,
@@ -573,37 +566,31 @@ with artist_plots_expander:
         with artist_decade_cols[i]:
             radio_name = val.get('name')
             radio_df = val.get('radio_df')
-            # Ensure spotify_release_date is parsed as a date in Polars
-            df_artists_with_date = radio_df.filter(~pl.col("mb_artist_career_begin").is_null())
 
-            # Extract decades for tracks
-            df_decades_artists = (
-                df_artists_with_date
-                .with_columns([
-                    (pl.col("mb_artist_career_begin").dt.year() // 10 * 10).alias("decade_year"),  # Full year of the decade
-                    ((pl.col("mb_artist_career_begin").dt.year() % 100) // 10 * 10).alias("decade_label"),  # Label for the graph (e.g., 80, 90)
-                ])
-                .select([
-                    pl.col("decade_year"),
-                    pl.col("decade_label"),
-                    pl.col("artist_name"),
-                ])
-                .unique()
-                .group_by(["decade_year", "decade_label"])
-                .count()
-                .sort("decade_year")
+            # Calculate metrics by decade
+            df_decades_artists = calculate_decade_metrics(
+                df=radio_df,
+                date_column="mb_artist_career_begin",
+                count_columns=[cm.ARTIST_NAME_COLUMN],
+                metric_type=metric_type_map.get(artists_metric_type),
             )
 
             # Plot unique tracks by decade
             df_artists_decade_pandas = df_decades_artists.to_pandas()
+
+            # Apply number_formatter to the 'metric' column for labels
+            df_artists_decade_pandas["formatted_metric"] = df_artists_decade_pandas["metric"].apply(
+                lambda x: number_formatter(x)
+            )
+            
             fig_tracks = px.bar(
                 df_artists_decade_pandas,
                 x="decade_year",
-                y="count",
+                y="metric",
                 title="",
-                labels={"decade_year": "Decade", "count": "Unique Artists"},
+                labels={"decade_year": "Decade", "metric": "Artists"},
                 orientation='v',
-                text="count",  # Display the count on the bars
+                text="formatted_metric",  # Display the count on the bars
             )
             fig_tracks.update_layout(
                 xaxis_title=None,
@@ -611,7 +598,7 @@ with artist_plots_expander:
                 margin=dict(l=10, r=30, t=30, b=0),
                 xaxis=dict(type='category', categoryorder='array', categoryarray=df_artists_decade_pandas["decade_year"].tolist()),  # Ensure proper ordering
             )
-            st.plotly_chart(fig_tracks, use_container_width=True, key=f'{radio_name}_unique_artists_by_decade')
+            st.plotly_chart(fig_tracks, use_container_width=True, key=f'{radio_name}_artists_by_decade')
 
 
 
@@ -740,9 +727,7 @@ for i, (key, val) in enumerate(app_config.items()):
 # Improve visual by trying to add some borders or background colors
 # Color PT bar differently
 
-# Allow selecting metric of number of unique tracks or number of total tracks
 # Reduce file size with helper functions, if possible
-
 
 # Apply Metric Type button for decades graph as well
 
@@ -750,3 +735,4 @@ for i, (key, val) in enumerate(app_config.items()):
 # Improve texts with markdown format - It's possible to add background color! :red-background
 # Reduce white space between graphs and headers if possible
 
+# Group "United States" and "United States of America" together, and other similar countries
