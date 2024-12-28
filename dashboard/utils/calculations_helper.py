@@ -300,7 +300,7 @@ def calculate_decade_metrics(
     Args:
         df (pl.DataFrame): Input DataFrame.
         date_column (str): Column with date information (e.g., 'mb_artist_career_begin').
-        count_columns (str): Columns to count (e.g., 'artist_name').
+        count_columns (List[str]): Columns to count (e.g., 'artist_name').
         metric_type (str, optional): Metric type ('unique', 'total', 'average'). Defaults to 'unique'.
 
     Returns:
@@ -357,3 +357,72 @@ def calculate_decade_metrics(
         raise ValueError(f"Unsupported metric_type: {metric_type}. Choose 'unique', 'total', or 'average'.")
 
     return result.sort("decade_year")
+
+def calculate_duration_metrics(
+    df: pl.DataFrame,
+    duration_column: str,
+    count_columns: List[str],
+    metric_type: str = "unique"
+) -> pl.DataFrame:
+    """
+    Calculate duration-based metrics (Unique Tracks, Total Tracks, Avg Tracks).
+
+    Args:
+        df (pl.DataFrame): Input DataFrame.
+        date_column (str): Column with duration information (e.g., 'spotify_duration_ms').
+        count_columns (List[str]): Columns to count (e.g., 'artist_name').
+        metric_type (str, optional): Metric type ('unique', 'total', 'average'). Defaults to 'unique'.
+
+    Returns:
+        pl.DataFrame: Decade-level metrics with 'decade_year', 'decade_label', and a 'metric' column.
+    """
+    # Filter out rows with null dates
+    df_duration = df.filter(~pl.col(duration_column).is_null())
+
+    # Extract decades
+    df_duration = df_duration.with_columns([
+        (pl.col(duration_column) / 60000).floor().cast(int).alias("duration_minutes")  # Convert to minutes and truncate
+    ])
+
+    if metric_type == "unique":
+        # Unique metric: Count unique combinations of decade and group_by_column
+        result = (
+            df_duration
+            .select(["duration_minutes"] + count_columns)
+            .unique()
+            .group_by(["duration_minutes"])
+            .count()
+            .rename({"count": "metric"})
+        )
+    elif metric_type == "total":
+        # Total metric: Count all rows grouped by decade
+        result = (
+            df_duration
+            .group_by(["duration_minutes"])
+            .count()
+            .rename({"count": "metric"})
+        )
+    elif metric_type == "average":
+        # Average metric: Compute total divided by unique
+        unique_counts = (
+            df_duration
+            .select(["duration_minutes"] + count_columns)
+            .unique()
+            .group_by(["duration_minutes"])
+            .count()
+            .rename({"count": "unique_count"})
+        )
+        total_counts = (
+            df_duration
+            .group_by(["duration_minutes"])
+            .count()
+            .rename({"count": "total_count"})
+        )
+        result = unique_counts.join(total_counts, on=["duration_minutes"])
+        result = result.with_columns(
+            (pl.col("total_count") / pl.col("unique_count")).alias("metric")
+        ).select(["duration_minutes", "metric"])
+    else:
+        raise ValueError(f"Unsupported metric_type: {metric_type}. Choose 'unique', 'total', or 'average'.")
+
+    return result.sort("duration_minutes")

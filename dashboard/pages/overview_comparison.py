@@ -10,7 +10,7 @@ from data_extract.config_manager import ConfigManager
 from utils.calculations_helper import (
     calculate_avg_tracks, calculate_avg_popularity, calculate_avg_time,
     prepare_weekday_metrics, prepare_hourly_metrics, plot_metrics, 
-    calculate_column_counts, calculate_decade_metrics, 
+    calculate_column_counts, calculate_decade_metrics, calculate_duration_metrics
 )
 from utils.helper import (
     country_to_flag, nationality_to_flag, number_formatter
@@ -669,25 +669,32 @@ for i, (key, val) in enumerate(app_config.items()):
             .sort("duration_minutes")
         )
 
+        df_duration_tracks = calculate_duration_metrics(
+            df=radio_df,
+            duration_column='spotify_duration_ms',
+            count_columns=[cm.TRACK_TITLE_COLUMN, cm.ARTIST_NAME_COLUMN],
+            metric_type=mapped_metric_type
+        )
+
         # Convert to Pandas for Plotly
         df_duration_pandas = df_duration_tracks.to_pandas()
 
         # Calculate Percentage
-        total_tracks = df_duration_pandas["count"].sum()
-        df_duration_pandas["percentage"] = (df_duration_pandas["count"] / total_tracks) * 100
+        total_tracks = df_duration_pandas["metric"].sum()
+        df_duration_pandas["percentage"] = (df_duration_pandas["metric"] / total_tracks) * 100
 
         # Create a label column with "number (percentage)"
         df_duration_pandas["label"] = df_duration_pandas.apply(
-            lambda row: f"{row['count']:.0f} ({row['percentage']:.1f}%)", axis=1
+            lambda row: f"{row['metric']:.0f} ({row['percentage']:.1f}%)", axis=1
         )
 
         # Plot unique tracks by truncated duration
         fig_duration = px.bar(
             df_duration_pandas,
             x="duration_minutes",
-            y="count",
+            y="metric",
             title="",
-            labels={"duration_minutes": "Track Duration (Minutes)", "count": "Number of Unique Tracks"},
+            labels={"duration_minutes": "Track Duration (Minutes)", "metric": "Number of Unique Tracks"},
             orientation='v',
             text="label",  # Use the custom label
         )
