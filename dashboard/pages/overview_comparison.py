@@ -10,7 +10,7 @@ from data_extract.config_manager import ConfigManager
 from utils.calculations_helper import (
     calculate_avg_tracks, calculate_avg_popularity, calculate_avg_time,
     prepare_weekday_metrics, prepare_hourly_metrics, plot_metrics, 
-    calculate_column_counts, calculate_decade_metrics
+    calculate_column_counts, calculate_decade_metrics, 
 )
 from utils.helper import (
     country_to_flag, nationality_to_flag, number_formatter
@@ -417,9 +417,17 @@ with track_plots_expander:
             # Plot unique tracks by decade
             df_tracks_decade_pandas = df_decades_tracks.to_pandas()
 
-            # Apply number_formatter to the 'metric' column for labels
-            df_tracks_decade_pandas["formatted_metric"] = df_tracks_decade_pandas["metric"].apply(
-                lambda x: number_formatter(x)
+            # df_tracks_decade_pandas["formatted_metric"] = df_tracks_decade_pandas["metric"].apply(
+            #     lambda x: number_formatter(x)
+            # )
+            
+            # Display the values percentages
+            total_tracks = df_tracks_decade_pandas["metric"].sum()
+            df_tracks_decade_pandas["percentage"] = (df_tracks_decade_pandas["metric"] / total_tracks) * 100
+
+            df_tracks_decade_pandas["formatted_metric"] = df_tracks_decade_pandas.apply(
+                lambda row: f"{row['percentage']:.1f}%"
+                , axis=1
             )
 
             fig_tracks = px.bar(
@@ -600,8 +608,17 @@ with artist_plots_expander:
             df_artists_decade_pandas = df_decades_artists.to_pandas()
 
             # Apply number_formatter to the 'metric' column for labels
-            df_artists_decade_pandas["formatted_metric"] = df_artists_decade_pandas["metric"].apply(
-                lambda x: number_formatter(x)
+            # df_artists_decade_pandas["formatted_metric"] = df_artists_decade_pandas["metric"].apply(
+            #     lambda x: number_formatter(x)
+            # )
+
+            # Display the values percentages
+            total_tracks = df_artists_decade_pandas["metric"].sum()
+            df_artists_decade_pandas["percentage"] = (df_artists_decade_pandas["metric"] / total_tracks) * 100
+
+            df_artists_decade_pandas["formatted_metric"] = df_artists_decade_pandas.apply(
+                lambda row: f"{row['percentage']:.1f}%"
+                , axis=1
             )
             
             fig_tracks = px.bar(
@@ -757,5 +774,4 @@ for i, (key, val) in enumerate(app_config.items()):
 # Reduce white space between graphs and headers if possible
 
 # Group "United States" and "United States of America" together, and other similar countries
-# Add helper for popularity
 # Decades graph ad percentage label
