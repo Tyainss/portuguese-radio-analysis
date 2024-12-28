@@ -52,6 +52,7 @@ if 'ts_graph' not in st.session_state:
 def reset_settings():
     st.session_state['date_period'] = (min_date, max_date)
     st.session_state['ts_graph'] = 'Avg Tracks'
+    st.session_state['metric_type'] = 'Unique'
 
 # Sidebar Settings
 with st.sidebar:
@@ -64,11 +65,21 @@ with st.sidebar:
         max_value=max_date,
         key='date_period'
     )
-    new_graph_option  = st.radio(
-        '📈 Select Time Series to display:',
+    new_graph_option = st.radio(
+        '📈 Select :blue-background[**Time Series**] to display:',
         ['Avg Tracks', 'Avg Hours Played', 'Avg Popularity'],
         index=0,
         key='ts_graph'
+    )
+
+    metric_type_option = st.radio(
+        label='📊 Select :blue-background[**Metric**] Type',
+        options=['Unique', 'Total', 'Average'],
+        index=0,
+        horizontal=False,
+        key='metric_type',
+        help="""Display either unique or total combinations, or average.
+            \nApplies for :red-background[**Tracks**] and :red-background[**Artists**] metrics"""
     )
 
     # Reset settings button
@@ -145,10 +156,17 @@ graph_metric_map = {
 
 metric_type_map = {
     'Unique Tracks': 'unique',
+    'Unique Artists': 'unique',
+    'Unique': 'unique',
     'Total Tracks': 'total',
-    'Avg Tracks': 'average'
+    'Total Artists': 'total',
+    'Total': 'total',
+    'Avg Tracks': 'average',
+    'Avg Artists': 'average',
+    'Average': 'average',
 }
 
+mapped_metric_type = metric_type_map.get(st.session_state['metric_type'])
 selected_metric = graph_metric_map[st.session_state['ts_graph']]
 
 ### Header KPIs + Logo
@@ -164,11 +182,11 @@ for i, (key, val) in enumerate(app_config.items()):
         with st.container(border=True):
             kpi_1, kpi_2, kpi_3 = st.columns(3)
             kpi_1.metric(
-                label='# Avg Tracks per Day',
+                label='# Avg Daily Tracks',
                 value=calculate_avg_tracks(df=radio_df)
             )
             kpi_2.metric(
-                label='Avg Hours Played',
+                label='Avg Daily Hours Played',
                 value=calculate_avg_time(df=radio_df, output_unit='hours')
             )
             kpi_3.metric(
@@ -226,8 +244,8 @@ with expander:
             )
 
 
-### Song Statistics
-st.header(f':musical_note: Song Statistics', divider="gray")
+### Track Statistics
+st.header(f':musical_note: Track Statistics', divider="gray")
 track_kpis_cols = st.columns(ncols)
 
 for i, (key, val) in enumerate(app_config.items()):
@@ -258,7 +276,7 @@ for i, (key, val) in enumerate(app_config.items()):
 
 
 # Track Plots Expander
-track_plots_expander = st.expander(label=f'Song Plots', expanded=True, icon='📊')
+track_plots_expander = st.expander(label=f'Track Plots', expanded=True, icon='📊')
 with track_plots_expander:
     # with stylable_container(
     #     key='track_plots_settings',
@@ -274,13 +292,13 @@ with track_plots_expander:
     #         """,
     # ):
     with st.popover(label='Settings', icon='⚙️', use_container_width=False):
-        tracks_metric_type = st.radio(
-            label='Select Metric Type',
-            options=['Unique Tracks', 'Total Tracks', 'Avg Tracks'],
-            index=0,
-            horizontal=True,
-            key='Tracks Metric Type'
-        )
+        # tracks_metric_type = st.radio(
+        #     label='Select Metric Type',
+        #     options=['Unique Tracks', 'Total Tracks', 'Avg Tracks'],
+        #     index=0,
+        #     horizontal=True,
+        #     key='Tracks Metric Type'
+        # )
         num_languages = st.number_input(
             label='Top Number of Languages',
             value=5,
@@ -289,8 +307,8 @@ with track_plots_expander:
             step=1,
         )
 
-    ### Song Language Statistics
-    st.subheader(f':earth_africa: Top {num_languages} Languages by {tracks_metric_type}', divider=False)
+    ### Track Language Statistics
+    st.subheader(f':earth_africa: Top {num_languages} Languages by {st.session_state['metric_type']} Tracks', divider=False)
     track_plots_cols = st.columns(ncols)
 
     for i, (key, val) in enumerate(app_config.items()):
@@ -302,14 +320,14 @@ with track_plots_expander:
                 df=radio_df,
                 group_by_cols='lyrics_language',
                 count_columns=[cm.TRACK_TITLE_COLUMN, cm.ARTIST_NAME_COLUMN],
-                metric_type=metric_type_map.get(tracks_metric_type),
+                metric_type=mapped_metric_type,
             )
 
             # Separate top languages and "Others"
             top_languages = language_counts.head(num_languages)
             others = language_counts.tail(language_counts.shape[0] - num_languages)
 
-            if tracks_metric_type == "Avg Tracks":
+            if mapped_metric_type == "average":
                 others_aggregated = pl.DataFrame({
                     "lyrics_language": ["Others"],
                     "metric": [others["metric"].mean()]
@@ -328,7 +346,7 @@ with track_plots_expander:
             all_languages = top_languages.vstack(others_aggregated)
 
             # Calculate percentage only for 'Unique Tracks' or 'Total Tracks'
-            if tracks_metric_type in ["Unique Tracks", "Total Tracks"]:
+            if mapped_metric_type in ["unique", "total"]:
                 all_languages = all_languages.with_columns(
                     (pl.col("metric") / all_languages["metric"].sum() * 100).alias("percentage")
                 )
@@ -343,7 +361,8 @@ with track_plots_expander:
 
             # Update label for average
             label_col = "metric"
-            if tracks_metric_type == "Avg Tracks":
+            # st.write(data_df)
+            if mapped_metric_type == "average":
                 data_df["label"] = data_df["metric"].apply(lambda x: f"{x:.1f}")
             else:
                 data_df["label"] = data_df["percentage"].apply(lambda x: f"{x:.1f}%")
@@ -377,8 +396,8 @@ with track_plots_expander:
 
     st.divider()
 
-    ### Song Language Statistics
-    st.subheader(f':date: {tracks_metric_type} by *decade*', divider=False)
+    ### Track Language Statistics
+    st.subheader(f':date: {st.session_state['metric_type']} Tracks by *decade*', divider=False)
     track_decade_cols = st.columns(ncols)
 
     for i, (key, val) in enumerate(app_config.items()):
@@ -390,7 +409,7 @@ with track_plots_expander:
                 df=radio_df,
                 date_column='spotify_release_date',
                 count_columns=[cm.TRACK_TITLE_COLUMN, cm.ARTIST_NAME_COLUMN],
-                metric_type=metric_type_map.get(tracks_metric_type)
+                metric_type=mapped_metric_type
             )
 
             # Plot unique tracks by decade
@@ -454,7 +473,7 @@ for i, (key, val) in enumerate(app_config.items()):
             percent_unique_artists = f'{(unique_artists / total_tracks * 100):.2f}%' if total_tracks > 0 else "N/A"
             avg_plays_per_artist = f'{(total_tracks / unique_artists if unique_artists > 0 else 0):.2f}'
             st.metric(
-                label='Avg Songs per Artist',
+                label='Avg Tracks per Artist',
                 value=avg_plays_per_artist
             )
 
@@ -462,13 +481,13 @@ for i, (key, val) in enumerate(app_config.items()):
 artist_plots_expander = st.expander(label=f'Artists Plots', expanded=True, icon='📊')
 with artist_plots_expander:
     with st.popover(label='Settings', icon='⚙️', use_container_width=False):
-        artists_metric_type = st.radio(
-            label='Select Metric Type',
-            options=['Unique Tracks', 'Total Tracks', 'Avg Tracks'],
-            index=0,
-            horizontal=True,
-            key='Artists Metric Type'
-        )
+        # artists_metric_type = st.radio(
+        #     label='Select Metric Type',
+        #     options=['Unique Tracks', 'Total Tracks', 'Avg Tracks'],
+        #     index=0,
+        #     horizontal=True,
+        #     key='Artists Metric Type'
+        # )
         num_countries = st.number_input(
             label='Top Number of Countries',
             value=5,
@@ -477,7 +496,7 @@ with artist_plots_expander:
             step=1,
         )
     ### Artists Country Statistics
-    st.header(f':earth_africa: Top 5 countries by {artists_metric_type}', divider="gray")
+    st.header(f':earth_africa: Top 5 countries by {st.session_state['metric_type']} Artists', divider="gray")
     artist_plots_cols = st.columns(ncols)
 
     for i, (key, val) in enumerate(app_config.items()):
@@ -489,13 +508,13 @@ with artist_plots_expander:
                 df=radio_df,
                 group_by_cols='combined_nationality',
                 count_columns=[cm.ARTIST_NAME_COLUMN],                
-                metric_type=metric_type_map.get(artists_metric_type),
+                metric_type=mapped_metric_type,
             )
 
             # Separate top countries and "Others"
             top_countries = country_counts.head(num_countries)
             others = country_counts.tail(country_counts.shape[0] - num_countries)
-            if artists_metric_type == "Avg Tracks":
+            if mapped_metric_type == "average":
                 others_aggregated = pl.DataFrame({
                     "combined_nationality": ["Others"],
                     "metric": [others["metric"].mean()]
@@ -514,7 +533,7 @@ with artist_plots_expander:
             all_countries = top_countries.vstack(others_aggregated)
 
             # Calculate percentage only for 'Unique Tracks' or 'Total Tracks'
-            if artists_metric_type in ["Unique Tracks", "Total Tracks"]:
+            if mapped_metric_type in ["unique", "total"]:
                 all_countries = all_countries.with_columns(
                     (pl.col("metric") / all_countries["metric"].sum() * 100).alias("percentage")
                 )
@@ -527,7 +546,7 @@ with artist_plots_expander:
 
             # Update label for average
             label_col = "metric"
-            if artists_metric_type == "Avg Tracks":
+            if mapped_metric_type == "average":
                 data_df["label"] = data_df["metric"].apply(lambda x: f"{x:.1f}")
             else:
                 data_df["label"] = data_df["percentage"].apply(lambda x: f"{x:.1f}%")
@@ -559,7 +578,7 @@ with artist_plots_expander:
             st.plotly_chart(fig, use_container_width=True, key=f'{radio_name}_artists_by_country')
     
     ### Artists Country Statistics
-    st.header(f':date: {artists_metric_type} by *decade*', divider="gray")
+    st.header(f':date: {st.session_state['metric_type']} Artists by *decade*', divider="gray")
     artist_decade_cols = st.columns(ncols)
 
     for i, (key, val) in enumerate(app_config.items()):
@@ -572,7 +591,7 @@ with artist_plots_expander:
                 df=radio_df,
                 date_column="mb_artist_career_begin",
                 count_columns=[cm.ARTIST_NAME_COLUMN],
-                metric_type=metric_type_map.get(artists_metric_type),
+                metric_type=mapped_metric_type,
             )
 
             # Plot unique tracks by decade
@@ -602,8 +621,8 @@ with artist_plots_expander:
 
 
 
-### Song Duration
-st.subheader(f':clock4: Song Duration (minutes)', divider="gray")
+### Track Duration
+st.subheader(f':clock4: Track Duration (minutes)', divider="gray")
 track_duration_cols = st.columns(ncols)
 
 for i, (key, val) in enumerate(app_config.items()):
@@ -729,7 +748,6 @@ for i, (key, val) in enumerate(app_config.items()):
 
 # Reduce file size with helper functions, if possible
 
-# Apply Metric Type button for decades graph as well
 
 # Improve graph tooltips
 # Improve texts with markdown format - It's possible to add background color! :red-background
