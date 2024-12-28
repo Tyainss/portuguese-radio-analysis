@@ -1,6 +1,7 @@
 import streamlit as st
 import polars as pl
 import plotly.express as px
+from typing import List
 
 from data_extract.data_storage import DataStorage
 from data_extract.config_manager import ConfigManager
@@ -226,3 +227,45 @@ def plot_metrics(
         fig.update_yaxes(range=y_axis_range)
 
     st.plotly_chart(fig, use_container_width=True, key=f'{radio_name}_{metric}_{x_axis_column}')
+
+
+def calculate_column_counts(
+    df: pl.DataFrame, 
+    group_by_cols: str, 
+    count_columns: List[str], 
+    metric_type: str = 'unique'
+) -> pl.DataFrame:
+    """
+    Calculate counts for a given column, grouped by specified columns, based on the selected metric type.
+
+    Args:
+        df (pl.DataFrame): Input DataFrame containing the data.
+        group_by_cols (List[str]): Columns to group by.
+        count_column (str): The column to count occurrences of.
+        metric_type (str, optional): Metric type; 'unique' for distinct combinations of group_by_cols 
+                                     or 'total' for all rows. Defaults to 'unique'.
+
+    Returns:
+        pl.DataFrame: A DataFrame containing the grouped and sorted counts.
+                      Columns include the group_by_cols and a 'count' column.
+    """
+    # Prepare column expressions for selection
+    cols = [pl.col(col_name) for col_name in count_columns]
+    if metric_type == "unique":
+        # Calculate unique counts based on group_by_cols
+        counts = (
+            df
+            .select(cols + [pl.col(group_by_cols)])  # Include count_column to ensure grouping is accurate
+            .unique()
+        )
+    else:  # Total Tracks
+        # Only retain group_by_cols
+        counts = df.select(cols + [pl.col(group_by_cols)])
+    
+    # Group by the specified columns and count occurrences
+    return (
+        counts
+        .group_by(group_by_cols)
+        .count()
+        .sort(by='count', descending=True)
+    )

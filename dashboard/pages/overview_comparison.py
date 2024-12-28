@@ -1,5 +1,6 @@
 import polars as pl
 import streamlit as st
+from streamlit_extras.stylable_container import stylable_container
 import plotly.express as px
 from datetime import datetime
 
@@ -8,7 +9,7 @@ from data_extract.config_manager import ConfigManager
 
 from utils.calculations_helper import (
     calculate_avg_tracks, calculate_avg_popularity, calculate_avg_time,
-    prepare_weekday_metrics, prepare_hourly_metrics, plot_metrics
+    prepare_weekday_metrics, prepare_hourly_metrics, plot_metrics, calculate_column_counts
 )
 from utils.helper import (
     country_to_flag, nationality_to_flag, number_formatter
@@ -57,7 +58,7 @@ with st.sidebar:
 
     new_date_period = st.date_input(
         label = ':calendar: Select the time period',
-        value=(min_date, max_date),
+        # value=(min_date, max_date),
         min_value=min_date,
         max_value=max_date,
         key='date_period'
@@ -70,7 +71,7 @@ with st.sidebar:
     )
 
     # Reset settings button
-    st.button('Reset settings', on_click=reset_settings)
+    st.button('Reset Page Settings', on_click=reset_settings)
 
 
 # Apply Date Filter Only After Both Dates Are Selected
@@ -133,13 +134,6 @@ for i, (key, val) in enumerate(app_config.items()):
                 metric_ranges[metric]['hour']['max'] = max(
                     metric_ranges[metric]['hour']['max'], hour_max
                 )
-                
-        # # Update weekday min/max
-        # metric_ranges[metric]['weekday']['min'] = min(metric_ranges[metric]['weekday']['min'], weekday_metric_df[metric].min())
-        # metric_ranges[metric]['weekday']['max'] = max(metric_ranges[metric]['weekday']['max'], weekday_metric_df[metric].max())
-        # # Update hour min/max
-        # metric_ranges[metric]['hour']['min'] = min(metric_ranges[metric]['hour']['min'], hour_metric_df[metric].min())
-        # metric_ranges[metric]['hour']['max'] = max(metric_ranges[metric]['hour']['max'], hour_metric_df[metric].max())
 
 
 graph_metric_map = {
@@ -147,6 +141,12 @@ graph_metric_map = {
     'Avg Hours Played': 'avg_time_played',
     'Avg Popularity': 'avg_popularity'
 }
+
+metric_type_map = {
+    'Unique Tracks': 'unique',
+    'Total Tracks': 'total',
+}
+
 selected_metric = graph_metric_map[st.session_state['ts_graph']]
 
 ### Header KPIs + Logo
@@ -258,8 +258,37 @@ for i, (key, val) in enumerate(app_config.items()):
 # Track Plots Expander
 track_plots_expander = st.expander(label=f'Song Plots', expanded=True, icon='📊')
 with track_plots_expander:
+    # with stylable_container(
+    #     key='track_plots_settings',
+    #     css_styles="""
+    #         button {
+    #             width: 150px;
+    #             height: 60px;
+    #             background-color: green;
+    #             color: white;
+    #             border-radius: 5px;
+    #             white-space: nowrap;
+    #         }
+    #         """,
+    # ):
+    with st.popover(label='Settings', icon='⚙️', use_container_width=False):
+        tracks_metric_type = st.radio(
+            label='Select Metric Type',
+            options=['Unique Tracks', 'Total Tracks'],
+            index=0,
+            horizontal=True,
+            key='Tracks Metric Type'
+        )
+        num_languages = st.number_input(
+            label='Top Number of Languages',
+            value=5,
+            min_value=1,
+            max_value=10,
+            step=1,
+        )
+
     ### Song Language Statistics
-    st.subheader(f':earth_africa: Top 5 Languages by Unique Tracks', divider=False)
+    st.subheader(f':earth_africa: Top {num_languages} Languages by {tracks_metric_type}', divider=False)
     track_plots_cols = st.columns(ncols)
 
     for i, (key, val) in enumerate(app_config.items()):
@@ -268,18 +297,24 @@ with track_plots_expander:
             radio_df = val.get('radio_df')
             
             # Calculate counts and percentages for all languages
-            language_counts = (
-                radio_df
-                .select([pl.col(cm.TRACK_TITLE_COLUMN), pl.col(cm.ARTIST_NAME_COLUMN), pl.col('lyrics_language')])
-                .unique()
-                .group_by('lyrics_language')
-                .count()
-                .sort(by='count', descending=True)
+            # language_counts = (
+            #     radio_df
+            #     .select([pl.col(cm.TRACK_TITLE_COLUMN), pl.col(cm.ARTIST_NAME_COLUMN), pl.col('lyrics_language')])
+            #     # .unique()
+            #     .group_by('lyrics_language')
+            #     .count()
+            #     .sort(by='count', descending=True)
+            # )
+            language_counts = calculate_column_counts(
+                df=radio_df,
+                group_by_cols='lyrics_language',
+                count_columns=[cm.TRACK_TITLE_COLUMN, cm.ARTIST_NAME_COLUMN],                
+                metric_type=metric_type_map.get(tracks_metric_type),
             )
 
             # Separate top 5 and others
-            top_5 = language_counts.head(5)
-            others = language_counts.tail(language_counts.shape[0] - 5)
+            top_5 = language_counts.head(num_languages)
+            others = language_counts.tail(language_counts.shape[0] - min(num_languages, language_counts.shape[0]))
             others_aggregated = others.select(
                 pl.lit('Others').alias('lyrics_language'),
                 pl.sum('count').alias('count')
@@ -332,7 +367,7 @@ with track_plots_expander:
     st.divider()
 
     ### Song Language Statistics
-    st.subheader(f':date: Unique Tracks by *decade*', divider=False)
+    st.subheader(f':date: {tracks_metric_type} by *decade*', divider=False)
     track_decade_cols = st.columns(ncols)
 
     for i, (key, val) in enumerate(app_config.items()):
@@ -423,8 +458,23 @@ for i, (key, val) in enumerate(app_config.items()):
 # Artist Plots Expander
 artist_plots_expander = st.expander(label=f'Artists Plots', expanded=True, icon='📊')
 with artist_plots_expander:
+    with st.popover(label='Settings', icon='⚙️', use_container_width=False):
+        artists_metric_type = st.radio(
+            label='Select Metric Type',
+            options=['Unique Tracks', 'Total Tracks'],
+            index=0,
+            horizontal=True,
+            key='Artists Metric Type'
+        )
+        num_countries = st.number_input(
+            label='Top Number of Countries',
+            value=5,
+            min_value=1,
+            max_value=10,
+            step=1,
+        )
     ### Artists Country Statistics
-    st.header(f':earth_africa: Top 5 countries', divider="gray")
+    st.header(f':earth_africa: Top 5 countries by {artists_metric_type}', divider="gray")
     artist_plots_cols = st.columns(ncols)
 
     for i, (key, val) in enumerate(app_config.items()):
@@ -432,19 +482,15 @@ with artist_plots_expander:
             radio_name = val.get('name')
             radio_df = val.get('radio_df')
             
-            country_counts = (
-                radio_df
-                .select([pl.col(cm.ARTIST_NAME_COLUMN), pl.col('combined_nationality')])
-                .unique()
-                .group_by('combined_nationality')
-                .count()
-                .sort(by='count', descending=True)
-                # .head(5)
+            country_counts = calculate_column_counts(
+                df=radio_df,
+                group_by_cols='combined_nationality',
+                count_columns=[cm.ARTIST_NAME_COLUMN],                
+                metric_type=metric_type_map.get(artists_metric_type),
             )
-            # st.write(country_counts)
             # Separate top 5 and others
-            top_5 = country_counts.head(5)
-            others = country_counts.tail(country_counts.shape[0] - 5)
+            top_5 = country_counts.head(num_countries)
+            others = country_counts.tail(country_counts.shape[0] - min(num_countries, country_counts.shape[0]))
             others_aggregated = others.select(
                 pl.lit('Others').alias('combined_nationality'),
                 pl.sum('count').alias('count')
@@ -465,22 +511,6 @@ with artist_plots_expander:
                 lambda x: 1 if x == "Others" else 0
             )
             unique_artists_df = unique_artists_df.sort_values(by=['order', 'count'], ascending=[False, True])
-
-            # unique_artists_by_country = (
-            #     radio_df
-            #     .select([pl.col(cm.ARTIST_NAME_COLUMN), pl.col('combined_nationality')])
-            #     .unique()
-            #     .group_by('combined_nationality')
-            #     .count()
-            #     .sort(by='count', descending=False)
-            #     .tail(5)
-            # )
-            # unique_artists_by_country = unique_artists_by_country.with_columns(
-            #     (pl.col('count') / unique_artists_by_country['count'].sum() * 100).alias('percentage')
-            # )
-
-            # unique_artists_df = unique_artists_by_country.to_pandas()
-            # unique_artists_df['flag'] = unique_artists_df['combined_nationality'].map(nationality_to_flag)
 
             # Plot top 5 countries for unique artists
             fig = px.bar(
@@ -510,7 +540,7 @@ with artist_plots_expander:
             st.plotly_chart(fig, use_container_width=True, key=f'{radio_name}_unique_artists_by_country')
     
     ### Artists Country Statistics
-    st.header(f':date: Unique Artists by *decade*', divider="gray")
+    st.header(f':date: {artists_metric_type} by *decade*', divider="gray")
     artist_decade_cols = st.columns(ncols)
 
     for i, (key, val) in enumerate(app_config.items()):
@@ -688,7 +718,10 @@ for i, (key, val) in enumerate(app_config.items()):
 # Reduce file size with helper functions, if possible
 
 # Add a button to choose between 'Total Tracks' or 'Unique Tracks'
+     # Add it for decades graph as well
 # Also add a button to choose 5 or more top countries/languages
+
 # Improve graph tooltips
 # Improve texts with markdown format - It's possible to add background color! :red-background
 # Reduce white space between graphs and headers if possible
+
