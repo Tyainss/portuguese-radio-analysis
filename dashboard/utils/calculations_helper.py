@@ -230,42 +230,60 @@ def plot_metrics(
 
 
 def calculate_column_counts(
-    df: pl.DataFrame, 
-    group_by_cols: str, 
-    count_columns: List[str], 
+    df: pl.DataFrame,
+    group_by_cols: str,
+    count_columns: List[str],
     metric_type: str = 'unique'
 ) -> pl.DataFrame:
     """
-    Calculate counts for a given column, grouped by specified columns, based on the selected metric type.
+    Calculate counts or averages for a given column, grouped by specified columns, based on the selected metric type.
 
     Args:
         df (pl.DataFrame): Input DataFrame containing the data.
-        group_by_cols (List[str]): Columns to group by.
-        count_column (str): The column to count occurrences of.
-        metric_type (str, optional): Metric type; 'unique' for distinct combinations of group_by_cols 
-                                     or 'total' for all rows. Defaults to 'unique'.
+        group_by_cols (str): Column to group by.
+        count_columns (List[str]): Columns to count occurrences of.
+        metric_type (str, optional): Metric type ('unique', 'total', or 'average'). Defaults to 'unique'.
 
     Returns:
-        pl.DataFrame: A DataFrame containing the grouped and sorted counts.
-                      Columns include the group_by_cols and a 'count' column.
+        pl.DataFrame: Grouped DataFrame with counts or averages and a 'metric' column.
     """
-    # Prepare column expressions for selection
-    cols = [pl.col(col_name) for col_name in count_columns]
+    cols = [pl.col(col) for col in count_columns] + [pl.col(group_by_cols)]
+
+    # Calculate metrics based on the selected type
     if metric_type == "unique":
-        # Calculate unique counts based on group_by_cols
-        counts = (
-            df
-            .select(cols + [pl.col(group_by_cols)])  # Include count_column to ensure grouping is accurate
-            .unique()
+        counts = df.select(cols).unique()
+        result = (
+            counts
+            .group_by(group_by_cols)
+            .count()
+            .rename({"count": "metric"})
         )
-    else:  # Total Tracks
-        # Only retain group_by_cols
-        counts = df.select(cols + [pl.col(group_by_cols)])
-    
-    # Group by the specified columns and count occurrences
-    return (
-        counts
-        .group_by(group_by_cols)
-        .count()
-        .sort(by='count', descending=True)
-    )
+    elif metric_type == "total":
+        counts = df.select(cols)
+        result = (
+            counts
+            .group_by(group_by_cols)
+            .count()
+            .rename({"count": "metric"})
+        )
+    elif metric_type == "average":
+        unique_counts = (
+            df.select(cols).unique()
+            .group_by(group_by_cols)
+            .count()
+            .rename({"count": "unique_count"})
+        )
+        total_counts = (
+            df.select(cols)
+            .group_by(group_by_cols)
+            .count()
+            .rename({"count": "total_count"})
+        )
+        result = unique_counts.join(total_counts, on=group_by_cols)
+        result = result.with_columns(
+            (pl.col("total_count") / pl.col("unique_count")).alias("metric")
+        ).select([group_by_cols, "metric"])
+    else:
+        raise ValueError(f"Unsupported metric_type: {metric_type}. Choose 'unique', 'total', or 'average'.")
+
+    return result.sort(by="metric", descending=True)
