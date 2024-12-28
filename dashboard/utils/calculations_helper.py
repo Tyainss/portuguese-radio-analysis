@@ -426,3 +426,75 @@ def calculate_duration_metrics(
         raise ValueError(f"Unsupported metric_type: {metric_type}. Choose 'unique', 'total', or 'average'.")
 
     return result.sort("duration_minutes")
+
+def calculate_genre_metrics(
+    df: pl.DataFrame,
+    genre_column: str,
+    count_columns: List[str],
+    metric_type: str = "unique"
+) -> pl.DataFrame:
+    """
+    Calculate duration-based metrics (Unique Tracks, Total Tracks, Avg Tracks).
+
+    Args:
+        df (pl.DataFrame): Input DataFrame.
+        date_column (str): Column with duration information (e.g., 'spotify_duration_ms').
+        count_columns (List[str]): Columns to count (e.g., 'artist_name').
+        metric_type (str, optional): Metric type ('unique', 'total', 'average'). Defaults to 'unique'.
+
+    Returns:
+        pl.DataFrame: Decade-level metrics with 'decade_year', 'decade_label', and a 'metric' column.
+    """
+    # Filter out rows with null dates
+    df_genres = df.filter(
+        (~pl.col(genre_column).is_null())
+        & (pl.col(genre_column) != "")
+    )
+
+    # Extract decades
+    df_genres = df_genres.with_columns([
+        pl.col(genre_column).str.split(", ").alias("split_genres")  # Split comma-separated genres into lists
+    ]).explode("split_genres")  # Explode the lists into rows
+
+    if metric_type == "unique":
+        # Unique metric: Count unique combinations of decade and group_by_column
+        result = (
+            df_genres
+            .select(["split_genres"] + count_columns)
+            .unique()
+            .group_by(["split_genres"])
+            .count()
+            .rename({"count": "metric"})
+        )
+    elif metric_type == "total":
+        # Total metric: Count all rows grouped by decade
+        result = (
+            df_genres
+            .group_by(["split_genres"])
+            .count()
+            .rename({"count": "metric"})
+        )
+    elif metric_type == "average":
+        # Average metric: Compute total divided by unique
+        unique_counts = (
+            df_genres
+            .select(["split_genres"] + count_columns)
+            .unique()
+            .group_by(["split_genres"])
+            .count()
+            .rename({"count": "unique_count"})
+        )
+        total_counts = (
+            df_genres
+            .group_by(["split_genres"])
+            .count()
+            .rename({"count": "total_count"})
+        )
+        result = unique_counts.join(total_counts, on=["split_genres"])
+        result = result.with_columns(
+            (pl.col("total_count") / pl.col("unique_count")).alias("metric")
+        ).select(["split_genres", "metric"])
+    else:
+        raise ValueError(f"Unsupported metric_type: {metric_type}. Choose 'unique', 'total', or 'average'.")
+
+    return result.sort("metric", descending=False).tail(10)

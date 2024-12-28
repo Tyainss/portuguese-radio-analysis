@@ -10,7 +10,8 @@ from data_extract.config_manager import ConfigManager
 from utils.calculations_helper import (
     calculate_avg_tracks, calculate_avg_popularity, calculate_avg_time,
     prepare_weekday_metrics, prepare_hourly_metrics, plot_metrics, 
-    calculate_column_counts, calculate_decade_metrics, calculate_duration_metrics
+    calculate_column_counts, calculate_decade_metrics, calculate_duration_metrics,
+    calculate_genre_metrics
 )
 from utils.helper import (
     country_to_flag, nationality_to_flag, number_formatter
@@ -649,26 +650,6 @@ for i, (key, val) in enumerate(app_config.items()):
         radio_name = val.get('name')
         radio_df = val.get('radio_df')
 
-        # Ensure spotify_duration_ms is not null
-        df_tracks_with_duration = radio_df.filter(~pl.col("spotify_duration_ms").is_null())
-
-        # Convert duration to minutes (truncated)
-        df_duration_tracks = (
-            df_tracks_with_duration
-            .with_columns([
-                (pl.col("spotify_duration_ms") / 60000).floor().cast(int).alias("duration_minutes")  # Convert to minutes and truncate
-            ])
-            .select([
-                pl.col("duration_minutes"),
-                pl.col("track_title"),
-                pl.col("artist_name"),
-            ])
-            .unique()
-            .group_by("duration_minutes")
-            .count()
-            .sort("duration_minutes")
-        )
-
         df_duration_tracks = calculate_duration_metrics(
             df=radio_df,
             duration_column='spotify_duration_ms',
@@ -739,18 +720,29 @@ for i, (key, val) in enumerate(app_config.items()):
             .tail(10)  # Show top 10 genres
         )
 
+        df_genres_cleaned = calculate_genre_metrics(
+            df=radio_df,
+            genre_column='spotify_genres',
+            count_columns=[cm.TRACK_TITLE_COLUMN, cm.ARTIST_NAME_COLUMN],
+            metric_type=mapped_metric_type,
+        )
+
         # Convert to Pandas for Plotly
         df_genres_pandas = df_genres_cleaned.rename({"split_genres": "spotify_genres"}).to_pandas()
+
+        df_genres_pandas["formatted_metric"] = df_genres_pandas["metric"].apply(
+            lambda x: number_formatter(x)
+        )
 
         # Plot horizontal bar chart
         fig_genres = px.bar(
             df_genres_pandas,
-            x="count",
+            x="metric",
             y="spotify_genres",
             title="",
-            labels={"count": "Track Count", "spotify_genres": "Genre"},
+            labels={"metric": "Track Count", "spotify_genres": "Genre"},
             orientation="h",
-            text="count",  # Show count on bars
+            text="formatted_metric",  # Show count on bars
         )
         fig_genres.update_traces(
             texttemplate="%{text}", 
@@ -782,3 +774,5 @@ for i, (key, val) in enumerate(app_config.items()):
 
 # Group "United States" and "United States of America" together, and other similar countries
 # Decades graph ad percentage label
+
+# Perhaps refactor calculations_helper.py
