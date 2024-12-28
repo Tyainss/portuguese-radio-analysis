@@ -191,7 +191,9 @@ for i, (key, val) in enumerate(app_config.items()):
             )
             kpi_3.metric(
                 label='Avg Popularity',
-                value=calculate_avg_popularity(df=radio_df)
+                value=calculate_avg_popularity(df=radio_df),
+                help='''Popularity is a **score** that reflects **how frequently a track has been played, 
+                saved, or added to playlists** by users on :green[Spotify], with recent activity weighing more heavily than older interactions.'''
             )
 
 
@@ -742,15 +744,18 @@ for i, (key, val) in enumerate(app_config.items()):
         st.write(radio_df)
         
 
+## Visuals
 # Create logos for radios of the same size
 # Improve visual by trying to add some borders or background colors
 # Color PT bar differently
+# Define color pallete for each radio
 
 # Reduce file size with helper functions, if possible
 
 
 # Improve graph tooltips
-# Improve texts with markdown format - It's possible to add background color! :red-background
 # Reduce white space between graphs and headers if possible
 
 # Group "United States" and "United States of America" together, and other similar countries
+# Add helper for popularity
+# Decades graph ad percentage label
