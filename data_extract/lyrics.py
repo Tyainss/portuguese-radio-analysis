@@ -70,8 +70,8 @@ class LyricsAnalyzer:
         # print(f'Sentiment analysis - Polarity: {sentiment.polarity}, Subjectivity: {sentiment.subjectivity}')
         return sentiment
 
-    def _split_lyrics_chunks(self, lyrics, max_length=510):
-        """ Split the lyrics into chunks of 510 tokens, this way avoiding limit of the classifier model"""
+    def _split_lyrics_chunks(self, lyrics, max_length=500):
+        """ Split the lyrics into chunks of 500 tokens, this way avoiding limit of the classifier model"""
         tokens = self.tokenizer(lyrics, return_tensors='pt', truncation=False).input_ids[0]
         for i in range(0, len(tokens), max_length):
             yield self.tokenizer.decode(tokens[i:i + max_length], skip_special_tokens=True)
@@ -137,14 +137,14 @@ class LyricsAnalyzer:
             if not lyrics:
                 print(f"No lyrics found for '{track_title}' by '{artist_name}'. Skipping...")
                 lyrics_info_list.append({
-                    'lyrics_language': 'unknown',
-                    'lyrics_love_occurrences': 0,
                     'lyrics_polarity': None,
                     'lyrics_subjectivity': None,
                     'lyrics_joy': None,
                     'lyrics_sadness': None,
                     'lyrics_optimism': None,
                     'lyrics_anger': None,
+                    'lyrics_language': 'unknown',
+                    'lyrics_love_occurrences': 0,
                 })
                 continue
 
