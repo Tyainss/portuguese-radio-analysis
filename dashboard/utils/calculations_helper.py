@@ -292,19 +292,22 @@ def calculate_decade_metrics(
     df: pl.DataFrame,
     date_column: str,
     count_columns: List[str],
-    metric_type: str = "unique"
+    metric_type: str = "unique",
+    include_most_played: str = None  # Options: "track", "artist", or None
 ) -> pl.DataFrame:
     """
-    Calculate decade-based metrics (Unique Tracks, Total Tracks, Avg Tracks).
+    Calculate decade-based metrics (Unique Tracks, Total Tracks, Avg Tracks),
+    with optional most played track or artist details.
 
     Args:
         df (pl.DataFrame): Input DataFrame.
         date_column (str): Column with date information (e.g., 'mb_artist_career_begin').
         count_columns (List[str]): Columns to count (e.g., 'artist_name').
         metric_type (str, optional): Metric type ('unique', 'total', 'average'). Defaults to 'unique'.
+        include_most_played (str, optional): Whether to include most played track or artist. Defaults to None.
 
     Returns:
-        pl.DataFrame: Decade-level metrics with 'decade_year', 'decade_label', and a 'metric' column.
+        pl.DataFrame: Decade-level metrics with optional most played track or artist details.
     """
     # Filter out rows with null dates
     df_with_date = df.filter(~pl.col(date_column).is_null())
@@ -355,6 +358,45 @@ def calculate_decade_metrics(
         ).select(["decade_year", "decade_label", "metric"])
     else:
         raise ValueError(f"Unsupported metric_type: {metric_type}. Choose 'unique', 'total', or 'average'.")
+
+    # Optionally add most played track or artist
+    if include_most_played == "track":
+        most_played = (
+            df_with_date
+            .group_by(["decade_year", "decade_label", cm.TRACK_TITLE_COLUMN, cm.ARTIST_NAME_COLUMN])
+            .count()
+            .sort(["decade_year", "decade_label", "count"], descending=True)
+            .group_by(["decade_year", "decade_label"])
+            .agg([
+                pl.col(cm.TRACK_TITLE_COLUMN).first().alias("most_played_track"),
+                pl.col(cm.ARTIST_NAME_COLUMN).first().alias("most_played_artist"),
+                pl.col("count").first().alias("most_played_count")
+            ])
+        )
+        result = result.join(most_played, on=["decade_year", "decade_label"], how="left")
+    elif include_most_played == "artist":
+        # Sum play counts for each artist within a decade
+        artist_counts = (
+            df_with_date
+            .group_by(["decade_year", "decade_label", cm.ARTIST_NAME_COLUMN])
+            .count()
+            .group_by(["decade_year", "decade_label", cm.ARTIST_NAME_COLUMN])
+            .agg([
+                pl.col("count").sum().alias("total_plays")
+            ])
+        )
+
+        # Find the artist with the most total plays per decade
+        most_played = (
+            artist_counts
+            .sort(["decade_year", "decade_label", "total_plays"], descending=True)
+            .group_by(["decade_year", "decade_label"])
+            .agg([
+                pl.col(cm.ARTIST_NAME_COLUMN).first().alias("most_played_artist"),
+                pl.col("total_plays").first().alias("most_played_count")
+            ])
+        )
+        result = result.join(most_played, on=["decade_year", "decade_label"], how="left")
 
     return result.sort("decade_year")
 

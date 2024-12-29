@@ -400,8 +400,12 @@ with track_plots_expander:
 
     st.divider()
 
-    ### Track Language Statistics
-    st.subheader(f':date: {st.session_state['metric_type']} Tracks by *decade*', divider=False)
+    ### Track Decade Statistics
+    st.subheader(
+        f':date: {st.session_state['metric_type']} Tracks by *decade*', 
+        divider=False, 
+        help='Based on the :blue-background[**year of release**] of the track'
+    )
     track_decade_cols = st.columns(ncols)
 
     for i, (key, val) in enumerate(app_config.items()):
@@ -409,27 +413,37 @@ with track_plots_expander:
             radio_name = val.get('name')
             radio_df = val.get('radio_df')
 
+            # Calculate metrics by decade, including most played track
             df_decades_tracks = calculate_decade_metrics(
                 df=radio_df,
                 date_column='spotify_release_date',
                 count_columns=[cm.TRACK_TITLE_COLUMN, cm.ARTIST_NAME_COLUMN],
-                metric_type=mapped_metric_type
+                metric_type=mapped_metric_type,
+                include_most_played="track",
             )
 
             # Plot unique tracks by decade
             df_tracks_decade_pandas = df_decades_tracks.to_pandas()
-
-            # df_tracks_decade_pandas["formatted_metric"] = df_tracks_decade_pandas["metric"].apply(
-            #     lambda x: number_formatter(x)
-            # )
             
             # Display the values percentages
             total_tracks = df_tracks_decade_pandas["metric"].sum()
-            df_tracks_decade_pandas["percentage"] = (df_tracks_decade_pandas["metric"] / total_tracks) * 100
+            # df_tracks_decade_pandas["percentage"] = (df_tracks_decade_pandas["metric"] / total_tracks) * 100
+            df_tracks_decade_pandas["percentage"] = (
+                df_tracks_decade_pandas["metric"] / total_tracks * 100
+            ).apply(lambda x: f"{x:.1f}%")
 
-            df_tracks_decade_pandas["formatted_metric"] = df_tracks_decade_pandas.apply(
-                lambda row: f"{row['percentage']:.1f}%"
-                , axis=1
+            df_tracks_decade_pandas["formatted_metric"] = df_tracks_decade_pandas["metric"].apply(lambda x: number_formatter(x))
+
+            # Add hover text
+            df_tracks_decade_pandas["tooltip_text"] = df_tracks_decade_pandas.apply(
+                lambda row: (
+                    f"<b>Decade:</b> {row['decade_label']}<br>"
+                    f"<b>{metric_type_option} Tracks:</b> {row['formatted_metric']}<br>"
+                    f"<b>Percentage:</b> {row['percentage']}<br>"
+                    f"<b>Most Played Track:</b> {row['most_played_track']} | {row['most_played_artist']} "
+                    f"({number_formatter(row['most_played_count'])} plays)"
+                ),
+                axis=1
             )
 
             fig_tracks = px.bar(
@@ -439,13 +453,21 @@ with track_plots_expander:
                 title="",
                 labels={"decade_label": "Decade", "metric": "Tracks"},
                 orientation='v',
-                text="formatted_metric",  # Display the count on the bars
+                text="percentage",  # Display the count on the bars
+                hover_data={"tooltip_text": True}
+            )
+            fig_tracks.update_traces(
+                hovertemplate="%{customdata[0]}",
+                customdata=df_tracks_decade_pandas[["tooltip_text"]].to_numpy(),
+                texttemplate="%{text}",
+                textposition="outside"
             )
             fig_tracks.update_layout(
                 xaxis_title=None,
                 yaxis_title=None,
                 margin=dict(l=10, r=30, t=30, b=0),
                 xaxis=dict(type='category', categoryorder='array', categoryarray=df_tracks_decade_pandas["decade_label"].tolist()),  # Ensure proper ordering
+                hoverlabel_align="left",
             )
             st.plotly_chart(fig_tracks, use_container_width=True, key=f'{radio_name}_unique_tracks_by_decade')
 
@@ -508,7 +530,7 @@ with artist_plots_expander:
             step=1,
         )
     ### Artists Country Statistics
-    st.header(f':earth_africa: Top 5 countries by {st.session_state['metric_type']} Artists', divider="gray")
+    st.subheader(f':earth_africa: Top 5 countries by {st.session_state['metric_type']} Artists', divider="gray")
     artist_plots_cols = st.columns(ncols)
 
     for i, (key, val) in enumerate(app_config.items()):
@@ -589,8 +611,13 @@ with artist_plots_expander:
             )
             st.plotly_chart(fig, use_container_width=True, key=f'{radio_name}_artists_by_country')
     
-    ### Artists Country Statistics
-    st.header(f':date: {st.session_state['metric_type']} Artists by *decade*', divider="gray")
+    ### Artists Decade Statistics
+    st.subheader(
+        f':date: {st.session_state['metric_type']} Artists by *decade*', 
+        divider="gray",
+        help="""Based on either the :blue-background[**birth year**] of the artists if they're a person
+        or the :blue-background[**career start year**] of a group"""
+    )
     artist_decade_cols = st.columns(ncols)
 
     for i, (key, val) in enumerate(app_config.items()):
@@ -598,47 +625,62 @@ with artist_plots_expander:
             radio_name = val.get('name')
             radio_df = val.get('radio_df')
 
-            # Calculate metrics by decade
+            # Calculate metrics by decade, including most played artist
             df_decades_artists = calculate_decade_metrics(
                 df=radio_df,
                 date_column="mb_artist_career_begin",
                 count_columns=[cm.ARTIST_NAME_COLUMN],
                 metric_type=mapped_metric_type,
+                include_most_played="artist",
             )
 
             # Plot unique tracks by decade
             df_artists_decade_pandas = df_decades_artists.to_pandas()
 
-            # Apply number_formatter to the 'metric' column for labels
-            # df_artists_decade_pandas["formatted_metric"] = df_artists_decade_pandas["metric"].apply(
-            #     lambda x: number_formatter(x)
-            # )
+            # Calculate percentage
+            total_artists = df_artists_decade_pandas["metric"].sum()
+            df_artists_decade_pandas["percentage"] = (
+                df_artists_decade_pandas["metric"] / total_artists * 100
+            ).apply(lambda x: f"{x:.1f}%")
 
-            # Display the values percentages
-            total_tracks = df_artists_decade_pandas["metric"].sum()
-            df_artists_decade_pandas["percentage"] = (df_artists_decade_pandas["metric"] / total_tracks) * 100
+            df_artists_decade_pandas["formatted_metric"] = df_artists_decade_pandas["metric"].apply(lambda x: number_formatter(x))
 
-            df_artists_decade_pandas["formatted_metric"] = df_artists_decade_pandas.apply(
-                lambda row: f"{row['percentage']:.1f}%"
-                , axis=1
+            # Add hover text
+            df_artists_decade_pandas["tooltip_text"] = df_artists_decade_pandas.apply(
+                lambda row: (
+                    f"<b>Decade:</b> {row['decade_year']}<br>"
+                    f"<b>{metric_type_option} Artists:</b> {row['formatted_metric']}<br>"
+                    f"<b>Percentage:</b> {row['percentage']}<br>"
+                    f"<b>Most Played Artist:</b> {row['most_played_artist']} "
+                    f"({number_formatter(row['most_played_count'])} plays)"
+                ),
+                axis=1
             )
             
-            fig_tracks = px.bar(
+            fig_artists = px.bar(
                 df_artists_decade_pandas,
                 x="decade_year",
                 y="metric",
                 title="",
                 labels={"decade_year": "Decade", "metric": "Artists"},
                 orientation='v',
-                text="formatted_metric",  # Display the count on the bars
+                text="percentage",
+                hover_data={"tooltip_text": True},
             )
-            fig_tracks.update_layout(
+            fig_artists.update_traces(
+                hovertemplate="%{customdata[0]}",
+                customdata=df_artists_decade_pandas[["tooltip_text"]].to_numpy(),
+                texttemplate="%{text}",
+                textposition="outside"
+            )
+            fig_artists.update_layout(
                 xaxis_title=None,
                 yaxis_title=None,
                 margin=dict(l=10, r=30, t=30, b=0),
                 xaxis=dict(type='category', categoryorder='array', categoryarray=df_artists_decade_pandas["decade_year"].tolist()),  # Ensure proper ordering
+                hoverlabel_align="left",
             )
-            st.plotly_chart(fig_tracks, use_container_width=True, key=f'{radio_name}_artists_by_decade')
+            st.plotly_chart(fig_artists, use_container_width=True, key=f'{radio_name}_artists_by_decade')
 
 
 
@@ -795,7 +837,7 @@ for i, (key, val) in enumerate(app_config.items()):
 
 
 
-        # st.write(radio_df)
+        st.write(radio_df.filter(pl.col('artist_name') == 'Sabrina Carpenter').height)
         
 
 ## Visuals
