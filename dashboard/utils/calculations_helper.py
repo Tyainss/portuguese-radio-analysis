@@ -207,19 +207,27 @@ def plot_metrics(
     pandas_df = df.to_pandas()
 
     title = kwargs.get('title', f"{radio_name} - {metric.replace('_', ' ').capitalize()} by {x_axis_label}")
-
+    metric_name = metric.replace('_', ' ').capitalize()
+    
     # Create a Plotly line chart
     fig = px.line(
         pandas_df,
         x=x_axis_column,
         y=metric,
         title=title,
-        labels={x_axis_column: x_axis_label, metric: metric.replace('_', ' ').capitalize()},
+        labels={x_axis_column: x_axis_label, metric: metric_name},
         markers=True
     )
     fig.update_layout(
         xaxis_title=x_axis_label,
         yaxis_title=metric.replace('_', ' ').capitalize(),
+        hoverlabel_align="left",
+    )
+    fig.update_traces(
+        hovertemplate=(
+            f"<b>{x_axis_label}</b>: " "%{x}<br>"
+            f"<b>{metric_name}</b>: " "%{y:.2f}<br>"
+        )
     )
 
     # Apply the y-axis range if provided
