@@ -651,48 +651,72 @@ for i, (key, val) in enumerate(app_config.items()):
         radio_name = val.get('name')
         radio_df = val.get('radio_df')
 
+        # Calculate duration metrics with most played track details
         df_duration_tracks = calculate_duration_metrics(
             df=radio_df,
             duration_column='spotify_duration_ms',
             count_columns=[cm.TRACK_TITLE_COLUMN, cm.ARTIST_NAME_COLUMN],
-            metric_type=mapped_metric_type
+            metric_type=mapped_metric_type,
+            include_most_played=True,
         )
 
         # Convert to Pandas for Plotly
         df_duration_pandas = df_duration_tracks.to_pandas()
 
-        # Calculate Percentage
+        # Calculate percentage
         total_tracks = df_duration_pandas["metric"].sum()
-        df_duration_pandas["percentage"] = (df_duration_pandas["metric"] / total_tracks) * 100
+        df_duration_pandas["percentage"] = (
+            (df_duration_pandas["metric"] / total_tracks) * 100
+        ).apply(lambda x: f"{x:.2f}%")
 
-        # Create a label column with "number (percentage)"
-        df_duration_pandas["label"] = df_duration_pandas.apply(
-            lambda row: f"{number_formatter(row['metric'])} ({row['percentage']:.1f}%)", axis=1
+        # Add formatted metric and hover text
+        df_duration_pandas["formatted_metric"] = df_duration_pandas["metric"].apply(lambda x: number_formatter(x))
+        df_duration_pandas["most_played_info"] = df_duration_pandas.apply(
+            lambda row: (
+                f"{row['most_played_track']} | {row['most_played_artist']} ({number_formatter(row['most_played_count'])} plays)"
+                if pd.notnull(row['most_played_track']) else "N/A"
+            ),
+            axis=1
+        )
+        df_duration_pandas["tooltip_text"] = df_duration_pandas.apply(
+            lambda row: (
+                f"<b>Track Minute Duration:</b> {row['duration_minutes']}<br>"
+                f"<b>{metric_type_option} Tracks:</b> {row['formatted_metric']}<br>"
+                f"<b>Percentage:</b> {row['percentage']}<br>"
+                f"<b>Most Played Track:</b> {row['most_played_info']}"
+            ),
+            axis=1
         )
 
-        # Plot unique tracks by truncated duration
+        # Plot duration-based bar chart
         fig_duration = px.bar(
             df_duration_pandas,
             x="duration_minutes",
             y="metric",
             title="",
-            labels={"duration_minutes": "Track Duration (Minutes)", "metric": "Number of Unique Tracks"},
-            orientation='v',
-            text="label",  # Use the custom label
+            labels={"duration_minutes": "Track Duration (Minutes)", "metric": metric_type_option},
+            orientation="v",
+            text="formatted_metric",  # Use formatted metric on bars
+            hover_data={"tooltip_text": True},  # Use custom tooltips
         )
         fig_duration.update_traces(
             marker_color="#d3d3d3",  # Light gray for bars
-            texttemplate="%{text}", 
-            textposition="outside"
+            texttemplate="%{text}",
+            textposition="outside",
+            hovertemplate="%{customdata[0]}",
+            customdata=df_duration_pandas[["tooltip_text"]].to_numpy(),  # Attach custom tooltip text
+            cliponaxis=False  # Prevent labels from being clipped
         )
         fig_duration.update_layout(
             xaxis_title=None,
             yaxis_title=None,
             margin=dict(l=10, r=30, t=30, b=0),
-            xaxis=dict(type='category'),  # Ensure durations are treated as categories
-            yaxis=dict(title="Number of Unique Tracks", tickformat=",")
+            xaxis=dict(type="category"),  # Treat durations as categories
+            yaxis=dict(title=metric_type_option, tickformat=","),
+            hoverlabel_align="left"  # Ensure left alignment for tooltips
         )
-        st.plotly_chart(fig_duration, use_container_width=True, key=f"{radio_name}_unique_tracks_by_duration")
+        st.plotly_chart(fig_duration, use_container_width=True, key=f"{radio_name}_tracks_by_duration")
+
 
 
 ### Genres

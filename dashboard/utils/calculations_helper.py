@@ -362,30 +362,31 @@ def calculate_duration_metrics(
     df: pl.DataFrame,
     duration_column: str,
     count_columns: List[str],
-    metric_type: str = "unique"
+    metric_type: str = "unique",
+    include_most_played: bool = False
 ) -> pl.DataFrame:
     """
-    Calculate duration-based metrics (Unique Tracks, Total Tracks, Avg Tracks).
+    Calculate duration-based metrics (Unique Tracks, Total Tracks, Avg Tracks), with optional most played track details.
 
     Args:
         df (pl.DataFrame): Input DataFrame.
-        date_column (str): Column with duration information (e.g., 'spotify_duration_ms').
+        duration_column (str): Column with duration information (e.g., 'spotify_duration_ms').
         count_columns (List[str]): Columns to count (e.g., 'artist_name').
         metric_type (str, optional): Metric type ('unique', 'total', 'average'). Defaults to 'unique'.
+        include_most_played (bool, optional): Whether to include most played track details. Defaults to False.
 
     Returns:
-        pl.DataFrame: Decade-level metrics with 'decade_year', 'decade_label', and a 'metric' column.
+        pl.DataFrame: Metrics with 'duration_minutes', 'metric', and optionally most played track details.
     """
-    # Filter out rows with null dates
+    # Filter out rows with null durations
     df_duration = df.filter(~pl.col(duration_column).is_null())
 
-    # Extract decades
+    # Convert duration to minutes and truncate
     df_duration = df_duration.with_columns([
-        (pl.col(duration_column) / 60000).floor().cast(int).alias("duration_minutes")  # Convert to minutes and truncate
+        (pl.col(duration_column) / 60000).floor().cast(int).alias("duration_minutes")  # Convert ms to minutes
     ])
 
     if metric_type == "unique":
-        # Unique metric: Count unique combinations of decade and group_by_column
         result = (
             df_duration
             .select(["duration_minutes"] + count_columns)
@@ -395,7 +396,6 @@ def calculate_duration_metrics(
             .rename({"count": "metric"})
         )
     elif metric_type == "total":
-        # Total metric: Count all rows grouped by decade
         result = (
             df_duration
             .group_by(["duration_minutes"])
@@ -403,7 +403,6 @@ def calculate_duration_metrics(
             .rename({"count": "metric"})
         )
     elif metric_type == "average":
-        # Average metric: Compute total divided by unique
         unique_counts = (
             df_duration
             .select(["duration_minutes"] + count_columns)
@@ -425,7 +424,24 @@ def calculate_duration_metrics(
     else:
         raise ValueError(f"Unsupported metric_type: {metric_type}. Choose 'unique', 'total', or 'average'.")
 
+    # Optionally add most played track details
+    if include_most_played:
+        most_played = (
+            df_duration
+            .group_by(["duration_minutes", cm.TRACK_TITLE_COLUMN, cm.ARTIST_NAME_COLUMN])
+            .count()
+            .sort(["duration_minutes", "count"], descending=True)
+            .group_by("duration_minutes")
+            .agg([
+                pl.col(cm.TRACK_TITLE_COLUMN).first().alias("most_played_track"),
+                pl.col(cm.ARTIST_NAME_COLUMN).first().alias("most_played_artist"),
+                pl.col("count").first().alias("most_played_count")
+            ])
+        )
+        result = result.join(most_played, on="duration_minutes", how="left")
+
     return result.sort("duration_minutes")
+
 
 def calculate_genre_metrics(
     df: pl.DataFrame,
