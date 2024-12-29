@@ -1,4 +1,5 @@
 import polars as pl
+import pandas as pd
 import streamlit as st
 from streamlit_extras.stylable_container import stylable_container
 import plotly.express as px
@@ -666,7 +667,7 @@ for i, (key, val) in enumerate(app_config.items()):
 
         # Create a label column with "number (percentage)"
         df_duration_pandas["label"] = df_duration_pandas.apply(
-            lambda row: f"{row['metric']:.0f} ({row['percentage']:.1f}%)", axis=1
+            lambda row: f"{number_formatter(row['metric'])} ({row['percentage']:.1f}%)", axis=1
         )
 
         # Plot unique tracks by truncated duration
@@ -702,36 +703,44 @@ for i, (key, val) in enumerate(app_config.items()):
     with genre_cols[i]:
         radio_name = val.get('name')
         radio_df = val.get('radio_df')
-        # Extract and group genres
-        # Ensure spotify_genres column is not null
-        df_genres_cleaned = (
-            radio_df
-            .filter(
-                (~pl.col("spotify_genres").is_null())
-                & (pl.col("spotify_genres") != ""),
-            )
-            .with_columns([
-                pl.col("spotify_genres").str.split(", ").alias("split_genres")  # Split comma-separated genres into lists
-            ])
-            .explode("split_genres")  # Explode the lists into rows
-            .group_by("split_genres")
-            .count()
-            .sort("count", descending=False)
-            .tail(10)  # Show top 10 genres
-        )
-
+        
+        # Calculate genre metrics
         df_genres_cleaned = calculate_genre_metrics(
             df=radio_df,
             genre_column='spotify_genres',
             count_columns=[cm.TRACK_TITLE_COLUMN, cm.ARTIST_NAME_COLUMN],
             metric_type=mapped_metric_type,
+            include_most_played=True,
         )
 
         # Convert to Pandas for Plotly
         df_genres_pandas = df_genres_cleaned.rename({"split_genres": "spotify_genres"}).to_pandas()
 
+        # Add percentage column
+        total_metric = df_genres_pandas["metric"].sum()
+        df_genres_pandas["percentage"] = (
+            df_genres_pandas["metric"] / total_metric * 100
+        ).apply(lambda x: f"{x:.2f}%")
+
+        # Add formatted columns for tooltips
         df_genres_pandas["formatted_metric"] = df_genres_pandas["metric"].apply(
             lambda x: number_formatter(x)
+        )
+        df_genres_pandas["most_played_info"] = df_genres_pandas.apply(
+            lambda row: (
+                f"{row['most_played_track']} | {row['most_played_artist']} ({number_formatter(row['most_played_count'])} plays)"
+                if pd.notnull(row['most_played_track']) else "N/A"
+            ),
+            axis=1
+        )
+        df_genres_pandas["tooltip_text"] = df_genres_pandas.apply(
+            lambda row: (
+                f"<b>Genre:</b> {row['spotify_genres']}<br>"
+                f"<b>{metric_type_option} Tracks:</b> {row['formatted_metric']}<br>"
+                f"<b>Percentage:</b> {row['percentage']}<br>"
+                f"<b>Most Played Track:</b> {row['most_played_info']}"
+            ),
+            axis=1
         )
 
         # Plot horizontal bar chart
@@ -740,24 +749,29 @@ for i, (key, val) in enumerate(app_config.items()):
             x="metric",
             y="spotify_genres",
             title="",
-            labels={"metric": "Track Count", "spotify_genres": "Genre"},
+            labels={"metric": metric_type_option, "spotify_genres": "Genre"},
             orientation="h",
             text="formatted_metric",  # Show count on bars
+            hover_data={"tooltip_text": True},  # Use custom tooltips
         )
         fig_genres.update_traces(
             texttemplate="%{text}", 
             textposition="outside",
+            hovertemplate="%{customdata[0]}",
+            customdata=df_genres_pandas[["tooltip_text"]].to_numpy(),  # Attach custom tooltip text
             cliponaxis=False  # Prevent labels from being clipped
         )
         fig_genres.update_layout(
             xaxis_title=None,
             yaxis_title=None,
             margin=dict(l=150, r=30, t=30, b=10),  # Adjust for long genre names
+            hoverlabel_align = 'left',
         )
         st.plotly_chart(fig_genres, use_container_width=True, key=f"{radio_name}_top_genres")
 
 
-        st.write(radio_df)
+
+        # st.write(radio_df)
         
 
 ## Visuals
@@ -766,13 +780,13 @@ for i, (key, val) in enumerate(app_config.items()):
 # Color PT bar differently
 # Define color pallete for each radio
 
+## Minor details
 # Reduce file size with helper functions, if possible
-
+# Reduce white space between graphs and headers if possible
+# Perhaps refactor calculations_helper.py
 
 # Improve graph tooltips
-# Reduce white space between graphs and headers if possible
+
 
 # Group "United States" and "United States of America" together, and other similar countries
-# Decades graph ad percentage label
 
-# Perhaps refactor calculations_helper.py

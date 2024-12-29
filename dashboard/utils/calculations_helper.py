@@ -431,31 +431,34 @@ def calculate_genre_metrics(
     df: pl.DataFrame,
     genre_column: str,
     count_columns: List[str],
-    metric_type: str = "unique"
+    metric_type: str = "unique",
+    include_most_played: bool = False,
 ) -> pl.DataFrame:
     """
-    Calculate duration-based metrics (Unique Tracks, Total Tracks, Avg Tracks).
+    Calculate metrics for genres, including optional most played track details.
 
     Args:
         df (pl.DataFrame): Input DataFrame.
-        date_column (str): Column with duration information (e.g., 'spotify_duration_ms').
+        genre_column (str): Column with genre information.
         count_columns (List[str]): Columns to count (e.g., 'artist_name').
         metric_type (str, optional): Metric type ('unique', 'total', 'average'). Defaults to 'unique'.
+        include_most_played (bool, optional): Whether to include most played track details. Defaults to False.
 
     Returns:
-        pl.DataFrame: Decade-level metrics with 'decade_year', 'decade_label', and a 'metric' column.
+        pl.DataFrame: Genre-level metrics with an optional 'most_played_track' and 'most_played_artist' column.
     """
-    # Filter out rows with null dates
+    # Filter out rows with null or empty genres
     df_genres = df.filter(
         (~pl.col(genre_column).is_null())
         & (pl.col(genre_column) != "")
     )
 
-    # Extract decades
+    # Split genres and explode into rows
     df_genres = df_genres.with_columns([
         pl.col(genre_column).str.split(", ").alias("split_genres")  # Split comma-separated genres into lists
     ]).explode("split_genres")  # Explode the lists into rows
 
+    # Calculate metric
     if metric_type == "unique":
         # Unique metric: Count unique combinations of decade and group_by_column
         result = (
@@ -496,5 +499,21 @@ def calculate_genre_metrics(
         ).select(["split_genres", "metric"])
     else:
         raise ValueError(f"Unsupported metric_type: {metric_type}. Choose 'unique', 'total', or 'average'.")
+
+    # Optionally add most played track details
+    if include_most_played:
+        most_played = (
+            df_genres
+            .group_by(["split_genres", cm.TRACK_TITLE_COLUMN, cm.ARTIST_NAME_COLUMN])
+            .count()
+            .sort(["split_genres", "count"], descending=True)
+            .group_by("split_genres")
+            .agg([
+                pl.col(cm.TRACK_TITLE_COLUMN).first().alias("most_played_track"),
+                pl.col(cm.ARTIST_NAME_COLUMN).first().alias("most_played_artist"),
+                pl.col("count").first().alias("most_played_count")
+            ])
+        )
+        result = result.join(most_played, on="split_genres", how="left")
 
     return result.sort("metric", descending=False).tail(10)
