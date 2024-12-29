@@ -14,6 +14,7 @@ click==8.1.7
 colorama==0.4.6
 contourpy==1.3.1
 cycler==0.12.1
+deep-translator==1.11.4
 entrypoints==0.4
 Faker==33.1.0
 favicon==0.7.0
@@ -23,18 +24,16 @@ frozenlist==1.5.0
 fsspec==2024.10.0
 gitdb==4.0.11
 GitPython==3.1.43
-googletrans==4.0.0rc1
 h11==0.9.0
 h2==3.2.0
 hpack==3.0.0
 hstspreload==2024.11.1
 htbuilder==0.7.0
 httpcore==0.9.1
-httpx==0.13.3
 huggingface-hub==0.26.2
 hyperframe==5.2.0
-idna==2.10
-Jinja2==3.1.4
+idna==3.10
+Jinja2==3.1.5
 joblib==1.4.2
 jsonschema==4.23.0
 jsonschema-specifications==2024.10.1
@@ -74,7 +73,7 @@ PySocks==1.7.1
 python-dateutil==2.9.0.post0
 pytz==2024.2
 PyYAML==6.0.2
--e git+https://github.com/Tyainss/radio_song_analysis@cb13f3bdc30e8cdc4ed5101981e0427cfe8e1e91#egg=radio_song_analysis
+-e git+https://github.com/Tyainss/radio_song_analysis@e811f04ee72fb643cf7f8337a99cd5378d0005b9#egg=radio_song_analysis
 redis==5.2.0
 referencing==0.35.1
 regex==2024.11.6
@@ -110,7 +109,7 @@ textblob==0.18.0.post0
 tokenizers==0.20.3
 toml==0.10.2
 torch==2.5.1
-tornado==6.4.1
+tornado==6.4.2
 tqdm==4.67.0
 transformers==4.46.3
 trio==0.27.0
