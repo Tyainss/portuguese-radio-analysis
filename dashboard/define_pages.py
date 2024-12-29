@@ -15,8 +15,8 @@ def logout():
         st.rerun()
 
 def define_pages():
-    login_page = st.Page(login, title="Log in", icon=":material/login:")
-    logout_page = st.Page(logout, title="Log out", icon=":material/logout:")
+    # login_page = st.Page(login, title="Log in", icon=":material/login:")
+    # logout_page = st.Page(logout, title="Log out", icon=":material/logout:")
 
     home_page = st.Page('pages/home.py', title='Home Page', icon='🏠')
     overview_page = st.Page('pages/overview_comparison.py', title='Overview Comparison', icon='📊')
@@ -28,21 +28,21 @@ def define_pages():
 
     # st.write(f'Logged In? : {st.session_state.logged_in}')
 
-    if st.session_state.logged_in:
-        pg = st.navigation([
-            logout_page,
-            home_page,
-            overview_page, radio_page, self_service_page,
-            # {
-            #     'Account': [logout_page],
-            #     'Home': [home_page],
-            #     'Dashboard': [overview_page, radio_page, self_service_page],
-            #     # "Tools": [search, history],
-            # }
-            ]
-        )
-    else:
-        pg = st.navigation([login_page])
+    # if st.session_state.logged_in:
+    #     pg = st.navigation([
+    #         logout_page,
+    #         home_page,
+    #         overview_page, radio_page, self_service_page,
+    #         # {
+    #         #     'Account': [logout_page],
+    #         #     'Home': [home_page],
+    #         #     'Dashboard': [overview_page, radio_page, self_service_page],
+    #         #     # "Tools": [search, history],
+    #         # }
+    #         ]
+    #     )
+    # else:
+    #     pg = st.navigation([login_page])
 
     return pg
 
