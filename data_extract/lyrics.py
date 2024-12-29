@@ -1,5 +1,6 @@
 import polars as pl
-from googletrans import Translator
+# from googletrans import Translator
+from deep_translator import GoogleTranslator
 from langdetect import detect
 from textblob import TextBlob
 from transformers import pipeline, AutoTokenizer
@@ -13,7 +14,7 @@ class LyricsAnalyzer:
     def __init__(self):
         self.config_manager = ConfigManager()
         self.genius = GeniusAPI()
-        self.translator = Translator()
+        self.translator = GoogleTranslator()
         self.transformer_model_name = 'cardiffnlp/twitter-roberta-base-emotion'
         self.classifier = pipeline("text-classification", model=self.transformer_model_name, top_k=5)
         self.tokenizer = AutoTokenizer.from_pretrained(self.transformer_model_name)
@@ -33,14 +34,11 @@ class LyricsAnalyzer:
             return text  # Return the original text if input is invalid
 
         try:
-            translation = self.translator.translate(text, src=src_lang, dest=dest_lang)
-            if translation is None or not hasattr(translation, 'text'):
-                print('Translation failed or returned None. Returning original text.')
-                return text  # Return the original text if translation fails
-            return translation.text
+            translation = self.translator.translate(text, source=src_lang, target=dest_lang)
+            return translation
         except Exception as e:
             print('Error during translation:', e)
-            return text  # Return the original text in case of an exception
+            return text
     
     def translate_lyrics(self, lyrics, src_lang=None, dest_lang='en'):
         if not src_lang:
@@ -58,7 +56,6 @@ class LyricsAnalyzer:
             'lieben', 'liebe', 'querer', 'quiero', 'adoro', 'adorar'
         ]
         count = sum(lyrics.lower().count(word) for word in love_words)
-        # print(f'"Love" word count: {count}')
         return count
 
     def classify_basic_sentiments(self, lyrics):
@@ -67,7 +64,6 @@ class LyricsAnalyzer:
         """
         blob = TextBlob(lyrics)
         sentiment = blob.sentiment
-        # print(f'Sentiment analysis - Polarity: {sentiment.polarity}, Subjectivity: {sentiment.subjectivity}')
         return sentiment
 
     def _split_lyrics_chunks(self, lyrics, max_length=500):
