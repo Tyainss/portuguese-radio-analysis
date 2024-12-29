@@ -229,32 +229,35 @@ def plot_metrics(
     st.plotly_chart(fig, use_container_width=True, key=f'{radio_name}_{metric}_{x_axis_column}')
 
 
-def calculate_column_counts(
+def calculate_country_counts(
     df: pl.DataFrame,
-    group_by_cols: str,
+    country_col: str,
     count_columns: List[str],
-    metric_type: str = 'unique'
+    metric_type: str = 'unique',
+    include_most_played: str = None  # Options: "track", "artist", or None
 ) -> pl.DataFrame:
     """
-    Calculate counts or averages for a given column, grouped by specified columns, based on the selected metric type.
+    Calculate counts or averages for a given column, grouped by flags,
+    based on the selected metric type, with optional most played artist or track.
 
     Args:
         df (pl.DataFrame): Input DataFrame containing the data.
-        group_by_cols (str): Column to group by.
+        country_col (str): Column to group by (e.g., 'lyrics_language' or 'combined_nationality').
         count_columns (List[str]): Columns to count occurrences of.
         metric_type (str, optional): Metric type ('unique', 'total', or 'average'). Defaults to 'unique'.
+        include_most_played (str, optional): Whether to include most played track or artist. Defaults to None.
 
     Returns:
-        pl.DataFrame: Grouped DataFrame with counts or averages and a 'metric' column.
+        pl.DataFrame: Grouped DataFrame with counts or averages, flags, and optional most played details.
     """
-    cols = [pl.col(col) for col in count_columns] + [pl.col(group_by_cols)]
+    cols = [pl.col(col) for col in count_columns] + [pl.col(country_col)]
 
     # Calculate metrics based on the selected type
     if metric_type == "unique":
         counts = df.select(cols).unique()
         result = (
             counts
-            .group_by(group_by_cols)
+            .group_by(country_col)
             .count()
             .rename({"count": "metric"})
         )
@@ -262,29 +265,56 @@ def calculate_column_counts(
         counts = df.select(cols)
         result = (
             counts
-            .group_by(group_by_cols)
+            .group_by(country_col)
             .count()
             .rename({"count": "metric"})
         )
     elif metric_type == "average":
         unique_counts = (
             df.select(cols).unique()
-            .group_by(group_by_cols)
+            .group_by(country_col)
             .count()
             .rename({"count": "unique_count"})
         )
         total_counts = (
             df.select(cols)
-            .group_by(group_by_cols)
+            .group_by(country_col)
             .count()
             .rename({"count": "total_count"})
         )
-        result = unique_counts.join(total_counts, on=group_by_cols)
+        result = unique_counts.join(total_counts, on=country_col)
         result = result.with_columns(
             (pl.col("total_count") / pl.col("unique_count")).alias("metric")
-        ).select([group_by_cols, "metric"])
+        ).select([country_col, "metric"])
     else:
         raise ValueError(f"Unsupported metric_type: {metric_type}. Choose 'unique', 'total', or 'average'.")
+    
+    # Optionally add most played track or artist
+    if include_most_played == "track":
+        most_played = (
+            df.group_by([country_col, cm.TRACK_TITLE_COLUMN, cm.ARTIST_NAME_COLUMN])
+            .count()
+            .sort([country_col, "count"], descending=True)
+            .group_by(country_col)
+            .agg([
+                pl.col(cm.TRACK_TITLE_COLUMN).first().alias("most_played_track"),
+                pl.col(cm.ARTIST_NAME_COLUMN).first().alias("most_played_artist"),
+                pl.col("count").first().alias("most_played_count")
+            ])
+        )
+        result = result.join(most_played, on=country_col, how="left")
+    elif include_most_played == "artist":
+        most_played = (
+            df.group_by([country_col, cm.ARTIST_NAME_COLUMN])
+            .count()
+            .sort([country_col, "count"], descending=True)
+            .group_by(country_col)
+            .agg([
+                pl.col(cm.ARTIST_NAME_COLUMN).first().alias("most_played_artist"),
+                pl.col("count").first().alias("most_played_count")
+            ])
+        )
+        result = result.join(most_played, on=country_col, how="left")
 
     return result.sort(by="metric", descending=True)
 

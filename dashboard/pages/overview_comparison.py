@@ -3,7 +3,6 @@ import pandas as pd
 import streamlit as st
 from streamlit_extras.stylable_container import stylable_container
 import plotly.express as px
-from datetime import datetime
 
 from data_extract.data_storage import DataStorage
 from data_extract.config_manager import ConfigManager
@@ -11,11 +10,12 @@ from data_extract.config_manager import ConfigManager
 from utils.calculations_helper import (
     calculate_avg_tracks, calculate_avg_popularity, calculate_avg_time,
     prepare_weekday_metrics, prepare_hourly_metrics, plot_metrics, 
-    calculate_column_counts, calculate_decade_metrics, calculate_duration_metrics,
+    calculate_country_counts, calculate_decade_metrics, calculate_duration_metrics,
     calculate_genre_metrics
 )
 from utils.helper import (
-    country_to_flag, nationality_to_flag, number_formatter
+    language_to_flag_dict, nationality_to_flag_dict, language_full_name_dict,
+    flag_to_nationality_dict, number_formatter,
 )
 
 ds = DataStorage()
@@ -305,14 +305,18 @@ with track_plots_expander:
         # )
         num_languages = st.number_input(
             label='Top Number of Languages',
-            value=5,
+            value=4,
             min_value=1,
             max_value=10,
             step=1,
         )
 
     ### Track Language Statistics
-    st.subheader(f':earth_africa: Top {num_languages} Languages by {st.session_state['metric_type']} Tracks', divider=False)
+    st.subheader(
+        f':earth_africa: Top {num_languages} Languages by {st.session_state['metric_type']} Tracks', 
+        divider="gray",
+        help='Language detected by :blue-background[**analysing the lyrics**] with a language-detection Python library'
+    )
     track_plots_cols = st.columns(ncols)
 
     for i, (key, val) in enumerate(app_config.items()):
@@ -320,32 +324,51 @@ with track_plots_expander:
             radio_name = val.get('name')
             radio_df = val.get('radio_df')
             
-            language_counts = calculate_column_counts(
+            # st.write(radio_df)
+            language_counts = calculate_country_counts(
                 df=radio_df,
-                group_by_cols='lyrics_language',
+                country_col='lyrics_language',
                 count_columns=[cm.TRACK_TITLE_COLUMN, cm.ARTIST_NAME_COLUMN],
                 metric_type=mapped_metric_type,
+                include_most_played="track",
             )
 
             # Separate top languages and "Others"
             top_languages = language_counts.head(num_languages)
-            others = language_counts.tail(language_counts.shape[0] - num_languages)
+            others = language_counts.tail(language_counts.shape[0] - min(num_languages, language_counts.shape[0]))
+
+            if not others.is_empty():
+                # Use values from the first row of 'others' for the top artist and play count
+                most_played_track = others[0, "most_played_track"]
+                most_played_artist = others[0, "most_played_artist"]
+                most_played_count = others[0, "most_played_count"]
+            else:
+                most_played_artist = None
+                most_played_count = None
 
             if mapped_metric_type == "average":
                 others_aggregated = pl.DataFrame({
                     "lyrics_language": ["Others"],
-                    "metric": [others["metric"].mean()]
+                    "metric": [others["metric"].mean()],
+                    "most_played_track": [most_played_track],
+                    "most_played_artist": [most_played_artist],
+                    "most_played_count": [most_played_count]
                 })
             else:
                 others_aggregated = pl.DataFrame({
                     "lyrics_language": ["Others"],
-                    "metric": [others["metric"].sum()]
+                    "metric": [others["metric"].sum()],
+                    "most_played_track": [most_played_track],
+                    "most_played_artist": [most_played_artist],
+                    "most_played_count": [most_played_count]
                 })
 
-            # Ensure the 'metric' column types match
-            others_aggregated = others_aggregated.with_columns(
-                pl.col("metric").cast(top_languages["metric"].dtype)
-            )
+            # Ensure all columns match between top_languages and others_aggregated
+            for column in top_languages.columns:
+                if column not in others_aggregated.columns:
+                    others_aggregated = others_aggregated.with_columns(pl.lit(None).cast(top_languages[column].dtype).alias(column))
+                else:
+                    others_aggregated = others_aggregated.with_columns(pl.col(column).cast(top_languages[column].dtype))
 
             all_languages = top_languages.vstack(others_aggregated)
 
@@ -355,17 +378,36 @@ with track_plots_expander:
                     (pl.col("metric") / all_languages["metric"].sum() * 100).alias("percentage")
                 )
 
+            
+            # Add flag mapping
+            all_languages = all_languages.with_columns(
+                pl.col("lyrics_language").replace_strict(language_full_name_dict, default='Others').alias("full_language_name")
+            )
+            # Add flag mapping
+            all_languages = all_languages.with_columns(
+                pl.col("lyrics_language").replace_strict(language_to_flag_dict, default='Others').alias("flag")
+            )
+            
             # Convert to Pandas for Plotly
             data_df = all_languages.to_pandas()
-            data_df['flag'] = data_df['lyrics_language'].map(country_to_flag)
 
             # Ensure "Others" is always last in the plot
-            data_df['order'] = data_df['lyrics_language'].apply(lambda x: 1 if x == "Others" else 0)
+            data_df['order'] = data_df['flag'].apply(lambda x: 1 if x == "Others" else 0)
+            
             data_df = data_df.sort_values(by=['order', 'metric'], ascending=[False, True])
 
-            # Update label for average
-            label_col = "metric"
-            # st.write(data_df)
+            # Add hover text
+            data_df["tooltip_text"] = data_df.apply(
+                lambda row: (
+                    f"<b>Abbreviation:</b> {row['flag']}<br>"
+                    f"<b>Language:</b> {row['full_language_name']}<br>"
+                    f"<b>{mapped_metric_type.capitalize()}:</b> {number_formatter(row['metric'])}<br>"
+                    f"<b>Most Played Track:</b> {row['most_played_track']} | {row['most_played_artist']} "
+                    f"({number_formatter(row['most_played_count'])} plays)"
+                ),
+                axis=1
+            )
+            
             if mapped_metric_type == "average":
                 data_df["label"] = data_df["metric"].apply(lambda x: f"{x:.1f}")
             else:
@@ -379,32 +421,37 @@ with track_plots_expander:
                 text="label",
                 title="",
                 orientation='h',
+                hover_data={"tooltip_text": True},
             )
 
             # Apply conditional coloring for "Portugal" or "PT"
             colors = [
-                "#1f77b4" if lang != "pt" else "#ff7f0e"  # Default color vs highlight color
-                for lang in data_df["lyrics_language"]
+                "#1f77b4" if lang != "PT" else "#ff7f0e"  # Default color vs highlight color
+                for lang in data_df["flag"]
             ]
             fig.update_traces(
                 marker_color=colors,  # Apply colors manually
                 textposition="outside",
+                hovertemplate="%{customdata[0]}",
+                customdata=data_df[["tooltip_text"]].to_numpy(),
                 cliponaxis=False  # Prevent labels from being clipped
             )
             fig.update_layout(
                 xaxis_title=None,  # Remove x-axis label
                 yaxis_title=None,  # Remove y-axis label
                 margin=dict(l=10, r=30, t=30, b=0),  # Add padding around the plot
+                hoverlabel_align="left",
             )
             st.plotly_chart(fig, use_container_width=True, key=f'{radio_name}_tracks_by_language')
 
-    st.divider()
+    # st.divider()
 
     ### Track Decade Statistics
     st.subheader(
         f':date: {st.session_state['metric_type']} Tracks by *decade*', 
-        divider=False, 
-        help='Based on the :blue-background[**year of release**] of the track'
+        divider="gray", 
+        help="""Based on the :blue-background[**year of release**] of the track
+        \n\nData Obtained from Spotify"""
     )
     track_decade_cols = st.columns(ncols)
 
@@ -530,56 +577,99 @@ with artist_plots_expander:
             step=1,
         )
     ### Artists Country Statistics
-    st.subheader(f':earth_africa: Top 5 countries by {st.session_state['metric_type']} Artists', divider="gray")
+    st.subheader(
+        f':earth_africa: Top {num_countries} countries by {st.session_state['metric_type']} Artists', 
+        divider="gray",
+        help='Country data extracted from :blue-background[**MusicBrainz**] and complemented with :blue-background[**Wikipedia**] when missing.'
+        )
     artist_plots_cols = st.columns(ncols)
 
     for i, (key, val) in enumerate(app_config.items()):
         with artist_plots_cols[i]:
             radio_name = val.get('name')
             radio_df = val.get('radio_df')
-            
-            country_counts = calculate_column_counts(
-                df=radio_df,
-                group_by_cols='combined_nationality',
-                count_columns=[cm.ARTIST_NAME_COLUMN],                
-                metric_type=mapped_metric_type,
-            )
 
+            # Add flag mapping
+            radio_df = radio_df.with_columns(
+                pl.col("combined_nationality").replace_strict(nationality_to_flag_dict, default='?').alias("flag")
+            )
+            
+            country_counts = calculate_country_counts(
+                df=radio_df,
+                country_col='flag',
+                count_columns=[cm.ARTIST_NAME_COLUMN],
+                metric_type=mapped_metric_type,
+                include_most_played="artist",
+            )
+            
             # Separate top countries and "Others"
             top_countries = country_counts.head(num_countries)
-            others = country_counts.tail(country_counts.shape[0] - num_countries)
+            others = country_counts.tail(country_counts.shape[0] - min(num_countries, country_counts.shape[0]))
+            
+            if not others.is_empty():
+                # Use values from the first row of 'others' for the top artist and play count
+                most_played_artist = others[0, "most_played_artist"]
+                most_played_count = others[0, "most_played_count"]
+            else:
+                most_played_artist = None
+                most_played_count = None
+
             if mapped_metric_type == "average":
                 others_aggregated = pl.DataFrame({
-                    "combined_nationality": ["Others"],
-                    "metric": [others["metric"].mean()]
+                    "flag": ["Others"],
+                    "metric": [others["metric"].mean()],
+                    "most_played_artist": [most_played_artist],
+                    "most_played_count": [most_played_count]
                 })
             else:
                 others_aggregated = pl.DataFrame({
-                    "combined_nationality": ["Others"],
-                    "metric": [others["metric"].sum()]
+                    "flag": ["Others"],
+                    "metric": [others["metric"].sum()],
+                    "most_played_artist": [most_played_artist],
+                    "most_played_count": [most_played_count]
                 })
 
-            # Ensure the 'metric' column types match
-            others_aggregated = others_aggregated.with_columns(
-                pl.col("metric").cast(top_countries["metric"].dtype)
-            )
-            
+            # Ensure 'others_aggregated' has the same structure as 'top_countries'
+            for column in top_countries.columns:
+                if column not in others_aggregated.columns:
+                    others_aggregated = others_aggregated.with_columns(
+                        pl.lit(None).cast(top_countries[column].dtype).alias(column)
+                    )
+                else:
+                    others_aggregated = others_aggregated.with_columns(
+                        pl.col(column).cast(top_countries[column].dtype)
+                    )
+
             all_countries = top_countries.vstack(others_aggregated)
+
+            # Add flag mapping
+            all_countries = all_countries.with_columns(
+                pl.col("flag").replace_strict(flag_to_nationality_dict, default='Others').alias("country_full_name")
+            )
 
             # Calculate percentage only for 'Unique Tracks' or 'Total Tracks'
             if mapped_metric_type in ["unique", "total"]:
                 all_countries = all_countries.with_columns(
                     (pl.col("metric") / all_countries["metric"].sum() * 100).alias("percentage")
                 )
-
+            
            # Convert to Pandas for Plotly
             data_df = all_countries.to_pandas()
-            data_df['flag'] = data_df['combined_nationality'].map(nationality_to_flag)
-            data_df['order'] = data_df['combined_nationality'].apply(lambda x: 1 if x == "Others" else 0)
+            data_df['order'] = data_df['flag'].apply(lambda x: 1 if x == "Others" else 0)
             data_df = data_df.sort_values(by=['order', 'metric'], ascending=[False, True])
 
-            # Update label for average
-            label_col = "metric"
+            # Add hover text
+            data_df["tooltip_text"] = data_df.apply(
+                lambda row: (
+                    f"<b>Flag:</b> {row['flag']}<br>"
+                    f"<b>Country:</b> {row['country_full_name']}<br>"
+                    f"<b>{mapped_metric_type.capitalize()}:</b> {number_formatter(row['metric'])}<br>"
+                    f"<b>Most Played Artist:</b> {row['most_played_artist']} "
+                    f"({number_formatter(row['most_played_count'])} plays)"
+                ),
+                axis=1
+            )
+
             if mapped_metric_type == "average":
                 data_df["label"] = data_df["metric"].apply(lambda x: f"{x:.1f}")
             else:
@@ -593,21 +683,25 @@ with artist_plots_expander:
                 text="label",
                 title="",
                 orientation='h',
+                hover_data={"tooltip_text": True},
             )
             # Apply conditional coloring for "Portugal" or "PT"
             colors = [
-                "#1f77b4" if country != "Portugal" else "#ff7f0e"  # Default color vs highlight color
-                for country in data_df["combined_nationality"]
+                "#1f77b4" if country != "🇵🇹" else "#ff7f0e"  # Default color vs highlight color
+                for country in data_df["flag"]
             ]
             fig.update_traces(
                 marker_color=colors,
                 textposition="outside",
+                hovertemplate="%{customdata[0]}",
+                customdata=data_df[["tooltip_text"]].to_numpy(),
                 cliponaxis=False
             )
             fig.update_layout(
                 xaxis_title=None,
                 yaxis_title=None,
                 margin=dict(l=10, r=30, t=30, b=0),
+                hoverlabel_align="left",
             )
             st.plotly_chart(fig, use_container_width=True, key=f'{radio_name}_artists_by_country')
     
@@ -616,7 +710,8 @@ with artist_plots_expander:
         f':date: {st.session_state['metric_type']} Artists by *decade*', 
         divider="gray",
         help="""Based on either the :blue-background[**birth year**] of the artists if they're a person
-        or the :blue-background[**career start year**] of a group"""
+        or the :blue-background[**career start year**] of a group
+        \n\nData Obtained from MusicBrainz"""
     )
     artist_decade_cols = st.columns(ncols)
 
@@ -837,7 +932,7 @@ for i, (key, val) in enumerate(app_config.items()):
 
 
 
-        st.write(radio_df.filter(pl.col('artist_name') == 'Sabrina Carpenter').height)
+        # st.write(radio_df.filter(pl.col('artist_name') == 'Bad Bunny'))
         
 
 ## Visuals
@@ -850,9 +945,3 @@ for i, (key, val) in enumerate(app_config.items()):
 # Reduce file size with helper functions, if possible
 # Reduce white space between graphs and headers if possible
 # Perhaps refactor calculations_helper.py
-
-# Improve graph tooltips
-
-
-# Group "United States" and "United States of America" together, and other similar countries
-
