@@ -206,8 +206,8 @@ def plot_metrics(
     # Convert to a Pandas DataFrame for Plotly compatibility
     pandas_df = df.to_pandas()
 
-    title = kwargs.get('title', f"{radio_name} - {metric.replace('_', ' ').capitalize()} by {x_axis_label}")
     metric_name = metric.replace('_', ' ').capitalize()
+    title = kwargs.get('title', f"{radio_name} - {metric_name} by {x_axis_label}")    
     
     # Create a Plotly line chart
     fig = px.line(
@@ -220,7 +220,9 @@ def plot_metrics(
     )
     fig.update_layout(
         xaxis_title=x_axis_label,
-        yaxis_title=metric.replace('_', ' ').capitalize(),
+        yaxis_title=metric_name,
+        margin=dict(l=0, r=0, t=0, b=0),
+        height=350,
         hoverlabel_align="left",
     )
     fig.update_traces(

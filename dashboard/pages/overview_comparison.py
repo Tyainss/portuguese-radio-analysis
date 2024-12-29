@@ -343,6 +343,7 @@ with track_plots_expander:
                 most_played_artist = others[0, "most_played_artist"]
                 most_played_count = others[0, "most_played_count"]
             else:
+                most_played_track = None
                 most_played_artist = None
                 most_played_count = None
 
@@ -440,6 +441,7 @@ with track_plots_expander:
                 xaxis_title=None,  # Remove x-axis label
                 yaxis_title=None,  # Remove y-axis label
                 margin=dict(l=10, r=30, t=30, b=0),  # Add padding around the plot
+                height=400,
                 hoverlabel_align="left",
             )
             st.plotly_chart(fig, use_container_width=True, key=f'{radio_name}_tracks_by_language')
@@ -513,6 +515,7 @@ with track_plots_expander:
                 xaxis_title=None,
                 yaxis_title=None,
                 margin=dict(l=10, r=30, t=30, b=0),
+                height=400,
                 xaxis=dict(type='category', categoryorder='array', categoryarray=df_tracks_decade_pandas["decade_label"].tolist()),  # Ensure proper ordering
                 hoverlabel_align="left",
             )
@@ -701,6 +704,7 @@ with artist_plots_expander:
                 xaxis_title=None,
                 yaxis_title=None,
                 margin=dict(l=10, r=30, t=30, b=0),
+                height=400,
                 hoverlabel_align="left",
             )
             st.plotly_chart(fig, use_container_width=True, key=f'{radio_name}_artists_by_country')
@@ -772,6 +776,7 @@ with artist_plots_expander:
                 xaxis_title=None,
                 yaxis_title=None,
                 margin=dict(l=10, r=30, t=30, b=0),
+                height=400,
                 xaxis=dict(type='category', categoryorder='array', categoryarray=df_artists_decade_pandas["decade_year"].tolist()),  # Ensure proper ordering
                 hoverlabel_align="left",
             )
@@ -848,6 +853,7 @@ for i, (key, val) in enumerate(app_config.items()):
             xaxis_title=None,
             yaxis_title=None,
             margin=dict(l=10, r=30, t=30, b=0),
+            height=400,
             xaxis=dict(type="category"),  # Treat durations as categories
             yaxis=dict(title=metric_type_option, tickformat=","),
             hoverlabel_align="left"  # Ensure left alignment for tooltips
@@ -926,6 +932,7 @@ for i, (key, val) in enumerate(app_config.items()):
             xaxis_title=None,
             yaxis_title=None,
             margin=dict(l=150, r=30, t=30, b=10),  # Adjust for long genre names
+            height=400,
             hoverlabel_align = 'left',
         )
         st.plotly_chart(fig_genres, use_container_width=True, key=f"{radio_name}_top_genres")
@@ -943,5 +950,4 @@ for i, (key, val) in enumerate(app_config.items()):
 
 ## Minor details
 # Reduce file size with helper functions, if possible
-# Reduce white space between graphs and headers if possible
 # Perhaps refactor calculations_helper.py
