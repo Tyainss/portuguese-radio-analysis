@@ -3,6 +3,7 @@ import pandas as pd
 import streamlit as st
 from streamlit_extras.stylable_container import stylable_container
 import plotly.express as px
+import io
 
 from data_extract.data_storage import DataStorage
 from data_extract.config_manager import ConfigManager
@@ -26,6 +27,10 @@ app_config = cm.load_json(path='dashboard/app_config.json')
 def load_data(path, schema = None):
     data = ds.read_csv(path, schema)
     return data
+
+@st.cache_data
+def generate_radio_csv(_data):
+    return _data.to_pandas().to_csv(index=False)
 
 
 # Load the data
@@ -112,6 +117,7 @@ for i, (key, val) in enumerate(app_config.items()):
     app_config[key]['radio_df'] = df_filtered.filter(
             pl.col(cm.RADIO_COLUMN) == val.get('name')
         )
+    app_config[key]['radio_csv'] = generate_radio_csv(app_config[key]['radio_df'])
     for metric in metrics:
         weekday_metric_df = prepare_weekday_metrics(app_config[key]['radio_df'], metric=metric)
         hour_metric_df = prepare_hourly_metrics(app_config[key]['radio_df'], metric=metric)
@@ -870,6 +876,7 @@ for i, (key, val) in enumerate(app_config.items()):
     with genre_cols[i]:
         radio_name = val.get('name')
         radio_df = val.get('radio_df')
+        radio_csv = val.get('radio_csv')
         
         # Calculate genre metrics
         df_genres_cleaned = calculate_genre_metrics(
@@ -938,6 +945,31 @@ for i, (key, val) in enumerate(app_config.items()):
         st.plotly_chart(fig_genres, use_container_width=True, key=f"{radio_name}_top_genres")
 
 
+        # Add an export button for the radio CSV data
+        # csv = radio_df.to_pandas().to_csv(index=False)  # Convert to pandas and CSV
+        with stylable_container(
+            key=f'csv_export_button',
+            css_styles="""
+                button {
+                    width: 275px;
+                    height: 60px;
+                    background-color: #add8e6; /* Light Blue */
+                    color: white;
+                    border-radius: 5px;
+                    white-space: nowrap;
+                }
+                """,
+        ):
+            _, csv_col, _ = st.columns(3)
+            with csv_col:
+                st.download_button(
+                    label=f"Export :grey-background[**{radio_name}**] Data as CSV",
+                    data=radio_csv,
+                    file_name=f"{radio_name}_data.csv",
+                    mime="text/csv",
+                    key=f"{radio_name}_export_button"
+                )
+
 
         # st.write(radio_df.filter(pl.col('artist_name') == 'Bad Bunny'))
         
@@ -951,3 +983,6 @@ for i, (key, val) in enumerate(app_config.items()):
 ## Minor details
 # Reduce file size with helper functions, if possible
 # Perhaps refactor calculations_helper.py
+
+# Add export button
+# Explore sentiment analysis on overview
