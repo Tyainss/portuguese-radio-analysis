@@ -231,7 +231,11 @@ for i, (key, val) in enumerate(app_config.items()):
 expander = st.expander(label=f'Time Series plots - *{st.session_state['ts_graph']}*', expanded=True, icon='📈')
 with expander:
     ### Hourly Graphs
-    st.subheader(f'{st.session_state['ts_graph']} by hour', divider="gray")
+    st.subheader(
+        f'{st.session_state['ts_graph']} by hour', 
+        divider="gray",
+        help="Track duration extracted from :green[Spotify].\n\nThe average played time of an hour can be above 1 if the song is not played in its entirety on the radio."
+    )
     hour_graph_cols = st.columns(ncols)
 
     for i, (key, val) in enumerate(app_config.items()):
@@ -481,7 +485,7 @@ with track_plots_expander:
         f':date: {st.session_state['metric_type']} Tracks by *decade*', 
         divider="gray", 
         help="""Based on the :blue-background[**year of release**] of the track
-        \n\nData Obtained from Spotify"""
+        \n\nData Obtained from :green[Spotify]"""
     )
     track_decade_cols = st.columns(ncols)
 
@@ -813,7 +817,11 @@ with artist_plots_expander:
 
 
 ### Track Duration
-st.subheader(f':clock4: Track Duration (minutes)', divider="gray")
+st.subheader(
+    f':clock4: Track Duration (minutes)', 
+    divider='gray',
+    help='Truncated based on the number of minutes of the song. The duration of the song is extracted from :green[Spotify]'
+)
 track_duration_cols = st.columns(ncols)
 
 for i, (key, val) in enumerate(app_config.items()):
@@ -891,7 +899,11 @@ for i, (key, val) in enumerate(app_config.items()):
 
 
 ### Genres
-st.subheader(f':musical_score: Top 10 Genres', divider="gray")
+st.subheader(
+    f':musical_score: Top 10 Genres', 
+    divider="gray",
+    help='Genre information gathered from :green[**Spotify**] and :blue-background[**based of the main genre of the artist**].'
+)
 genre_cols = st.columns(ncols)
 
 for i, (key, val) in enumerate(app_config.items()):
@@ -969,11 +981,11 @@ for i, (key, val) in enumerate(app_config.items()):
 
 ### Sentiment Analysis
 st.subheader(
-    f':musical_score: Sentiment Analysis', 
+    f'😊 Sentiment Analysis', 
     divider="gray",
     help="""These plots show the relative strength of various sentiment metrics (Joy, Sadness, Optimism, Anger, and Love) 
-    calculated from song lyrics played on each radio station. Sentiments are derived using NLP models, while the 
-    "Love" metric represents the frequency of words related to love across the lyrics. Values are normalized 
+    :blue-background[**calculated from the song lyrics played**]. Sentiments are derived using NLP models, while the 
+    "Love Mentions" metric represents the frequency of words related to love across the lyrics. Values are normalized 
     based on the maximum mean sentiment value across all radios for comparability.
     """
 )
@@ -1024,7 +1036,8 @@ for i, (key, val) in enumerate(app_config.items()):
         # Display radar chart in Streamlit
         st.plotly_chart(fig, use_container_width=True, key=f"{radio_name}_radar_chart")
 
-        
+        st.divider()
+
         # Add an export button for the radio CSV data
         # csv = radio_df.to_pandas().to_csv(index=False)  # Convert to pandas and CSV
         with stylable_container(
@@ -1065,3 +1078,4 @@ for i, (key, val) in enumerate(app_config.items()):
 ## Minor details
 # Reduce file size with helper functions, if possible
 # Perhaps refactor calculations_helper.py
+# Add more helper text to sections
