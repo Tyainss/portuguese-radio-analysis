@@ -3,6 +3,7 @@ import pandas as pd
 import streamlit as st
 from streamlit_extras.stylable_container import stylable_container
 import plotly.express as px
+import plotly.graph_objects as go
 import io
 
 from data_extract.data_storage import DataStorage
@@ -111,6 +112,7 @@ else:
 # Calculate global min and max values
 metrics = ['avg_tracks', 'avg_time_played', 'avg_popularity']
 metric_ranges = {}
+global_max_mean_values = {}  # Dictionary to store global max values for each metric
 
 # Initialize config for each radio
 for i, (key, val) in enumerate(app_config.items()):
@@ -155,6 +157,18 @@ for i, (key, val) in enumerate(app_config.items()):
                     metric_ranges[metric]['hour']['max'], hour_max
                 )
 
+    # Compute mean values for the current radio
+    mean_values = app_config[key]['radio_df'].select(
+        "lyrics_joy", "lyrics_sadness", "lyrics_optimism", "lyrics_anger", "lyrics_love_occurrences"
+    ).mean().to_dict(as_series=False)
+    app_config[key]['mean_values'] = mean_values  # Store mean values for this radio
+    # Update global max mean values
+    if not global_max_mean_values:
+        global_max_mean_values = mean_values.copy()
+    else:
+        for metric, mean_value in mean_values.items():
+            global_max_mean_values[metric] = max(global_max_mean_values[metric], mean_value)
+
 
 graph_metric_map = {
     'Avg Tracks': 'avg_tracks',
@@ -172,6 +186,14 @@ metric_type_map = {
     'Avg Tracks': 'average',
     'Avg Artists': 'average',
     'Average': 'average',
+}
+
+category_map = {
+    "lyrics_joy": "Joy",
+    "lyrics_sadness": "Sadness",
+    "lyrics_optimism": "Optimism",
+    "lyrics_anger": "Anger",
+    "lyrics_love_occurrences": "Love Mentions"
 }
 
 mapped_metric_type = metric_type_map.get(st.session_state['metric_type'])
@@ -945,6 +967,64 @@ for i, (key, val) in enumerate(app_config.items()):
         st.plotly_chart(fig_genres, use_container_width=True, key=f"{radio_name}_top_genres")
 
 
+### Sentiment Analysis
+st.subheader(
+    f':musical_score: Sentiment Analysis', 
+    divider="gray",
+    help="""These plots show the relative strength of various sentiment metrics (Joy, Sadness, Optimism, Anger, and Love) 
+    calculated from song lyrics played on each radio station. Sentiments are derived using NLP models, while the 
+    "Love" metric represents the frequency of words related to love across the lyrics. Values are normalized 
+    based on the maximum mean sentiment value across all radios for comparability.
+    """
+)
+sentiment_cols = st.columns(ncols)
+
+for i, (key, val) in enumerate(app_config.items()):
+    with sentiment_cols[i]:
+        radio_name = val.get('name')
+        mean_values = val.get('mean_values')  # Retrieve mean values for this radio
+        radio_df = val.get('radio_df')
+        
+        # Normalize mean values using global max mean values
+        normalized_values = [
+            mean_values[metric][0] / global_max_mean_values[metric][0]
+            for metric in mean_values.keys()
+        ]
+
+        # Close the loop for the radar chart
+        normalized_values.append(normalized_values[0])  # Repeat the first value to close the radar chart
+        categories = list(mean_values.keys()) + [list(mean_values.keys())[0]]  # Repeat the first category
+        categories = list(category_map.values()) + [list(category_map.values())[0]]  # Map to display labels
+
+        # Create radar chart
+        fig = go.Figure()
+        fig.add_trace(go.Scatterpolar(
+            r=normalized_values,
+            theta=categories,
+            fill='toself',
+            # name=f'{radio_name}'
+            name=None,
+        ))
+
+        # Update layout for radar chart
+        fig.update_layout(
+            polar=dict(
+                radialaxis=dict(
+                    visible=True,
+                    range=[0, 1]  # Ensure all metrics are on the same scale (0 to 1)
+                )
+            ),
+            # showlegend=True,
+            # title=f"Lyrics Sentiment Star Plot for {radio_name}"
+            margin=dict(l=100, r=100, t=50, b=50),  # Adjust for long genre names
+            height=400,
+            hoverlabel_align = 'left',
+        )
+
+        # Display radar chart in Streamlit
+        st.plotly_chart(fig, use_container_width=True, key=f"{radio_name}_radar_chart")
+
+        
         # Add an export button for the radio CSV data
         # csv = radio_df.to_pandas().to_csv(index=False)  # Convert to pandas and CSV
         with stylable_container(
@@ -960,7 +1040,7 @@ for i, (key, val) in enumerate(app_config.items()):
                 }
                 """,
         ):
-            _, csv_col, _ = st.columns(3)
+            _, csv_col, _ = st.columns([1,2,1])
             with csv_col:
                 st.download_button(
                     label=f"Export :grey-background[**{radio_name}**] Data as CSV",
@@ -972,6 +1052,8 @@ for i, (key, val) in enumerate(app_config.items()):
 
 
         # st.write(radio_df.filter(pl.col('artist_name') == 'Bad Bunny'))
+
+
         
 
 ## Visuals
@@ -983,6 +1065,3 @@ for i, (key, val) in enumerate(app_config.items()):
 ## Minor details
 # Reduce file size with helper functions, if possible
 # Perhaps refactor calculations_helper.py
-
-# Add export button
-# Explore sentiment analysis on overview
