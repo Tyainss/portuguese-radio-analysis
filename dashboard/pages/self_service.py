@@ -2,7 +2,7 @@ import polars as pl
 import streamlit as st
 from pygwalker.api.streamlit import StreamlitRenderer
 from pathlib import Path
-import ydata_profiling
+from ydata_profiling import ProfileReport
 from streamlit_pandas_profiling import st_profile_report
 
 from data_extract.data_storage import DataStorage
@@ -45,44 +45,78 @@ st.info('''
     **Data Profiling** provides information about the whole dataset, including a description for each column
 ''')
 
+# Initialize session state for profiling generation
+if "profiling_started" not in st.session_state:
+    st.session_state["profiling_started"] = False
+
 # Get the path to the current script
 current_dir = Path(__file__).parent
 
 # Build the path to the spec file
 spec_file_path = current_dir / ".." / "spec" / "self_service_spec.json"
+# config_file_path = Path(__file__).parent / "profiling_config.yaml"
 
-@st.cache_resource
-def get_pyg_renderer() -> "StreamlitRenderer":
-    df = load_df()
-    # Convert day and time_played into a single datetime column
-    df = df.with_columns(
-        (pl.col("day").cast(pl.Datetime) + pl.col("time_played").cast(pl.Duration)).alias("datetime_played")
-    )
-    # Drop the original columns if you no longer need them
-    df = df.drop(["time_played"])
+# @st.cache_resource
+# def get_pyg_renderer() -> "StreamlitRenderer":
+#     df = load_df()
+#     # Convert day and time_played into a single datetime column
+#     df = df.with_columns(
+#         (pl.col("day").cast(pl.Datetime) + pl.col("time_played").cast(pl.Duration)).alias("datetime_played")
+#     )
+#     # Drop the original columns if you no longer need them
+#     df = df.drop(["time_played"])
 
-    columns = df.columns
-    # Reorder by placing 'datetime' after 'radio'
-    columns = ["radio", "day", "datetime_played"] + [col for col in columns if col not in ["radio", "day", "datetime_played"]]
-    # Reorder the DataFrame
-    df = df.select(columns)
+#     columns = df.columns
+#     # Reorder by placing 'datetime' after 'radio'
+#     columns = ["radio", "day", "datetime_played"] + [col for col in columns if col not in ["radio", "day", "datetime_played"]]
+#     # Reorder the DataFrame
+#     df = df.select(columns)
 
-    return StreamlitRenderer(df, spec=str(spec_file_path), spec_io_mode="r") 
+#     return StreamlitRenderer(df, spec=str(spec_file_path), spec_io_mode="r") 
 
 tab1, tab2 = st.tabs(['Data Exploration', 'Data Profiling'])
 
+# Data Exploration Tab
 with tab1:
-    st.markdown('The tool below was created using :blue-background[**pygwalker**]. \n\n Learn more about it, including how to use it, [here](https://kanaries.net/pygwalker)')
-    renderer = get_pyg_renderer()
+    st.markdown(
+        "The tool below was created using :blue-background[**pygwalker**]. \n\n Learn more about it, including how to use it, [here](https://kanaries.net/pygwalker)"
+    )
+    @st.cache_resource
+    def get_pyg_renderer() -> "StreamlitRenderer":
+        df = load_df()
+        df = df.with_columns(
+            (pl.col("day").cast(pl.Datetime) + pl.col("time_played").cast(pl.Duration)).alias("datetime_played")
+        )
+        df = df.drop(["time_played"])
 
+        columns = df.columns
+        columns = ["radio", "day", "datetime_played"] + [col for col in columns if col not in ["radio", "day", "datetime_played"]]
+        df = df.select(columns)
+        return StreamlitRenderer(df, spec=str(Path(__file__).parent / ".." / "spec" / "self_service_spec.json"), spec_io_mode="r")
+
+    renderer = get_pyg_renderer()
     renderer.explorer()
 
+# Data Profiling Tab
 with tab2:
-    df = load_df(pandas_format=True)
-    pr = df.profile_report()
+    st.title("Data Profiling")
 
-    st.title("Profiling in Streamlit")
-    # st.write(df)
-    # st_profile_report(pr)
+    if st.session_state["profiling_started"]:
+        # Profiling already started, reuse the saved report
+        with st.spinner("Loading the existing profiling report..."):
+            st_profile_report(st.session_state["profiling_report"])
+    else:
+        # Generate the profiling report and save to session_state
+        with st.spinner("Generating the profiling report. This may take a few moments..."):
+            df = load_df(pandas_format=True)
+            profiling_report = ProfileReport(
+                df,
+                title="Profiling Report",
+                explorative=True,
+            )
+            # Save the report in session state
+            st.session_state["profiling_started"] = True
+            st.session_state["profiling_report"] = profiling_report
 
-# Improve Profiling process
+            # Display the profiling report
+            st_profile_report(profiling_report)
