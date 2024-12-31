@@ -1,0 +1,1795 @@
+[
+  {
+    "config": {
+      "defaultAggregated": true,
+      "geoms": [
+        "auto"
+      ],
+      "coordSystem": "generic",
+      "limit": -1,
+      "timezoneDisplayOffset": 0
+    },
+    "encodings": {
+      "dimensions": [
+        {
+          "fid": "radio",
+          "name": "radio",
+          "basename": "radio",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "day",
+          "name": "day",
+          "basename": "day",
+          "semanticType": "temporal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "datetime_played",
+          "name": "datetime_played",
+          "basename": "datetime_played",
+          "semanticType": "temporal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "track_title",
+          "name": "track_title",
+          "basename": "track_title",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "artist_name",
+          "name": "artist_name",
+          "basename": "artist_name",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "mb_artist_country",
+          "name": "mb_artist_country",
+          "basename": "mb_artist_country",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "mb_artist_main_genre",
+          "name": "mb_artist_main_genre",
+          "basename": "mb_artist_main_genre",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "mb_artist_type",
+          "name": "mb_artist_type",
+          "basename": "mb_artist_type",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "mb_artist_career_begin",
+          "name": "mb_artist_career_begin",
+          "basename": "mb_artist_career_begin",
+          "semanticType": "temporal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "mb_artist_career_end",
+          "name": "mb_artist_career_end",
+          "basename": "mb_artist_career_end",
+          "semanticType": "temporal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "mb_artist_career_ended",
+          "name": "mb_artist_career_ended",
+          "basename": "mb_artist_career_ended",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "wiki_nationality",
+          "name": "wiki_nationality",
+          "basename": "wiki_nationality",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "combined_nationality",
+          "name": "combined_nationality",
+          "basename": "combined_nationality",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_album",
+          "name": "spotify_album",
+          "basename": "spotify_album",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_release_date",
+          "name": "spotify_release_date",
+          "basename": "spotify_release_date",
+          "semanticType": "temporal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_genres",
+          "name": "spotify_genres",
+          "basename": "spotify_genres",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_mode",
+          "name": "spotify_mode",
+          "basename": "spotify_mode",
+          "semanticType": "quantitative",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_time_signature",
+          "name": "spotify_time_signature",
+          "basename": "spotify_time_signature",
+          "semanticType": "quantitative",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "lyrics_language",
+          "name": "lyrics_language",
+          "basename": "lyrics_language",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "gw_mea_key_fid",
+          "name": "Measure names",
+          "analyticType": "dimension",
+          "semanticType": "nominal"
+        }
+      ],
+      "measures": [
+        {
+          "fid": "spotify_duration_ms",
+          "name": "spotify_duration_ms",
+          "basename": "spotify_duration_ms",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_popularity",
+          "name": "spotify_popularity",
+          "basename": "spotify_popularity",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_danceability",
+          "name": "spotify_danceability",
+          "basename": "spotify_danceability",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_energy",
+          "name": "spotify_energy",
+          "basename": "spotify_energy",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_valence",
+          "name": "spotify_valence",
+          "basename": "spotify_valence",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_acousticness",
+          "name": "spotify_acousticness",
+          "basename": "spotify_acousticness",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_instrumentalness",
+          "name": "spotify_instrumentalness",
+          "basename": "spotify_instrumentalness",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_liveness",
+          "name": "spotify_liveness",
+          "basename": "spotify_liveness",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_speechiness",
+          "name": "spotify_speechiness",
+          "basename": "spotify_speechiness",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_tempo",
+          "name": "spotify_tempo",
+          "basename": "spotify_tempo",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_loudness",
+          "name": "spotify_loudness",
+          "basename": "spotify_loudness",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "lyrics_polarity",
+          "name": "lyrics_polarity",
+          "basename": "lyrics_polarity",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "lyrics_subjectivity",
+          "name": "lyrics_subjectivity",
+          "basename": "lyrics_subjectivity",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "lyrics_joy",
+          "name": "lyrics_joy",
+          "basename": "lyrics_joy",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "lyrics_sadness",
+          "name": "lyrics_sadness",
+          "basename": "lyrics_sadness",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "lyrics_optimism",
+          "name": "lyrics_optimism",
+          "basename": "lyrics_optimism",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "lyrics_anger",
+          "name": "lyrics_anger",
+          "basename": "lyrics_anger",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "lyrics_love_occurrences",
+          "name": "lyrics_love_occurrences",
+          "basename": "lyrics_love_occurrences",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "gw_count_fid",
+          "name": "Row count",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "computed": true,
+          "expression": {
+            "op": "one",
+            "params": [],
+            "as": "gw_count_fid"
+          }
+        },
+        {
+          "fid": "gw_mea_val_fid",
+          "name": "Measure values",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum"
+        }
+      ],
+      "rows": [
+        {
+          "fid": "artist_name",
+          "name": "artist_name",
+          "basename": "artist_name",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0,
+          "sort": "descending"
+        }
+      ],
+      "columns": [
+        {
+          "fid": "gw_count_fid",
+          "name": "Row count",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "computed": true,
+          "expression": {
+            "op": "one",
+            "params": [],
+            "as": "gw_count_fid"
+          }
+        },
+        {
+          "fid": "spotify_duration_ms",
+          "name": "spotify_duration_ms",
+          "basename": "spotify_duration_ms",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        }
+      ],
+      "color": [
+        {
+          "fid": "radio",
+          "name": "radio",
+          "basename": "radio",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        }
+      ],
+      "opacity": [],
+      "size": [],
+      "shape": [],
+      "radius": [],
+      "theta": [],
+      "longitude": [],
+      "latitude": [],
+      "geoId": [],
+      "details": [],
+      "filters": [],
+      "text": []
+    },
+    "layout": {
+      "showActions": false,
+      "showTableSummary": false,
+      "stack": "stack",
+      "interactiveScale": false,
+      "zeroScale": true,
+      "size": {
+        "mode": "auto",
+        "width": 320,
+        "height": 200
+      },
+      "format": {},
+      "geoKey": "name",
+      "resolve": {
+        "x": false,
+        "y": false,
+        "color": false,
+        "opacity": false,
+        "shape": false,
+        "size": false
+      }
+    },
+    "visId": "gw_Ez0k",
+    "name": "by Artist"
+  },
+  {
+    "config": {
+      "defaultAggregated": true,
+      "geoms": [
+        "line"
+      ],
+      "coordSystem": "generic",
+      "limit": -1,
+      "timezoneDisplayOffset": 0
+    },
+    "encodings": {
+      "dimensions": [
+        {
+          "fid": "radio",
+          "name": "radio",
+          "basename": "radio",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "day",
+          "name": "day",
+          "basename": "day",
+          "semanticType": "temporal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "datetime_played",
+          "name": "datetime_played",
+          "basename": "datetime_played",
+          "semanticType": "temporal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "track_title",
+          "name": "track_title",
+          "basename": "track_title",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "artist_name",
+          "name": "artist_name",
+          "basename": "artist_name",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "mb_artist_country",
+          "name": "mb_artist_country",
+          "basename": "mb_artist_country",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "mb_artist_main_genre",
+          "name": "mb_artist_main_genre",
+          "basename": "mb_artist_main_genre",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "mb_artist_type",
+          "name": "mb_artist_type",
+          "basename": "mb_artist_type",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "mb_artist_career_begin",
+          "name": "mb_artist_career_begin",
+          "basename": "mb_artist_career_begin",
+          "semanticType": "temporal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "mb_artist_career_end",
+          "name": "mb_artist_career_end",
+          "basename": "mb_artist_career_end",
+          "semanticType": "temporal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "mb_artist_career_ended",
+          "name": "mb_artist_career_ended",
+          "basename": "mb_artist_career_ended",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "wiki_nationality",
+          "name": "wiki_nationality",
+          "basename": "wiki_nationality",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "combined_nationality",
+          "name": "combined_nationality",
+          "basename": "combined_nationality",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_album",
+          "name": "spotify_album",
+          "basename": "spotify_album",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_release_date",
+          "name": "spotify_release_date",
+          "basename": "spotify_release_date",
+          "semanticType": "temporal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_genres",
+          "name": "spotify_genres",
+          "basename": "spotify_genres",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_mode",
+          "name": "spotify_mode",
+          "basename": "spotify_mode",
+          "semanticType": "quantitative",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_time_signature",
+          "name": "spotify_time_signature",
+          "basename": "spotify_time_signature",
+          "semanticType": "quantitative",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "lyrics_language",
+          "name": "lyrics_language",
+          "basename": "lyrics_language",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "gw_aFjr",
+          "name": "Hour (datetime_played)",
+          "semanticType": "temporal",
+          "analyticType": "dimension",
+          "aggName": "sum",
+          "computed": true,
+          "timeUnit": "hour",
+          "expression": {
+            "op": "dateTimeDrill",
+            "as": "gw_aFjr",
+            "params": [
+              {
+                "type": "field",
+                "value": "datetime_played"
+              },
+              {
+                "type": "value",
+                "value": "hour"
+              },
+              {
+                "type": "format",
+                "value": "timestamp"
+              },
+              {
+                "type": "offset",
+                "value": 0
+              }
+            ]
+          }
+        },
+        {
+          "fid": "gw_iFyB",
+          "name": "Hour [datetime_played]",
+          "semanticType": "ordinal",
+          "analyticType": "dimension",
+          "aggName": "sum",
+          "computed": true,
+          "expression": {
+            "op": "dateTimeFeature",
+            "as": "gw_iFyB",
+            "params": [
+              {
+                "type": "field",
+                "value": "datetime_played"
+              },
+              {
+                "type": "value",
+                "value": "hour"
+              },
+              {
+                "type": "format",
+                "value": "timestamp"
+              },
+              {
+                "type": "offset",
+                "value": 0
+              }
+            ]
+          }
+        },
+        {
+          "fid": "gw_mea_key_fid",
+          "name": "Measure names",
+          "analyticType": "dimension",
+          "semanticType": "nominal"
+        }
+      ],
+      "measures": [
+        {
+          "fid": "spotify_duration_ms",
+          "name": "spotify_duration_ms",
+          "basename": "spotify_duration_ms",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_popularity",
+          "name": "spotify_popularity",
+          "basename": "spotify_popularity",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_danceability",
+          "name": "spotify_danceability",
+          "basename": "spotify_danceability",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_energy",
+          "name": "spotify_energy",
+          "basename": "spotify_energy",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_valence",
+          "name": "spotify_valence",
+          "basename": "spotify_valence",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_acousticness",
+          "name": "spotify_acousticness",
+          "basename": "spotify_acousticness",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_instrumentalness",
+          "name": "spotify_instrumentalness",
+          "basename": "spotify_instrumentalness",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_liveness",
+          "name": "spotify_liveness",
+          "basename": "spotify_liveness",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_speechiness",
+          "name": "spotify_speechiness",
+          "basename": "spotify_speechiness",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_tempo",
+          "name": "spotify_tempo",
+          "basename": "spotify_tempo",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_loudness",
+          "name": "spotify_loudness",
+          "basename": "spotify_loudness",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "lyrics_polarity",
+          "name": "lyrics_polarity",
+          "basename": "lyrics_polarity",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "lyrics_subjectivity",
+          "name": "lyrics_subjectivity",
+          "basename": "lyrics_subjectivity",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "lyrics_joy",
+          "name": "lyrics_joy",
+          "basename": "lyrics_joy",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "lyrics_sadness",
+          "name": "lyrics_sadness",
+          "basename": "lyrics_sadness",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "lyrics_optimism",
+          "name": "lyrics_optimism",
+          "basename": "lyrics_optimism",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "lyrics_anger",
+          "name": "lyrics_anger",
+          "basename": "lyrics_anger",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "lyrics_love_occurrences",
+          "name": "lyrics_love_occurrences",
+          "basename": "lyrics_love_occurrences",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "gw_count_fid",
+          "name": "Row count",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "computed": true,
+          "expression": {
+            "op": "one",
+            "params": [],
+            "as": "gw_count_fid"
+          }
+        },
+        {
+          "fid": "gw_mea_val_fid",
+          "name": "Measure values",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum"
+        }
+      ],
+      "rows": [
+        {
+          "fid": "lyrics_love_occurrences",
+          "name": "lyrics_love_occurrences",
+          "basename": "lyrics_love_occurrences",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        }
+      ],
+      "columns": [
+        {
+          "fid": "gw_iFyB",
+          "name": "Hour [datetime_played]",
+          "semanticType": "ordinal",
+          "analyticType": "dimension",
+          "aggName": "sum",
+          "computed": true,
+          "expression": {
+            "op": "dateTimeFeature",
+            "as": "gw_iFyB",
+            "params": [
+              {
+                "type": "field",
+                "value": "datetime_played"
+              },
+              {
+                "type": "value",
+                "value": "hour"
+              },
+              {
+                "type": "format",
+                "value": "timestamp"
+              },
+              {
+                "type": "offset",
+                "value": 0
+              }
+            ]
+          }
+        }
+      ],
+      "color": [
+        {
+          "fid": "radio",
+          "name": "radio",
+          "basename": "radio",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        }
+      ],
+      "opacity": [],
+      "size": [],
+      "shape": [],
+      "radius": [],
+      "theta": [],
+      "longitude": [],
+      "latitude": [],
+      "geoId": [],
+      "details": [],
+      "filters": [],
+      "text": []
+    },
+    "layout": {
+      "showActions": false,
+      "showTableSummary": false,
+      "stack": "stack",
+      "interactiveScale": false,
+      "zeroScale": true,
+      "size": {
+        "mode": "full",
+        "width": 320,
+        "height": 200
+      },
+      "format": {},
+      "geoKey": "name",
+      "resolve": {
+        "x": false,
+        "y": false,
+        "color": false,
+        "opacity": false,
+        "shape": false,
+        "size": false
+      }
+    },
+    "visId": "gw_pGQJ",
+    "name": "Love Mentions by Hour"
+  },
+  {
+    "config": {
+      "defaultAggregated": true,
+      "geoms": [
+        "auto"
+      ],
+      "coordSystem": "generic",
+      "limit": -1,
+      "timezoneDisplayOffset": 0
+    },
+    "encodings": {
+      "dimensions": [
+        {
+          "fid": "radio",
+          "name": "radio",
+          "basename": "radio",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "day",
+          "name": "day",
+          "basename": "day",
+          "semanticType": "temporal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "datetime_played",
+          "name": "datetime_played",
+          "basename": "datetime_played",
+          "semanticType": "temporal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "track_title",
+          "name": "track_title",
+          "basename": "track_title",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "artist_name",
+          "name": "artist_name",
+          "basename": "artist_name",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "mb_artist_country",
+          "name": "mb_artist_country",
+          "basename": "mb_artist_country",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "mb_artist_main_genre",
+          "name": "mb_artist_main_genre",
+          "basename": "mb_artist_main_genre",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "mb_artist_type",
+          "name": "mb_artist_type",
+          "basename": "mb_artist_type",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "mb_artist_career_begin",
+          "name": "mb_artist_career_begin",
+          "basename": "mb_artist_career_begin",
+          "semanticType": "temporal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "mb_artist_career_end",
+          "name": "mb_artist_career_end",
+          "basename": "mb_artist_career_end",
+          "semanticType": "temporal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "mb_artist_career_ended",
+          "name": "mb_artist_career_ended",
+          "basename": "mb_artist_career_ended",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "wiki_nationality",
+          "name": "wiki_nationality",
+          "basename": "wiki_nationality",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "combined_nationality",
+          "name": "combined_nationality",
+          "basename": "combined_nationality",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_album",
+          "name": "spotify_album",
+          "basename": "spotify_album",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_release_date",
+          "name": "spotify_release_date",
+          "basename": "spotify_release_date",
+          "semanticType": "temporal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_genres",
+          "name": "spotify_genres",
+          "basename": "spotify_genres",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_mode",
+          "name": "spotify_mode",
+          "basename": "spotify_mode",
+          "semanticType": "quantitative",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_time_signature",
+          "name": "spotify_time_signature",
+          "basename": "spotify_time_signature",
+          "semanticType": "quantitative",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "lyrics_language",
+          "name": "lyrics_language",
+          "basename": "lyrics_language",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "gw_c9aE",
+          "name": "Hour (datetime_played)",
+          "semanticType": "temporal",
+          "analyticType": "dimension",
+          "aggName": "sum",
+          "computed": true,
+          "timeUnit": "hour",
+          "expression": {
+            "op": "dateTimeDrill",
+            "as": "gw_c9aE",
+            "params": [
+              {
+                "type": "field",
+                "value": "datetime_played"
+              },
+              {
+                "type": "value",
+                "value": "hour"
+              },
+              {
+                "type": "format",
+                "value": "timestamp"
+              },
+              {
+                "type": "offset",
+                "value": 0
+              }
+            ]
+          }
+        },
+        {
+          "fid": "gw_mea_key_fid",
+          "name": "Measure names",
+          "analyticType": "dimension",
+          "semanticType": "nominal"
+        }
+      ],
+      "measures": [
+        {
+          "fid": "spotify_duration_ms",
+          "name": "spotify_duration_ms",
+          "basename": "spotify_duration_ms",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_popularity",
+          "name": "spotify_popularity",
+          "basename": "spotify_popularity",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_danceability",
+          "name": "spotify_danceability",
+          "basename": "spotify_danceability",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_energy",
+          "name": "spotify_energy",
+          "basename": "spotify_energy",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_valence",
+          "name": "spotify_valence",
+          "basename": "spotify_valence",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_acousticness",
+          "name": "spotify_acousticness",
+          "basename": "spotify_acousticness",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_instrumentalness",
+          "name": "spotify_instrumentalness",
+          "basename": "spotify_instrumentalness",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_liveness",
+          "name": "spotify_liveness",
+          "basename": "spotify_liveness",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_speechiness",
+          "name": "spotify_speechiness",
+          "basename": "spotify_speechiness",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_tempo",
+          "name": "spotify_tempo",
+          "basename": "spotify_tempo",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_loudness",
+          "name": "spotify_loudness",
+          "basename": "spotify_loudness",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "lyrics_polarity",
+          "name": "lyrics_polarity",
+          "basename": "lyrics_polarity",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "lyrics_subjectivity",
+          "name": "lyrics_subjectivity",
+          "basename": "lyrics_subjectivity",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "lyrics_joy",
+          "name": "lyrics_joy",
+          "basename": "lyrics_joy",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "lyrics_sadness",
+          "name": "lyrics_sadness",
+          "basename": "lyrics_sadness",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "lyrics_optimism",
+          "name": "lyrics_optimism",
+          "basename": "lyrics_optimism",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "lyrics_anger",
+          "name": "lyrics_anger",
+          "basename": "lyrics_anger",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "lyrics_love_occurrences",
+          "name": "lyrics_love_occurrences",
+          "basename": "lyrics_love_occurrences",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "gw_count_fid",
+          "name": "Row count",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "computed": true,
+          "expression": {
+            "op": "one",
+            "params": [],
+            "as": "gw_count_fid"
+          }
+        },
+        {
+          "fid": "gw_mea_val_fid",
+          "name": "Measure values",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum"
+        }
+      ],
+      "rows": [
+        {
+          "fid": "spotify_danceability",
+          "name": "spotify_danceability",
+          "basename": "spotify_danceability",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "mean",
+          "offset": 0
+        }
+      ],
+      "columns": [
+        {
+          "fid": "spotify_genres",
+          "name": "spotify_genres",
+          "basename": "spotify_genres",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0,
+          "sort": "descending"
+        }
+      ],
+      "color": [
+        {
+          "fid": "radio",
+          "name": "radio",
+          "basename": "radio",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        }
+      ],
+      "opacity": [],
+      "size": [],
+      "shape": [],
+      "radius": [],
+      "theta": [],
+      "longitude": [],
+      "latitude": [],
+      "geoId": [],
+      "details": [],
+      "filters": [],
+      "text": []
+    },
+    "layout": {
+      "showActions": false,
+      "showTableSummary": false,
+      "stack": "stack",
+      "interactiveScale": false,
+      "zeroScale": true,
+      "size": {
+        "mode": "full",
+        "width": 320,
+        "height": 200
+      },
+      "format": {},
+      "geoKey": "name",
+      "resolve": {
+        "x": false,
+        "y": false,
+        "color": false,
+        "opacity": false,
+        "shape": false,
+        "size": false
+      }
+    },
+    "visId": "gw_5ao_",
+    "name": "Danceable Genres"
+  },
+  {
+    "config": {
+      "defaultAggregated": true,
+      "geoms": [
+        "auto"
+      ],
+      "coordSystem": "generic",
+      "limit": -1,
+      "timezoneDisplayOffset": 0
+    },
+    "encodings": {
+      "dimensions": [
+        {
+          "fid": "radio",
+          "name": "radio",
+          "basename": "radio",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "day",
+          "name": "day",
+          "basename": "day",
+          "semanticType": "temporal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "datetime_played",
+          "name": "datetime_played",
+          "basename": "datetime_played",
+          "semanticType": "temporal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "track_title",
+          "name": "track_title",
+          "basename": "track_title",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "artist_name",
+          "name": "artist_name",
+          "basename": "artist_name",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "mb_artist_country",
+          "name": "mb_artist_country",
+          "basename": "mb_artist_country",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "mb_artist_main_genre",
+          "name": "mb_artist_main_genre",
+          "basename": "mb_artist_main_genre",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "mb_artist_type",
+          "name": "mb_artist_type",
+          "basename": "mb_artist_type",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "mb_artist_career_begin",
+          "name": "mb_artist_career_begin",
+          "basename": "mb_artist_career_begin",
+          "semanticType": "temporal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "mb_artist_career_end",
+          "name": "mb_artist_career_end",
+          "basename": "mb_artist_career_end",
+          "semanticType": "temporal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "mb_artist_career_ended",
+          "name": "mb_artist_career_ended",
+          "basename": "mb_artist_career_ended",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "wiki_nationality",
+          "name": "wiki_nationality",
+          "basename": "wiki_nationality",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "combined_nationality",
+          "name": "combined_nationality",
+          "basename": "combined_nationality",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_album",
+          "name": "spotify_album",
+          "basename": "spotify_album",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_release_date",
+          "name": "spotify_release_date",
+          "basename": "spotify_release_date",
+          "semanticType": "temporal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_genres",
+          "name": "spotify_genres",
+          "basename": "spotify_genres",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_mode",
+          "name": "spotify_mode",
+          "basename": "spotify_mode",
+          "semanticType": "quantitative",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_time_signature",
+          "name": "spotify_time_signature",
+          "basename": "spotify_time_signature",
+          "semanticType": "quantitative",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "lyrics_language",
+          "name": "lyrics_language",
+          "basename": "lyrics_language",
+          "semanticType": "nominal",
+          "analyticType": "dimension",
+          "offset": 0
+        },
+        {
+          "fid": "gw_mea_key_fid",
+          "name": "Measure names",
+          "analyticType": "dimension",
+          "semanticType": "nominal"
+        }
+      ],
+      "measures": [
+        {
+          "fid": "spotify_duration_ms",
+          "name": "spotify_duration_ms",
+          "basename": "spotify_duration_ms",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_popularity",
+          "name": "spotify_popularity",
+          "basename": "spotify_popularity",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_danceability",
+          "name": "spotify_danceability",
+          "basename": "spotify_danceability",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_energy",
+          "name": "spotify_energy",
+          "basename": "spotify_energy",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_valence",
+          "name": "spotify_valence",
+          "basename": "spotify_valence",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_acousticness",
+          "name": "spotify_acousticness",
+          "basename": "spotify_acousticness",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_instrumentalness",
+          "name": "spotify_instrumentalness",
+          "basename": "spotify_instrumentalness",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_liveness",
+          "name": "spotify_liveness",
+          "basename": "spotify_liveness",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_speechiness",
+          "name": "spotify_speechiness",
+          "basename": "spotify_speechiness",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_tempo",
+          "name": "spotify_tempo",
+          "basename": "spotify_tempo",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "spotify_loudness",
+          "name": "spotify_loudness",
+          "basename": "spotify_loudness",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "lyrics_polarity",
+          "name": "lyrics_polarity",
+          "basename": "lyrics_polarity",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "lyrics_subjectivity",
+          "name": "lyrics_subjectivity",
+          "basename": "lyrics_subjectivity",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "lyrics_joy",
+          "name": "lyrics_joy",
+          "basename": "lyrics_joy",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "lyrics_sadness",
+          "name": "lyrics_sadness",
+          "basename": "lyrics_sadness",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "lyrics_optimism",
+          "name": "lyrics_optimism",
+          "basename": "lyrics_optimism",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "lyrics_anger",
+          "name": "lyrics_anger",
+          "basename": "lyrics_anger",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "lyrics_love_occurrences",
+          "name": "lyrics_love_occurrences",
+          "basename": "lyrics_love_occurrences",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "offset": 0
+        },
+        {
+          "fid": "gw_count_fid",
+          "name": "Row count",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum",
+          "computed": true,
+          "expression": {
+            "op": "one",
+            "params": [],
+            "as": "gw_count_fid"
+          }
+        },
+        {
+          "fid": "gw_mea_val_fid",
+          "name": "Measure values",
+          "analyticType": "measure",
+          "semanticType": "quantitative",
+          "aggName": "sum"
+        }
+      ],
+      "rows": [],
+      "columns": [],
+      "color": [],
+      "opacity": [],
+      "size": [],
+      "shape": [],
+      "radius": [],
+      "theta": [],
+      "longitude": [],
+      "latitude": [],
+      "geoId": [],
+      "details": [],
+      "filters": [],
+      "text": []
+    },
+    "layout": {
+      "showActions": false,
+      "showTableSummary": false,
+      "stack": "stack",
+      "interactiveScale": false,
+      "zeroScale": true,
+      "size": {
+        "mode": "auto",
+        "width": 320,
+        "height": 200
+      },
+      "format": {},
+      "geoKey": "name",
+      "resolve": {
+        "x": false,
+        "y": false,
+        "color": false,
+        "opacity": false,
+        "shape": false,
+        "size": false
+      }
+    },
+    "visId": "gw_tzwW",
+    "name": "Explore it yourself!"
+  }
+]

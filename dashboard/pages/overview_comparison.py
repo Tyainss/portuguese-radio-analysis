@@ -4,7 +4,6 @@ import streamlit as st
 from streamlit_extras.stylable_container import stylable_container
 import plotly.express as px
 import plotly.graph_objects as go
-import io
 
 from data_extract.data_storage import DataStorage
 from data_extract.config_manager import ConfigManager
@@ -25,13 +24,13 @@ cm = ConfigManager()
 app_config = cm.load_json(path='dashboard/app_config.json')
 
 @st.cache_data
+def generate_radio_csv(_data):
+    return _data.to_pandas().to_csv(index=False)
+
+@st.cache_data
 def load_data(path, schema = None):
     data = ds.read_csv(path, schema)
     return data
-
-@st.cache_data
-def generate_radio_csv(_data):
-    return _data.to_pandas().to_csv(index=False)
 
 
 # Load the data
@@ -48,6 +47,8 @@ df_joined = df_radio_data.join(
         on=[cm.TRACK_TITLE_COLUMN, cm.ARTIST_NAME_COLUMN],
         how='left',
     )
+
+# df_joined = st.session_state['df']
 
 min_date = df_joined[cm.DAY_COLUMN].min()
 max_date = df_joined[cm.DAY_COLUMN].max()
@@ -1078,4 +1079,3 @@ for i, (key, val) in enumerate(app_config.items()):
 ## Minor details
 # Reduce file size with helper functions, if possible
 # Perhaps refactor calculations_helper.py
-# Add more helper text to sections
