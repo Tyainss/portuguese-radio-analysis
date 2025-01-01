@@ -10,5 +10,9 @@
     "RFM": {
         "logo": "dashboard/logo/RFM_logo.png",
         "name": "RFM"
+    },
+    "MegaHits": {
+        "logo": "dashboard/logo/RFM_logo.png",
+        "name": "MegaHits"
     }
 }
