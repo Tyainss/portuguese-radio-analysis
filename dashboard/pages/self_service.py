@@ -4,18 +4,16 @@ from pygwalker.api.streamlit import StreamlitRenderer
 from pathlib import Path
 from ydata_profiling import ProfileReport
 from streamlit_pandas_profiling import st_profile_report
+from streamlit_extras.stylable_container import stylable_container
 
-from data_extract.data_storage import DataStorage
 from data_extract.config_manager import ConfigManager
 
-ds = DataStorage()
+from utils.storage import (
+    load_data, generate_csv
+)
+
 cm = ConfigManager()
 app_config = cm.load_json(path='dashboard/app_config.json')
-
-@st.cache_data
-def load_data(path, schema = None):
-    data = ds.read_csv(path, schema)
-    return data
 
 # Load the data
 df_radio_data = load_data(cm.RADIO_CSV_PATH, cm.RADIO_SCRAPPER_SCHEMA)
@@ -33,6 +31,14 @@ def load_df(pandas_format=False):
             on=[cm.TRACK_TITLE_COLUMN, cm.ARTIST_NAME_COLUMN],
             how='left',
         )
+    df = df.with_columns(
+        (pl.col("day").cast(pl.Datetime) + pl.col("time_played").cast(pl.Duration)).alias("datetime_played")
+    )
+    df = df.drop(["time_played"])
+
+    columns = df.columns
+    columns = ["radio", "day", "datetime_played"] + [col for col in columns if col not in ["radio", "day", "datetime_played"]]
+    df = df.select(columns)
     if pandas_format:
         df = df.to_pandas()
     return df
@@ -51,30 +57,9 @@ if "profiling_started" not in st.session_state:
 
 # Get the path to the current script
 current_dir = Path(__file__).parent
-
-# Build the path to the spec file
 spec_file_path = current_dir / ".." / "spec" / "self_service_spec.json"
-# config_file_path = Path(__file__).parent / "profiling_config.yaml"
 
-# @st.cache_resource
-# def get_pyg_renderer() -> "StreamlitRenderer":
-#     df = load_df()
-#     # Convert day and time_played into a single datetime column
-#     df = df.with_columns(
-#         (pl.col("day").cast(pl.Datetime) + pl.col("time_played").cast(pl.Duration)).alias("datetime_played")
-#     )
-#     # Drop the original columns if you no longer need them
-#     df = df.drop(["time_played"])
-
-#     columns = df.columns
-#     # Reorder by placing 'datetime' after 'radio'
-#     columns = ["radio", "day", "datetime_played"] + [col for col in columns if col not in ["radio", "day", "datetime_played"]]
-#     # Reorder the DataFrame
-#     df = df.select(columns)
-
-#     return StreamlitRenderer(df, spec=str(spec_file_path), spec_io_mode="r") 
-
-tab1, tab2 = st.tabs(['Data Exploration', 'Data Profiling'])
+tab1, tab2, tab3 = st.tabs(['Data Exploration', 'Data Profiling', 'Extract Dataset'])
 
 # Data Exploration Tab
 with tab1:
@@ -84,15 +69,7 @@ with tab1:
     @st.cache_resource
     def get_pyg_renderer() -> "StreamlitRenderer":
         df = load_df()
-        df = df.with_columns(
-            (pl.col("day").cast(pl.Datetime) + pl.col("time_played").cast(pl.Duration)).alias("datetime_played")
-        )
-        df = df.drop(["time_played"])
-
-        columns = df.columns
-        columns = ["radio", "day", "datetime_played"] + [col for col in columns if col not in ["radio", "day", "datetime_played"]]
-        df = df.select(columns)
-        return StreamlitRenderer(df, spec=str(Path(__file__).parent / ".." / "spec" / "self_service_spec.json"), spec_io_mode="r")
+        return StreamlitRenderer(df, spec=str(spec_file_path), spec_io_mode="r")
 
     renderer = get_pyg_renderer()
     renderer.explorer()
@@ -120,3 +97,30 @@ with tab2:
 
             # Display the profiling report
             st_profile_report(profiling_report)
+
+# Data Extract Tab
+with tab3:
+    df = load_df()
+    csv = generate_csv(df)
+    with stylable_container(
+        key=f'csv_export_button',
+        css_styles="""
+            button {
+                width: 275px;
+                height: 60px;
+                background-color: #add8e6; /* Light Blue */
+                color: white;
+                border-radius: 5px;
+                white-space: nowrap;
+            }
+            """,
+    ):
+        _, csv_col, _ = st.columns([1,2,1])
+        with csv_col:
+            st.download_button(
+                label=f"Export whole dataset as CSV",
+                data=csv,
+                file_name=f"radio_data.csv",
+                mime="text/csv",
+                key=f"data_export_button"
+            )
