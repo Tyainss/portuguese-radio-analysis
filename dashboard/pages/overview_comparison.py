@@ -5,10 +5,9 @@ from streamlit_extras.stylable_container import stylable_container
 import plotly.express as px
 import plotly.graph_objects as go
 
-from data_extract.data_storage import DataStorage
 from data_extract.config_manager import ConfigManager
 
-from utils.calculations_helper import (
+from utils.calculations import (
     calculate_avg_tracks, calculate_avg_popularity, calculate_avg_time,
     prepare_weekday_metrics, prepare_hourly_metrics, plot_metrics, 
     calculate_country_counts, calculate_decade_metrics, calculate_duration_metrics,
@@ -19,18 +18,13 @@ from utils.helper import (
     flag_to_nationality_dict, number_formatter,
 )
 
-ds = DataStorage()
+from utils.storage import (
+    load_data, generate_csv
+)
+
 cm = ConfigManager()
 app_config = cm.load_json(path='dashboard/app_config.json')
 
-@st.cache_data
-def generate_radio_csv(_data):
-    return _data.to_pandas().to_csv(index=False)
-
-@st.cache_data
-def load_data(path, schema = None):
-    data = ds.read_csv(path, schema)
-    return data
 
 
 # Load the data
@@ -48,7 +42,6 @@ df_joined = df_radio_data.join(
         how='left',
     )
 
-# df_joined = st.session_state['df']
 
 min_date = df_joined[cm.DAY_COLUMN].min()
 max_date = df_joined[cm.DAY_COLUMN].max()
@@ -120,7 +113,7 @@ for i, (key, val) in enumerate(app_config.items()):
     app_config[key]['radio_df'] = df_filtered.filter(
             pl.col(cm.RADIO_COLUMN) == val.get('name')
         )
-    app_config[key]['radio_csv'] = generate_radio_csv(app_config[key]['radio_df'])
+    app_config[key]['radio_csv'] = generate_csv(app_config[key]['radio_df'])
     for metric in metrics:
         weekday_metric_df = prepare_weekday_metrics(app_config[key]['radio_df'], metric=metric)
         hour_metric_df = prepare_hourly_metrics(app_config[key]['radio_df'], metric=metric)
@@ -217,7 +210,7 @@ for i, (key, val) in enumerate(app_config.items()):
                 value=calculate_avg_tracks(df=radio_df)
             )
             kpi_2.metric(
-                label='Avg Daily Hours Played',
+                label='Avg Daily Hours',
                 value=calculate_avg_time(df=radio_df, output_unit='hours')
             )
             kpi_3.metric(
@@ -1079,3 +1072,8 @@ for i, (key, val) in enumerate(app_config.items()):
 ## Minor details
 # Reduce file size with helper functions, if possible
 # Perhaps refactor calculations_helper.py
+
+# Mention on last graphs what is the measure being ussed
+# Allow to select year of release for comparison
+# Add filter to select radios
+# Make all bar charts the same y-axis

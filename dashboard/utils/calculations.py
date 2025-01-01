@@ -220,7 +220,8 @@ def plot_metrics(
     )
     fig.update_layout(
         xaxis_title=x_axis_label,
-        yaxis_title=metric_name,
+        # yaxis_title=metric_name,
+        yaxis_title=None,
         margin=dict(l=0, r=0, t=0, b=0),
         height=350,
         hoverlabel_align="left",
