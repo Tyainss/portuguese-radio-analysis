@@ -56,7 +56,7 @@ ipython==8.31.0
 ipywidgets==8.1.5
 jedi==0.19.2
 Jinja2==3.1.5
-joblib==1.1.1
+joblib==1.4.2
 jsonschema==4.23.0
 jsonschema-specifications==2024.10.1
 jupyterlab_widgets==3.0.13
@@ -115,7 +115,7 @@ pytz==2024.2
 PyWavelets==1.8.0
 PyYAML==6.0.2
 quickjs==1.19.4
--e git+https://github.com/Tyainss/radio_song_analysis@0977a41ebec3b2d66abd27b066ea17699ee87c39#egg=radio_song_analysis
+-e git+https://github.com/Tyainss/radio_song_analysis@e29b710914933a1801d4a3f8c19a9683a96eaa98#egg=radio_song_analysis
 redis==5.2.0
 referencing==0.35.1
 regex==2024.11.6
