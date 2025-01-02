@@ -21,19 +21,20 @@ def _convert_ms(duration_ms, output_unit: str = 'hours') -> float:
     return round(duration_ms * factor, 2)
 
 @st.cache_data(show_spinner=True)
-def prepare_hourly_metrics(df: pl.DataFrame, metric: str, **kwargs) -> pl.DataFrame:
+def prepare_hourly_metrics(_df: pl.DataFrame, metric: str, id=None, **kwargs) -> pl.DataFrame:
     """
     Prepares hourly metrics for plotting.
 
     Args:
-        df: Polars DataFrame with 'time' and the relevant columns.
+        _df: Polars DataFrame with 'time' and the relevant columns.
         metric: One of 'avg_tracks', 'avg_time_played', or 'avg_popularity'.
 
     Returns:
         A Polars DataFrame with 'hour' and the calculated metric.
     """
+    # print(id)
     # Extract the hour from the 'time' column
-    df = df.with_columns(
+    df = _df.with_columns(
             pl.col(cm.TIME_PLAYED_COLUMN)
             .dt.hour()  # Extract the hour component
             .alias("hour")
@@ -85,19 +86,19 @@ def prepare_hourly_metrics(df: pl.DataFrame, metric: str, **kwargs) -> pl.DataFr
     return result
 
 @st.cache_data(show_spinner=True)
-def prepare_weekday_metrics(df: pl.DataFrame, metric: str, output_unit: str = 'hours') -> pl.DataFrame:
+def prepare_weekday_metrics(_df: pl.DataFrame, metric: str, output_unit: str = 'hours', id=None) -> pl.DataFrame:
     """
     Prepares weekday metrics for plotting.
 
     Args:
-        df: Polars DataFrame with 'day' and the relevant columns.
+        _df: Polars DataFrame with 'day' and the relevant columns.
         metric: One of 'avg_tracks', 'avg_time_played', or 'avg_popularity'.
 
     Returns:
         A Polars DataFrame with 'weekday' and the calculated metric.
     """
     # Extract the weekday from the 'day' column
-    df = df.with_columns(
+    df = _df.with_columns(
         pl.col(cm.DAY_COLUMN).dt.to_string('%A').alias("weekday"),
         pl.col(cm.DAY_COLUMN).dt.weekday().alias("weekday_number"),
     )
@@ -151,7 +152,8 @@ def prepare_weekday_metrics(df: pl.DataFrame, metric: str, output_unit: str = 'h
     return weekday_data.select(["weekday_name", metric])
 
 @st.cache_data(show_spinner=True)
-def calculate_avg_tracks(df: pl.DataFrame, adjusted_calc=True) -> float:
+def calculate_avg_tracks(_df: pl.DataFrame, adjusted_calc=True, id=None) -> float:
+    df = _df # '_' before indicates the variable is not hashed in cache_data
     if df.is_empty():
         return 0.0
     if not adjusted_calc:
@@ -159,12 +161,14 @@ def calculate_avg_tracks(df: pl.DataFrame, adjusted_calc=True) -> float:
         unique_days = df.select(pl.col(cm.DAY_COLUMN).n_unique())[0, 0]
         avg_tracks = total_tracks / unique_days
     else:
-        hourly_data = prepare_hourly_metrics(df, metric='avg_tracks')
+        hourly_data = prepare_hourly_metrics(df, metric='avg_tracks', id=id)
         avg_tracks = hourly_data.select(pl.col('avg_tracks').sum())[0,0]
 
     return round(avg_tracks, 2)
 
-def calculate_avg_time(df: pl.DataFrame, output_unit: str = "hours", adjusted_calc=True) -> float:
+@st.cache_data(show_spinner=True)
+def calculate_avg_time(_df: pl.DataFrame, output_unit: str = "hours", adjusted_calc=True, id=None) -> float:
+    df = _df # '_' before indicates the variable is not hashed in cache_data
     if df.is_empty():
         return 0.0
     if not adjusted_calc:
@@ -173,13 +177,14 @@ def calculate_avg_time(df: pl.DataFrame, output_unit: str = "hours", adjusted_ca
         avg_duration_ms = total_duration_ms / unique_days
         avg_time = _convert_ms(avg_duration_ms, output_unit=output_unit)
     else:
-        hourly_data = prepare_hourly_metrics(df, metric='avg_time_played', kwargs=output_unit)
+        hourly_data = prepare_hourly_metrics(df, metric='avg_time_played', id=id, kwargs=output_unit)
         avg_time = hourly_data.select(pl.col('avg_time_played').sum())[0, 0]
 
     return round(avg_time, 2)
     
 @st.cache_data(show_spinner=True) 
-def calculate_avg_popularity(df: pl.DataFrame) -> float:
+def calculate_avg_popularity(_df: pl.DataFrame, id=None) -> float:
+    df = _df # '_' before indicates the variable is not hashed in cache_data
     if df.is_empty():
         return 0.0
     avg = df.select(pl.col('spotify_popularity').mean())[0, 0]
@@ -242,20 +247,21 @@ def plot_metrics(
 
     st.plotly_chart(fig, use_container_width=True, key=f'{radio_name}_{metric}_{x_axis_column}')
 
-@st.cache_data(show_spinner=True)
+# @st.cache_data(show_spinner=True)
 def calculate_country_counts(
-    df: pl.DataFrame,
+    _df: pl.DataFrame,
     country_col: str,
     count_columns: List[str],
     metric_type: str = 'unique',
-    include_most_played: str = None  # Options: "track", "artist", or None
+    include_most_played: str = None,  # Options: "track", "artist", or None
+    id=None,
 ) -> pl.DataFrame:
     """
     Calculate counts or averages for a given column, grouped by flags,
     based on the selected metric type, with optional most played artist or track.
 
     Args:
-        df (pl.DataFrame): Input DataFrame containing the data.
+        _df (pl.DataFrame): Input DataFrame containing the data.
         country_col (str): Column to group by (e.g., 'lyrics_language' or 'combined_nationality').
         count_columns (List[str]): Columns to count occurrences of.
         metric_type (str, optional): Metric type ('unique', 'total', or 'average'). Defaults to 'unique'.
@@ -264,6 +270,7 @@ def calculate_country_counts(
     Returns:
         pl.DataFrame: Grouped DataFrame with counts or averages, flags, and optional most played details.
     """
+    df = _df # '_' before indicates the variable is not hashed in cache_data
     cols = [pl.col(col) for col in count_columns] + [pl.col(country_col)]
 
     # Calculate metrics based on the selected type
@@ -334,18 +341,19 @@ def calculate_country_counts(
 
 @st.cache_data(show_spinner=True)
 def calculate_decade_metrics(
-    df: pl.DataFrame,
+    _df: pl.DataFrame,
     date_column: str,
     count_columns: List[str],
     metric_type: str = "unique",
-    include_most_played: str = None  # Options: "track", "artist", or None
+    include_most_played: str = None,  # Options: "track", "artist", or None
+    id=None,
 ) -> pl.DataFrame:
     """
     Calculate decade-based metrics (Unique Tracks, Total Tracks, Avg Tracks),
     with optional most played track or artist details.
 
     Args:
-        df (pl.DataFrame): Input DataFrame.
+        _df (pl.DataFrame): Input DataFrame.
         date_column (str): Column with date information (e.g., 'mb_artist_career_begin').
         count_columns (List[str]): Columns to count (e.g., 'artist_name').
         metric_type (str, optional): Metric type ('unique', 'total', 'average'). Defaults to 'unique'.
@@ -354,6 +362,7 @@ def calculate_decade_metrics(
     Returns:
         pl.DataFrame: Decade-level metrics with optional most played track or artist details.
     """
+    df = _df # '_' before indicates the variable is not hashed in cache_data
     # Filter out rows with null dates
     df_with_date = df.filter(~pl.col(date_column).is_null())
 
@@ -447,17 +456,18 @@ def calculate_decade_metrics(
 
 @st.cache_data(show_spinner=True)
 def calculate_duration_metrics(
-    df: pl.DataFrame,
+    _df: pl.DataFrame,
     duration_column: str,
     count_columns: List[str],
     metric_type: str = "unique",
-    include_most_played: bool = False
+    include_most_played: bool = False,
+    id=None,
 ) -> pl.DataFrame:
     """
     Calculate duration-based metrics (Unique Tracks, Total Tracks, Avg Tracks), with optional most played track details.
 
     Args:
-        df (pl.DataFrame): Input DataFrame.
+        _df (pl.DataFrame): Input DataFrame.
         duration_column (str): Column with duration information (e.g., 'spotify_duration_ms').
         count_columns (List[str]): Columns to count (e.g., 'artist_name').
         metric_type (str, optional): Metric type ('unique', 'total', 'average'). Defaults to 'unique'.
@@ -466,6 +476,7 @@ def calculate_duration_metrics(
     Returns:
         pl.DataFrame: Metrics with 'duration_minutes', 'metric', and optionally most played track details.
     """
+    df = _df # '_' before indicates the variable is not hashed in cache_data
     # Filter out rows with null durations
     df_duration = df.filter(~pl.col(duration_column).is_null())
 
@@ -532,17 +543,18 @@ def calculate_duration_metrics(
 
 @st.cache_data(show_spinner=True)
 def calculate_genre_metrics(
-    df: pl.DataFrame,
+    _df: pl.DataFrame,
     genre_column: str,
     count_columns: List[str],
     metric_type: str = "unique",
     include_most_played: bool = False,
+    id=None,
 ) -> pl.DataFrame:
     """
     Calculate metrics for genres, including optional most played track details.
 
     Args:
-        df (pl.DataFrame): Input DataFrame.
+        _df (pl.DataFrame): Input DataFrame.
         genre_column (str): Column with genre information.
         count_columns (List[str]): Columns to count (e.g., 'artist_name').
         metric_type (str, optional): Metric type ('unique', 'total', 'average'). Defaults to 'unique'.
@@ -551,6 +563,7 @@ def calculate_genre_metrics(
     Returns:
         pl.DataFrame: Genre-level metrics with an optional 'most_played_track' and 'most_played_artist' column.
     """
+    df = _df # '_' before indicates the variable is not hashed in cache_data
     # Filter out rows with null or empty genres
     df_genres = df.filter(
         (~pl.col(genre_column).is_null())
