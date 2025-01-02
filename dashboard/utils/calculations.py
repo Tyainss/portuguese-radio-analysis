@@ -20,6 +20,7 @@ def _convert_ms(duration_ms, output_unit: str = 'hours') -> float:
     factor = conversion_factors.get(output_unit, 1)
     return round(duration_ms * factor, 2)
 
+@st.cache_data(show_spinner=True)
 def prepare_hourly_metrics(df: pl.DataFrame, metric: str, **kwargs) -> pl.DataFrame:
     """
     Prepares hourly metrics for plotting.
@@ -83,6 +84,7 @@ def prepare_hourly_metrics(df: pl.DataFrame, metric: str, **kwargs) -> pl.DataFr
     # result = hourly_data
     return result
 
+@st.cache_data(show_spinner=True)
 def prepare_weekday_metrics(df: pl.DataFrame, metric: str, output_unit: str = 'hours') -> pl.DataFrame:
     """
     Prepares weekday metrics for plotting.
@@ -148,6 +150,7 @@ def prepare_weekday_metrics(df: pl.DataFrame, metric: str, output_unit: str = 'h
 
     return weekday_data.select(["weekday_name", metric])
 
+@st.cache_data(show_spinner=True)
 def calculate_avg_tracks(df: pl.DataFrame, adjusted_calc=True) -> float:
     if df.is_empty():
         return 0.0
@@ -175,7 +178,7 @@ def calculate_avg_time(df: pl.DataFrame, output_unit: str = "hours", adjusted_ca
 
     return round(avg_time, 2)
     
-    
+@st.cache_data(show_spinner=True) 
 def calculate_avg_popularity(df: pl.DataFrame) -> float:
     if df.is_empty():
         return 0.0
@@ -239,7 +242,7 @@ def plot_metrics(
 
     st.plotly_chart(fig, use_container_width=True, key=f'{radio_name}_{metric}_{x_axis_column}')
 
-
+@st.cache_data(show_spinner=True)
 def calculate_country_counts(
     df: pl.DataFrame,
     country_col: str,
@@ -329,6 +332,7 @@ def calculate_country_counts(
 
     return result.sort(by="metric", descending=True)
 
+@st.cache_data(show_spinner=True)
 def calculate_decade_metrics(
     df: pl.DataFrame,
     date_column: str,
@@ -441,6 +445,7 @@ def calculate_decade_metrics(
 
     return result.sort("decade_year")
 
+@st.cache_data(show_spinner=True)
 def calculate_duration_metrics(
     df: pl.DataFrame,
     duration_column: str,
@@ -525,7 +530,7 @@ def calculate_duration_metrics(
 
     return result.sort("duration_minutes")
 
-
+@st.cache_data(show_spinner=True)
 def calculate_genre_metrics(
     df: pl.DataFrame,
     genre_column: str,
