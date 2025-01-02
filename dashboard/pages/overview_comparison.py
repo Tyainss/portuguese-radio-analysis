@@ -17,14 +17,12 @@ from utils.helper import (
     language_to_flag_dict, nationality_to_flag_dict, language_full_name_dict,
     flag_to_nationality_dict, number_formatter,
 )
-
 from utils.storage import (
     load_data, generate_csv
 )
 
 cm = ConfigManager()
 app_config = cm.load_json(path='dashboard/app_config.json')
-
 
 
 # Load the data
@@ -61,15 +59,15 @@ with st.sidebar:
     st.title(':gear: Page Settings')
 
     new_date_period = st.date_input(
-        label = ':calendar: Select the time period',
+        label=':calendar: Select the time period',
         # value=(min_date, max_date),
         min_value=min_date,
         max_value=max_date,
         key='date_period'
     )
     new_graph_option = st.radio(
-        '📈 Select :blue-background[**Time Series**] to display:',
-        ['Avg Tracks', 'Avg Hours Played', 'Avg Popularity'],
+        label='📈 Select :blue-background[**Time Series**] to display:',
+        options=['Avg Tracks', 'Avg Hours Played', 'Avg Popularity'],
         index=0,
         key='ts_graph'
     )
@@ -1084,3 +1082,4 @@ for i, (key, val) in enumerate(app_config.items()):
 # Allow to select year of release for comparison
 # Add filter to select radios
 # Make all bar charts the same y-axis
+# Add a 'Segmented Control' to allow to choose between seeing percentages or total values (or toggle?)
