@@ -41,10 +41,8 @@ df_joined = load_df()
 if "radio_name_filter" not in st.session_state:
     st.session_state['radio_name_filter'] = radio_options[0]
 
-def filter_period():
-    st.session_state['date_period_2'] = st.session_state.date_period_2
 
-
+# st.session_state.clear()
 def filter_genre():
     """
     Reads 'edited_rows' from st.session_state['genre_editor']
@@ -93,7 +91,7 @@ with st.sidebar:
 
     min_date = radio_df[cm.DAY_COLUMN].min()
     max_date = radio_df[cm.DAY_COLUMN].max()
-    # st.session_state['date_period']
+
     # Date Filter
     new_date_period = st.date_input(
         label=':calendar: Select the time period',
@@ -102,33 +100,50 @@ with st.sidebar:
         max_value=max_date,
         key='date_period'
     )
-    st.session_state['date_period']
 
     # Radio Filter
     genres = radio_df.select('spotify_genres').unique()
+    # Extract unique genres and their count from radio_df
+    genre_counts = (
+        radio_df
+        .group_by("spotify_genres")
+        .count()
+        .rename({"count": "genre_count"})  # Rename count column for clarity
+    )
+
+    # If 'genres_selection' is not in session_state, initialize it
     if 'genres_selection' not in st.session_state:
-        genre_df = pl.DataFrame({
-            'spotify_genres': genres.to_series(),
-            'Selected?': [True] * len(genres)
-        })
+        genre_df = (
+            genres
+            .join(genre_counts, on="spotify_genres", how="left")
+            .with_columns(pl.col("genre_count").fill_null(0))  # Fill missing counts with 0
+            .sort("genre_count", descending=True)  # Sort by count descending
+            .with_columns(pl.lit(True).alias("Selected?"))  # Default selection to True
+        )
         st.session_state["genres_selection"] = genre_df
     else:
+        # Drop genre_count from session_state before joining to avoid duplication
+        existing_selection = st.session_state["genres_selection"].drop(["genre_count"], strict=False)
+
         # Perform a LEFT JOIN to merge existing selections with new genres
-        genre_df = genres.join(
-            st.session_state["genres_selection"], 
-            on="spotify_genres", 
-            how="left"
-        ).with_columns(
-            # Fill missing 'Selected?' values with True for new genres
-            pl.col("Selected?").fill_null(True)
+        genre_df = (
+            genres
+            .join(existing_selection, on="spotify_genres", how="left")
+            .join(genre_counts, on="spotify_genres", how="left")
+            .with_columns(
+                pl.col("Selected?").fill_null(True),  # Fill missing selections with True
+                pl.col("genre_count").fill_null(0)  # Fill missing counts with 0
+            )
+            .sort("genre_count", descending=True)  # Sort by descending count
         )
+
         # Update session_state with new genre_df
         st.session_state["genres_selection"] = genre_df
 
     # st.session_state
     with st.expander(label='Filter by Genres'):
         st.data_editor(
-            st.session_state["genres_selection"],
+            st.session_state["genres_selection"].drop(["genre_count"], strict=False),
             use_container_width=True,
             column_config={
                 "spotify_genres": {"width": 150},
@@ -180,7 +195,6 @@ st.write("Placeholder for Radio Deep Dive")
 
 
 
-# Order Genre filter by num plays/rows
-# Reflect changes on Radio/Period filter on the Genre filter
 # Add a 'Select/Unselect' all button
 # Add reset filters button
+# Structure file differently to not occupy so much space with filters? Move sidebar filters into another file?
