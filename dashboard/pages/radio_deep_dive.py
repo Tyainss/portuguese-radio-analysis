@@ -41,6 +41,10 @@ df_joined = load_df()
 if "radio_name_filter" not in st.session_state:
     st.session_state['radio_name_filter'] = radio_options[0]
 
+def filter_period():
+    st.session_state['date_period_2'] = st.session_state.date_period_2
+
+
 def filter_genre():
     """
     Reads 'edited_rows' from st.session_state['genre_editor']
@@ -76,7 +80,7 @@ def reset_settings():
 # Sidebar Filters
 with st.sidebar:
     st.title(':gear: Page Settings')
-
+    # st.session_state['date_period']
     # Radio Filter
     radio_chosen = st.selectbox(
         label='Pick the Radio',
@@ -85,26 +89,42 @@ with st.sidebar:
         key='radio_name_filter',
     )
     radio_df = filter_dataframe_by_radio(df_joined, app_config[radio_chosen].get('name'))
+    # radio_df = radio_df.head()
 
     min_date = radio_df[cm.DAY_COLUMN].min()
     max_date = radio_df[cm.DAY_COLUMN].max()
-
+    # st.session_state['date_period']
     # Date Filter
     new_date_period = st.date_input(
         label=':calendar: Select the time period',
         value=(min_date, max_date),
         min_value=min_date,
         max_value=max_date,
-        # key='date_period'
+        key='date_period'
     )
+    st.session_state['date_period']
 
     # Radio Filter
     genres = radio_df.select('spotify_genres').unique()
     if 'genres_selection' not in st.session_state:
-        st.session_state["genres_selection"] = pl.DataFrame({
+        genre_df = pl.DataFrame({
             'spotify_genres': genres.to_series(),
             'Selected?': [True] * len(genres)
         })
+        st.session_state["genres_selection"] = genre_df
+    else:
+        # Perform a LEFT JOIN to merge existing selections with new genres
+        genre_df = genres.join(
+            st.session_state["genres_selection"], 
+            on="spotify_genres", 
+            how="left"
+        ).with_columns(
+            # Fill missing 'Selected?' values with True for new genres
+            pl.col("Selected?").fill_null(True)
+        )
+        # Update session_state with new genre_df
+        st.session_state["genres_selection"] = genre_df
+
     # st.session_state
     with st.expander(label='Filter by Genres'):
         st.data_editor(
@@ -121,7 +141,24 @@ with st.sidebar:
         )
 
 radio_chosen
+# new_date_period
 
+# st.write(radio_df[cm.DAY_COLUMN].min())
+# st.session_state['date_period']
+
+# Apply Date Filter Only After Both Dates Are Selected
+if len(new_date_period) == 2:
+    start_date, end_date = new_date_period
+    df_filtered = radio_df.filter(
+        (pl.col(cm.DAY_COLUMN) >= start_date) & (pl.col(cm.DAY_COLUMN) <= end_date)
+    )
+elif len(new_date_period) == 1:
+    start_date = new_date_period[0]
+    df_filtered = radio_df.filter(
+        pl.col(cm.DAY_COLUMN) >= start_date
+    )
+else:
+    df_filtered = radio_df  # Keep unfiltered data if only one date is selected
 
 # Filter the dataframe by selected genres
 selected_genres = (
@@ -130,15 +167,20 @@ selected_genres = (
     ["spotify_genres"]
 )
 
-filtered_radio_df  = radio_df.filter(
+df_filtered  = df_filtered.filter(
     pl.col('spotify_genres').is_in(selected_genres)
 )
 
-st.write(filtered_radio_df.select('spotify_genres'))
+st.write(df_filtered)
 
 st.write(st.session_state)
 
 
 st.write("Placeholder for Radio Deep Dive")
 
-# Genre filter not working
+
+
+# Order Genre filter by num plays/rows
+# Reflect changes on Radio/Period filter on the Genre filter
+# Add a 'Select/Unselect' all button
+# Add reset filters button
