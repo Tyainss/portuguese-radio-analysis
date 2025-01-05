@@ -30,17 +30,29 @@ df_joined = filters.filter_by_most_recent_min_date(df_joined, cm.RADIO_COLUMN, c
 
 def reset_page_settings():
     """
-    Resets date_period and clears out the 'genres_selection' so it will be regenerated.
+    Resets all page filters:
+    - Resets `date_period` to full available range.
+    - Resets `genres_selection`.
+    - Resets `release_year_range` to full available range.
     """
+    global min_date, max_date, release_years  # Ensure these are accessible
+
+    # Reset date filter
     st.session_state['date_period'] = (min_date, max_date)
+
+    # Reset genre selection
     st.session_state.pop("genres_selection", None)
+
+    # Reset release year filter
+    if release_years:
+        st.session_state['release_year_range'] = (release_years[0], release_years[-1])
 
 if "radio_name_filter" not in st.session_state:
     st.session_state['radio_name_filter'] = radio_options[0]
 
 # st.session_state.clear()
 
-# Sidebar Filters
+### Sidebar Filters ###
 with st.sidebar:
     st.title(':gear: Page Settings')
 
@@ -58,6 +70,7 @@ with st.sidebar:
     )
     # radio_df = radio_df.head()
 
+
     min_date = radio_df[cm.DAY_COLUMN].min()
     max_date = radio_df[cm.DAY_COLUMN].max()
     if 'date_period' not in st.session_state:
@@ -71,9 +84,53 @@ with st.sidebar:
         max_value=max_date,
         key='date_period'
     )
+    # If user selected a date range
+    if isinstance(new_date_period, tuple) and new_date_period:
+        start_date, *end_date = new_date_period
+        radio_df = filters.filter_by_date(radio_df, cm.DAY_COLUMN, start_date, end_date[0] if end_date else None)
 
-    # Radio Filter
+
+    # Relase Year Filter
+    release_years = (
+        radio_df
+        .with_columns(pl.col('spotify_release_date').dt.year().cast(pl.Int32).alias('release_year'))  # Convert to Int
+        .drop_nulls('release_year')  # Remove None values
+        .select('release_year')  # Keep only the release_year column
+        .unique()
+        .sort('release_year', descending=False)
+        ['release_year']
+    ).to_list()
+    
+    if 'release_year_range' not in st.session_state:
+        st.session_state['release_year_range'] = (release_years[0], release_years[-1])
+    
+
+    st.session_state['release_year_range'] = (
+        max(release_years[0], st.session_state['release_year_range'][0]),
+        min(release_years[-1], st.session_state['release_year_range'][1])
+    )
+
+    # Define the range slider and store its value in session state
+    st.slider(
+        ':date: Select the range of :blue[**release years**] for the tracks',
+        min_value=release_years[0],
+        max_value=release_years[-1],
+        value=st.session_state['release_year_range'],  # Persist selection
+        key='release_year_slider',
+        on_change=filters.update_release_year_selection_in_session_state,
+        step=1
+    )
+    # # Unpack selected range from session state
+    start_release_year, end_release_year = st.session_state['release_year_range']
+    radio_df = filters.filter_by_release_year_range(radio_df, 'spotify_release_date', start_release_year, end_release_year)
+
+    # Genres Filter
     with st.expander(label='Filter by Genres'):
+        col1, col2 = st.columns(2)
+        with col1:
+            st.checkbox("Select All", on_change=filters.select_all_options)
+        with col2:
+            st.button("Unselect All", on_click=filters.unselect_all_genres)
         genres = radio_df.select('spotify_genres').unique()
         # Extract unique genres and their count from radio_df
         genre_counts = (
@@ -124,6 +181,14 @@ with st.sidebar:
             on_change=filters.update_genre_selection_in_session_state,
             hide_index=True
         )
+    # Filter the dataframe by selected genres
+    selected_genres = (
+        st.session_state["genres_selection"]
+        .filter(pl.col("Selected?"))
+        ["spotify_genres"]
+    )
+    radio_df = filters.filter_by_genres(radio_df, "spotify_genres", selected_genres.to_list())
+    
     
     # Reset settings button
     st.button('Reset Page Settings', on_click=reset_page_settings)
@@ -131,19 +196,6 @@ with st.sidebar:
 radio_chosen
 
 df_filtered = radio_df
-
-# If user selected a date range
-if isinstance(new_date_period, tuple) and new_date_period:
-    start_date, *end_date = new_date_period
-    df_filtered = filters.filter_by_date(df_filtered, cm.DAY_COLUMN, start_date, end_date[0] if end_date else None)
-
-# Filter the dataframe by selected genres
-selected_genres = (
-    st.session_state["genres_selection"]
-    .filter(pl.col("Selected?"))
-    ["spotify_genres"]
-)
-df_filtered = filters.filter_by_genres(df_filtered, "spotify_genres", selected_genres.to_list())
 
 st.write(df_filtered)
 
@@ -153,6 +205,5 @@ st.write(st.session_state)
 st.write("Placeholder for Radio Deep Dive")
 
 
-# Start date filter always by the max of the min dates for every radio
 # Add a 'Select/Unselect' all button
 # Structure file differently to not occupy so much space with filters? Move sidebar filters into another file?

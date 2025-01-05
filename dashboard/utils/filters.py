@@ -73,3 +73,55 @@ def update_genre_selection_in_session_state():
     )
     st.session_state["genres_selection"] = updated_df
 
+def update_release_year_selection_in_session_state():
+    slider_range = st.session_state['release_year_slider']
+    st.session_state['release_year_range'] = slider_range
+
+def filter_by_release_year_range(df: pl.DataFrame, date_col: str, start_year: int, end_year: int) -> pl.DataFrame:
+    """
+    Filters a dataframe based on a selected range of release years.
+    
+    If both the min and max years in the dataframe are included in the selected range, 
+    it also includes rows where `date_col` is `None`.
+
+    Parameters:
+        df (pl.DataFrame): The input dataframe.
+        date_col (str): The column containing release dates.
+        start_year (int): The starting year for filtering.
+        end_year (int): The ending year for filtering.
+
+    Returns:
+        pl.DataFrame: Filtered dataframe.
+    """
+    # Extract min and max available years in the dataframe (excluding None values)
+    min_max_years = df.select([
+        pl.col(date_col).drop_nulls().dt.year().min().alias("min_year"),
+        pl.col(date_col).drop_nulls().dt.year().max().alias("max_year")
+    ]).row(0)  # Extracts values as a tuple
+
+    min_year, max_year = min_max_years
+
+    # Create the filtering condition
+    year_condition = (pl.col(date_col).dt.year() >= start_year) & (pl.col(date_col).dt.year() <= end_year)
+
+    # If selected range covers full data range, include None values
+    if start_year <= min_year and end_year >= max_year:
+        return df.filter(year_condition | pl.col(date_col).is_null())
+
+    return df.filter(year_condition)
+
+def select_all_options():
+    """
+    Sets all genres in the 'Selected?' column to True.
+    """
+    st.session_state["genres_selection"] = st.session_state["genres_selection"].with_columns(
+        pl.lit(True).alias("Selected?")
+    )
+
+def unselect_all_genres():
+    """
+    Sets all genres in the 'Selected?' column to False.
+    """
+    st.session_state["genres_selection"] = st.session_state["genres_selection"].with_columns(
+        pl.lit(False).alias("Selected?")
+    )
