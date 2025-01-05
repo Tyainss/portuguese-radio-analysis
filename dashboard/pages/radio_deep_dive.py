@@ -95,7 +95,7 @@ with st.sidebar:
     # Date Filter
     new_date_period = st.date_input(
         label=':calendar: Select the time period',
-        value=(min_date, max_date),
+        # value=(min_date, max_date),
         min_value=min_date,
         max_value=max_date,
         key='date_period'
@@ -147,13 +147,16 @@ with st.sidebar:
             use_container_width=True,
             column_config={
                 "spotify_genres": {"width": 150},
-                "Selected?": {"width": 100},
+                "Selected?": {"width": 80},
             },
             # 3) Provide a key so Streamlit can track the widget state
             key="genre_editor",
             on_change=filter_genre,
             hide_index=True
         )
+    
+    # Reset settings button
+    st.button('Reset Page Settings', on_click=reset_settings)
 
 radio_chosen
 # new_date_period
@@ -196,5 +199,4 @@ st.write("Placeholder for Radio Deep Dive")
 
 
 # Add a 'Select/Unselect' all button
-# Add reset filters button
 # Structure file differently to not occupy so much space with filters? Move sidebar filters into another file?
