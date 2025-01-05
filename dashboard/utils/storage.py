@@ -13,3 +13,24 @@ def generate_csv(_data):
 def load_data(path, schema = None):
     data = ds.read_csv(path, schema)
     return data
+
+def load_joined_data(
+    df_radio_data: pl.DataFrame,
+    df_artist_info: pl.DataFrame,
+    df_track_info: pl.DataFrame,
+    artist_col: str,
+    track_col: str,
+    how="left",
+    pandas_format=False,
+) -> pl.DataFrame:
+    """
+    Joins the radio, artist, and track info data into a single dataframe.
+    """
+    df = (
+        df_radio_data
+        .join(df_artist_info, on=artist_col, how=how)
+        .join(df_track_info, on=[track_col, artist_col], how=how)
+    )
+    if pandas_format:
+        df = df.to_pandas()
+    return df
