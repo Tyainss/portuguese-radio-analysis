@@ -42,24 +42,24 @@ def filter_by_date(df: pl.DataFrame, date_col: str, start_date, end_date=None) -
         condition &= pl.col(date_col) <= end_date
     return df.filter(condition)
 
-def filter_by_genres(df: pl.DataFrame, genre_col: str, allowed_genres: list[str]) -> pl.DataFrame:
+def filter_by_list(df: pl.DataFrame, col: str, allowed_list: list[str]) -> pl.DataFrame:
     """
-    Filter the DF so that genre_col is in the allowed_genres list.
+    Filter the DF so that col is in the allowed_list list.
     """
-    return df.filter(pl.col(genre_col).is_in(allowed_genres))
+    return df.filter(pl.col(col).is_in(allowed_list))
 
-def update_genre_selection_in_session_state():
+def update_editor_selection_in_session_state(editor_col: str, state_key: str):
     """
-    Callback that reads the edited_rows from st.session_state["genre_editor"]
-    and applies them to st.session_state["genres_selection"].
+    Callback that reads the edited_rows from st.session_state[editor_col]
+    and applies them to st.session_state[state_key].
     """
-    data_editor_state = st.session_state["genre_editor"]
+    data_editor_state = st.session_state[editor_col]
     edited_rows = data_editor_state.get("edited_rows", {})
     if not edited_rows:
         return  # No changes
 
     # Get the list of booleans from the Polars DF
-    selected_col = st.session_state["genres_selection"].get_column("Selected?").to_list()
+    selected_col = st.session_state[state_key].get_column("Selected?").to_list()
 
     # For each row that was changed, update that row in selected_col
     for row_str, changed_fields in edited_rows.items():
@@ -68,10 +68,10 @@ def update_genre_selection_in_session_state():
             selected_col[row_idx] = changed_fields["Selected?"]
 
     # Overwrite the Polars DF
-    updated_df = st.session_state["genres_selection"].with_columns(
+    updated_df = st.session_state[state_key].with_columns(
         pl.Series("Selected?", selected_col)
     )
-    st.session_state["genres_selection"] = updated_df
+    st.session_state[state_key] = updated_df
 
 def update_release_year_selection_in_session_state():
     slider_range = st.session_state['release_year_slider']
