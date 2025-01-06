@@ -110,18 +110,46 @@ def filter_by_release_year_range(df: pl.DataFrame, date_col: str, start_year: in
 
     return df.filter(year_condition)
 
-def select_all_options():
-    """
-    Sets all genres in the 'Selected?' column to True.
-    """
-    st.session_state["genres_selection"] = st.session_state["genres_selection"].with_columns(
-        pl.lit(True).alias("Selected?")
-    )
 
-def unselect_all_genres():
+def update_select_all_checkbox(state_key: str, filter_column: str, checkbox_key: str):
     """
-    Sets all genres in the 'Selected?' column to False.
+    Updates the 'Select All' checkbox state based on the current selection.
+
+    Parameters:
+        state_key (str): The key for the session state dataframe.
+        filter_column (str): The name of the column containing selection flags (e.g., 'Selected?').
+        checkbox_key (str): The session state key for the 'Select All' checkbox.
     """
-    st.session_state["genres_selection"] = st.session_state["genres_selection"].with_columns(
-        pl.lit(False).alias("Selected?")
+    if state_key not in st.session_state:
+        return  # No data to update
+
+    df = st.session_state[state_key]
+
+    # Determine current selection state
+    all_selected = df[filter_column].all()
+    none_selected = not df[filter_column].any()
+
+    # Update the checkbox state accordingly
+    st.session_state[checkbox_key] = all_selected
+
+    # return all_selected, none_selected
+
+def toggle_select_all(state_key: str, filter_column: str, checkbox_key: str):
+    """
+    Toggles selection of all items based on the 'Select All' checkbox state.
+
+    Parameters:
+        state_key (str): The key for the session state dataframe.
+        filter_column (str): The name of the column containing selection flags (e.g., 'Selected?').
+        checkbox_key (str): The session state key for the 'Select All' checkbox.
+    """
+    if state_key not in st.session_state:
+        return  # No data to update
+
+    # Check if 'Select All' is checked or unchecked
+    select_all = st.session_state[checkbox_key]
+
+    # Update all rows based on the checkbox state
+    st.session_state[state_key] = st.session_state[state_key].with_columns(
+        pl.lit(select_all).alias(filter_column)
     )

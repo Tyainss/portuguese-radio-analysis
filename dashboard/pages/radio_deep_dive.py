@@ -42,6 +42,7 @@ def reset_page_settings():
 
     # Reset genre selection
     st.session_state.pop("genres_selection", None)
+    st.session_state['select_all_genres'] = True
 
     # Reset release year filter
     if release_years:
@@ -126,11 +127,23 @@ with st.sidebar:
 
     # Genres Filter
     with st.expander(label='Filter by Genres'):
-        col1, col2 = st.columns(2)
-        with col1:
-            st.checkbox("Select All", on_change=filters.select_all_options)
-        with col2:
-            st.button("Unselect All", on_click=filters.unselect_all_genres)
+        # Checkbox for Select All
+        filters.update_select_all_checkbox(
+            state_key="genres_selection",
+            filter_column="Selected?",
+            checkbox_key="select_all_genres"
+        )
+
+        # Render the checkbox
+        st.checkbox(
+            "Select All",
+            key="select_all_genres",
+            # value=select_all_checked,
+            on_change=filters.toggle_select_all,
+            args=("genres_selection", "Selected?", "select_all_genres"),
+            help='Genres ordered by importance\n\ni.e Number of plays, in descending order'
+        )
+
         genres = radio_df.select('spotify_genres').unique()
         # Extract unique genres and their count from radio_df
         genre_counts = (
@@ -146,8 +159,8 @@ with st.sidebar:
             genre_df = (
                 genres
                 .join(genre_counts, on="spotify_genres", how="left")
-                .with_columns(pl.col("genre_count").fill_null(0))  # Fill missing counts with 0
-                .sort("genre_count", descending=True)  # Sort by count descending
+                .with_columns(pl.col("genre_count").fill_null(0))
+                .sort("genre_count", descending=True)
                 .with_columns(pl.lit(True).alias("Selected?"))  # Default selection to True
             )
             st.session_state["genres_selection"] = genre_df
