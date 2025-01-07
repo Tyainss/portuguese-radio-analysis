@@ -41,9 +41,28 @@ class RadioScraper:
 
     def _accept_cookies(self, cookies_button_accept_text, cookies_button='qc-cmp2-summary-buttons') -> None:
         try:
-            cookies_banner = self.wait.until(EC.presence_of_element_located((By.CLASS_NAME, cookies_button)))
-            accept_button = cookies_banner.find_element(By.XPATH, f".//button[span[text()='{cookies_button_accept_text}']]")
-            accept_button.click()
+            time.sleep(2)
+            print("Waiting for cookie banner to appear...")
+            # cookies_banner = self.wait.until(EC.presence_of_element_located((By.CLASS_NAME, cookies_button)))
+            cookies_banner = self.wait.until(EC.visibility_of_element_located((By.CLASS_NAME, cookies_button)))
+            print("Cookie banner detected, searching for Accept button...")
+            # accept_button = cookies_banner.find_element(By.XPATH, f".//button[span[text()='{cookies_button_accept_text}']]")
+            # accept_button.click()
+            # Try locating the button inside the banner
+            try:
+                accept_button = cookies_banner.find_element(By.XPATH, f".//button[span[text()='{cookies_button_accept_text}']]")
+            except:
+                print("Trying alternative XPath...")
+                accept_button = self.driver.find_element(By.XPATH, "//button[contains(text(), 'ACEITAR')]")
+
+            # Scroll and click (ensures interaction success)
+            self.driver.execute_script("arguments[0].scrollIntoView();", accept_button)
+            self.driver.execute_script("arguments[0].click();", accept_button)
+
+            print("Cookie banner accepted successfully!")
+
+            # Short wait to allow page updates
+            time.sleep(1)
         except Exception as e:
             print("Error accepting cookie banner:", e)
 
