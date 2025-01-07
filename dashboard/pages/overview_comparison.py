@@ -1078,3 +1078,4 @@ for i, (key, val) in enumerate(app_config.items()):
 # Add filter to select radios
 # Make all bar charts the same y-axis
 # Add a 'Segmented Control' to allow to choose between seeing percentages or total values (or toggle?)
+# Format Weekday names shorter

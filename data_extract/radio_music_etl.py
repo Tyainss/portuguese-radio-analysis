@@ -364,3 +364,4 @@ if __name__ == "__main__":
     # Add new column in artist transformation to easily identify tracks without Audio Features
     # Add another process to get artist career begin date from Wikipedia to make data more robust - Example: Richie Campbell
     # Add a 'combined_artist_genres' column
+    # Format genres as 'title' format
