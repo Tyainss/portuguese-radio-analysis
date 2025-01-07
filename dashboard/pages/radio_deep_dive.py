@@ -1,5 +1,6 @@
 import polars as pl
 import streamlit as st
+import plotly.express as px
 from datetime import timedelta
 
 from data_extract.config_manager import ConfigManager
@@ -305,6 +306,133 @@ with st.sidebar:
 
 radio_chosen
 
+############################
+## Artist/Track Sparkline ##
+############################
+
+# Toggles between Cumulative and Non-Cumulative
+cumulative_toggle = st.toggle('Cumulative View', value=False)
+
+# Determine grouping columns
+if view_option == 'Artist':
+    group_cols = [cm.ARTIST_NAME_COLUMN]
+else:
+    group_cols = [cm.ARTIST_NAME_COLUMN, cm.TRACK_TITLE_COLUMN]
+
+# Identify last 21 days from the max date for the sparkline
+max_date_in_df = radio_df[cm.DAY_COLUMN].max()
+last_days_start = max_date_in_df - timedelta(days=21)
+last_days_end = max_date_in_df - timedelta(days=1)
+df_last_days = radio_df.filter(
+    (pl.col(cm.DAY_COLUMN) >= last_days_start)
+    & (pl.col(cm.DAY_COLUMN) <= last_days_end)
+)
+
+# Aggregate daily plays (each row is a play)
+plays_by_day = (
+    df_last_days
+    .group_by(group_cols + [cm.DAY_COLUMN])
+    .agg(pl.count().alias('play_count'))
+)
+
+# Ensure all days are covered (fill missing dates with 0 plays)
+all_dates = pl.DataFrame({cm.DAY_COLUMN: pl.date_range(
+    start=df_last_days[cm.DAY_COLUMN].min(),
+    end=df_last_days[cm.DAY_COLUMN].max(),
+    interval='1d',
+    eager=True
+)})
+
+distinct_entities = plays_by_day.select(group_cols).unique()
+all_combinations = distinct_entities.join(all_dates, how='cross')
+
+filled_data = (
+    all_combinations
+    .join(plays_by_day, on=group_cols + [cm.DAY_COLUMN], how='left')
+    .with_columns(pl.col('play_count').fill_null(0))
+)
+
+# Compute cumulative sum if toggle is enabled
+if cumulative_toggle:
+    filled_data = (
+        filled_data.sort(group_cols + [cm.DAY_COLUMN])
+        .with_columns(pl.col('play_count').cum_sum().over(group_cols).alias('cumulative_play_count'))
+    )
+    value_col = 'cumulative_play_count'
+else:
+    value_col = 'play_count'
+
+# Compute top 20 entities by total plays
+sorted_top_entities = (
+    filled_data.group_by(group_cols)
+    .agg(pl.col(value_col).sum().alias('total_plays'))
+    .sort('total_plays', descending=True)
+    .head(20)
+)
+
+# Filter data to top entities
+top_filled_data = filled_data.join(sorted_top_entities, on=group_cols, how='inner')
+
+# Ensure fixed sorting order for display labels
+if view_option == 'Track':
+    sorted_top_entities = sorted_top_entities.with_columns(
+        (pl.col(cm.TRACK_TITLE_COLUMN) + ' - ' + pl.col(cm.ARTIST_NAME_COLUMN)).alias('display_label')
+    )
+    top_filled_data = top_filled_data.with_columns(
+        (pl.col(cm.TRACK_TITLE_COLUMN) + ' - ' + pl.col(cm.ARTIST_NAME_COLUMN)).alias('display_label')
+    )
+    color_col = 'display_label'
+else:
+    color_col = cm.ARTIST_NAME_COLUMN
+
+# Fix ordering for consistent colors
+top_filled_data = top_filled_data.join(sorted_top_entities.select(group_cols), on=group_cols, how='left')
+
+# Limit default visibility to top 5 entities
+default_visible_entities = sorted_top_entities.head(5)['display_label' if view_option == 'Track' else cm.ARTIST_NAME_COLUMN].to_list()
+
+# Plot the sparkline
+fig = px.line(
+    top_filled_data.to_pandas(), 
+    x=cm.DAY_COLUMN, 
+    y=value_col,
+    color=color_col,
+    category_orders={color_col: sorted_top_entities[color_col].to_list()},
+    title=f'Trend of {view_option} Plays Over Time',
+    labels={value_col: 'Plays', cm.DAY_COLUMN: 'Date'},
+    template='plotly_white',
+    line_shape="spline",
+)
+
+# Determine the min and max values for the y-axis
+y_min = top_filled_data[value_col].min()
+y_max = top_filled_data[value_col].max()
+fig.update_yaxes(range=[0, y_max * 1.1])  # Add some padding (10%) for better visibility
+
+# Define line width based on total plays
+line_widths = {label: 2 + (total_plays / sorted_top_entities['total_plays'].max()) * 1.5
+               for label, total_plays in zip(sorted_top_entities[color_col], sorted_top_entities['total_plays'])}
+
+for trace in fig.data:
+    trace.line.width = line_widths.get(trace.name, 2)  # Adjust width dynamically
+
+# Hide all but top 5 lines by default
+# for trace in fig.data:
+#     if trace.name not in default_visible_entities:
+#         trace.visible = 'legendonly'
+
+# Display interaction instructions
+st.markdown(
+    """
+    **Interactive Graph**: Click on the legend to toggle visibility of specific artists/tracks. 
+    By default, only the top 5 are shown.
+    """
+)
+
+st.plotly_chart(fig, use_container_width=True)
+
+
+
 ########################################
 ## Artist/Track Dataframe with plots  ##
 ########################################
@@ -327,31 +455,31 @@ total_plays_all = (
     ])
 )
 
-# Identify last 30 days from the max date for the sparkline
+# Identify last 60 days from the max date for the sparkline
 max_date_in_df = df_all_time[cm.DAY_COLUMN].max()
-last_30_days_start = max_date_in_df - timedelta(days=31)
-last_30_days_end   = max_date_in_df - timedelta(days=1)
-df_30_days = radio_df.filter(
-    (pl.col(cm.DAY_COLUMN) >= last_30_days_start)
-    & (pl.col(cm.DAY_COLUMN) <= last_30_days_end)
+last_60_days_start = max_date_in_df - timedelta(days=61)
+last_60_days_end   = max_date_in_df - timedelta(days=1)
+df_60_days = radio_df.filter(
+    (pl.col(cm.DAY_COLUMN) >= last_60_days_start)
+    & (pl.col(cm.DAY_COLUMN) <= last_60_days_end)
 )
 
 # Build the date range for zero-filling
 date_series = pl.date_range(
-    start=last_30_days_start,
-    end=last_30_days_end,
+    start=last_60_days_start,
+    end=last_60_days_end,
     interval="1d",
     eager=True  # returns a Polars Series directly
 )
 all_dates = pl.DataFrame({cm.DAY_COLUMN: date_series})
 
 # Cross-join all dates with dimension combos
-dim_combos = df_30_days.select(group_cols).unique()
+dim_combos = df_60_days.select(group_cols).unique()
 all_combinations = dim_combos.join(all_dates, how='cross')
 
-# Count daily plays within last 30 days
-daily_counts_30 = (
-    df_30_days
+# Count daily plays within last 60 days
+daily_counts_60 = (
+    df_60_days
     .group_by(group_cols + [cm.DAY_COLUMN])
     .agg([pl.count().alias('plays_per_day')])
 )
@@ -359,7 +487,7 @@ daily_counts_30 = (
 # Zero-fill missing dates for the sparkline
 zero_filled = (
     all_combinations
-    .join(daily_counts_30, on=group_cols + [cm.DAY_COLUMN], how='left')
+    .join(daily_counts_60, on=group_cols + [cm.DAY_COLUMN], how='left')
     .with_columns(pl.col('plays_per_day').fill_null(0))
 )
 
@@ -399,9 +527,9 @@ else:
     col_config['spotify_genres'] = st.column_config.Column(label="Genre", width="small")
 
 col_config["plays_list"] = st.column_config.LineChartColumn(
-    label="Daily Plays (Last 30d)",
+    label="Daily Plays (Last 60d)",
     width="big",
-    help="Zero-filled daily plays for last 30 days"
+    help="Zero-filled daily plays for last 60 days"
 )
 
 col_config["Total Plays"] = st.column_config.Column(
@@ -421,7 +549,7 @@ col_config["fraction_of_max"] = st.column_config.ProgressColumn(
 # Convert to pandas and render
 df_to_display = final_df.to_pandas()
 
-st.subheader("30-Day Overview")
+st.subheader("60-Day Overview")
 st.data_editor(
     df_to_display,
     column_config=col_config,
@@ -432,6 +560,8 @@ st.data_editor(
 
 
 ### Graphs
+# 0 - Explore other ways of showing several sparklines, 1 by artist, besides the dataframe
+#       - Line chart with top 30/50 artist for last 60d, cumulative or non-cumulative?
 # 1 - Dataframe table with graphs [Done]
 # 2 - Bar Chart (possibly not) [Rejected]
 # 3 - Most Played per week
@@ -444,3 +574,11 @@ st.data_editor(
 
 # Add a right column for the 'average of other radios'
 ## These should be included in the filters of the sidebar
+
+# If 'release_year_range' wasn't filtered, keep it the min/max for every radio
+    # i.e if it's 1997-2024 (min-max) for Cidade and we change to RFM, keep the min-max of RFM
+# Same thing for genres filter - If it was filtered, don't had other genres as 'true' when switching between radios
+
+# Fix errors when filter results in empty dataframe
+
+# Add post-processing in load_data that removes empty space in the end of artist name
