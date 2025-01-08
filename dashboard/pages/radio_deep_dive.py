@@ -325,10 +325,10 @@ plots.display_plot_dataframe(radio_df, view_option)
 
 
 ### Graphs
-# 0 - Explore other ways of showing several sparklines, 1 by artist, besides the dataframe
-#       - Line chart with top 30/50 artist for last 60d, cumulative or non-cumulative?
+# 0 - Explore other ways of showing several sparklines, 1 by artist, besides the dataframe [Done]
+#       - Line chart with top 30/50 artist for last 60d, cumulative or non-cumulative? [Done]
 # 1 - Dataframe table with graphs [Done]
-# 2 - Bar Chart (possibly not) [Rejected]
+# 2 - Bar Chart (possibly not)
 # 3 - Most Played per week
 # 4 - Histogram by # plays
 # 5 - Evolution - Cumultive and non-cumulative
@@ -343,8 +343,6 @@ plots.display_plot_dataframe(radio_df, view_option)
 # If 'release_year_range' wasn't filtered, keep it the min/max for every radio
     # i.e if it's 1997-2024 (min-max) for Cidade and we change to RFM, keep the min-max of RFM
 # Same thing for genres filter - If it was filtered, don't had other genres as 'true' when switching between radios
-
-# Fix errors when filter results in empty dataframe
 
 # Add post-processing in load_data that removes empty space in the end of artist name
 

@@ -10,7 +10,7 @@ cm = ConfigManager()
 def display_sparkline(radio_df: pl.DataFrame, view_option: str):
     """Displays a sparkline with top X and date-range filters."""
 
-    with st.expander("Trend of Plays Over Time", expanded=True):
+    with st.expander("Trend of Plays Over Time", expanded=True, icon='📈'):
         # Handle empty dataframe scenario
         if radio_df.is_empty():
             st.warning("No available data to display.")
@@ -63,8 +63,10 @@ def display_sparkline(radio_df: pl.DataFrame, view_option: str):
 
         if view_option == "Artist":
             group_cols = [cm.ARTIST_NAME_COLUMN]
+            legend_title = "Artist Name"
         else:  # "Track"
             group_cols = [cm.ARTIST_NAME_COLUMN, cm.TRACK_TITLE_COLUMN]
+            legend_title = "Track Name"
 
         # Aggregate daily plays (each row is a play)
         plays_by_day = (
@@ -134,7 +136,7 @@ def display_sparkline(radio_df: pl.DataFrame, view_option: str):
             color=color_col,
             category_orders={color_col: sorted_top_entities[color_col].to_list()},
             title=f'Trend of {view_option} Plays Over Time',
-            labels={value_col: 'Plays', cm.DAY_COLUMN: 'Date'},
+            labels={value_col: 'Plays', cm.DAY_COLUMN: 'Date', color_col: legend_title},
             template='plotly_white',
             line_shape="spline",
         )
@@ -146,6 +148,7 @@ def display_sparkline(radio_df: pl.DataFrame, view_option: str):
         fig.update_layout(
                 xaxis_title=None,
                 yaxis_title=None,
+                legend_title_text=legend_title,
                 margin=dict(l=10, r=30, t=30, b=0),
                 height=600,
                 hoverlabel_align="left",
