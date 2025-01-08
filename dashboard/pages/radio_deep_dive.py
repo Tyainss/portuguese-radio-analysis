@@ -7,6 +7,7 @@ from data_extract.config_manager import ConfigManager
 
 from utils import storage, filters
 from utils.radio_deep_dive import plots
+from utils.helper import number_formatter
 
 cm = ConfigManager()
 app_config = cm.load_json(path='dashboard/app_config.json')
@@ -316,12 +317,23 @@ radio_chosen
 
 plots.display_sparkline(radio_df, view_option)
 
+########################
+## Comparison section ##
+########################
+
+with st.expander('Comparison to Other Radios', expanded=True):
+
+    plots.display_top_bar_chart(radio_df, view_option)
+
+
 
 ########################################
 ## Artist/Track Dataframe with plots  ##
 ########################################
 
 plots.display_plot_dataframe(radio_df, view_option)
+
+
 
 
 ### Graphs

@@ -4,6 +4,7 @@ import plotly.express as px
 from datetime import timedelta
 
 from data_extract.config_manager import ConfigManager
+from utils.helper import number_formatter
 
 cm = ConfigManager()
 
@@ -294,3 +295,60 @@ def display_plot_dataframe(radio_df: pl.DataFrame, view_option: str):
         hide_index=True,
         use_container_width=True
     )
+
+def display_top_bar_chart(radio_df: pl.DataFrame, view_option: str):
+    if view_option == "Artist":
+        group_cols = [cm.ARTIST_NAME_COLUMN]
+    else:  # "Track"
+        group_cols = [cm.ARTIST_NAME_COLUMN, cm.TRACK_TITLE_COLUMN]
+
+    st.subheader(f'Top 10 {view_option}s')
+
+    # Aggregate data by Artist or Track
+    bar_chart_df = (
+        radio_df
+        .group_by(group_cols)
+        .agg(pl.count().alias('play_count'))
+        .sort('play_count', descending=True)
+        .head(10)
+        .with_columns(
+            pl.col('play_count').map_elements(number_formatter).alias('formatted_play_count')
+        )
+    )
+
+    if view_option == 'Track':
+        bar_chart_df = bar_chart_df.with_columns(
+            (pl.col(cm.TRACK_TITLE_COLUMN) + ' - ' + pl.col(cm.ARTIST_NAME_COLUMN)).alias('display_label')
+        )
+        color_col = 'display_label'
+    else:
+        color_col = cm.ARTIST_NAME_COLUMN
+
+    # Sort columns for visual
+    bar_chart_df = bar_chart_df.sort('play_count', descending=False)
+
+    bar_chart_fig = px.bar(
+        bar_chart_df,
+        x='play_count',
+        y=color_col,
+        text='formatted_play_count',
+        # title=f'Top 10 {view_option}s',
+        title='',
+        orientation='h',
+    )
+    bar_chart_fig.update_traces(
+        # marker_color=colors,  # Apply colors manually
+        textposition="outside",
+        # hovertemplate="%{customdata[0]}",
+        # customdata=data_df[["tooltip_text"]].to_numpy(),
+        cliponaxis=False  # Prevent labels from being clipped
+    )
+    bar_chart_fig.update_layout(
+        xaxis_title=None,  # Remove x-axis label
+        yaxis_title=None,  # Remove y-axis label
+        margin=dict(l=10, r=30, t=30, b=0),  # Add padding around the plot
+        height=400,
+        # width=900,
+        hoverlabel_align="left",
+    )
+    st.plotly_chart(bar_chart_fig, use_container_width=False)
