@@ -10,12 +10,11 @@ cm = ConfigManager()
 def display_sparkline(radio_df: pl.DataFrame, view_option: str):
     """Displays a sparkline with top X and date-range filters."""
 
-    # Handle empty dataframe scenario
-    if radio_df.is_empty():
-        st.warning("No available data to display.")
-        return
-
     with st.expander("Trend of Plays Over Time", expanded=True):
+        # Handle empty dataframe scenario
+        if radio_df.is_empty():
+            st.warning("No available data to display.")
+            return
         with st.popover(label='Settings', icon='⚙️', use_container_width=False):
             # Toggle for cumulative vs non-cumulative
             cumulative_toggle = st.toggle(
@@ -168,7 +167,13 @@ def display_sparkline(radio_df: pl.DataFrame, view_option: str):
 
 
 def display_plot_dataframe(radio_df: pl.DataFrame, view_option: str):
-# Select dimensions based on user choice
+    st.subheader("60-Day Overview")
+    # Handle empty dataframe scenario
+    if radio_df.is_empty():
+        st.warning("No available data to display.")
+        return
+    
+    # Select dimensions based on user choice
     if view_option == 'Artist':
         group_cols = [cm.ARTIST_NAME_COLUMN, 'spotify_genres']
     else:
@@ -280,7 +285,6 @@ def display_plot_dataframe(radio_df: pl.DataFrame, view_option: str):
     # Convert to pandas and render
     df_to_display = final_df.to_pandas()
 
-    st.subheader("60-Day Overview")
     st.data_editor(
         df_to_display,
         column_config=col_config,
