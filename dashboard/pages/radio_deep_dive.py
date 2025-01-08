@@ -57,6 +57,15 @@ def reset_page_settings():
 if 'radio_name_filter' not in st.session_state:
     st.session_state['radio_name_filter'] = radio_options[0]
 
+if 'select_all_genres' not in st.session_state: 
+    st.session_state['select_all_genres'] = True
+
+if 'select_all_artists' not in st.session_state:
+    st.session_state['select_all_artists'] = True
+
+if 'artist_editor' not in st.session_state:
+    st.session_state['artist_editor'] = {}
+
 # st.session_state.clear()
 
 ### Sidebar Filters ###
@@ -149,7 +158,7 @@ with st.sidebar:
         # Render the checkbox
         st.checkbox(
             'Select All',
-            value=True,
+            # value=True,
             key='select_all_genres',
             # value=select_all_checked,
             on_change=filters.toggle_select_all,
@@ -196,9 +205,6 @@ with st.sidebar:
             # Update session_state with new genre_df
             st.session_state['genres_selection'] = genre_df
 
-        if 'select_all_genres' not in st.session_state: 
-            st.session_state['select_all_genres'] = True
-
         st.data_editor(
             st.session_state['genres_selection'].drop(['genre_count'], strict=False),
             use_container_width=True,
@@ -230,7 +236,7 @@ with st.sidebar:
         # Render the checkbox
         st.checkbox(
             'Select All',
-            value=True,
+            # value=True,
             key='select_all_artists',
             on_change=filters.toggle_select_all,
             args=('artists_selection', 'Selected?', 'select_all_artists'),
@@ -276,9 +282,6 @@ with st.sidebar:
             # Update session_state with new artists_df
             st.session_state['artists_selection'] = artists_df
 
-        if 'select_all_artists' not in st.session_state:
-            st.session_state['select_all_artists'] = True
-
         st.data_editor(
             st.session_state['artists_selection'].drop(['artist_count'], strict=False),
             use_container_width=True,
@@ -288,7 +291,7 @@ with st.sidebar:
             },
             key='artists_editor',
             on_change=filters.update_editor_selection_in_session_state,
-            args=('artist_editor', 'artists_selection'),
+            args=('artists_editor', 'artists_selection'),
             hide_index=True
         )
 
@@ -310,126 +313,130 @@ radio_chosen
 ## Artist/Track Sparkline ##
 ############################
 
-# Toggles between Cumulative and Non-Cumulative
-cumulative_toggle = st.toggle('Cumulative View', value=False)
+from utils.radio_deep_dive import plots
 
-# Determine grouping columns
-if view_option == 'Artist':
-    group_cols = [cm.ARTIST_NAME_COLUMN]
-else:
-    group_cols = [cm.ARTIST_NAME_COLUMN, cm.TRACK_TITLE_COLUMN]
+plots.display_sparkline(radio_df, view_option)
 
-# Identify last 21 days from the max date for the sparkline
-max_date_in_df = radio_df[cm.DAY_COLUMN].max()
-last_days_start = max_date_in_df - timedelta(days=21)
-last_days_end = max_date_in_df - timedelta(days=1)
-df_last_days = radio_df.filter(
-    (pl.col(cm.DAY_COLUMN) >= last_days_start)
-    & (pl.col(cm.DAY_COLUMN) <= last_days_end)
-)
+# # Toggles between Cumulative and Non-Cumulative
+# cumulative_toggle = st.toggle('Cumulative View', value=False)
 
-# Aggregate daily plays (each row is a play)
-plays_by_day = (
-    df_last_days
-    .group_by(group_cols + [cm.DAY_COLUMN])
-    .agg(pl.count().alias('play_count'))
-)
+# # Determine grouping columns
+# if view_option == 'Artist':
+#     group_cols = [cm.ARTIST_NAME_COLUMN]
+# else:
+#     group_cols = [cm.ARTIST_NAME_COLUMN, cm.TRACK_TITLE_COLUMN]
 
-# Ensure all days are covered (fill missing dates with 0 plays)
-all_dates = pl.DataFrame({cm.DAY_COLUMN: pl.date_range(
-    start=df_last_days[cm.DAY_COLUMN].min(),
-    end=df_last_days[cm.DAY_COLUMN].max(),
-    interval='1d',
-    eager=True
-)})
+# # Identify last 21 days from the max date for the sparkline
+# max_date_in_df = radio_df[cm.DAY_COLUMN].max()
+# last_days_start = max_date_in_df - timedelta(days=21)
+# last_days_end = max_date_in_df - timedelta(days=1)
+# df_last_days = radio_df.filter(
+#     (pl.col(cm.DAY_COLUMN) >= last_days_start)
+#     & (pl.col(cm.DAY_COLUMN) <= last_days_end)
+# )
 
-distinct_entities = plays_by_day.select(group_cols).unique()
-all_combinations = distinct_entities.join(all_dates, how='cross')
+# # Aggregate daily plays (each row is a play)
+# plays_by_day = (
+#     df_last_days
+#     .group_by(group_cols + [cm.DAY_COLUMN])
+#     .agg(pl.count().alias('play_count'))
+# )
 
-filled_data = (
-    all_combinations
-    .join(plays_by_day, on=group_cols + [cm.DAY_COLUMN], how='left')
-    .with_columns(pl.col('play_count').fill_null(0))
-)
+# # Ensure all days are covered (fill missing dates with 0 plays)
+# all_dates = pl.DataFrame({cm.DAY_COLUMN: pl.date_range(
+#     start=df_last_days[cm.DAY_COLUMN].min(),
+#     end=df_last_days[cm.DAY_COLUMN].max(),
+#     interval='1d',
+#     eager=True
+# )})
 
-# Compute cumulative sum if toggle is enabled
-if cumulative_toggle:
-    filled_data = (
-        filled_data.sort(group_cols + [cm.DAY_COLUMN])
-        .with_columns(pl.col('play_count').cum_sum().over(group_cols).alias('cumulative_play_count'))
-    )
-    value_col = 'cumulative_play_count'
-else:
-    value_col = 'play_count'
+# distinct_entities = plays_by_day.select(group_cols).unique()
+# all_combinations = distinct_entities.join(all_dates, how='cross')
 
-# Compute top 20 entities by total plays
-sorted_top_entities = (
-    filled_data.group_by(group_cols)
-    .agg(pl.col(value_col).sum().alias('total_plays'))
-    .sort('total_plays', descending=True)
-    .head(20)
-)
+# filled_data = (
+#     all_combinations
+#     .join(plays_by_day, on=group_cols + [cm.DAY_COLUMN], how='left')
+#     .with_columns(pl.col('play_count').fill_null(0))
+# )
 
-# Filter data to top entities
-top_filled_data = filled_data.join(sorted_top_entities, on=group_cols, how='inner')
+# # Compute cumulative sum if toggle is enabled
+# if cumulative_toggle:
+#     filled_data = (
+#         filled_data.sort(group_cols + [cm.DAY_COLUMN])
+#         .with_columns(pl.col('play_count').cum_sum().over(group_cols).alias('cumulative_play_count'))
+#     )
+#     value_col = 'cumulative_play_count'
+# else:
+#     value_col = 'play_count'
 
-# Ensure fixed sorting order for display labels
-if view_option == 'Track':
-    sorted_top_entities = sorted_top_entities.with_columns(
-        (pl.col(cm.TRACK_TITLE_COLUMN) + ' - ' + pl.col(cm.ARTIST_NAME_COLUMN)).alias('display_label')
-    )
-    top_filled_data = top_filled_data.with_columns(
-        (pl.col(cm.TRACK_TITLE_COLUMN) + ' - ' + pl.col(cm.ARTIST_NAME_COLUMN)).alias('display_label')
-    )
-    color_col = 'display_label'
-else:
-    color_col = cm.ARTIST_NAME_COLUMN
+# # Compute top 20 entities by total plays
+# sorted_top_entities = (
+#     filled_data.group_by(group_cols)
+#     .agg(pl.col(value_col).sum().alias('total_plays'))
+#     .sort('total_plays', descending=True)
+#     .head(20)
+# )
 
-# Fix ordering for consistent colors
-top_filled_data = top_filled_data.join(sorted_top_entities.select(group_cols), on=group_cols, how='left')
+# # Filter data to top entities
+# top_filled_data = filled_data.join(sorted_top_entities, on=group_cols, how='inner')
 
-# Limit default visibility to top 5 entities
-default_visible_entities = sorted_top_entities.head(5)['display_label' if view_option == 'Track' else cm.ARTIST_NAME_COLUMN].to_list()
+# # Ensure fixed sorting order for display labels
+# if view_option == 'Track':
+#     sorted_top_entities = sorted_top_entities.with_columns(
+#         (pl.col(cm.TRACK_TITLE_COLUMN) + ' - ' + pl.col(cm.ARTIST_NAME_COLUMN)).alias('display_label')
+#     )
+#     top_filled_data = top_filled_data.with_columns(
+#         (pl.col(cm.TRACK_TITLE_COLUMN) + ' - ' + pl.col(cm.ARTIST_NAME_COLUMN)).alias('display_label')
+#     )
+#     color_col = 'display_label'
+# else:
+#     color_col = cm.ARTIST_NAME_COLUMN
 
-# Plot the sparkline
-fig = px.line(
-    top_filled_data.to_pandas(), 
-    x=cm.DAY_COLUMN, 
-    y=value_col,
-    color=color_col,
-    category_orders={color_col: sorted_top_entities[color_col].to_list()},
-    title=f'Trend of {view_option} Plays Over Time',
-    labels={value_col: 'Plays', cm.DAY_COLUMN: 'Date'},
-    template='plotly_white',
-    line_shape="spline",
-)
+# # Fix ordering for consistent colors
+# top_filled_data = top_filled_data.join(sorted_top_entities.select(group_cols), on=group_cols, how='left')
 
-# Determine the min and max values for the y-axis
-y_min = top_filled_data[value_col].min()
-y_max = top_filled_data[value_col].max()
-fig.update_yaxes(range=[0, y_max * 1.1])  # Add some padding (10%) for better visibility
+# # Limit default visibility to top 5 entities
+# default_visible_entities = sorted_top_entities.head(5)['display_label' if view_option == 'Track' else cm.ARTIST_NAME_COLUMN].to_list()
 
-# Define line width based on total plays
-line_widths = {label: 2 + (total_plays / sorted_top_entities['total_plays'].max()) * 1.5
-               for label, total_plays in zip(sorted_top_entities[color_col], sorted_top_entities['total_plays'])}
+# # Plot the sparkline
+# fig = px.line(
+#     top_filled_data.to_pandas(), 
+#     x=cm.DAY_COLUMN, 
+#     y=value_col,
+#     color=color_col,
+#     category_orders={color_col: sorted_top_entities[color_col].to_list()},
+#     title=f'Trend of {view_option} Plays Over Time',
+#     labels={value_col: 'Plays', cm.DAY_COLUMN: 'Date'},
+#     template='plotly_white',
+#     line_shape="spline",
+# )
 
-for trace in fig.data:
-    trace.line.width = line_widths.get(trace.name, 2)  # Adjust width dynamically
+# # Determine the min and max values for the y-axis
+# y_min = top_filled_data[value_col].min()
+# y_max = top_filled_data[value_col].max()
+# fig.update_yaxes(range=[0, y_max * 1.1])  # Add some padding (10%) for better visibility
 
-# Hide all but top 5 lines by default
+# # Define line width based on total plays
+# line_widths = {label: 2 + (total_plays / sorted_top_entities['total_plays'].max()) * 1.5
+#                for label, total_plays in zip(sorted_top_entities[color_col], sorted_top_entities['total_plays'])}
+
 # for trace in fig.data:
-#     if trace.name not in default_visible_entities:
-#         trace.visible = 'legendonly'
+#     trace.line.width = line_widths.get(trace.name, 2)  # Adjust width dynamically
 
-# Display interaction instructions
-st.markdown(
-    """
-    **Interactive Graph**: Click on the legend to toggle visibility of specific artists/tracks. 
-    By default, only the top 5 are shown.
-    """
-)
+# # Hide all but top 5 lines by default
+# # for trace in fig.data:
+# #     if trace.name not in default_visible_entities:
+# #         trace.visible = 'legendonly'
 
-st.plotly_chart(fig, use_container_width=True)
+# # Display interaction instructions
+# st.markdown(
+#     """
+#     **Interactive Graph**: Click on the legend to toggle visibility of specific artists/tracks. 
+#     By default, only the top 5 are shown.
+#     """
+# )
+
+# st.plotly_chart(fig, use_container_width=True)
 
 
 
@@ -582,3 +589,5 @@ st.data_editor(
 # Fix errors when filter results in empty dataframe
 
 # Add post-processing in load_data that removes empty space in the end of artist name
+
+# Possiby group sections of plots into functions in an helper file that are used here after
