@@ -2,6 +2,7 @@ import polars as pl
 import streamlit as st
 import plotly.express as px
 from datetime import timedelta
+from typing import Optional
 
 from data_extract.config_manager import ConfigManager
 from utils.helper import number_formatter
@@ -296,7 +297,64 @@ def display_plot_dataframe(radio_df: pl.DataFrame, view_option: str):
         use_container_width=True
     )
 
-def display_top_bar_chart(radio_df: pl.DataFrame, view_option: str):
+# def display_top_bar_chart(radio_df: pl.DataFrame, view_option: str, other_radios_df: Optional[pl.DataFrame] = None):
+#     if view_option == "Artist":
+#         group_cols = [cm.ARTIST_NAME_COLUMN]
+#     else:  # "Track"
+#         group_cols = [cm.ARTIST_NAME_COLUMN, cm.TRACK_TITLE_COLUMN]
+
+#     st.subheader(f'Top 10 {view_option}s')
+
+#     # Aggregate data by Artist or Track
+#     bar_chart_df = (
+#         radio_df
+#         .group_by(group_cols)
+#         .agg(pl.count().alias('play_count'))
+#         .sort('play_count', descending=True)
+#         .head(10)
+#         .with_columns(
+#             pl.col('play_count').map_elements(number_formatter).alias('formatted_play_count')
+#         )
+#     )
+
+#     if view_option == 'Track':
+#         bar_chart_df = bar_chart_df.with_columns(
+#             (pl.col(cm.TRACK_TITLE_COLUMN) + ' - ' + pl.col(cm.ARTIST_NAME_COLUMN)).alias('display_label')
+#         )
+#         color_col = 'display_label'
+#     else:
+#         color_col = cm.ARTIST_NAME_COLUMN
+
+#     # Sort columns for visual
+#     bar_chart_df = bar_chart_df.sort('play_count', descending=False)
+
+#     bar_chart_fig = px.bar(
+#         bar_chart_df,
+#         x='play_count',
+#         y=color_col,
+#         text='formatted_play_count',
+#         # title=f'Top 10 {view_option}s',
+#         title='',
+#         orientation='h',
+#     )
+#     bar_chart_fig.update_traces(
+#         # marker_color=colors,  # Apply colors manually
+#         textposition="outside",
+#         # hovertemplate="%{customdata[0]}",
+#         # customdata=data_df[["tooltip_text"]].to_numpy(),
+#         cliponaxis=False  # Prevent labels from being clipped
+#     )
+#     bar_chart_fig.update_layout(
+#         xaxis_title=None,  # Remove x-axis label
+#         yaxis_title=None,  # Remove y-axis label
+#         margin=dict(l=10, r=30, t=30, b=0),  # Add padding around the plot
+#         height=400,
+#         # width=900,
+#         hoverlabel_align="left",
+#     )
+#     st.plotly_chart(bar_chart_fig, use_container_width=False)
+
+def display_top_bar_chart(radio_df: pl.DataFrame, view_option: str, other_radios_df: Optional[pl.DataFrame] = None):
     if view_option == "Artist":
         group_cols = [cm.ARTIST_NAME_COLUMN]
     else:  # "Track"
@@ -304,51 +362,62 @@ def display_top_bar_chart(radio_df: pl.DataFrame, view_option: str):
 
     st.subheader(f'Top 10 {view_option}s')
 
-    # Aggregate data by Artist or Track
-    bar_chart_df = (
-        radio_df
-        .group_by(group_cols)
-        .agg(pl.count().alias('play_count'))
-        .sort('play_count', descending=True)
-        .head(10)
-        .with_columns(
-            pl.col('play_count').map_elements(number_formatter).alias('formatted_play_count')
-        )
-    )
-
-    if view_option == 'Track':
-        bar_chart_df = bar_chart_df.with_columns(
-            (pl.col(cm.TRACK_TITLE_COLUMN) + ' - ' + pl.col(cm.ARTIST_NAME_COLUMN)).alias('display_label')
-        )
-        color_col = 'display_label'
+    # Create two columns if `other_radios_df` is provided
+    if other_radios_df is not None:
+        col1, col2 = st.columns(2)
     else:
-        color_col = cm.ARTIST_NAME_COLUMN
+        col1 = st.container()  # Use a single column if no comparison is needed
 
-    # Sort columns for visual
-    bar_chart_df = bar_chart_df.sort('play_count', descending=False)
+    def generate_bar_chart(df: pl.DataFrame, title_suffix: str):
+        """Generate a formatted bar chart from the dataframe."""
+        bar_chart_df = (
+            df.group_by(group_cols)
+            .agg(pl.count().alias('play_count'))
+            .sort('play_count', descending=True)
+            .head(10)
+            .with_columns(pl.col('play_count').map_elements(number_formatter).alias('formatted_play_count'))
+        )
 
-    bar_chart_fig = px.bar(
-        bar_chart_df,
-        x='play_count',
-        y=color_col,
-        text='formatted_play_count',
-        # title=f'Top 10 {view_option}s',
-        title='',
-        orientation='h',
-    )
-    bar_chart_fig.update_traces(
-        # marker_color=colors,  # Apply colors manually
-        textposition="outside",
-        # hovertemplate="%{customdata[0]}",
-        # customdata=data_df[["tooltip_text"]].to_numpy(),
-        cliponaxis=False  # Prevent labels from being clipped
-    )
-    bar_chart_fig.update_layout(
-        xaxis_title=None,  # Remove x-axis label
-        yaxis_title=None,  # Remove y-axis label
-        margin=dict(l=10, r=30, t=30, b=0),  # Add padding around the plot
-        height=400,
-        # width=900,
-        hoverlabel_align="left",
-    )
-    st.plotly_chart(bar_chart_fig, use_container_width=False)
+        if view_option == 'Track':
+            bar_chart_df = bar_chart_df.with_columns(
+                (pl.col(cm.TRACK_TITLE_COLUMN) + ' - ' + pl.col(cm.ARTIST_NAME_COLUMN)).alias('display_label')
+            )
+            color_col = 'display_label'
+        else:
+            color_col = cm.ARTIST_NAME_COLUMN
+
+        # Sort for visual consistency
+        bar_chart_df = bar_chart_df.sort('play_count', descending=False)
+
+        # Create the bar chart
+        bar_chart_fig = px.bar(
+            bar_chart_df.to_pandas(),
+            x='play_count',
+            y=color_col,
+            text='formatted_play_count',
+            # title=f'Top 10 {view_option}s {title_suffix}',
+            orientation='h',
+        )
+        bar_chart_fig.update_traces(
+            textposition="outside",
+            cliponaxis=False  # Prevent labels from being clipped
+        )
+        bar_chart_fig.update_layout(
+            xaxis_title=None,
+            yaxis_title=None,
+            margin=dict(l=10, r=30, t=30, b=0),
+            height=400,
+            hoverlabel_align="left",
+        )
+        return bar_chart_fig
+
+    # Display left chart (selected radio)
+    with col1:
+        st.markdown(f"**{radio_df[cm.RADIO_COLUMN][0]}**")  # Display selected radio name
+        st.plotly_chart(generate_bar_chart(radio_df, "(Selected Radio)"), use_container_width=True)
+
+    # Display right chart (other radios) if provided
+    if other_radios_df is not None:
+        with col2:
+            st.markdown("**All Other Radios**")
+            st.plotly_chart(generate_bar_chart(other_radios_df, "(Other Radios)"), use_container_width=True)

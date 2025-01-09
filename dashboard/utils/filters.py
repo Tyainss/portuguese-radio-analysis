@@ -26,11 +26,21 @@ def filter_by_most_recent_min_date(df: pl.DataFrame, radio_col: str, date_col: s
     # Filter the original dataframe to include only rows with the most recent minimum date
     return df.filter(pl.col(date_col) >= most_recent_min_date)
 
-def filter_by_radio(df: pl.DataFrame, radio_name_col: str, radio_selected: str) -> pl.DataFrame:
+def filter_by_radio(df: pl.DataFrame, radio_name_col: str, radio_selected: str, exclude: bool = False) -> pl.DataFrame:
     """
-    Return only rows matching the selected radio.
+    Filter the dataframe based on the selected radio.
+
+    Args:
+        df: Polars DataFrame.
+        radio_name_col: Column containing radio names.
+        radio_selected: The radio to filter (or exclude).
+        exclude: If True, returns all rows **except** the selected radio.
+
+    Returns:
+        A filtered Polars DataFrame.
     """
-    return df.filter(pl.col(radio_name_col) == radio_selected)
+    return df.filter(pl.col(radio_name_col) != radio_selected) if exclude else df.filter(pl.col(radio_name_col) == radio_selected)
+
 
 def filter_by_date(df: pl.DataFrame, date_col: str, start_date, end_date=None) -> pl.DataFrame:
     """
