@@ -81,12 +81,22 @@ with st.sidebar:
         index=0,
         key='radio_name_filter',
     )
+
+    # Dataframe of the other non-selected radios, for comparison
+    other_radios_df = filters.filter_by_radio(
+        df_joined, 
+        radio_name_col=cm.RADIO_COLUMN,
+        radio_selected=app_config[radio_chosen].get('name'),
+        exclude=True,
+    )
+
     radio_df = filters.filter_by_radio(
         df_joined, 
         radio_name_col=cm.RADIO_COLUMN,
         radio_selected=app_config[radio_chosen].get('name')
     )
-    # radio_df = radio_df.head()
+    
+    # Sidebar Container for Artist/Track selection
     with st.container(border=True):
         view_option = st.radio(
             label='View plot data by...',
@@ -95,8 +105,10 @@ with st.sidebar:
             horizontal=True
         )
 
+    # Get min and max dates
     min_date = radio_df[cm.DAY_COLUMN].min()
     max_date = radio_df[cm.DAY_COLUMN].max()
+
     if 'date_period' not in st.session_state:
         st.session_state['date_period'] = (min_date, max_date)
 
@@ -108,26 +120,26 @@ with st.sidebar:
         max_value=max_date,
         key='date_period'
     )
+
     # If user selected a date range
     if isinstance(new_date_period, tuple) and new_date_period:
         start_date, *end_date = new_date_period
         radio_df = filters.filter_by_date(radio_df, cm.DAY_COLUMN, start_date, end_date[0] if end_date else None)
-
+        other_radios_df = filters.filter_by_date(other_radios_df, cm.DAY_COLUMN, start_date, end_date[0] if end_date else None)
 
     # Relase Year Filter
     release_years = (
         radio_df
-        .with_columns(pl.col('spotify_release_date').dt.year().cast(pl.Int32).alias('release_year'))  # Convert to Int
-        .drop_nulls('release_year')  # Remove None values
-        .select('release_year')  # Keep only the release_year column
+        .with_columns(pl.col('spotify_release_date').dt.year().cast(pl.Int32).alias('release_year'))
+        .drop_nulls('release_year')
+        .select('release_year')
         .unique()
         .sort('release_year', descending=False)
         ['release_year']
     ).to_list()
     
     if 'release_year_range' not in st.session_state:
-        st.session_state['release_year_range'] = (release_years[0], release_years[-1])
-    
+        st.session_state['release_year_range'] = (release_years[0], release_years[-1])    
 
     st.session_state['release_year_range'] = (
         max(release_years[0], st.session_state['release_year_range'][0]),
@@ -139,14 +151,16 @@ with st.sidebar:
         ':date: Select the range of :blue[**release years**] for the tracks',
         min_value=release_years[0],
         max_value=release_years[-1],
-        value=st.session_state['release_year_range'],  # Persist selection
+        value=st.session_state['release_year_range'],
         key='release_year_slider',
         on_change=filters.update_release_year_selection_in_session_state,
         step=1
     )
-    # # Unpack selected range from session state
+
+    # Unpack selected range from session state
     start_release_year, end_release_year = st.session_state['release_year_range']
     radio_df = filters.filter_by_release_year_range(radio_df, 'spotify_release_date', start_release_year, end_release_year)
+    other_radios_df = filters.filter_by_release_year_range(other_radios_df, 'spotify_release_date', start_release_year, end_release_year)
 
     # Genres Filter
     with st.expander(label='Filter by :blue[**Genres**]', icon='🎼'):
@@ -160,9 +174,7 @@ with st.sidebar:
         # Render the checkbox
         st.checkbox(
             'Select All',
-            # value=True,
             key='select_all_genres',
-            # value=select_all_checked,
             on_change=filters.toggle_select_all,
             args=('genres_selection', 'Selected?', 'select_all_genres'),
             help='Genres ordered by importance\n\ni.e Number of plays, in descending order'
@@ -174,7 +186,7 @@ with st.sidebar:
             radio_df
             .group_by('spotify_genres')
             .len()
-            .rename({'len': 'genre_count'})  # Rename count column for clarity
+            .rename({'len': 'genre_count'})
         )
 
         # If 'genres_selection' is not in session_state, initialize it
@@ -198,10 +210,10 @@ with st.sidebar:
                 .join(existing_selection, on='spotify_genres', how='left')
                 .join(genre_counts, on='spotify_genres', how='left')
                 .with_columns(
-                    pl.col('Selected?').fill_null(True),  # Fill missing selections with True
-                    pl.col('genre_count').fill_null(0)  # Fill missing counts with 0
+                    pl.col('Selected?').fill_null(True),
+                    pl.col('genre_count').fill_null(0)
                 )
-                .sort('genre_count', descending=True)  # Sort by descending count
+                .sort('genre_count', descending=True)
             )
 
             # Update session_state with new genre_df
@@ -219,6 +231,7 @@ with st.sidebar:
             args=('genre_editor', 'genres_selection'),
             hide_index=True
         )
+
     # Filter the dataframe by selected genres
     selected_genres = (
         st.session_state['genres_selection']
@@ -226,6 +239,7 @@ with st.sidebar:
         ['spotify_genres']
     )
     radio_df = filters.filter_by_list(radio_df, 'spotify_genres', selected_genres.to_list())
+    other_radios_df = filters.filter_by_list(other_radios_df, 'spotify_genres', selected_genres.to_list())
 
     # Artists Filter
     with st.expander(label='Filter by :blue[**Artist**]', icon='🎤'):
@@ -238,7 +252,6 @@ with st.sidebar:
         # Render the checkbox
         st.checkbox(
             'Select All',
-            # value=True,
             key='select_all_artists',
             on_change=filters.toggle_select_all,
             args=('artists_selection', 'Selected?', 'select_all_artists'),
@@ -251,7 +264,7 @@ with st.sidebar:
             radio_df
             .group_by(cm.ARTIST_NAME_COLUMN)
             .len()
-            .rename({'len': 'artist_count'})  # Rename count column for clarity
+            .rename({'len': 'artist_count'})
         )
 
         # If 'artists_selection' is not in session_state, initialize it
@@ -304,6 +317,7 @@ with st.sidebar:
         [cm.ARTIST_NAME_COLUMN]
     )
     radio_df = filters.filter_by_list(radio_df, cm.ARTIST_NAME_COLUMN, selected_artists.to_list())
+    other_radios_df = filters.filter_by_list(other_radios_df, cm.ARTIST_NAME_COLUMN, selected_artists.to_list())
     
     
     # Reset settings button
@@ -323,7 +337,7 @@ plots.display_sparkline(radio_df, view_option)
 
 with st.expander('Comparison to Other Radios', expanded=True):
 
-    plots.display_top_bar_chart(radio_df, view_option)
+    plots.display_top_bar_chart(radio_df, view_option, other_radios_df)
 
 
 
@@ -340,7 +354,9 @@ plots.display_plot_dataframe(radio_df, view_option)
 # 0 - Explore other ways of showing several sparklines, 1 by artist, besides the dataframe [Done]
 #       - Line chart with top 30/50 artist for last 60d, cumulative or non-cumulative? [Done]
 # 1 - Dataframe table with graphs [Done]
-# 2 - Bar Chart (possibly not)
+# 2 - Bar Chart (possibly not) [Done]
+#   - To Improve visually: Try a grading color on the chart. Use the same color for the artist 
+#       from the selected radio on the chart for the other radios, this way highlighting them
 # 3 - Most Played per week
 # 4 - Histogram by # plays
 # 5 - Evolution - Cumultive and non-cumulative
