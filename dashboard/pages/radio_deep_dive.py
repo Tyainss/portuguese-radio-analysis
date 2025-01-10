@@ -339,6 +339,7 @@ with st.expander('Comparison to Other Radios', expanded=True):
 
     plots.display_top_bar_chart(radio_df, view_option, other_radios_df)
 
+    plots.display_top_by_week_chart(radio_df, view_option, other_radios_df)
 
 
 ########################################
@@ -358,7 +359,7 @@ plots.display_plot_dataframe(radio_df, view_option)
 #   - To Improve visually: Try a grading color on the chart. Use the same color for the artist 
 #       from the selected radio on the chart for the other radios, this way highlighting them
 # 3 - Most Played per week
-# 4 - Histogram by # plays
+# 4 - Histogram by num plays
 # 5 - Evolution - Cumultive and non-cumulative
 # 6 - Scatterplot Popularity vs Plays
 # 7 - Radar Chart for song feelings sound
@@ -375,3 +376,5 @@ plots.display_plot_dataframe(radio_df, view_option)
 # Add post-processing in load_data that removes empty space in the end of artist name
 
 # Possiby group sections of plots into functions in an helper file that are used here after
+
+# Format tooltips
