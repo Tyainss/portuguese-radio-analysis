@@ -72,6 +72,7 @@ André Sardet,Unknown,"",Person,1976-01-01,,false,Portugal,Portugal
 Anita Baker,United States,jazz,Person,1929-12-23,1988-05-13,true,United States of America,United States
 Anitta,Brazil,funk,Person,1993-03-30,,false,Brazil,Brazil
 Anitta ,Brazil,funk,Person,1993-03-30,,false,Brazil,Brazil
+Anjos & Calema,Sao Tome and Principe,"",Group,2011-01-01,,false,Unknown,Sao Tome and Principe
 Anjos Ft. Soraia Ramos,Portugal,"","",,,false,Unknown,Portugal
 "Anjos, Buba Espinho",Portugal,"",Person,,,false,Unknown,Portugal
 "Anjos, Nuno Ribeiro",Portugal,"",Person,,,false,Portugal,Portugal
@@ -302,6 +303,7 @@ Charlie Puth,United States,pop,Person,1991-12-02,,false,United States of America
 "Charlie Puth, Meghan Trainor",United States,pop,Person,1993-12-22,,false,Unknown,United States
 "Charlie Puth, Selena Gomez",United States,dance-pop,Person,1992-07-22,,false,Unknown,United States
 Charlotte Day Wilson,Canada,alternative r&b,Person,1993-01-01,,false,Canada,Canada
+Cheat Codes,United States,edm,Group,2014-01-01,,false,Unknown,United States
 Chicago,United States,rock,Group,1967-01-01,,false,Unknown,United States
 Chris Brown,United States,pop,Person,1989-05-05,,false,United States of America,United States
 Chris Brown Feat. Wizkid,Nigeria,afropop,Person,1990-07-16,,false,United States of America,Nigeria
@@ -431,6 +433,7 @@ Disclosure,United Kingdom,future garage,Group,2010-01-01,,false,Unknown,United K
 Disturbed,United States,alternative metal,Group,1996-01-01,,false,Unknown,United States
 "Disturbed, Cyril Remix",Latvia,latvian,Group,1985-01-01,1992-01-01,true,Unknown,Latvia
 Dj Dadda,Sweden,"",Person,,,false,Portugal,Sweden
+Dj Khaled ,Algeria,raï,Person,1960-02-29,,false,United States,Algeria
 Dj Snake,France,dance,Person,1986-06-13,,false,France,France
 "Dj Snake, Justin Bieber",Canada,pop,Person,1994-03-01,,false,Unknown,Canada
 Dj Topo,Spain,"",Group,1978-01-01,,false,Unknown,Spain
@@ -454,6 +457,7 @@ Drake Feat. Wizkid & Kyla,Nigeria,afropop,Person,1990-07-16,,false,Unknown,Niger
 Dreamers,Unknown,"","",,,false,Unknown,Unknown
 Dua Lipa,Unknown,dance-pop,Person,1995-08-22,,false,United Kingdom,United Kingdom
 "Dua Lipa, Dababy",Unknown,dance-pop,Person,1995-08-22,,false,Unknown,Unknown
+Duffy,United Kingdom,soul,Person,1984-06-23,,false,Unknown,United Kingdom
 "Duncan Laurence, Fletcher",United Kingdom,"",Person,,,false,Kingdom of the Netherlands,United Kingdom
 Duran Duran,United Kingdom,new wave,Group,1978-01-01,,false,Unknown,United Kingdom
 Eartha Kitt,United States,2008 universal fire victim,Person,1927-01-17,2008-12-25,true,United States of America,United States
@@ -1003,12 +1007,14 @@ Michael Buble [+] Shania Twain,Canada,country,Person,1965-08-28,,false,Unknown,C
 Michael Bublã‰,United States,pop,Person,1958-08-29,2009-06-25,true,Unknown,United States
 Michael Bublé,Canada,jazz,Person,1975-09-09,,false,Canada,Canada
 "Michael Bublé, Carly Pearce",Canada,jazz,Person,1975-09-09,,false,Unknown,Canada
+Michael Gray,United Kingdom,hip hop rnb and dance hall,Person,1966-07-12,,false,Unknown,United Kingdom
 Michael Jackson,United States,pop,Person,1958-08-29,2009-06-25,true,United States of America,United States
 Michael Kiwanuka,United Kingdom,soul,Person,1987-05-03,,false,United Kingdom,United Kingdom
 Michael Marcagi,Unknown,"",Person,,,false,Unknown,Unknown
 Michael Marcagi Feat. Joy Oladokun,United States,folk,Person,,,false,Unknown,United States
 Michele Morrone,Italy,"",Person,1990-10-03,,false,Italy,Italy
 Mick Jagger,United Kingdom,blues,Person,1943-07-26,,false,United Kingdom,United Kingdom
+Mickael Carreira,Portugal,"",Person,1986-04-03,,false,Portugal,Portugal
 "Mickael Carreira, Syro",Portugal,"",Person,1986-04-03,,false,Unknown,Portugal
 Miguel,Spain,ballad,Person,1956-04-03,,false,Unknown,Spain
 Miguel Angelo,Japan,visual kei,Group,2006-08-14,,false,Unknown,Japan
@@ -1279,6 +1285,7 @@ Rita Rocha,Unknown,"",Person,2006-08-08,,false,Unknown,Unknown
 Riton,United Kingdom,dance,Person,1978-09-01,,false,Unknown,United Kingdom
 Riton X Nightcrawlers Feat. Mufasa & Hypeman,Unknown,"",Group,,,false,Unknown,Unknown
 Riton X Nightcrawlers Ft. Mufasa E Hypeman,Unknown,"",Group,,,false,Unknown,Unknown
+"Riton, Nightcrawlers, Mufasa, Hypeman",Unknown,"",Group,,,false,Unknown,Unknown
 "Riton, Nightcrawlers, Mufasa, Hyperman",United Kingdom,british,Group,1992-01-01,,false,Unknown,United Kingdom
 Robbie Williams,United Kingdom,pop,Person,1974-02-13,,false,United Kingdom,United Kingdom
 "Robbie Williams, Bryan Adams",Canada,rock,Person,1959-11-05,,false,United Kingdom,Canada
@@ -1344,8 +1351,8 @@ Shaboozey,United States,country,Person,1995-05-09,,false,United States of Americ
 Shaggy,Jamaica,dancehall,Person,1968-10-22,,false,Unknown,Jamaica
 Shaggy Feat. Rayvon,Unknown,dancehall,Person,1968-01-01,,false,Unknown,Unknown
 Shakira,Colombia,pop,Person,1977-02-02,,false,Spain,Colombia
-Shakira ,Colombia,pop,Person,1977-02-02,,false,Spain,Colombia
 Shakira ,"","","",,,,"",""
+Shakira ,Colombia,pop,Person,1977-02-02,,false,Spain,Colombia
 Shakira Feat. Cardi B.,United States,hip hop,Person,1992-10-11,,false,Unknown,United States
 Shakira [+] Alejandro Sanz,Spain,latin pop,Person,1968-12-18,,false,Spain,Spain
 "Shakira, Wyclef Jean",Unknown,hip hop,Person,1969-10-17,,false,Unknown,Unknown
@@ -1386,6 +1393,7 @@ Staysolidrocky ,Unknown,english,Person,,,false,United States of America,United S
 "Stephen Sanchez, Em Beihold",United States,pop,Person,1999-01-21,,false,United States of America,United States
 Stevie Wonder,United States,soul,Person,1950-05-13,,false,United States of America,United States
 Sting,Unknown,pop,Person,1951-10-02,,false,Unknown,Unknown
+Sting [+] Eric Clapton,United Kingdom,blues rock,Person,1945-03-30,,false,Unknown,United Kingdom
 "Stromae, Pomme",France,chanson française,Person,1996-08-02,,false,France,France
 Summer Walker,United States,r&b,Person,1996-04-11,,false,United States of America,United States
 Supremes,United States,soul,Group,1961-01-15,1977-06-12,true,Unknown,United States
@@ -1543,6 +1551,7 @@ Wham,United Kingdom,pop,Group,1981-01-01,1986-01-01,true,Unknown,United Kingdom
 Wham!,United Kingdom,pop,Group,1981-01-01,1986-01-01,true,Unknown,United Kingdom
 Whitney Houston,United States,contemporary r&b,Person,1963-08-09,2012-02-11,true,United States of America,United States
 Why Dont We,Germany,"",Group,,,false,Unknown,Germany
+Will To Power,United States,electronic,Group,1987-01-01,,false,Unknown,United States
 Wiu,Brazil,hip hop,Person,2002-02-16,,false,Unknown,Brazil
 Wiu ,Brazil,hip hop,Person,2002-02-16,,false,Unknown,Brazil
 Wiu & Teto,Japan,"",Group,2016-01-01,2022-01-01,true,Unknown,Japan
