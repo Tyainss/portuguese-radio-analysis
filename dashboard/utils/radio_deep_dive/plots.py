@@ -496,3 +496,109 @@ def display_top_by_week_chart(radio_df: pl.DataFrame, view_option: str, other_ra
         with col2:
             st.markdown("**All Other Radios**")
             st.plotly_chart(generate_bar_chart(other_weekly_top, color_col_2, "(Other Radios)"), use_container_width=True)
+
+import plotly.express as px
+from typing import Optional
+
+def display_play_count_histogram(radio_df: pl.DataFrame, view_option: str, other_radios_df: Optional[pl.DataFrame] = None):
+    """
+    Displays a histogram of the number of artists/tracks that fall into predefined play count buckets.
+    """
+
+    if view_option == "Artist":
+        group_cols = [cm.ARTIST_NAME_COLUMN]
+        buckets = [
+            (1, 25), (26, 50), (51, 100), (101, 250), (251, None)
+        ]
+        legend_title = "Artist Name"
+    else:  # "Track"
+        group_cols = [cm.ARTIST_NAME_COLUMN, cm.TRACK_TITLE_COLUMN]
+        buckets = [
+            (1, 15), (16, 40), (41, 75), (76, 150), (151, None)
+        ]
+        legend_title = "Track Name"
+
+    st.subheader(f'Distribution of {view_option} Plays')
+
+    # Create two columns if `other_radios_df` is provided
+    if other_radios_df is not None:
+        col1, col2 = st.columns(2)
+    else:
+        col1 = st.container()
+
+    def process_histogram_data(df: pl.DataFrame) -> pl.DataFrame:
+        """Aggregates play counts for artists/tracks and assigns them to buckets."""
+        # Count total plays per artist/track
+        df = (
+            df.group_by(group_cols)
+            .agg(pl.count().alias("play_count"))
+        )
+
+        # Assign each row to a bucket
+        def categorize_play_count(play_count):
+            for lower, upper in buckets:
+                if upper is None or lower <= play_count <= upper:
+                    return f"{lower}-{upper if upper else '+'}"
+            return "Other"  # Fallback case (shouldn't happen)
+
+        df = df.with_columns(
+            pl.col("play_count").map_elements(categorize_play_count, return_dtype=pl.Utf8).alias("play_bucket")
+        )
+
+        # Aggregate count of artists/tracks in each bucket
+        df = df.group_by("play_bucket").agg(pl.count().alias("count"))
+
+        # Define a manual ordering for the buckets
+        ordered_buckets = [f"{low}-{up if up else '+'}" for low, up in buckets]
+        
+        # Ensure proper sorting using a manual mapping
+        bucket_order_mapping = {bucket: i for i, bucket in enumerate(ordered_buckets)}
+
+        df = df.with_columns(
+            pl.col("play_bucket").map_elements(lambda x: bucket_order_mapping.get(x, 9999), return_dtype=pl.Int32).alias("bucket_order")
+        ).sort("bucket_order").drop("bucket_order")
+
+        return df
+
+    # Process histograms for both selected radio and other radios
+    radio_histogram_df = process_histogram_data(radio_df)
+    if other_radios_df is not None:
+        other_histogram_df = process_histogram_data(other_radios_df)
+
+    def generate_histogram(df: pl.DataFrame, title_suffix: str):
+        """Generates a histogram bar chart from the processed data."""
+        fig = px.bar(
+            df.to_pandas(),
+            x="play_bucket",
+            y="count",
+            text="count",
+            title=f"{view_option} Play Distribution {title_suffix}",
+        )
+
+        fig.update_traces(
+            textposition="outside",
+            cliponaxis=False
+        )
+
+        fig.update_layout(
+            xaxis_title="Number of Plays",
+            # yaxis_title="Number of Artists/Tracks",
+            yaxis_title=None,
+            legend_title_text=legend_title,
+            margin=dict(l=10, r=30, t=30, b=40),
+            height=500,
+            hoverlabel_align="left",
+        )
+
+        return fig
+
+    # Display left chart (selected radio)
+    with col1:
+        st.markdown(f"**{radio_df[cm.RADIO_COLUMN][0]}**")  # Display selected radio name
+        st.plotly_chart(generate_histogram(radio_histogram_df, "(Selected Radio)"), use_container_width=True)
+
+    # Display right chart (other radios) if provided
+    if other_radios_df is not None:
+        with col2:
+            st.markdown("**All Other Radios**")
+            st.plotly_chart(generate_histogram(other_histogram_df, "(Other Radios)"), use_container_width=True)

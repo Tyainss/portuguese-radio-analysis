@@ -233,13 +233,14 @@ with st.sidebar:
         )
 
     # Filter the dataframe by selected genres
-    selected_genres = (
-        st.session_state['genres_selection']
-        .filter(pl.col('Selected?'))
-        ['spotify_genres']
-    )
-    radio_df = filters.filter_by_list(radio_df, 'spotify_genres', selected_genres.to_list())
-    other_radios_df = filters.filter_by_list(other_radios_df, 'spotify_genres', selected_genres.to_list())
+    if not st.session_state['select_all_genres']:
+        selected_genres = (
+            st.session_state['genres_selection']
+            .filter(pl.col('Selected?'))
+            ['spotify_genres']
+        )
+        radio_df = filters.filter_by_list(radio_df, 'spotify_genres', selected_genres.to_list())
+        other_radios_df = filters.filter_by_list(other_radios_df, 'spotify_genres', selected_genres.to_list())
 
     # Artists Filter
     with st.expander(label='Filter by :blue[**Artist**]', icon='🎤'):
@@ -311,13 +312,14 @@ with st.sidebar:
         )
 
     # Filter the dataframe by selected artists
-    selected_artists = (
-        st.session_state['artists_selection']
-        .filter(pl.col('Selected?'))
-        [cm.ARTIST_NAME_COLUMN]
-    )
-    radio_df = filters.filter_by_list(radio_df, cm.ARTIST_NAME_COLUMN, selected_artists.to_list())
-    other_radios_df = filters.filter_by_list(other_radios_df, cm.ARTIST_NAME_COLUMN, selected_artists.to_list())
+    if not st.session_state['select_all_artists']:
+        selected_artists = (
+            st.session_state['artists_selection']
+            .filter(pl.col('Selected?'))
+            [cm.ARTIST_NAME_COLUMN]
+        )
+        radio_df = filters.filter_by_list(radio_df, cm.ARTIST_NAME_COLUMN, selected_artists.to_list())
+        other_radios_df = filters.filter_by_list(other_radios_df, cm.ARTIST_NAME_COLUMN, selected_artists.to_list())
     
     
     # Reset settings button
@@ -341,6 +343,9 @@ with st.expander('Comparison to Other Radios', expanded=True):
 
     plots.display_top_by_week_chart(radio_df, view_option, other_radios_df)
 
+    plots.display_play_count_histogram(radio_df, view_option, other_radios_df)
+    
+    
 
 ########################################
 ## Artist/Track Dataframe with plots  ##
@@ -358,7 +363,7 @@ plots.display_plot_dataframe(radio_df, view_option)
 # 2 - Bar Chart (possibly not) [Done]
 #   - To Improve visually: Try a grading color on the chart. Use the same color for the artist 
 #       from the selected radio on the chart for the other radios, this way highlighting them
-# 3 - Most Played per week
+# 3 - Most Played per week [Done]
 # 4 - Histogram by num plays
 # 5 - Evolution - Cumultive and non-cumulative
 # 6 - Scatterplot Popularity vs Plays
@@ -378,3 +383,6 @@ plots.display_plot_dataframe(radio_df, view_option)
 # Possiby group sections of plots into functions in an helper file that are used here after
 
 # Format tooltips
+
+# Should comparison mode only show the same artists/filters/genres/etc from the main radio?
+# or if all are selected, show all options from other radios?
