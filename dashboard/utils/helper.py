@@ -1,3 +1,6 @@
+import unidecode
+import polars as pl
+
 language_full_name_dict = {
     "ar": "Arabic",
     "ca": "Catalan",
@@ -160,3 +163,20 @@ def number_formatter(number, decimal_places: int = 2) -> str:
         return f"{number:,.0f}" if number.is_integer() else f"{number:,.{decimal_places}f}"
     except (ValueError, TypeError):
         raise ValueError("Input must be a valid number.")
+
+
+def clean_name_column(df: pl.DataFrame, col: str) -> pl.DataFrame:
+    """
+    Cleans a column by:
+    - Stripping spaces.
+    - Removing special characters (e.g., "Plutónio" → "Plutonio").
+    """
+    df = df.with_columns(
+        pl.col(col)
+        .str.strip_chars()  # Removes leading/trailing spaces
+        .map_elements(lambda x: unidecode.unidecode(x) if isinstance(x, str) else x, return_dtype=pl.Utf8)  # Removes accents
+        # .str.to_lowercase()  # Ensures all names are lowercase for consistent joins
+        .alias(col)
+    )
+    
+    return df
