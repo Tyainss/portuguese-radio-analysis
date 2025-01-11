@@ -340,10 +340,14 @@ plots.display_sparkline(radio_df, view_option)
 with st.expander('Comparison to Other Radios', expanded=True):
 
     plots.display_top_bar_chart(radio_df, view_option, other_radios_df)
-
+    st.divider()
     plots.display_top_by_week_chart(radio_df, view_option, other_radios_df)
-
+    st.divider()
     plots.display_play_count_histogram(radio_df, view_option, other_radios_df)
+    st.divider()
+    plots.display_popularity_vs_plays_quadrant(radio_df, view_option, other_radios_df)
+    st.divider()
+
     
     
 
@@ -364,10 +368,11 @@ plots.display_plot_dataframe(radio_df, view_option)
 #   - To Improve visually: Try a grading color on the chart. Use the same color for the artist 
 #       from the selected radio on the chart for the other radios, this way highlighting them
 # 3 - Most Played per week [Done]
-# 4 - Histogram by num plays
-# 5 - Evolution - Cumultive and non-cumulative
-# 6 - Scatterplot Popularity vs Plays
+# 4 - Histogram by num plays [Done]
+# 5 - Evolution - Cumultive and non-cumulative [Done]
+# 6 - Scatterplot Popularity vs Plays [Done]
 # 7 - Radar Chart for song feelings sound
+# 8 - Underplayed and Overplayed songs/artists
 
 # Add image of selected radio up top
 

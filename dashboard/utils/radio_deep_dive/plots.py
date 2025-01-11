@@ -2,6 +2,7 @@ import polars as pl
 import streamlit as st
 import plotly.express as px
 import plotly.colors as pc
+import plotly.graph_objects as go
 from datetime import timedelta
 from typing import Optional
 
@@ -497,8 +498,6 @@ def display_top_by_week_chart(radio_df: pl.DataFrame, view_option: str, other_ra
             st.markdown("**All Other Radios**")
             st.plotly_chart(generate_bar_chart(other_weekly_top, color_col_2, "(Other Radios)"), use_container_width=True)
 
-import plotly.express as px
-from typing import Optional
 
 def display_play_count_histogram(radio_df: pl.DataFrame, view_option: str, other_radios_df: Optional[pl.DataFrame] = None):
     """
@@ -602,3 +601,112 @@ def display_play_count_histogram(radio_df: pl.DataFrame, view_option: str, other
         with col2:
             st.markdown("**All Other Radios**")
             st.plotly_chart(generate_histogram(other_histogram_df, "(Other Radios)"), use_container_width=True)
+
+
+def display_popularity_vs_plays_quadrant(radio_df: pl.DataFrame, view_option: str, other_radios_df: Optional[pl.DataFrame] = None, top_n_labels: int = 10):
+    """
+    Displays a quadrant chart comparing Popularity vs. Number of Plays, with labels for the top N played artists/tracks and quadrant legends.
+    """
+
+    if view_option == "Artist":
+        group_cols = [cm.ARTIST_NAME_COLUMN]
+    else:  # "Track"
+        group_cols = [cm.ARTIST_NAME_COLUMN, cm.TRACK_TITLE_COLUMN]
+
+    st.subheader(f'Popularity vs. Number of Plays ({view_option}s) - Quadrant Chart')
+
+    # Create two columns if `other_radios_df` is provided
+    if other_radios_df is not None:
+        col1, col2 = st.columns(2)
+    else:
+        col1 = st.container()
+
+    def process_scatter_data(df: pl.DataFrame) -> pl.DataFrame:
+        """Aggregates play counts and total popularity per artist/track."""
+        df = (
+            df.group_by(group_cols)
+            .agg(
+                pl.count().alias("play_count"),
+                pl.col("spotify_popularity").mean().alias("total_popularity")
+            )
+        )
+        return df
+
+    radio_scatter_df = process_scatter_data(radio_df)
+    if other_radios_df is not None:
+        other_scatter_df = process_scatter_data(other_radios_df)
+
+    def generate_quadrant_chart(df: pl.DataFrame, title_suffix: str):
+        """Generates a scatterplot quadrant chart with labels for top-played artists/tracks and quadrant lines."""
+        df_pd = df.to_pandas()
+
+        # Calculate median values for quadrants
+        median_plays = df_pd["play_count"].median()
+        median_popularity = df_pd["total_popularity"].median()
+
+        # Select only the top N most played artists/tracks for labeling
+        top_played = df_pd.nlargest(top_n_labels, "play_count")
+
+        fig = px.scatter(
+            df_pd,
+            x="play_count",
+            y="total_popularity",
+            title=f"Popularity vs. Plays - {title_suffix}",
+        )
+
+        # Add quadrant dividing lines (with labels)
+        fig.add_shape(go.layout.Shape(
+            type="line", x0=median_plays, x1=median_plays, y0=df_pd["total_popularity"].min(), y1=df_pd["total_popularity"].max(),
+            line=dict(color="red", width=2, dash="dot")
+        ))
+
+        fig.add_shape(go.layout.Shape(
+            type="line", x0=df_pd["play_count"].min(), x1=df_pd["play_count"].max(), y0=median_popularity, y1=median_popularity,
+            line=dict(color="red", width=2, dash="dot")
+        ))
+
+        # Labels for quadrant lines
+        fig.add_annotation(
+            x=median_plays * 1.1, y=df_pd["total_popularity"].max() * 1.02,
+            text="Median Plays", showarrow=False, font=dict(size=12, color="red")
+        )
+
+        fig.add_annotation(
+            x=df_pd["play_count"].max() * 1.02, y=median_popularity * 1.1,
+            text="Median Popularity", showarrow=False, font=dict(size=12, color="red")
+        )
+
+        # Add labels only for top-played artists/tracks
+        for _, row in top_played.iterrows():
+            fig.add_annotation(
+                x=row["play_count"],
+                y=row["total_popularity"],
+                text=row[group_cols[-1]],  # Show track/artist name
+                showarrow=True,
+                arrowhead=2,
+                ax=20,  # Adjust label positioning
+                ay=-20
+            )
+
+        fig.update_traces(marker=dict(size=10, opacity=0.7))
+
+        fig.update_layout(
+            xaxis_title="Number of Plays",
+            yaxis_title="Popularity",
+            margin=dict(l=10, r=30, t=30, b=40),
+            height=500,
+            hoverlabel_align="left",
+        )
+
+        return fig
+
+    # Display left chart (selected radio)
+    with col1:
+        st.markdown(f"**{radio_df[cm.RADIO_COLUMN][0]}**")  
+        st.plotly_chart(generate_quadrant_chart(radio_scatter_df, "(Selected Radio)"), use_container_width=True)
+
+    # Display right chart (other radios) if provided
+    if other_radios_df is not None:
+        with col2:
+            st.markdown("**All Other Radios**")
+            st.plotly_chart(generate_quadrant_chart(other_scatter_df, "(Other Radios)"), use_container_width=True)
