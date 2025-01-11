@@ -247,15 +247,15 @@ def display_plot_dataframe(radio_df: pl.DataFrame, view_option: str):
     final_df = (
         sparkline_df
         .join(total_plays_all, on=group_cols, how='left')
-        .sort('Total Plays', descending=True)
     )
-
+    
     # Compute fraction of max (based on full-period total plays)
     max_plays = final_df['Total Plays'].max()
     final_df = final_df.with_columns(
         (pl.col('Total Plays') / max_plays).alias('fraction_of_max')
     )
-
+    final_df = final_df.fill_null(0).sort('Total Plays', descending=True)
+    
     # Limit to top 50
     final_df = final_df.head(50)
 
