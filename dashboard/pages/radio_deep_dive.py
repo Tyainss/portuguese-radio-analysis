@@ -348,6 +348,9 @@ with st.expander('Comparison to Other Radios', expanded=True):
     plots.display_popularity_vs_plays_quadrant(radio_df, view_option, other_radios_df)
     st.divider()
 
+plots.display_underplayed_overplayed_highlights(radio_df, other_radios_df, view_option)
+st.divider()
+
     
     
 
@@ -372,7 +375,8 @@ plots.display_plot_dataframe(radio_df, view_option)
 # 5 - Evolution - Cumultive and non-cumulative [Done]
 # 6 - Scatterplot Popularity vs Plays [Done]
 # 7 - Radar Chart for song feelings sound
-# 8 - Underplayed and Overplayed songs/artists
+# 8 - Underplayed and Overplayed songs/artists (add a list of top 5 as "extra")
+#   - Format artists name by removing "acentos" and spaces at the end of their names
 
 # Add image of selected radio up top
 

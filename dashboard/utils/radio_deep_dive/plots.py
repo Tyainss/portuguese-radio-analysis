@@ -710,3 +710,158 @@ def display_popularity_vs_plays_quadrant(radio_df: pl.DataFrame, view_option: st
         with col2:
             st.markdown("**All Other Radios**")
             st.plotly_chart(generate_quadrant_chart(other_scatter_df, "(Other Radios)"), use_container_width=True)
+
+
+def display_underplayed_overplayed_highlights(radio_df: pl.DataFrame, other_radios_df: pl.DataFrame, view_option: str):
+    """
+    Highlights the most underplayed and most overplayed artist/track.
+    """
+
+    if view_option == "Artist":
+        group_cols = [cm.ARTIST_NAME_COLUMN]
+    else:  # "Track"
+        group_cols = [cm.ARTIST_NAME_COLUMN, cm.TRACK_TITLE_COLUMN]
+
+    # Get the selected radio name (it's a unique value in cm.RADIO_COLUMN)
+    selected_radio_name = radio_df[cm.RADIO_COLUMN].unique().item()
+
+    # Aggregate total plays for each artist/track
+    radio_plays = (
+        radio_df.group_by(group_cols)
+        .agg(pl.count().alias("radio_play_count"))
+    )
+
+    other_radios_plays = (
+        other_radios_df.group_by(group_cols)
+        .agg(pl.count().alias("other_play_count"))
+    )
+
+    # Ensure we remove empty and None values
+    def clean_artist_names(df: pl.DataFrame) -> pl.DataFrame:
+        return df.filter(
+            (pl.col(group_cols[-1]).is_not_null()) &  # Remove None
+            (pl.col(group_cols[-1]).cast(pl.Utf8).str.strip_chars() != "")  # Remove empty strings
+        )
+
+    radio_plays = clean_artist_names(radio_plays)
+    other_radios_plays = clean_artist_names(other_radios_plays)
+
+    # Merge both datasets
+    play_comparison = radio_plays.join(other_radios_plays, on=group_cols, how="outer").fill_null(0)
+
+    # Fix issue where artist name exists only in `other_radios_plays`
+    artist_col_right = group_cols[-1] + "_right"
+    if artist_col_right in play_comparison.columns:
+        play_comparison = play_comparison.with_columns(
+            pl.when(pl.col(group_cols[-1]).is_null())
+            .then(pl.col(artist_col_right))
+            .otherwise(pl.col(group_cols[-1]))
+            .alias(group_cols[-1])
+        ).drop(artist_col_right)
+
+    # Identify potential underplayed and overplayed artists/tracks
+    potential_underplayed = (
+        play_comparison.filter((pl.col("radio_play_count") == 0) & (pl.col("other_play_count") > 50))
+        .sort("other_play_count", descending=True)
+    )
+
+    potential_overplayed = (
+        play_comparison.filter((pl.col("radio_play_count") > 50) & (pl.col("other_play_count") == 0))
+        .sort("radio_play_count", descending=True)
+    )
+
+    # Get **lists of all artist names** in both main and other radios, lowercased
+    main_radio_artist_names = set(radio_plays[group_cols[-1]].str.to_lowercase().to_list())
+    other_radio_artist_names = set(other_radios_plays[group_cols[-1]].str.to_lowercase().to_list())
+
+    # Filter Overplayed Artists:
+    # Exclude artists that appear as part of another artist's name in other radios
+    def is_part_of_other_artist(artist_name: str) -> bool:
+        """
+        Returns True if `artist_name` exists inside any artist name in `other_radios_df`.
+        """
+        artist_name = artist_name.lower()
+        return any(artist_name in other_name for other_name in other_radio_artist_names)
+
+    filtered_overplayed = (
+        potential_overplayed.filter(
+            ~pl.col(group_cols[-1])
+            .str.to_lowercase()
+            .map_elements(is_part_of_other_artist, return_dtype=pl.Boolean)
+        )
+    )
+
+    # Filter Underplayed Artists:
+    # Exclude artists that appear as part of another artist's name in the main radio
+    def is_part_of_main_artist(artist_name: str) -> bool:
+        """
+        Returns True if `artist_name` exists inside any artist name in `radio_df`.
+        """
+        artist_name = artist_name.lower()
+        return any(artist_name in other_name for other_name in main_radio_artist_names)
+
+    filtered_underplayed = (
+        potential_underplayed.filter(
+            ~pl.col(group_cols[-1])
+            .str.to_lowercase()
+            .map_elements(is_part_of_main_artist, return_dtype=pl.Boolean)
+        )
+    )
+
+    # Select the most underplayed and overplayed artist/track after filtering
+    most_underplayed = filtered_underplayed.head(1)
+    most_overplayed = filtered_overplayed.head(1)
+
+    st.subheader("🎵 Underplayed & Overplayed Artists/Tracks")
+
+    col1, col2 = st.columns(2)
+
+    # Display **Most Underplayed**
+    with col1:
+        if not most_underplayed.is_empty():
+            row = most_underplayed.row(0)  # Returns a tuple
+            artist_name = row[most_underplayed.columns.index(group_cols[-1])]
+
+            # Ensure no "None" or empty values are displayed
+            if artist_name and artist_name.strip():
+                underplayed_text = f"""
+                <div style="background-color:#e8f5e9;padding:12px;border-radius:8px;">
+                🔥 <b>Missed Opportunity!</b><br>
+                <b>{artist_name}</b><br>
+                <b>{row[most_underplayed.columns.index("radio_play_count")]} plays on {selected_radio_name}</b><br>
+                but <b>heavily played on other radios ({row[most_underplayed.columns.index("other_play_count")]} plays)</b>!
+                </div>
+                """
+                st.markdown(underplayed_text, unsafe_allow_html=True)
+        else:
+            st.write("✅ No major underplayed tracks found!")
+
+    # Display **Most Overplayed**
+    with col2:
+        if not most_overplayed.is_empty():
+            row = most_overplayed.row(0)  # Returns a tuple
+            artist_name = row[most_overplayed.columns.index(group_cols[-1])]
+
+            if artist_name and artist_name.strip():
+                other_play_count = row[most_overplayed.columns.index("other_play_count")]
+                if other_play_count > 0:
+                    overplayed_text = f"""
+                    <div style="background-color:#ffebee;padding:12px;border-radius:8px;">
+                    📢 <b>Unique Pick!</b><br>
+                    <b>{artist_name}</b><br>
+                    <b>{row[most_overplayed.columns.index("radio_play_count")]} plays on {selected_radio_name}</b><br>
+                    but <b>barely played on other radios ({other_play_count} plays)</b>!
+                    </div>
+                    """
+                else:
+                    overplayed_text = f"""
+                    <div style="background-color:#ffebee;padding:12px;border-radius:8px;">
+                    📢 <b>Unique Pick!</b><br>
+                    <b>{artist_name}</b><br>
+                    <b>{row[most_overplayed.columns.index("radio_play_count")]} plays on {selected_radio_name}</b><br>
+                    and <b>doesn't have any plays on other radios!</b>
+                    </div>
+                    """
+                st.markdown(overplayed_text, unsafe_allow_html=True)
+        else:
+            st.write("✅ No major overplayed tracks found!")
