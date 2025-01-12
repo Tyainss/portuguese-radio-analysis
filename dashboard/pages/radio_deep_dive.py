@@ -376,7 +376,8 @@ plots.display_plot_dataframe(radio_df, view_option)
 # 6 - Scatterplot Popularity vs Plays [Done]
 # 7 - Radar Chart for song feelings sound
 # 8 - Underplayed and Overplayed songs/artists (add a list of top 5 as "extra")
-#   - Format artists name by removing "acentos" and spaces at the end of their names
+#   - Format artists name by removing "acentos" and spaces at the end of their names [Done]
+#   - Issue with "Bruno Mars, Lady Gaga" and "Lady Gaga,Bruno Mars"
 
 # Add image of selected radio up top
 
