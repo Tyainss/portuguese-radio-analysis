@@ -719,10 +719,10 @@ def display_underplayed_overplayed_highlights(radio_df: pl.DataFrame, other_radi
 
     if view_option == "Artist":
         group_cols = [cm.ARTIST_NAME_COLUMN]
-        display_col = cm.ARTIST_NAME_COLUMN
+        display_col = 'Artist Name'
     else:  # "Track"
         group_cols = [cm.ARTIST_NAME_COLUMN, cm.TRACK_TITLE_COLUMN]
-        display_col = "display_track"
+        display_col = 'Track Title'
 
     # Get the selected radio name (it's a unique value in cm.RADIO_COLUMN)
     selected_radio_name = radio_df[cm.RADIO_COLUMN].unique().item()
@@ -763,10 +763,15 @@ def display_underplayed_overplayed_highlights(radio_df: pl.DataFrame, other_radi
             ).drop(col_right)
 
     # Add a display column for Tracks (Track Title - Artist)
+    if view_option == "Artist":
+        play_comparison = play_comparison.with_columns(
+            pl.col(cm.ARTIST_NAME_COLUMN)
+            .alias(display_col)
+        )
     if view_option == "Track":
         play_comparison = play_comparison.with_columns(
             pl.concat_str([pl.col(cm.TRACK_TITLE_COLUMN), pl.col(cm.ARTIST_NAME_COLUMN)], separator=" - ")
-            .alias("display_track")
+            .alias(display_col)
         )
 
     # Identify potential underplayed and overplayed artists/tracks
