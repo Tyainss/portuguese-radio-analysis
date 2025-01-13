@@ -1,4 +1,5 @@
 import polars as pl
+import pandas as pd
 import streamlit as st
 import plotly.express as px
 import plotly.colors as pc
@@ -174,7 +175,7 @@ def display_sparkline(radio_df: pl.DataFrame, view_option: str):
 
 
 def display_plot_dataframe(radio_df: pl.DataFrame, view_option: str):
-    st.subheader("60-Day Overview")
+    st.subheader("Dataframe Overview")
     # Handle empty dataframe scenario
     if radio_df.is_empty():
         st.warning("No available data to display.")
@@ -182,9 +183,9 @@ def display_plot_dataframe(radio_df: pl.DataFrame, view_option: str):
     
     # Select dimensions based on user choice
     if view_option == 'Artist':
-        group_cols = [cm.ARTIST_NAME_COLUMN, 'spotify_genres']
+        group_cols = [cm.ARTIST_NAME_COLUMN, cm.SPOTIFY_GENRE_COLUMN]
     else:
-        group_cols = [cm.TRACK_TITLE_COLUMN, cm.ARTIST_NAME_COLUMN, 'spotify_genres']
+        group_cols = [cm.TRACK_TITLE_COLUMN, cm.ARTIST_NAME_COLUMN, cm.SPOTIFY_GENRE_COLUMN]
 
     # Use all filtered data for total plays
     df_all_time = radio_df
@@ -198,31 +199,31 @@ def display_plot_dataframe(radio_df: pl.DataFrame, view_option: str):
         ])
     )
 
-    # Identify last 60 days from the max date for the sparkline
+    # Identify last days from the max date for the sparkline
     max_date_in_df = df_all_time[cm.DAY_COLUMN].max()
-    last_60_days_start = max_date_in_df - timedelta(days=61)
-    last_60_days_end   = max_date_in_df - timedelta(days=1)
-    df_60_days = radio_df.filter(
-        (pl.col(cm.DAY_COLUMN) >= last_60_days_start)
-        & (pl.col(cm.DAY_COLUMN) <= last_60_days_end)
+    last_days_start = max_date_in_df - timedelta(days=61)
+    last_days_end   = max_date_in_df - timedelta(days=1)
+    df_days = radio_df.filter(
+        (pl.col(cm.DAY_COLUMN) >= last_days_start)
+        & (pl.col(cm.DAY_COLUMN) <= last_days_end)
     )
 
     # Build the date range for zero-filling
     date_series = pl.date_range(
-        start=last_60_days_start,
-        end=last_60_days_end,
+        start=last_days_start,
+        end=last_days_end,
         interval="1d",
         eager=True  # returns a Polars Series directly
     )
     all_dates = pl.DataFrame({cm.DAY_COLUMN: date_series})
 
     # Cross-join all dates with dimension combos
-    dim_combos = df_60_days.select(group_cols).unique()
+    dim_combos = df_days.select(group_cols).unique()
     all_combinations = dim_combos.join(all_dates, how='cross')
 
-    # Count daily plays within last 60 days
-    daily_counts_60 = (
-        df_60_days
+    # Count daily plays within last days
+    daily_counts = (
+        df_days
         .group_by(group_cols + [cm.DAY_COLUMN])
         .agg([pl.count().alias('plays_per_day')])
     )
@@ -230,7 +231,7 @@ def display_plot_dataframe(radio_df: pl.DataFrame, view_option: str):
     # Zero-fill missing dates for the sparkline
     zero_filled = (
         all_combinations
-        .join(daily_counts_60, on=group_cols + [cm.DAY_COLUMN], how='left')
+        .join(daily_counts, on=group_cols + [cm.DAY_COLUMN], how='left')
         .with_columns(pl.col('plays_per_day').fill_null(0))
     )
 
@@ -263,11 +264,11 @@ def display_plot_dataframe(radio_df: pl.DataFrame, view_option: str):
     col_config = {}
     if view_option == 'Artist':
         col_config[cm.ARTIST_NAME_COLUMN] = st.column_config.Column(label="Artist", width="small")
-        col_config['spotify_genres'] = st.column_config.Column(label="Genre", width="small")
+        col_config[cm.SPOTIFY_GENRE_COLUMN] = st.column_config.Column(label=cm.SPOTIFY_GENRE_COLUMN, width="small")
     else:
         col_config[cm.TRACK_TITLE_COLUMN] = st.column_config.Column(label="Track Title", width="small")
         col_config[cm.ARTIST_NAME_COLUMN] = st.column_config.Column(label="Artist", width="small")
-        col_config['spotify_genres'] = st.column_config.Column(label="Genre", width="small")
+        col_config[cm.SPOTIFY_GENRE_COLUMN] = st.column_config.Column(label=cm.SPOTIFY_GENRE_COLUMN, width="small")
 
     col_config["plays_list"] = st.column_config.LineChartColumn(
         label="Daily Plays (Last 60d)",
@@ -627,7 +628,7 @@ def display_popularity_vs_plays_quadrant(radio_df: pl.DataFrame, view_option: st
             df.group_by(group_cols)
             .agg(
                 pl.count().alias("play_count"),
-                pl.col("spotify_popularity").mean().alias("total_popularity")
+                pl.col(cm.SPOTIFY_POPULARITY_COLUMN).mean().alias("total_popularity")
             )
         )
         return df
@@ -904,3 +905,243 @@ def display_underplayed_overplayed_highlights(radio_df: pl.DataFrame, other_radi
                 })
                 # , use_container_width=True
             )
+
+
+def display_top_genres_evolution(radio_df: pl.DataFrame, other_radios_df: Optional[pl.DataFrame] = None):
+    """
+    Displays a bump chart tracking the evolution of the top 5 genres per week.
+    """
+    st.subheader("Top 5 Genres Evolution per Week")
+
+    # Create two columns if `other_radios_df` is provided
+    if other_radios_df is not None:
+        col1, col2 = st.columns(2)
+    else:
+        col1 = st.container()
+
+    def process_genre_evolution(df: pl.DataFrame) -> pl.DataFrame:
+        """
+        - Convert date to ISO-8601 "YYYY-WW"
+        - Compute total plays -> top-5 rank each week
+        - Keep only rows where rank <= 5
+        - Sort by (week_label, rank)
+        """
+        df = df.with_columns([
+            # ISO week label
+            pl.col(cm.DAY_COLUMN).dt.strftime("%G-W%V").alias("week_label")
+        ])
+
+        weekly_genre_plays = (
+            df.group_by(["week_label", cm.SPOTIFY_GENRE_COLUMN])
+              .agg(pl.count().alias("total_plays"))
+        )
+
+        # Rank descending by total_plays within each week
+        weekly_top5 = (
+            weekly_genre_plays
+            .with_columns(
+                pl.col("total_plays")
+                  .rank("dense", descending=True)
+                  .over("week_label")
+                  .alias("rank")
+            )
+            .filter(pl.col("rank") <= 5)
+            .sort(["week_label", "rank"])
+        )
+        return weekly_top5
+
+    radio_genre_evolution = process_genre_evolution(radio_df)
+    
+    if other_radios_df is not None:
+        other_genre_evolution = process_genre_evolution(other_radios_df)
+    else:
+        other_genre_evolution = None
+
+    def generate_bump_chart(
+        df: pl.DataFrame, 
+        title_suffix: str,
+        all_genres: set, 
+        sorted_genres_desc: list, 
+        color_map: dict,
+        show_legend: bool = True,
+    ):
+        """
+        Generates a bump chart showing the ranking evolution of top 5 genres 
+        with improved visuals, ensuring the legend includes all genres.
+        """
+        import pandas as pd
+
+        # Convert Polars → Pandas
+        df_pd = df.to_pandas()
+
+        # Sort rows by "week_label" to ensure lines move forward
+        df_pd = df_pd.sort_values("week_label")
+
+        # Expand data so each genre has a row for EVERY week
+        if not df_pd.empty:
+            unique_week_labels = df_pd["week_label"].unique()
+            current_genres = set(df_pd[cm.SPOTIFY_GENRE_COLUMN].dropna())
+
+            # Cross product => all (genre, week_label) combos
+            full_index = pd.MultiIndex.from_product(
+                [current_genres, unique_week_labels],
+                names=[cm.SPOTIFY_GENRE_COLUMN, "week_label"]
+            )
+            df_expanded = (
+                df_pd.set_index([cm.SPOTIFY_GENRE_COLUMN, "week_label"])
+                    .reindex(full_index)
+                    .reset_index()
+            )
+        else:
+            # If empty, just create an empty DataFrame
+            df_expanded = df_pd.copy()
+
+        # Now rank or total_plays may be NaN if that genre wasn't top-5 that week.
+
+        # Add dummy rows for genres that never appear in the final DataFrame => force them to appear in legend
+        if not df_expanded.empty:
+            all_missing = all_genres - set(df_expanded[cm.SPOTIFY_GENRE_COLUMN].dropna())
+            if all_missing:
+                # Use the first week_label (or last) from df_expanded
+                all_weeks = df_expanded["week_label"].dropna().unique()
+                if len(all_weeks) > 0:
+                    dummy_week = all_weeks[0]
+                else:
+                    dummy_week = "2024-W01"  # fallback if nothing
+
+                dummy_rows = []
+                for g in all_missing:
+                    dummy_rows.append({
+                        cm.SPOTIFY_GENRE_COLUMN: g,
+                        "week_label": dummy_week,
+                        "rank": None,
+                        "total_plays": None
+                    })
+                df_expanded = pd.concat(
+                    [df_expanded, pd.DataFrame(dummy_rows)],
+                    ignore_index=True
+                )
+        else:
+            # If the entire DataFrame was empty, we can't do much
+            pass
+
+        # Make sure to sort again by week_label
+        df_expanded = df_expanded.sort_values("week_label")
+
+        # Plot with Plotly Express using "spline" but connectgaps=False
+        fig = px.line(
+            df_expanded,
+            x="week_label",
+            y="rank",
+            color=cm.SPOTIFY_GENRE_COLUMN,
+            hover_data=["total_plays"],
+            line_shape="spline",  # try "linear" if you still see weird arcs
+            category_orders={
+                cm.SPOTIFY_GENRE_COLUMN: sorted_genres_desc,
+                "rank": [1, 2, 3, 4, 5]
+            },
+            color_discrete_map=color_map
+        )
+
+        fig.update_traces(
+            mode="lines+markers",
+            line=dict(width=2),
+            marker=dict(size=7),
+            # do NOT connect missing data across big rank gaps
+            connectgaps=False
+        )
+
+        # Tweak layout
+        fig.update_layout(
+            title=f"Top 5 Genres Evolution {title_suffix}",
+            xaxis_title="Week",
+            yaxis_title=None,
+            yaxis=dict(
+                autorange="reversed",
+                tickmode="array",
+                tickvals=[1, 2, 3, 4, 5],
+                showgrid=True,
+                gridcolor="lightgray"
+            ),
+            height=500,
+            margin=dict(l=10, r=30, t=30, b=40),
+            legend_title_text="Genres",
+            legend_traceorder="reversed+grouped",  # or "normal" if you prefer
+            xaxis=dict(
+                tickmode="array",
+                # Show every 3rd or 4th label to reduce clutter
+                tickvals=df_expanded["week_label"].unique()[::3],
+                tickangle=-45
+            ),
+            showlegend=show_legend
+        )
+
+        return fig
+
+    # Process data
+    all_radio_genres = set(radio_genre_evolution[cm.SPOTIFY_GENRE_COLUMN].unique())
+    if other_genre_evolution is not None and other_genre_evolution.height > 0:
+        all_radio_genres.update(
+            other_genre_evolution[cm.SPOTIFY_GENRE_COLUMN].unique()
+        )
+    all_radio_genres = sorted(all_radio_genres)
+
+    union_df = pl.concat(
+        [
+            radio_genre_evolution.select(
+                cm.SPOTIFY_GENRE_COLUMN, "total_plays"
+            ),
+            other_genre_evolution.select(
+                cm.SPOTIFY_GENRE_COLUMN, "total_plays"
+            )
+        ]
+    ) if other_genre_evolution is not None else radio_genre_evolution
+
+    # Sum total plays by genre, then sort descending
+    union_sums = (
+        union_df
+        .group_by(cm.SPOTIFY_GENRE_COLUMN)
+        .agg(pl.col("total_plays").sum().alias("sum_plays"))
+        .sort("sum_plays", descending=True)
+    )
+
+    # Get all unique genres appearing in either dataset
+    all_genres = set(radio_genre_evolution[cm.SPOTIFY_GENRE_COLUMN].unique().to_list())
+    if other_radios_df is not None:
+        all_genres.update(other_genre_evolution[cm.SPOTIFY_GENRE_COLUMN].unique().to_list())
+    sorted_genres_desc = union_sums[cm.SPOTIFY_GENRE_COLUMN].to_list()
+
+    # Create a color map from the union
+    pastel_colors = px.colors.qualitative.Pastel
+    color_map = {
+        g: pastel_colors[i % len(pastel_colors)]
+        for i, g in enumerate(sorted_genres_desc)
+    }
+
+    # Generate the left chart (Selected Radio)
+    with col1:
+        station_name = radio_df[cm.RADIO_COLUMN][0] if radio_df.height > 0 else "Unknown Radio"
+        st.markdown(f"**{station_name}**")
+
+        fig_left = generate_bump_chart(
+            df=radio_genre_evolution,
+            title_suffix="(Selected Radio)",
+            color_map=color_map,
+            all_genres=all_genres,
+            sorted_genres_desc=sorted_genres_desc,
+            show_legend=(other_genre_evolution is None)  # only show legend if there's no "other" chart
+        )
+        st.plotly_chart(fig_left, use_container_width=True)
+
+    if other_radios_df is not None:
+        with col2:
+            st.markdown("**All Other Radios**")
+            fig_right = generate_bump_chart(
+                df=other_genre_evolution,
+                title_suffix="(Other Radios)",
+                color_map=color_map,
+                all_genres=all_genres,
+                sorted_genres_desc=sorted_genres_desc,
+                show_legend=True
+            )
+            st.plotly_chart(fig_right, use_container_width=True)

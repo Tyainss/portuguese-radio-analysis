@@ -27,6 +27,8 @@ def load_joined_data(
 ) -> pl.DataFrame:
     """
     Joins the radio, artist, and track info data into a single dataframe.
+    Cleans the artists names and track titles.
+    Formats 'spotify_genres' column to improve readibility.
     """
     # Clean artist and track names in all datasets
     df_radio_data = clean_name_column(df_radio_data, artist_col)
@@ -45,6 +47,11 @@ def load_joined_data(
         .join(df_artist_info, on=artist_col, how=how)
         .join(df_track_info, on=[track_col, artist_col], how=how)
     )
+
+    # Format 'spotify_genres' column
+    if 'spotify_genres' in df.columns:
+        df = df.with_columns(pl.col('spotify_genres').str.to_titlecase())
+
     if pandas_format:
         df = df.to_pandas()
     return df

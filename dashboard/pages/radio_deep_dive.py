@@ -19,7 +19,7 @@ df_track_info = storage.load_data(cm.TRACK_INFO_CSV_PATH, cm.TRACK_INFO_SCHEMA)
 
 radio_options = list(app_config.keys())
 
-@st.cache_data
+# @st.cache_data
 def load_main_df(pandas_format=False):
     return storage.load_joined_data(
         df_radio_data, df_artist_info, df_track_info,
@@ -30,7 +30,6 @@ def load_main_df(pandas_format=False):
 
 df_joined = load_main_df()
 df_joined = filters.filter_by_most_recent_min_date(df_joined, cm.RADIO_COLUMN, cm.DAY_COLUMN)
-
 
 def reset_page_settings():
     '''
@@ -347,11 +346,14 @@ with st.expander('Comparison to Other Radios', expanded=True):
     st.divider()
     plots.display_popularity_vs_plays_quadrant(radio_df, view_option, other_radios_df)
     st.divider()
+    plots.display_top_genres_evolution(radio_df, other_radios_df)
+
+######################
+## Radio Highlights ##
+######################
 
 plots.display_underplayed_overplayed_highlights(radio_df, other_radios_df, view_option)
 st.divider()
-
-    
     
 
 ########################################
@@ -374,25 +376,26 @@ plots.display_plot_dataframe(radio_df, view_option)
 # 4 - Histogram by num plays [Done]
 # 5 - Evolution - Cumultive and non-cumulative [Done]
 # 6 - Scatterplot Popularity vs Plays [Done]
-# 7 - Radar Chart for song feelings sound
-# 8 - Underplayed and Overplayed songs/artists (add a list of top 5 as "extra")
+# 7 - Radar Chart for song feelings sound [Rejected]
+# 8 - Underplayed and Overplayed songs/artists (add a list of top 5 as "extra") [Done]
 #   - Format artists name by removing "acentos" and spaces at the end of their names [Done]
 #   - Issue with "Bruno Mars, Lady Gaga" and "Lady Gaga,Bruno Mars"
 
 # Add image of selected radio up top
 
-# Add a right column for the 'average of other radios'
-## These should be included in the filters of the sidebar
-
 # If 'release_year_range' wasn't filtered, keep it the min/max for every radio
     # i.e if it's 1997-2024 (min-max) for Cidade and we change to RFM, keep the min-max of RFM
 # Same thing for genres filter - If it was filtered, don't had other genres as 'true' when switching between radios
 
-# Add post-processing in load_data that removes empty space in the end of artist name
-
-# Possiby group sections of plots into functions in an helper file that are used here after
 
 # Format tooltips
 
 # Should comparison mode only show the same artists/filters/genres/etc from the main radio?
 # or if all are selected, show all options from other radios?
+
+# Format Genres names
+
+# Improve visual when dataframe has 0 rows
+
+# Improve functions comments and their subheaders names, etc
+# Add text explaining comparison to other radios
