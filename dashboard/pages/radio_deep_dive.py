@@ -326,41 +326,43 @@ with st.sidebar:
 
 radio_chosen
 
-############################
-## Artist/Track Sparkline ##
-############################
+# Handle empty dataframe scenario
+if radio_df.is_empty():
+    st.warning("No available data to display.")
+else:
 
-plots.display_sparkline(radio_df, view_option)
+    ############################
+    ## Artist/Track Sparkline ##
+    ############################
+    plots.display_sparkline(radio_df, view_option)
 
-########################
-## Comparison section ##
-########################
+    ########################
+    ## Comparison section ##
+    ########################
+    with st.expander('Comparison to Other Radios', expanded=True):
 
-with st.expander('Comparison to Other Radios', expanded=True):
+        plots.display_top_bar_chart(radio_df, view_option, other_radios_df)
+        st.divider()
+        plots.display_top_by_week_chart(radio_df, view_option, other_radios_df)
+        st.divider()
+        plots.display_play_count_histogram(radio_df, view_option, other_radios_df)
+        st.divider()
+        plots.display_popularity_vs_plays_quadrant(radio_df, view_option, other_radios_df)
+        st.divider()
+        plots.display_top_genres_evolution(radio_df, other_radios_df)
 
-    plots.display_top_bar_chart(radio_df, view_option, other_radios_df)
+
+    ######################
+    ## Radio Highlights ##
+    ######################
+    plots.display_underplayed_overplayed_highlights(radio_df, other_radios_df, view_option)
     st.divider()
-    plots.display_top_by_week_chart(radio_df, view_option, other_radios_df)
-    st.divider()
-    plots.display_play_count_histogram(radio_df, view_option, other_radios_df)
-    st.divider()
-    plots.display_popularity_vs_plays_quadrant(radio_df, view_option, other_radios_df)
-    st.divider()
-    plots.display_top_genres_evolution(radio_df, other_radios_df)
+        
 
-######################
-## Radio Highlights ##
-######################
-
-plots.display_underplayed_overplayed_highlights(radio_df, other_radios_df, view_option)
-st.divider()
-    
-
-########################################
-## Artist/Track Dataframe with plots  ##
-########################################
-
-plots.display_plot_dataframe(radio_df, view_option)
+    ########################################
+    ## Artist/Track Dataframe with plots  ##
+    ########################################
+    plots.display_plot_dataframe(radio_df, view_option)
 
 
 
@@ -393,9 +395,6 @@ plots.display_plot_dataframe(radio_df, view_option)
 # Should comparison mode only show the same artists/filters/genres/etc from the main radio?
 # or if all are selected, show all options from other radios?
 
-# Format Genres names
-
-# Improve visual when dataframe has 0 rows
 
 # Improve functions comments and their subheaders names, etc
 # Add text explaining comparison to other radios
