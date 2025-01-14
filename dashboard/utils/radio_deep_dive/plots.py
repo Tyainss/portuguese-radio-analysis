@@ -305,9 +305,14 @@ def display_top_bar_chart(radio_df: pl.DataFrame, view_option: str, other_radios
         group_cols = [cm.ARTIST_NAME_COLUMN]
     else:  # "Track"
         group_cols = [cm.ARTIST_NAME_COLUMN, cm.TRACK_TITLE_COLUMN]
-
-    st.subheader(f'Top 10 {view_option}s')
-
+    
+    selected_radio_name = radio_df[cm.RADIO_COLUMN].unique().item()
+    st.subheader(f'🎤 :blue[Top 10 {view_option}s:] How Does This {selected_radio_name} Compare?')
+    st.markdown(
+        f"""
+        A side-by-side look at the most played {view_option}s.
+        """
+    )
     # Create two columns if `other_radios_df` is provided
     if other_radios_df is not None:
         col1, col2 = st.columns(2)
@@ -362,13 +367,13 @@ def display_top_bar_chart(radio_df: pl.DataFrame, view_option: str, other_radios
 
     # Display left chart (selected radio)
     with col1:
-        st.markdown(f"**{radio_df[cm.RADIO_COLUMN][0]}**")  # Display selected radio name
+        # st.markdown(f"**{radio_df[cm.RADIO_COLUMN][0]}**")  # Display selected radio name
         st.plotly_chart(generate_bar_chart(radio_df, "(Selected Radio)"), use_container_width=True)
 
     # Display right chart (other radios) if provided
     if other_radios_df is not None:
         with col2:
-            st.markdown("**All Other Radios**")
+            # st.markdown("**All Other Radios**")
             st.plotly_chart(generate_bar_chart(other_radios_df, "(Other Radios)"), use_container_width=True)
 
 
@@ -380,11 +385,18 @@ def display_top_by_week_chart(radio_df: pl.DataFrame, view_option: str, other_ra
     if view_option == "Artist":
         group_cols = [cm.ARTIST_NAME_COLUMN]
         legend_title = "Artist Name"
+        st.subheader("📆 :blue[Weekly Leaders:] Who Topped the Charts Each Week?")
     else:  # "Track"
         group_cols = [cm.ARTIST_NAME_COLUMN, cm.TRACK_TITLE_COLUMN]
         legend_title = "Track Name"
+        st.subheader("📆 :blue[Weekly Leaders:] What Topped the Charts Each Week?")
 
-    st.subheader(f'Top {view_option} by Week')
+    st.markdown(
+        f"""
+        This section highlights the **most played {view_option.lower()} each week**.  
+        See which names had consistent dominance and which ones had breakout moments.  
+        """
+    )
 
     # Create two columns if `other_radios_df` is provided
     if other_radios_df is not None:
@@ -395,31 +407,33 @@ def display_top_by_week_chart(radio_df: pl.DataFrame, view_option: str, other_ra
     def process_weekly_top(df: pl.DataFrame) -> pl.DataFrame:
         """Extracts the top artist/track per week from the given dataframe."""
         df = df.with_columns([
-            pl.col(cm.DAY_COLUMN).dt.year().alias("year"),
-            pl.col(cm.DAY_COLUMN).dt.week().alias("week")
+            pl.col(cm.DAY_COLUMN).dt.strftime("%G-W%V").alias("week_label")  # Ensures correct ISO weeks
         ])
 
         # Aggregate total plays per artist/track per week
         weekly_top_df = (
-            df.group_by(["year", "week"] + group_cols)
+            df.group_by(["week_label"] + group_cols)
             .agg(pl.count().alias("play_count"))
         )
 
         # Find the top artist/track per week
         weekly_top_df = (
             weekly_top_df
-            .sort(["year", "week", "play_count"], descending=[False, False, True])
-            .group_by(["year", "week"])
+            .sort(["week_label", "play_count"], descending=[False, True])
+            .group_by(["week_label"])
             .head(1)  # Keep only the top artist/track per week
         )
 
-        # Format the week label
-        weekly_top_df = weekly_top_df.with_columns(
-            (pl.col("year").cast(pl.Utf8) + "-W" + pl.col("week").cast(pl.Utf8).str.zfill(2)).alias("week_label")
+        # Convert week_label to Date for correct sorting
+        weekly_top_df = (
+            weekly_top_df
+            .with_columns([
+                pl.col("week_label").str.slice(0, 4).cast(pl.Int64).alias("year"),  # Extract year
+                pl.col("week_label").str.slice(6, 2).cast(pl.Int64).alias("week"),  # Extract week number
+            ])
+            .sort(["year", "week", "play_count"], descending=[False, False, True])  # Sort chronologically
+            .drop(["year", "week"])  # Remove auxiliary columns
         )
-
-        # Sort bars by year first, then week
-        weekly_top_df = weekly_top_df.sort(["year", "week"])
 
         # Format play count for display
         weekly_top_df = weekly_top_df.with_columns(
@@ -468,7 +482,8 @@ def display_top_by_week_chart(radio_df: pl.DataFrame, view_option: str, other_ra
             text="formatted_play_count",
             color=color_col,
             labels={color_col: legend_title},
-            title=f"Top {view_option} by Week {title_suffix}",
+            # title=f"Top {view_option} by Week {title_suffix}",
+            title='',
             color_discrete_map=artist_colors  # Ensure consistent colors
         )
 
@@ -478,8 +493,13 @@ def display_top_by_week_chart(radio_df: pl.DataFrame, view_option: str, other_ra
         )
 
         fig.update_layout(
-            xaxis_title="Week",
-            yaxis_title="Total Plays",
+            # xaxis_title="Week",
+            # yaxis_title="Total Plays",
+            # showlegend=True,
+            # bargap=0.1,
+            yaxis=dict(visible=False),  # Hides the Y-axis
+            xaxis_title=None,
+            yaxis_title=None,
             margin=dict(l=10, r=30, t=30, b=40),
             legend_title_text=legend_title,
             height=500,
@@ -490,13 +510,11 @@ def display_top_by_week_chart(radio_df: pl.DataFrame, view_option: str, other_ra
 
     # Display left chart (selected radio)
     with col1:
-        st.markdown(f"**{radio_df[cm.RADIO_COLUMN][0]}**")  # Display selected radio name
         st.plotly_chart(generate_bar_chart(radio_weekly_top, color_col_1, "(Selected Radio)"), use_container_width=True)
 
     # Display right chart (other radios) if provided
     if other_radios_df is not None:
         with col2:
-            st.markdown("**All Other Radios**")
             st.plotly_chart(generate_bar_chart(other_weekly_top, color_col_2, "(Other Radios)"), use_container_width=True)
 
 
