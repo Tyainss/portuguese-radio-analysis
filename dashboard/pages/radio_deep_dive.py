@@ -339,8 +339,56 @@ else:
     ########################
     ## Comparison section ##
     ########################
-    with st.expander('Comparison to Other Radios', expanded=True):
+    with st.expander('', expanded=True):
+        st.markdown(
+            """
+            <div style="background-color: #edf0f5; padding: 15px; border-radius: 10px;">
+                <h2 style="text-align: center; color: #333;">📊 Comparison to Other Radios</h2>
+                <p style="font-size: 16px;">
+                    Understanding how a selected radio station compares to others is key to identifying trends, uniqueness, 
+                    and performance. This section provides a side-by-side comparison of <b>top artists, play distributions, 
+                    and genre trends</b>, helping you uncover insights such as:
+                </p>
+                <ul style="font-size: 16px; margin-left: 20px;">
+                    <li>🎵 <b>Which artists/tracks are more popular on this radio compared to others?</b></li>
+                    <li>📈 <b>How do play counts vary across different stations?</b></li>
+                    <li>🎨 <b>Are there unique genre preferences in this radio’s audience?</b></li>
+                </ul>
+                <p style="font-size: 16px;">
+                    Each visualization below is designed to <b>highlight key differences</b> between the selected radio 
+                    and the aggregated performance of other stations.
+                </p>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+        st.write('#####')
 
+        # Centered headers for each column
+        col1, col2 = st.columns(2)
+        with col1:
+            st.markdown(
+                f"""
+                <div style="text-align: center; background-color: #e3e7f1; padding: 8px; 
+                            border-radius: 8px; font-size: 20px; font-weight: bold; color: #1f2937;">
+                    🎧 {radio_df[cm.RADIO_COLUMN][0]}
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+
+        with col2:
+            st.markdown(
+                """
+                <div style="text-align: center; background-color: #e3e7f1; padding: 8px; 
+                            border-radius: 8px; font-size: 20px; font-weight: bold; color: #1f2937;">
+                    📡 Other Radios
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+        
+        st.write('#####')
         plots.display_top_bar_chart(radio_df, view_option, other_radios_df)
         st.divider()
         plots.display_top_by_week_chart(radio_df, view_option, other_radios_df)
