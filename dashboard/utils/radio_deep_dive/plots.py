@@ -1017,10 +1017,19 @@ def display_top_genres_evolution(radio_df: pl.DataFrame, other_radios_df: Option
                         "rank": None,
                         "total_plays": None
                     })
-                df_expanded = pd.concat(
-                    [df_expanded, pd.DataFrame(dummy_rows)],
-                    ignore_index=True
-                )
+                # Only concat if dummy_rows is non-empty
+                if dummy_rows:
+                    # Build a DataFrame with the same columns as df_expanded
+                    dummy_df = pd.DataFrame(dummy_rows, columns=df_expanded.columns)
+                    
+                    # Optionally cast columns to match df_expanded dtypes
+                    # (for example, ensure rank and total_plays are float)
+                    dummy_df = dummy_df.astype({
+                        "rank": "float",
+                        "total_plays": "float"
+                    })
+
+                    df_expanded = pd.concat([df_expanded, dummy_df], ignore_index=True)
         else:
             # If the entire DataFrame was empty, we can't do much
             pass
