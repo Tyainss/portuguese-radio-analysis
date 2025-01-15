@@ -438,11 +438,9 @@ else:
 # Same thing for genres filter - If it was filtered, don't had other genres as 'true' when switching between radios
 
 
-# Format tooltips
-
 # Should comparison mode only show the same artists/filters/genres/etc from the main radio?
 # or if all are selected, show all options from other radios?
 
 
-# Improve functions comments and their subheaders names, etc
-# Add text explaining comparison to other radios
+# Improve functions comments etc
+# Format tooltips

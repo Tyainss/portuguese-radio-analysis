@@ -497,7 +497,7 @@ def display_top_by_week_chart(radio_df: pl.DataFrame, view_option: str, other_ra
             # yaxis_title="Total Plays",
             # showlegend=True,
             # bargap=0.1,
-            yaxis=dict(visible=False),  # Hides the Y-axis
+            yaxis=dict(visible=False),
             xaxis_title=None,
             yaxis_title=None,
             margin=dict(l=10, r=30, t=30, b=40),
@@ -529,14 +529,22 @@ def display_play_count_histogram(radio_df: pl.DataFrame, view_option: str, other
             (1, 25), (26, 50), (51, 100), (101, 250), (251, None)
         ]
         legend_title = "Artist Name"
+        st.subheader("📊 :blue[Play Distribution:] How Many Plays Do Artists Get?")
     else:  # "Track"
         group_cols = [cm.ARTIST_NAME_COLUMN, cm.TRACK_TITLE_COLUMN]
         buckets = [
             (1, 15), (16, 40), (41, 75), (76, 150), (151, None)
         ]
         legend_title = "Track Name"
+        st.subheader("📊 :blue[Play Distribution:] How Often Are Tracks Played?")
 
-    st.subheader(f'Distribution of {view_option} Plays')
+    # st.subheader(f'Distribution of {view_option} Plays')
+    st.markdown(
+        f"""
+        This chart shows how **{view_option.lower()}s** are distributed based on their total number of plays.  
+        Does the station concentrate on their top {view_option.lower()}s, or is it playing a wide variety evenly?  
+        """
+    )
 
     # Create two columns if `other_radios_df` is provided
     if other_radios_df is not None:
@@ -583,14 +591,15 @@ def display_play_count_histogram(radio_df: pl.DataFrame, view_option: str, other
     if other_radios_df is not None:
         other_histogram_df = process_histogram_data(other_radios_df)
 
-    def generate_histogram(df: pl.DataFrame, title_suffix: str):
+    def generate_histogram(df: pl.DataFrame, show_yaxis_title: bool = True):
         """Generates a histogram bar chart from the processed data."""
         fig = px.bar(
             df.to_pandas(),
             x="play_bucket",
             y="count",
             text="count",
-            title=f"{view_option} Play Distribution {title_suffix}",
+            # title=f"{view_option} Play Distribution {title_suffix}",
+            title='',
         )
 
         fig.update_traces(
@@ -600,10 +609,11 @@ def display_play_count_histogram(radio_df: pl.DataFrame, view_option: str, other
 
         fig.update_layout(
             xaxis_title="Number of Plays",
-            # yaxis_title="Number of Artists/Tracks",
-            yaxis_title=None,
+            yaxis_title=f"Number of {view_option}s" if show_yaxis_title else None,
+            yaxis=dict(showticklabels=False, showgrid=False),
+            # yaxis_title=None,
             legend_title_text=legend_title,
-            margin=dict(l=10, r=30, t=30, b=40),
+            margin=dict(l=50, r=50, t=30, b=40),
             height=500,
             hoverlabel_align="left",
         )
@@ -612,14 +622,12 @@ def display_play_count_histogram(radio_df: pl.DataFrame, view_option: str, other
 
     # Display left chart (selected radio)
     with col1:
-        st.markdown(f"**{radio_df[cm.RADIO_COLUMN][0]}**")  # Display selected radio name
-        st.plotly_chart(generate_histogram(radio_histogram_df, "(Selected Radio)"), use_container_width=True)
+        st.plotly_chart(generate_histogram(radio_histogram_df, show_yaxis_title=True), use_container_width=True)
 
     # Display right chart (other radios) if provided
     if other_radios_df is not None:
         with col2:
-            st.markdown("**All Other Radios**")
-            st.plotly_chart(generate_histogram(other_histogram_df, "(Other Radios)"), use_container_width=True)
+            st.plotly_chart(generate_histogram(other_histogram_df, show_yaxis_title=False), use_container_width=True)
 
 
 def display_popularity_vs_plays_quadrant(radio_df: pl.DataFrame, view_option: str, other_radios_df: Optional[pl.DataFrame] = None, top_n_labels: int = 10):
@@ -632,7 +640,16 @@ def display_popularity_vs_plays_quadrant(radio_df: pl.DataFrame, view_option: st
     else:  # "Track"
         group_cols = [cm.ARTIST_NAME_COLUMN, cm.TRACK_TITLE_COLUMN]
 
-    st.subheader(f'Popularity vs. Number of Plays ({view_option}s) - Quadrant Chart')
+    st.subheader(f'🔍 Does Popularity Always Mean More Plays?')
+
+    st.markdown(
+        f"""
+        This quadrant chart highlights how **{view_option.lower()}s** perform based on total plays and popularity.  
+        - The **top-right quadrant** represents highly played and highly popular {view_option.lower()}s.  
+        - The **bottom-right quadrant** highlights frequently played but lower-popularity {view_option.lower()}s.  
+        - Median lines divide the space, helping to spot trends and outliers.  
+        """
+    )
 
     # Create two columns if `other_radios_df` is provided
     if other_radios_df is not None:
@@ -670,7 +687,9 @@ def display_popularity_vs_plays_quadrant(radio_df: pl.DataFrame, view_option: st
             df_pd,
             x="play_count",
             y="total_popularity",
-            title=f"Popularity vs. Plays - {title_suffix}",
+            # title=f"Popularity vs. Plays - {title_suffix}"
+            title='',
+            hover_data={group_cols[-1]: True, "play_count": True, "total_popularity": True},
         )
 
         # Add quadrant dividing lines (with labels)
@@ -703,7 +722,7 @@ def display_popularity_vs_plays_quadrant(radio_df: pl.DataFrame, view_option: st
                 text=row[group_cols[-1]],  # Show track/artist name
                 showarrow=True,
                 arrowhead=2,
-                ax=20,  # Adjust label positioning
+                ax=25,  # Adjust label positioning
                 ay=-20
             )
 
@@ -721,13 +740,11 @@ def display_popularity_vs_plays_quadrant(radio_df: pl.DataFrame, view_option: st
 
     # Display left chart (selected radio)
     with col1:
-        st.markdown(f"**{radio_df[cm.RADIO_COLUMN][0]}**")  
         st.plotly_chart(generate_quadrant_chart(radio_scatter_df, "(Selected Radio)"), use_container_width=True)
 
     # Display right chart (other radios) if provided
     if other_radios_df is not None:
         with col2:
-            st.markdown("**All Other Radios**")
             st.plotly_chart(generate_quadrant_chart(other_scatter_df, "(Other Radios)"), use_container_width=True)
 
 
@@ -929,7 +946,14 @@ def display_top_genres_evolution(radio_df: pl.DataFrame, other_radios_df: Option
     """
     Displays a bump chart tracking the evolution of the top 5 genres per week.
     """
-    st.subheader("Top 5 Genres Evolution per Week")
+    st.subheader("🎼 How Have the Top Genres Shifted Over Time?")
+
+    st.markdown(
+        """
+        This chart tracks the **top 5 genres** each week based on total plays.  
+        See which genres **stay on top**, which ones **rise and fall**, and how preferences **shift over time**.
+        """
+    )
 
     # Create two columns if `other_radios_df` is provided
     if other_radios_df is not None:
@@ -977,11 +1001,12 @@ def display_top_genres_evolution(radio_df: pl.DataFrame, other_radios_df: Option
 
     def generate_bump_chart(
         df: pl.DataFrame, 
-        title_suffix: str,
         all_genres: set, 
         sorted_genres_desc: list, 
         color_map: dict,
+        margin: dict,
         show_legend: bool = True,
+        show_yaxis_title: bool = True,
     ):
         """
         Generates a bump chart showing the ranking evolution of top 5 genres 
@@ -1080,9 +1105,10 @@ def display_top_genres_evolution(radio_df: pl.DataFrame, other_radios_df: Option
 
         # Tweak layout
         fig.update_layout(
-            title=f"Top 5 Genres Evolution {title_suffix}",
-            xaxis_title="Week",
-            yaxis_title=None,
+            # title=f"Top 5 Genres Evolution {title_suffix}",
+            title='',
+            xaxis_title=None,
+            yaxis_title='Rank' if show_yaxis_title else None,
             yaxis=dict(
                 autorange="reversed",
                 tickmode="array",
@@ -1091,7 +1117,7 @@ def display_top_genres_evolution(radio_df: pl.DataFrame, other_radios_df: Option
                 gridcolor="lightgray"
             ),
             height=500,
-            margin=dict(l=10, r=30, t=30, b=40),
+            margin=margin,
             legend_title_text="Genres",
             legend_traceorder="reversed+grouped",  # or "normal" if you prefer
             xaxis=dict(
@@ -1147,28 +1173,26 @@ def display_top_genres_evolution(radio_df: pl.DataFrame, other_radios_df: Option
 
     # Generate the left chart (Selected Radio)
     with col1:
-        station_name = radio_df[cm.RADIO_COLUMN][0] if radio_df.height > 0 else "Unknown Radio"
-        st.markdown(f"**{station_name}**")
-
         fig_left = generate_bump_chart(
             df=radio_genre_evolution,
-            title_suffix="(Selected Radio)",
             color_map=color_map,
             all_genres=all_genres,
             sorted_genres_desc=sorted_genres_desc,
-            show_legend=(other_genre_evolution is None)  # only show legend if there's no "other" chart
+            margin=dict(l=50, r=120, t=30, b=40),
+            show_legend=(other_genre_evolution is None),  # only show legend if there's no "other" chart
+            show_yaxis_title=True
         )
         st.plotly_chart(fig_left, use_container_width=True)
 
     if other_radios_df is not None:
         with col2:
-            st.markdown("**All Other Radios**")
             fig_right = generate_bump_chart(
                 df=other_genre_evolution,
-                title_suffix="(Other Radios)",
                 color_map=color_map,
                 all_genres=all_genres,
                 sorted_genres_desc=sorted_genres_desc,
-                show_legend=True
+                margin=dict(l=0, r=0, t=30, b=40),
+                show_legend=True,
+                show_yaxis_title=False
             )
             st.plotly_chart(fig_right, use_container_width=True)
