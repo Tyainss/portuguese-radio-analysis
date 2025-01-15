@@ -1,5 +1,6 @@
 import unidecode
 import polars as pl
+from datetime import datetime, timedelta
 
 language_full_name_dict = {
     "ar": "Arabic",
@@ -180,3 +181,9 @@ def clean_name_column(df: pl.DataFrame, col: str) -> pl.DataFrame:
     )
     
     return df
+
+def week_dates_start_end(week_label):
+    year, week = map(int, week_label.split("-W"))
+    start_date = datetime.strptime(f"{year}-W{week}-1", "%G-W%V-%u")  # First day of the week
+    end_date = start_date + timedelta(days=6)  # Last day of the week
+    return [start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d")]

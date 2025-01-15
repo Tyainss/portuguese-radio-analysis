@@ -8,7 +8,7 @@ from datetime import timedelta
 from typing import Optional
 
 from data_extract.config_manager import ConfigManager
-from utils.helper import number_formatter
+from utils.helper import number_formatter, week_dates_start_end
 
 cm = ConfigManager()
 
@@ -518,8 +518,23 @@ def display_top_by_week_chart(radio_df: pl.DataFrame, view_option: str, other_ra
             next_color = all_colors[len(artist_colors) % len(all_colors)]
             artist_colors[artist] = next_color
 
-    def generate_bar_chart(df: pl.DataFrame, color_col: str, title_suffix: str):
+    def generate_bar_chart(df: pl.DataFrame, color_col: str):
         """Generates a vertical bar chart from the processed weekly data with consistent colors."""
+        # Prepare data for tooltips
+        df = df.with_columns([
+            # Assuming `start_date` and `end_date` are in the dataframe
+            pl.col("week_label").map_elements(lambda w: week_dates_start_end(w), return_dtype=pl.List(pl.Utf8)).alias("week_dates"),
+        ])
+        df = df.with_columns([
+            pl.col("week_dates").list.get(0).alias("start_date"),
+            pl.col("week_dates").list.get(1).alias("end_date"),
+        ])
+
+        # Ensure `customdata` is properly aligned with each row of the dataframe
+        df = df.with_columns([
+            pl.col(color_col).alias("hover_label"),  # Ensure hover label matches the `color_col`
+        ])
+
         fig = px.bar(
             df.to_pandas(),
             x="week_label",
@@ -527,20 +542,35 @@ def display_top_by_week_chart(radio_df: pl.DataFrame, view_option: str, other_ra
             text="formatted_play_count",
             color=color_col,
             labels={color_col: legend_title},
-            # title=f"Top {view_option} by Week {title_suffix}",
             title='',
             color_discrete_map=artist_colors  # Ensure consistent colors
         )
+        # Add custom data for tooltips
+        customdata_values = df[["hover_label", "formatted_play_count", "start_date", "end_date"]].to_pandas().values
+        for i, trace in enumerate(fig.data):
+            # Match the trace's name to the corresponding hover label
+            trace_hover_label = trace.name  # This should match `hover_label`
+            trace_customdata = [
+                data_row for data_row in customdata_values if data_row[0] == trace_hover_label
+            ]
 
-        fig.update_traces(
-            textposition="outside",
-            cliponaxis=False
-        )
+            # Extract bar color from the trace
+            bar_color = trace.marker.color if trace.marker.color else '#000'  # Fallback to black
+
+            # Set the hovertemplate
+            trace.update(
+                hovertemplate=(
+                    f"<span style='font-size:16px; font-weight:bold; color:{bar_color};'>%{{customdata[0]}}</span> <br>"  # Artist/Track Name
+                    f"<span style='font-weight:bold;'>%{{customdata[1]}} Plays</span><br>"  # formatted_play_count
+                    f"<span>%{{customdata[2]}} to %{{customdata[3]}}</span><br>"  # start_date to end_date
+                    "<extra></extra>"
+                ),
+                customdata=trace_customdata,
+                textposition="outside",
+                cliponaxis=False,
+            )
 
         fig.update_layout(
-            # xaxis_title="Week",
-            # yaxis_title="Total Plays",
-            # showlegend=True,
             # bargap=0.1,
             yaxis=dict(visible=False),
             xaxis_title=None,
@@ -555,12 +585,12 @@ def display_top_by_week_chart(radio_df: pl.DataFrame, view_option: str, other_ra
 
     # Display left chart (selected radio)
     with col1:
-        st.plotly_chart(generate_bar_chart(radio_weekly_top, color_col_1, "(Selected Radio)"), use_container_width=True)
+        st.plotly_chart(generate_bar_chart(radio_weekly_top, color_col_1), use_container_width=True)
 
     # Display right chart (other radios) if provided
     if other_radios_df is not None:
         with col2:
-            st.plotly_chart(generate_bar_chart(other_weekly_top, color_col_2, "(Other Radios)"), use_container_width=True)
+            st.plotly_chart(generate_bar_chart(other_weekly_top, color_col_2), use_container_width=True)
 
 
 def display_play_count_histogram(radio_df: pl.DataFrame, view_option: str, other_radios_df: Optional[pl.DataFrame] = None):
