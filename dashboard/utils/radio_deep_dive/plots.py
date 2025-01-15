@@ -528,12 +528,23 @@ def display_top_by_week_chart(radio_df: pl.DataFrame, view_option: str, other_ra
         df = df.with_columns([
             pl.col("week_dates").list.get(0).alias("start_date"),
             pl.col("week_dates").list.get(1).alias("end_date"),
+            pl.col("week_label").str.slice(0, 4).cast(pl.Int64).alias("year"),  # Extract year
+            pl.col("week_label").str.slice(6, 2).cast(pl.Int64).alias("week"),  # Extract week number
         ])
+
+        # Sort the dataframe by year and week for chronological order
+        df = df.sort(["year", "week"])
+
+        # Remove auxiliary sorting columns before plotting
+        df = df.drop(["year", "week"])
 
         # Ensure `customdata` is properly aligned with each row of the dataframe
         df = df.with_columns([
             pl.col(color_col).alias("hover_label"),  # Ensure hover label matches the `color_col`
         ])
+
+        # Obtain an ordered list of week labels for category ordering
+        ordered_weeks = df["week_label"].to_list()
 
         fig = px.bar(
             df.to_pandas(),
@@ -543,8 +554,10 @@ def display_top_by_week_chart(radio_df: pl.DataFrame, view_option: str, other_ra
             color=color_col,
             labels={color_col: legend_title},
             title='',
-            color_discrete_map=artist_colors  # Ensure consistent colors
+            color_discrete_map=artist_colors,
+            category_orders={"week_label": ordered_weeks}  # Enforce ordering for week_label
         )
+
         # Add custom data for tooltips
         customdata_values = df[["hover_label", "formatted_play_count", "start_date", "end_date"]].to_pandas().values
         for i, trace in enumerate(fig.data):
@@ -582,6 +595,7 @@ def display_top_by_week_chart(radio_df: pl.DataFrame, view_option: str, other_ra
         )
 
         return fig
+
 
     # Display left chart (selected radio)
     with col1:
