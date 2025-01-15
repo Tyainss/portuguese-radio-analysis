@@ -7,40 +7,33 @@ import plotly.graph_objects as go
 
 from data_extract.config_manager import ConfigManager
 
-from utils.calculations import (
-    calculate_avg_tracks, calculate_avg_popularity, calculate_avg_time,
-    prepare_weekday_metrics, prepare_hourly_metrics, plot_metrics, 
-    calculate_country_counts, calculate_decade_metrics, calculate_duration_metrics,
-    calculate_genre_metrics
-)
+from utils import storage, filters, calculations
+
 from utils.helper import (
     language_to_flag_dict, nationality_to_flag_dict, language_full_name_dict,
     flag_to_nationality_dict, number_formatter,
 )
 
-from utils.storage import (
-    load_data, generate_csv
-)
 
 cm = ConfigManager()
 app_config = cm.load_json(path='dashboard/app_config.json')
 
-
-
 # Load the data
-df_radio_data = load_data(cm.RADIO_CSV_PATH, cm.RADIO_SCRAPPER_SCHEMA)
-df_artist_info = load_data(cm.ARTIST_INFO_CSV_PATH, cm.ARTIST_INFO_SCHEMA)
-df_track_info = load_data(cm.TRACK_INFO_CSV_PATH, cm.TRACK_INFO_SCHEMA)
+df_radio_data = storage.load_data(cm.RADIO_CSV_PATH, cm.RADIO_SCRAPPER_SCHEMA)
+df_artist_info = storage.load_data(cm.ARTIST_INFO_CSV_PATH, cm.ARTIST_INFO_SCHEMA)
+df_track_info = storage.load_data(cm.TRACK_INFO_CSV_PATH, cm.TRACK_INFO_SCHEMA)
 
-df_joined = df_radio_data.join(
-        df_artist_info, 
-        on=cm.ARTIST_NAME_COLUMN,
-        how='left',
-    ).join(
-        df_track_info,
-        on=[cm.TRACK_TITLE_COLUMN, cm.ARTIST_NAME_COLUMN],
-        how='left',
+@st.cache_data
+def load_main_df(pandas_format=False):
+    return storage.load_joined_data(
+        df_radio_data, df_artist_info, df_track_info,
+        artist_col=cm.ARTIST_NAME_COLUMN,
+        track_col=cm.TRACK_TITLE_COLUMN,
+        pandas_format=pandas_format,
     )
+
+df_joined = load_main_df()
+df_joined = filters.filter_by_most_recent_min_date(df_joined, cm.RADIO_COLUMN, cm.DAY_COLUMN)
 
 
 min_date = df_joined[cm.DAY_COLUMN].min()
@@ -61,15 +54,15 @@ with st.sidebar:
     st.title(':gear: Page Settings')
 
     new_date_period = st.date_input(
-        label = ':calendar: Select the time period',
+        label=':calendar: Select the time period',
         # value=(min_date, max_date),
         min_value=min_date,
         max_value=max_date,
         key='date_period'
     )
     new_graph_option = st.radio(
-        '📈 Select :blue-background[**Time Series**] to display:',
-        ['Avg Tracks', 'Avg Hours Played', 'Avg Popularity'],
+        label='📈 Select :blue-background[**Time Series**] to display:',
+        options=['Avg Tracks', 'Avg Hours Played', 'Avg Popularity'],
         index=0,
         key='ts_graph'
     )
@@ -110,13 +103,14 @@ global_max_mean_values = {}  # Dictionary to store global max values for each me
 
 # Initialize config for each radio
 for i, (key, val) in enumerate(app_config.items()):
+    radio_name = val.get('name')
     app_config[key]['radio_df'] = df_filtered.filter(
             pl.col(cm.RADIO_COLUMN) == val.get('name')
         )
-    app_config[key]['radio_csv'] = generate_csv(app_config[key]['radio_df'])
+    app_config[key]['radio_csv'] = storage.generate_csv(app_config[key]['radio_df'])
     for metric in metrics:
-        weekday_metric_df = prepare_weekday_metrics(app_config[key]['radio_df'], metric=metric)
-        hour_metric_df = prepare_hourly_metrics(app_config[key]['radio_df'], metric=metric)
+        weekday_metric_df = calculations.prepare_weekday_metrics(app_config[key]['radio_df'], metric=metric, id=radio_name)
+        hour_metric_df = calculations.prepare_hourly_metrics(app_config[key]['radio_df'], metric=metric, id=radio_name)
         if metric not in metric_ranges:
             metric_ranges[metric] = {
                 'weekday': {'min': float('inf'), 'max': float('-inf')},
@@ -207,15 +201,15 @@ for i, (key, val) in enumerate(app_config.items()):
             kpi_1, kpi_2, kpi_3 = st.columns(3)
             kpi_1.metric(
                 label='# Avg Daily Tracks',
-                value=calculate_avg_tracks(df=radio_df)
+                value=calculations.calculate_avg_tracks(_df=radio_df, id=radio_name)
             )
             kpi_2.metric(
                 label='Avg Daily Hours',
-                value=calculate_avg_time(df=radio_df, output_unit='hours')
+                value=calculations.calculate_avg_time(_df=radio_df, output_unit='hours', id=radio_name)
             )
             kpi_3.metric(
                 label='Avg Popularity',
-                value=calculate_avg_popularity(df=radio_df),
+                value=calculations.calculate_avg_popularity(_df=radio_df, id=radio_name),
                 help='''Popularity is a **score** that reflects **how frequently a track has been played, 
                 saved, or added to playlists** by users on :green[Spotify], with recent activity weighing more heavily than older interactions.'''
             )
@@ -236,8 +230,8 @@ with expander:
         with hour_graph_cols[i]:
             radio_name = val.get('name')
             radio_df = val.get('radio_df')
-            hourly_df = prepare_hourly_metrics(radio_df, metric=selected_metric)
-            plot_metrics(
+            hourly_df = calculations.prepare_hourly_metrics(radio_df, metric=selected_metric, id=radio_name)
+            calculations.plot_metrics(
                 hourly_df,
                 metric=selected_metric,
                 radio_name=radio_name,
@@ -259,8 +253,8 @@ with expander:
             radio_name = val.get('name')
             radio_df = val.get('radio_df')
             # Prepare the selected Weekday Metric
-            weekday_df = prepare_weekday_metrics(radio_df, metric=selected_metric)
-            plot_metrics(
+            weekday_df = calculations.prepare_weekday_metrics(radio_df, metric=selected_metric, id=radio_name)
+            calculations.plot_metrics(
                 weekday_df,
                 metric=selected_metric,
                 radio_name=radio_name,
@@ -351,12 +345,13 @@ with track_plots_expander:
             radio_df = val.get('radio_df')
             
             # st.write(radio_df)
-            language_counts = calculate_country_counts(
-                df=radio_df,
+            language_counts = calculations.calculate_country_counts(
+                _df=radio_df,
                 country_col='lyrics_language',
                 count_columns=[cm.TRACK_TITLE_COLUMN, cm.ARTIST_NAME_COLUMN],
                 metric_type=mapped_metric_type,
                 include_most_played="track",
+                id=radio_name,
             )
 
             # Separate top languages and "Others"
@@ -489,12 +484,13 @@ with track_plots_expander:
             radio_df = val.get('radio_df')
 
             # Calculate metrics by decade, including most played track
-            df_decades_tracks = calculate_decade_metrics(
-                df=radio_df,
+            df_decades_tracks = calculations.calculate_decade_metrics(
+                _df=radio_df,
                 date_column='spotify_release_date',
                 count_columns=[cm.TRACK_TITLE_COLUMN, cm.ARTIST_NAME_COLUMN],
                 metric_type=mapped_metric_type,
                 include_most_played="track",
+                id=radio_name,
             )
 
             # Plot unique tracks by decade
@@ -623,12 +619,13 @@ with artist_plots_expander:
                 pl.col("combined_nationality").replace_strict(nationality_to_flag_dict, default='?').alias("flag")
             )
             
-            country_counts = calculate_country_counts(
-                df=radio_df,
+            country_counts = calculations.calculate_country_counts(
+                _df=radio_df,
                 country_col='flag',
                 count_columns=[cm.ARTIST_NAME_COLUMN],
                 metric_type=mapped_metric_type,
                 include_most_played="artist",
+                id=radio_name,
             )
             
             # Separate top countries and "Others"
@@ -751,12 +748,13 @@ with artist_plots_expander:
             radio_df = val.get('radio_df')
 
             # Calculate metrics by decade, including most played artist
-            df_decades_artists = calculate_decade_metrics(
-                df=radio_df,
+            df_decades_artists = calculations.calculate_decade_metrics(
+                _df=radio_df,
                 date_column="mb_artist_career_begin",
                 count_columns=[cm.ARTIST_NAME_COLUMN],
                 metric_type=mapped_metric_type,
                 include_most_played="artist",
+                id=radio_name,
             )
 
             # Plot unique tracks by decade
@@ -824,12 +822,13 @@ for i, (key, val) in enumerate(app_config.items()):
         radio_df = val.get('radio_df')
 
         # Calculate duration metrics with most played track details
-        df_duration_tracks = calculate_duration_metrics(
-            df=radio_df,
+        df_duration_tracks = calculations.calculate_duration_metrics(
+            _df=radio_df,
             duration_column='spotify_duration_ms',
             count_columns=[cm.TRACK_TITLE_COLUMN, cm.ARTIST_NAME_COLUMN],
             metric_type=mapped_metric_type,
             include_most_played=True,
+            id=radio_name,
         )
 
         # Convert to Pandas for Plotly
@@ -907,12 +906,13 @@ for i, (key, val) in enumerate(app_config.items()):
         radio_csv = val.get('radio_csv')
         
         # Calculate genre metrics
-        df_genres_cleaned = calculate_genre_metrics(
-            df=radio_df,
+        df_genres_cleaned = calculations.calculate_genre_metrics(
+            _df=radio_df,
             genre_column='spotify_genres',
             count_columns=[cm.TRACK_TITLE_COLUMN, cm.ARTIST_NAME_COLUMN],
             metric_type=mapped_metric_type,
             include_most_played=True,
+            id=radio_name,
         )
 
         # Convert to Pandas for Plotly
@@ -1077,3 +1077,5 @@ for i, (key, val) in enumerate(app_config.items()):
 # Allow to select year of release for comparison
 # Add filter to select radios
 # Make all bar charts the same y-axis
+# Add a 'Segmented Control' to allow to choose between seeing percentages or total values (or toggle?)
+# Format Weekday names shorter

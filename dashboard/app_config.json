@@ -1,9 +1,9 @@
 {
-    "CIDADE": {
+    "CidadeFM": {
         "logo": "dashboard/logo/CidadeFM_logo.png",
         "name": "CIDADE"
     },
-    "COMERCIAL": {
+    "Comercial": {
         "logo": "dashboard/logo/RadioComercial_logo.jpg",
         "name": "Rádio Comercial"
     },

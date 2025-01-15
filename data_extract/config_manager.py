@@ -23,6 +23,7 @@ class ConfigManager:
         self._initialize_secrets()
         self._initialize_web_scrapper_config()
         self._initialize_other_config()
+        self._initialize_columns_config()
     
     def _initialize_schema_config(self, schema_path) -> None:
         self.schema = self.load_polars_schema(schema_path)
@@ -33,6 +34,12 @@ class ConfigManager:
         self.LYRICS_INFO_SCHEMA = self.schema['LYRICS_INFO']
         self.MUSICBRAINZ_INFO_SCHEMA = self.schema['MUSICBRAINZ_INFO']
         self.WIKIPEDIA_INFO_SCHEMA = self.schema['WIKIPEDIA_INFO']
+
+    def _initialize_columns_config(self) -> None:
+        self.SPOTIFY_GENRE_COLUMN = 'spotify_genres'
+        self.SPOTIFY_POPULARITY_COLUMN = 'spotify_popularity'
+        
+        # spotify_popularity
 
     def _initialize_secrets(self) -> None:
         self.SPOTIFY_CLIENT_ID = self.config['SPOTIFY_CLIENT_ID']
