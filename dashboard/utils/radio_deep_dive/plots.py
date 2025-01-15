@@ -20,6 +20,7 @@ def display_sparkline(radio_df: pl.DataFrame, view_option: str):
         if radio_df.is_empty():
             st.warning("No available data to display.")
             return
+
         with st.popover(label='Settings', icon='⚙️', use_container_width=False):
             # Toggle for cumulative vs non-cumulative
             cumulative_toggle = st.toggle(
@@ -27,6 +28,7 @@ def display_sparkline(radio_df: pl.DataFrame, view_option: str):
                 value=False, 
                 help="Check to see a cumulative sum of plays over time."
             )
+
             # Add a filter to select top X
             top_x = st.number_input(
                 f"Number of top {view_option.lower()}s", 
@@ -81,12 +83,14 @@ def display_sparkline(radio_df: pl.DataFrame, view_option: str):
         )
 
         # Ensure all days are covered (fill missing dates with 0 plays)
-        all_dates = pl.DataFrame({cm.DAY_COLUMN: pl.date_range(
-            start=df_filtered[cm.DAY_COLUMN].min(),
-            end=df_filtered[cm.DAY_COLUMN].max(),
-            interval='1d',
-            eager=True
-        )})
+        all_dates = pl.DataFrame(
+            {cm.DAY_COLUMN: pl.date_range(
+                start=df_filtered[cm.DAY_COLUMN].min(),
+                end=df_filtered[cm.DAY_COLUMN].max(),
+                interval='1d',
+                eager=True
+            )
+        })
 
         distinct_entities = plays_by_day.select(group_cols).unique()
         all_combinations = distinct_entities.join(all_dates, how='cross')
@@ -133,9 +137,11 @@ def display_sparkline(radio_df: pl.DataFrame, view_option: str):
         # Fix ordering for consistent colors
         top_data = top_data.join(sorted_top_entities.select(group_cols), on=group_cols, how='left')
 
+        top_data_pandas = top_data.to_pandas()
+
         # Plot the sparkline
         fig = px.line(
-            top_data.to_pandas(), 
+            top_data_pandas, 
             x=cm.DAY_COLUMN, 
             y=value_col,
             color=color_col,
@@ -144,27 +150,52 @@ def display_sparkline(radio_df: pl.DataFrame, view_option: str):
             labels={value_col: 'Plays', cm.DAY_COLUMN: 'Date', color_col: legend_title},
             template='plotly_white',
             line_shape="spline",
+            hover_data=None, 
+            custom_data=[color_col],
         )
+
         # Determine the min and max values for the y-axis
         y_max = top_data[value_col].max()
         fig.update_yaxes(range=[0, y_max * 1.1])  # Add some padding (10%) for better visibility
 
         # Increase height
         fig.update_layout(
-                xaxis_title=None,
-                yaxis_title=None,
-                legend_title_text=legend_title,
-                margin=dict(l=10, r=30, t=30, b=0),
-                height=600,
-                hoverlabel_align="left",
-            )
+            xaxis_title=None,
+            yaxis_title=None,
+            legend_title_text=legend_title,
+            margin=dict(l=10, r=30, t=30, b=0),
+            height=600,
+            hoverlabel_align="left",
+        )
 
         # Define line width based on total plays
-        line_widths = {label: 2 + (total_plays / sorted_top_entities['total_plays'].max()) * 1.5
-                    for label, total_plays in zip(sorted_top_entities[color_col], sorted_top_entities['total_plays'])}
+        line_widths = {
+            label: 2 + (total_plays / sorted_top_entities['total_plays'].max()) * 1.5
+            for label, total_plays in zip(sorted_top_entities[color_col], sorted_top_entities['total_plays'])
+        }
 
         for trace in fig.data:
-            trace.line.width = line_widths.get(trace.name, 2)  # Adjust width dynamically
+            # Set dynamic line width
+            trace.line.width = line_widths.get(trace.name, 2)
+            
+            # Use the trace's line color for the bold text
+            line_color = trace.line.color if trace.line.color else '#000'  # fallback if no color assigned
+
+            # Updated hovertemplate with colored, bold labels
+            # trace.update(
+            #     hovertemplate=(
+            #         f"<span style='font-weight:bold; color:{line_color};'>{view_option} Name</span>: %{{customdata[0]}}<br>"
+            #         f"<span style='font-weight:bold; color:{line_color};'>Plays</span>: %{{y}}<br>"
+            #         "%{x}<extra></extra>"
+            #     )
+            # )
+            trace.update(
+                hovertemplate=(
+                    f"<span style='font-size:16px; font-weight:bold; color:{line_color};'>%{{customdata[0]}}</span> <br>"
+                    f"<span style='font-weight:bold;'>%{{y}} Plays</span><br>"
+                    "%{x}<extra></extra>"
+                )
+            )
 
         st.write(
             "**Tip**: You can hover over the lines to see exact values. "
