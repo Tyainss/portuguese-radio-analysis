@@ -350,8 +350,14 @@ def display_top_bar_chart(radio_df: pl.DataFrame, view_option: str, other_radios
     else:
         col1 = st.container()  # Use a single column if no comparison is needed
 
-    def generate_bar_chart(df: pl.DataFrame, title_suffix: str):
-        """Generate a formatted bar chart from the dataframe."""
+    def generate_bar_chart(df: pl.DataFrame, tooltip_color: str = "#4E87F9"):
+        """
+        Generate a formatted bar chart from the dataframe with customizable tooltip color.
+        
+        Parameters:
+            df (pl.DataFrame): The dataframe to visualize.
+            tooltip_color (str): Hex color for tooltip styling (default: light blue).
+        """
         bar_chart_df = (
             df.group_by(group_cols)
             .agg(pl.count().alias('play_count'))
@@ -380,13 +386,23 @@ def display_top_bar_chart(radio_df: pl.DataFrame, view_option: str, other_radios
             x='play_count',
             y=color_col,
             text='formatted_play_count',
-            # title=f'Top 10 {view_option}s {title_suffix}',
             orientation='h',
         )
         bar_chart_fig.update_traces(
             textposition="outside",
             cliponaxis=False  # Prevent labels from being clipped
         )
+        # Update tooltips with the light blue color
+        bar_chart_fig.update_traces(
+            hovertemplate=(
+                # f"<span style='font-size:14px; font-weight:bold; color:{tooltip_color};'>%{{y}}</span> <br>"
+                f"<span style='font-size:16px; font-weight:bold; color:{tooltip_color};'>%{{y}}</span> <br>"
+                f"<span style='font-weight:bold;'>%{{customdata[0]}} Plays</span><br>"
+                "<extra></extra>"
+            ),
+            customdata=bar_chart_df[['formatted_play_count']].to_pandas().values,
+        )
+
         bar_chart_fig.update_layout(
             xaxis_title=None,
             yaxis_title=None,
@@ -398,14 +414,12 @@ def display_top_bar_chart(radio_df: pl.DataFrame, view_option: str, other_radios
 
     # Display left chart (selected radio)
     with col1:
-        # st.markdown(f"**{radio_df[cm.RADIO_COLUMN][0]}**")  # Display selected radio name
-        st.plotly_chart(generate_bar_chart(radio_df, "(Selected Radio)"), use_container_width=True)
+        st.plotly_chart(generate_bar_chart(radio_df), use_container_width=True)
 
     # Display right chart (other radios) if provided
     if other_radios_df is not None:
         with col2:
-            # st.markdown("**All Other Radios**")
-            st.plotly_chart(generate_bar_chart(other_radios_df, "(Other Radios)"), use_container_width=True)
+            st.plotly_chart(generate_bar_chart(other_radios_df), use_container_width=True)
 
 
 def display_top_by_week_chart(radio_df: pl.DataFrame, view_option: str, other_radios_df: Optional[pl.DataFrame] = None):
