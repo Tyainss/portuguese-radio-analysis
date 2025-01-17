@@ -681,20 +681,44 @@ def display_play_count_histogram(radio_df: pl.DataFrame, view_option: str, other
         other_histogram_df = process_histogram_data(other_radios_df)
 
     def generate_histogram(df: pl.DataFrame, show_yaxis_title: bool = True):
-        """Generates a histogram bar chart from the processed data."""
+        """Generates a histogram bar chart from the processed data with enhanced tooltips, including percentages."""
+        # Calculate the percentage of the total for each bucket
+        total_count = df["count"].sum()
+        df = df.with_columns(
+            (pl.col("count") / total_count * 100).round(2).alias("percentage")
+        )
+
+        # Add custom data for the tooltips
+        df = df.with_columns(
+            pl.col("play_bucket").alias("hover_label")  # Assign hover_label as play_bucket
+        )
+
+        customdata_values = df[["hover_label", "count", "percentage"]].to_pandas().values
+
         fig = px.bar(
             df.to_pandas(),
             x="play_bucket",
             y="count",
             text="count",
-            # title=f"{view_option} Play Distribution {title_suffix}",
             title='',
         )
 
-        fig.update_traces(
-            textposition="outside",
-            cliponaxis=False
-        )
+        for _, trace in enumerate(fig.data):
+            # Extract bar color (use a fallback if necessary)
+            bar_color = trace.marker.color if trace.marker.color else '#000'
+
+            # Set hovertemplate with enhanced formatting
+            trace.update(
+                hovertemplate=(
+                    f"<span style='font-size:16px; font-weight:bold; color:{bar_color};'>%{{customdata[0]}}</span> <br>"  # Play Bucket
+                    f"<span style='font-weight:bold;'>%{{customdata[1]}} {view_option}s</span><br>"  # Count of items
+                    f"<span >%{{customdata[2]}}% of Total</span><br>"  # Percentage
+                    "<extra></extra>"
+                ),
+                customdata=customdata_values,
+                textposition="outside",
+                cliponaxis=False,
+            )
 
         fig.update_layout(
             xaxis_title="Number of Plays",
