@@ -1081,6 +1081,9 @@ def display_top_genres_evolution(radio_df: pl.DataFrame, other_radios_df: Option
         - Keep only rows where rank <= 5
         - Sort by (week_label, rank)
         """
+        # Filter out empty genres
+        df = df.filter(pl.col(cm.SPOTIFY_GENRE_COLUMN) != "")
+
         df = df.with_columns([
             # ISO week label
             pl.col(cm.DAY_COLUMN).dt.strftime("%G-W%V").alias("week_label")
@@ -1126,6 +1129,22 @@ def display_top_genres_evolution(radio_df: pl.DataFrame, other_radios_df: Option
         with improved visuals, ensuring the legend includes all genres.
         """
         import pandas as pd
+        df = df.with_columns([
+            # Assuming `start_date` and `end_date` are in the dataframe
+            pl.col("week_label").map_elements(lambda w: week_dates_start_end(w), return_dtype=pl.List(pl.Utf8)).alias("week_dates"),
+        ])
+        df = df.with_columns([
+            pl.col("week_dates").list.get(0).alias("start_date"),
+            pl.col("week_dates").list.get(1).alias("end_date"),
+            pl.col("week_label").str.slice(0, 4).cast(pl.Int64).alias("year"),  # Extract year
+            pl.col("week_label").str.slice(6, 2).cast(pl.Int64).alias("week"),  # Extract week number
+        ])
+
+        # Sort the dataframe by year and week for chronological order
+        df = df.sort(["year", "week"])
+
+        # Remove auxiliary sorting columns before plotting
+        df = df.drop(["year", "week"])
 
         # Convert Polars → Pandas
         df_pd = df.to_pandas()
@@ -1159,39 +1178,29 @@ def display_top_genres_evolution(radio_df: pl.DataFrame, other_radios_df: Option
             all_missing = all_genres - set(df_expanded[cm.SPOTIFY_GENRE_COLUMN].dropna())
             if all_missing:
                 # Use the first week_label (or last) from df_expanded
-                all_weeks = df_expanded["week_label"].dropna().unique()
-                if len(all_weeks) > 0:
-                    dummy_week = all_weeks[0]
-                else:
-                    dummy_week = "2024-W01"  # fallback if nothing
+                dummy_week = df_expanded["week_label"].dropna().unique()[0]  # Use the first week_label
 
-                dummy_rows = []
-                for g in all_missing:
-                    dummy_rows.append({
-                        cm.SPOTIFY_GENRE_COLUMN: g,
+                dummy_rows = [
+                    {
+                        cm.SPOTIFY_GENRE_COLUMN: genre,
                         "week_label": dummy_week,
                         "rank": None,
-                        "total_plays": None
-                    })
-                # Only concat if dummy_rows is non-empty
-                if dummy_rows:
-                    # Build a DataFrame with the same columns as df_expanded
-                    dummy_df = pd.DataFrame(dummy_rows, columns=df_expanded.columns)
-                    
-                    # Optionally cast columns to match df_expanded dtypes
-                    # (for example, ensure rank and total_plays are float)
-                    dummy_df = dummy_df.astype({
-                        "rank": "float",
-                        "total_plays": "float"
-                    })
-
-                    df_expanded = pd.concat([df_expanded, dummy_df], ignore_index=True)
-        else:
-            # If the entire DataFrame was empty, we can't do much
-            pass
+                        "total_plays": None,
+                    }
+                    for genre in all_missing
+                ]
+                dummy_df = pd.DataFrame(dummy_rows, columns=df_expanded.columns)
+                df_expanded = pd.concat([df_expanded, dummy_df], ignore_index=True)
 
         # Make sure to sort again by week_label
         df_expanded = df_expanded.sort_values("week_label")
+
+        # Prepare custom data for each genre
+        genre_customdata_map = {}
+        for genre in df_expanded[cm.SPOTIFY_GENRE_COLUMN].unique():
+            genre_data = df_expanded[df_expanded[cm.SPOTIFY_GENRE_COLUMN] == genre]
+            genre_customdata_map[genre] = genre_data[[cm.SPOTIFY_GENRE_COLUMN, "rank", "total_plays", "start_date", "end_date"]].values
+
 
         # Plot with Plotly Express using "spline" but connectgaps=False
         fig = px.line(
@@ -1199,14 +1208,34 @@ def display_top_genres_evolution(radio_df: pl.DataFrame, other_radios_df: Option
             x="week_label",
             y="rank",
             color=cm.SPOTIFY_GENRE_COLUMN,
-            hover_data=["total_plays"],
-            line_shape="spline",  # try "linear" if you still see weird arcs
+            # hover_data=["total_plays"],
+            line_shape="spline", 
             category_orders={
                 cm.SPOTIFY_GENRE_COLUMN: sorted_genres_desc,
                 "rank": [1, 2, 3, 4, 5]
             },
             color_discrete_map=color_map
         )
+        # Enhanced tooltips
+        for trace in fig.data:
+            # Extract the line color for dynamic tooltip styling
+            line_color = trace.line.color if trace.line.color else "#000"
+
+            # Get the relevant custom data for the current trace
+            trace_genre = trace.name
+            trace_customdata = genre_customdata_map.get(trace_genre, [])
+
+            # Set hovertemplate with enhanced formatting
+            trace.update(
+                hovertemplate=(
+                    f"<span style='font-size:16px; font-weight:bold; color:{line_color};'> %{{customdata[1]}} - %{{customdata[0]}}</span><br>" 
+                    # f"<span style='font-size:14px; font-weight:bold;'>Rank: %{{customdata[1]}}</span><br>"
+                    f"<span style='font-weight:bold;'>%{{customdata[2]}} Plays</span><br>"
+                    f"<span>%{{customdata[3]}} to %{{customdata[4]}}</span><br>"  # start_date to end_date
+                    "<extra></extra>"
+                ),
+                customdata=trace_customdata,
+            )
 
         fig.update_traces(
             mode="lines+markers",
@@ -1232,7 +1261,7 @@ def display_top_genres_evolution(radio_df: pl.DataFrame, other_radios_df: Option
             height=500,
             margin=margin,
             legend_title_text="Genres",
-            legend_traceorder="reversed+grouped",  # or "normal" if you prefer
+            legend_traceorder="reversed+grouped", 
             xaxis=dict(
                 tickmode="array",
                 # Show every 3rd or 4th label to reduce clutter
