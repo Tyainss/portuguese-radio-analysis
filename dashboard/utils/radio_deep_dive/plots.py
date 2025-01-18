@@ -1180,16 +1180,35 @@ def display_top_genres_evolution(radio_df: pl.DataFrame, other_radios_df: Option
                 # Use the first week_label (or last) from df_expanded
                 dummy_week = df_expanded["week_label"].dropna().unique()[0]  # Use the first week_label
 
-                dummy_rows = [
-                    {
-                        cm.SPOTIFY_GENRE_COLUMN: genre,
-                        "week_label": dummy_week,
-                        "rank": None,
-                        "total_plays": None,
-                    }
-                    for genre in all_missing
-                ]
-                dummy_df = pd.DataFrame(dummy_rows, columns=df_expanded.columns)
+                # Get all columns from df_expanded
+                all_columns = df_expanded.columns.tolist()
+
+                # Create list of dummy rows, including all necessary columns
+                dummy_rows = []
+                for genre in all_missing:
+                    dummy_row = {col: None for col in all_columns}  # Initialize all columns with None
+                    dummy_row[cm.SPOTIFY_GENRE_COLUMN] = genre
+                    dummy_row["week_label"] = dummy_week
+                    dummy_rows.append(dummy_row)
+
+                # Create dummy_df with all columns
+                dummy_df = pd.DataFrame(dummy_rows, columns=all_columns)
+
+                # Build a dtype mapping from df_expanded for columns existing in dummy_df
+                dtype_dict = {col: dtype for col, dtype in df_expanded.dtypes.to_dict().items() if col in dummy_df.columns}
+
+                # Modify dtype_dict to use nullable integer types where needed
+                modified_dtype_dict = {}
+                for col, dtype in dtype_dict.items():
+                    if pd.api.types.is_integer_dtype(dtype):
+                        modified_dtype_dict[col] = "Int64"  # use nullable integer type
+                    else:
+                        modified_dtype_dict[col] = dtype
+
+                # Convert dummy_df columns to the specified dtypes using the modified mapping
+                dummy_df = dummy_df.astype(modified_dtype_dict)
+
+                # Concatenate the dummy_df with df_expanded
                 df_expanded = pd.concat([df_expanded, dummy_df], ignore_index=True)
 
         # Make sure to sort again by week_label
