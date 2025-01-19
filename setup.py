@@ -3,10 +3,15 @@ from setuptools import setup, find_packages
 # Read requirements.txt for dependencies
 def parse_requirements():
     with open('requirements.txt') as f:
-        return f.read().splitlines()
+        lines = f.read().splitlines()
+        # Filter out -e, git+ or anything else that confuses setup()
+        return [
+            line for line in lines
+            if line and not line.startswith('-e') and not line.startswith('#') and 'git+' not in line
+        ]
 
 setup(
-    name='radio_song_analysis',
+    name='radio-song-analysis',
     version='0.2',
     author='Rui Pereira',
     author_email='ruiarpereira15@gmail.com',
