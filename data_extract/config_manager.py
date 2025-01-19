@@ -1,9 +1,10 @@
+import os
 import json
 import polars as pl
 from typing import Dict
+from dotenv import load_dotenv
 
 from data_extract import logger
-
 
 class ConfigManager:
     CONFIG_PATH_DEFAULT = 'config.json'
@@ -18,6 +19,7 @@ class ConfigManager:
     }
     def __init__(self, config_path = CONFIG_PATH_DEFAULT, schema_path = SCHEMA_PATH_DEFAULT) -> None:
         self.config = self.load_json(config_path)
+        load_dotenv()
 
         self._initialize_schema_config(schema_path)        
         self._initialize_secrets()
@@ -39,20 +41,15 @@ class ConfigManager:
         self.SPOTIFY_GENRE_COLUMN = 'spotify_genres'
         self.SPOTIFY_POPULARITY_COLUMN = 'spotify_popularity'
         self.SPOTIFY_RELEASE_DATE_COLUMN = 'spotify_release_date'
-        
-        # spotify_popularity
 
     def _initialize_secrets(self) -> None:
-        self.SPOTIFY_CLIENT_ID = self.config.get('SPOTIFY_CLIENT_ID')
-        self.SPOTIFY_CLIENT_SECRET = self.config.get('SPOTIFY_CLIENT_SECRET')
-
-        self.MUSICBRAINZ_CLIENT_ID = self.config.get('MUSICBRAINZ_CLIENT_ID')
-        self.MUSICBRAINZ_CLIENT_SECRET = self.config.get('MUSICBRAINZ_CLIENT_SECRET')
-
-        self.GENIUS_ACCESS_TOKEN = self.config.get('GENIUS_ACCESS_TOKEN')
-
-        self.WIKI_ACCESS_TOKEN = self.config.get('WIKIPEDIA_ACCESS_TOKEN', None)
-        self.WIKI_CLIENT_SECRET = self.config.get('WIKIPEDIA_CLIENT_SECRET', None)
+        self.SPOTIFY_CLIENT_ID = os.environ.get('SPOTIFY_CLIENT_ID')
+        self.SPOTIFY_CLIENT_SECRET = os.environ.get('SPOTIFY_CLIENT_SECRET')
+        self.MUSICBRAINZ_CLIENT_ID = os.environ.get('MUSICBRAINZ_CLIENT_ID')
+        self.MUSICBRAINZ_CLIENT_SECRET = os.environ.get('MUSICBRAINZ_CLIENT_SECRET')
+        self.GENIUS_ACCESS_TOKEN = os.environ.get('GENIUS_ACCESS_TOKEN')
+        self.WIKI_ACCESS_TOKEN = os.environ.get('WIKIPEDIA_ACCESS_TOKEN')
+        self.WIKI_CLIENT_SECRET = os.environ.get('WIKIPEDIA_CLIENT_SECRET')
 
     def _initialize_web_scrapper_config(self) -> None:
         self.RADIO_COLUMN = "radio"
@@ -61,20 +58,20 @@ class ConfigManager:
         self.TRACK_TITLE_COLUMN = "track_title"
         self.ARTIST_NAME_COLUMN = "artist_name"
 
-        self.WEB_SCRAPPER = self.config['WEB_SCRAPPER']
-        self.CHROME_DRIVER_PATH = self.WEB_SCRAPPER['CHROME_DRIVER_PATH']
-        self.CSV_PATH_FORMAT = self.WEB_SCRAPPER['CSV_PATH']
-        self.WAIT_DURATION = self.WEB_SCRAPPER['WAIT_DURATION']
-        self.WEB_SITES = self.WEB_SCRAPPER['WEB_SITES']
+        self.WEB_SCRAPPER = self.config.get('WEB_SCRAPPER', {})
+        self.CHROME_DRIVER_PATH = self.WEB_SCRAPPER.get('CHROME_DRIVER_PATH')
+        self.CSV_PATH_FORMAT = self.WEB_SCRAPPER.get('CSV_PATH')
+        self.WAIT_DURATION = self.WEB_SCRAPPER.get('WAIT_DURATION')
+        self.WEB_SITES = self.WEB_SCRAPPER.get('WEB_SITES')
 
     def _initialize_other_config(self) -> None:
-        self.RADIO_CSV_PATH = self.config['RADIO_CSV_PATH']
-        self.TRACK_INFO_CSV_PATH = self.config['TRACK_INFO_CSV_PATH']
-        self.ARTIST_INFO_CSV_PATH = self.config['ARTIST_INFO_CSV_PATH']
-        self.SPOTIFY_INFO_CSV_PATH = self.config['SPOTIFY_INFO_CSV_PATH']
-        self.LYRICS_INFO_CSV_PATH = self.config['LYRICS_INFO_CSV_PATH']
-        self.MUSICBRAINZ_INFO_CSV_PATH = self.config['MUSICBRAINZ_INFO_CSV_PATH']
-        self.WIKIPEDIA_INFO_CSV_PATH = self.config['WIKIPEDIA_INFO_CSV_PATH']
+        self.RADIO_CSV_PATH = self.config.get('RADIO_CSV_PATH')
+        self.TRACK_INFO_CSV_PATH = self.config.get('TRACK_INFO_CSV_PATH')
+        self.ARTIST_INFO_CSV_PATH = self.config.get('ARTIST_INFO_CSV_PATH')
+        self.SPOTIFY_INFO_CSV_PATH = self.config.get('SPOTIFY_INFO_CSV_PATH')
+        self.LYRICS_INFO_CSV_PATH = self.config.get('LYRICS_INFO_CSV_PATH')
+        self.MUSICBRAINZ_INFO_CSV_PATH = self.config.get('MUSICBRAINZ_INFO_CSV_PATH')
+        self.WIKIPEDIA_INFO_CSV_PATH = self.config.get('WIKIPEDIA_INFO_CSV_PATH')
 
     def get_scraper_csv_path(self, radio, path_format):
         csv_path = path_format.format(radio=radio)

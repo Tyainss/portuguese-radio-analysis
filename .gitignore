@@ -1,5 +1,5 @@
 # Ignore config.json file
-/config.json
+# /config.json
 
 # Ignore testing files or testing Streamlit folder
 testing_*.py
