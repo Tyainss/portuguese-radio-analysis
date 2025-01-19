@@ -31,9 +31,19 @@ def load_main_df(pandas_format=False):
 df_joined = load_main_df()
 df_joined = filters.filter_by_most_recent_min_date(df_joined, cm.RADIO_COLUMN, cm.DAY_COLUMN)
 
-min_release_date = df_joined.with_columns(pl.col(cm.SPOTIFY_RELEASE_DATE_COLUMN).dt.year().cast(pl.Int32).alias('release_year'))['release_year'].min()
-max_release_date = df_joined.with_columns(pl.col(cm.SPOTIFY_RELEASE_DATE_COLUMN).dt.year().cast(pl.Int32).alias('release_year'))['release_year'].max()
+min_release_date = df_joined.with_columns(
+    pl.col(cm.SPOTIFY_RELEASE_DATE_COLUMN).dt.year().cast(pl.Int32).alias('release_year')
+)['release_year'].min()
 
+max_release_date = df_joined.with_columns(
+    pl.col(cm.SPOTIFY_RELEASE_DATE_COLUMN).dt.year().cast(pl.Int32).alias('release_year')
+)['release_year'].max()
+
+# Watch for changes to the main radio selection
+def update_other_radios():
+    st.session_state['other_radios_filter'] = [
+        radio for radio in radio_options if radio != st.session_state['radio_name_filter']
+    ]
 
 def reset_page_settings():
     '''
@@ -57,8 +67,9 @@ def reset_page_settings():
 
     # Reset release year filter
     if release_years:
-        # st.session_state['release_year_range'] = (release_years[0], release_years[-1])
         st.session_state['release_year_range'] = (min_release_date, max_release_date)
+
+    update_other_radios()
 
 if 'radio_name_filter' not in st.session_state:
     st.session_state['radio_name_filter'] = radio_options[0]
@@ -72,6 +83,11 @@ if 'select_all_artists' not in st.session_state:
 if 'artist_editor' not in st.session_state:
     st.session_state['artist_editor'] = {}
 
+if 'other_radios_filter' not in st.session_state:
+    update_other_radios()
+
+
+
 # st.session_state.clear()
 
 ### Sidebar Filters ###
@@ -84,6 +100,7 @@ with st.sidebar:
         options=radio_options,
         index=0,
         key='radio_name_filter',
+        on_change=update_other_radios,
     )
 
     # Dataframe of the other non-selected radios, for comparison
@@ -108,6 +125,25 @@ with st.sidebar:
             options=['Artist', 'Track'],
             horizontal=True
         )
+
+    with st.expander(label='Compare to...'):
+        st.caption('Select radios to compare with')
+        other_radios_chosen = st.segmented_control(
+            label='Pick Radio',
+            label_visibility='collapsed',
+            options=[radio for radio in radio_options if radio != st.session_state['radio_name_filter']],
+            selection_mode='multi',
+            key='other_radios_filter',
+        )
+        other_radios_chosen_mapped = [
+            app_config[radio].get('name') for radio in other_radios_chosen
+        ]
+    
+    other_radios_df = filters.filter_by_radio(
+        df_joined, 
+        radio_name_col=cm.RADIO_COLUMN,
+        radio_selected=other_radios_chosen_mapped,
+    )
 
     # Get min and max dates
     min_date = df_joined[cm.DAY_COLUMN].min()
@@ -460,8 +496,11 @@ else:
         )
         st.write('#####')
 
-        # Centered headers for each column
-        col1, col2 = st.columns(2)
+        # Create two columns if `other_radios_df` is provided
+        if other_radios_df is not None and not other_radios_df.is_empty():
+            col1, col2 = st.columns(2)
+        else:
+            col1 = st.container()
         with col1:
             st.markdown(
                 f"""
@@ -472,17 +511,17 @@ else:
                 """,
                 unsafe_allow_html=True
             )
-
-        with col2:
-            st.markdown(
-                """
-                <div style="text-align: center; background-color: #e3e7f1; padding: 8px; 
-                            border-radius: 8px; font-size: 20px; font-weight: bold; color: #1f2937;">
-                    📡 Other Radios
-                </div>
-                """,
-                unsafe_allow_html=True
-            )
+        if other_radios_df is not None and not other_radios_df.is_empty():
+            with col2:
+                st.markdown(
+                    """
+                    <div style="text-align: center; background-color: #e3e7f1; padding: 8px; 
+                                border-radius: 8px; font-size: 20px; font-weight: bold; color: #1f2937;">
+                        📡 Other Radios
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
         
         st.write('#####')
         plots.display_top_bar_chart(radio_df, view_option, other_radios_df)
@@ -499,8 +538,9 @@ else:
     ######################
     ## Radio Highlights ##
     ######################
-    plots.display_underplayed_overplayed_highlights(radio_df, other_radios_df, view_option)
-    st.divider()
+    if other_radios_df is not None and not other_radios_df.is_empty():
+        plots.display_underplayed_overplayed_highlights(radio_df, other_radios_df, view_option)
+        st.divider()
         
 
     ########################################

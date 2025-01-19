@@ -393,7 +393,3 @@ plots.display_sentiment_analysis(
 # Improve visual by trying to add some borders or background colors
 # Color PT bar differently
 # Define color pallete for each radio
-
-
-# Make all bar charts the same y-axis
-# Add a 'Segmented Control' to allow to choose between seeing percentages or total values (or toggle?)

@@ -380,7 +380,7 @@ def display_top_bar_chart(radio_df: pl.DataFrame, view_option: str, other_radios
         """
     )
     # Create two columns if `other_radios_df` is provided
-    if other_radios_df is not None:
+    if other_radios_df is not None and not other_radios_df.is_empty():
         col1, col2 = st.columns(2)
     else:
         col1 = st.container()  # Use a single column if no comparison is needed
@@ -459,7 +459,7 @@ def display_top_bar_chart(radio_df: pl.DataFrame, view_option: str, other_radios
         st.plotly_chart(generate_bar_chart(radio_df), use_container_width=True)
 
     # Display right chart (other radios) if provided
-    if other_radios_df is not None:
+    if other_radios_df is not None and not other_radios_df.is_empty():
         with col2:
             st.plotly_chart(generate_bar_chart(other_radios_df), use_container_width=True)
 
@@ -496,7 +496,7 @@ def display_top_by_week_chart(radio_df: pl.DataFrame, view_option: str, other_ra
     )
 
     # Create two columns if `other_radios_df` is provided
-    if other_radios_df is not None:
+    if other_radios_df is not None and not other_radios_df.is_empty():
         col1, col2 = st.columns(2)
     else:
         col1 = st.container()
@@ -549,7 +549,7 @@ def display_top_by_week_chart(radio_df: pl.DataFrame, view_option: str, other_ra
 
     # Process both selected radio and other radios (if provided)
     radio_weekly_top, color_col_1 = process_weekly_top(radio_df)
-    if other_radios_df is not None:
+    if other_radios_df is not None and not other_radios_df.is_empty():
         other_weekly_top, color_col_2 = process_weekly_top(other_radios_df)
 
     # Assign Colors for Artists in Selected Radio
@@ -557,7 +557,7 @@ def display_top_by_week_chart(radio_df: pl.DataFrame, view_option: str, other_ra
     # all_colors = pc.qualitative.Bold
     all_artists = sorted(
         set(radio_weekly_top[color_col_1].unique().to_list()) |
-        (set(other_weekly_top[color_col_2].unique().to_list()) if other_radios_df is not None else set()),
+        (set(other_weekly_top[color_col_2].unique().to_list()) if other_radios_df is not None and not other_radios_df.is_empty() else set()),
         reverse=True
     )
     color_map = {
@@ -567,7 +567,7 @@ def display_top_by_week_chart(radio_df: pl.DataFrame, view_option: str, other_ra
 
     # Extract unique artists from both datasets
     selected_artists = radio_weekly_top[color_col_1].unique().to_list()
-    other_artists = other_weekly_top[color_col_2].unique().to_list() if other_radios_df is not None else []
+    other_artists = other_weekly_top[color_col_2].unique().to_list() if other_radios_df is not None and not other_radios_df.is_empty() else []
 
     # Assign colors to artists in the selected radio chart
     artist_colors = {artist: all_colors[i % len(all_colors)] for i, artist in enumerate(selected_artists)}
@@ -661,7 +661,7 @@ def display_top_by_week_chart(radio_df: pl.DataFrame, view_option: str, other_ra
         st.plotly_chart(generate_bar_chart(radio_weekly_top, color_col_1), use_container_width=True)
 
     # Display right chart (other radios) if provided
-    if other_radios_df is not None:
+    if other_radios_df is not None and not other_radios_df.is_empty():
         with col2:
             st.plotly_chart(generate_bar_chart(other_weekly_top, color_col_2), use_container_width=True)
 
@@ -704,7 +704,7 @@ def display_play_count_histogram(radio_df: pl.DataFrame, view_option: str, other
     )
 
     # Create two columns if `other_radios_df` is provided
-    if other_radios_df is not None:
+    if other_radios_df is not None and not other_radios_df.is_empty():
         col1, col2 = st.columns(2)
     else:
         col1 = st.container()
@@ -745,7 +745,7 @@ def display_play_count_histogram(radio_df: pl.DataFrame, view_option: str, other
 
     # Process histograms for both selected radio and other radios
     radio_histogram_df = process_histogram_data(radio_df)
-    if other_radios_df is not None:
+    if other_radios_df is not None and not other_radios_df.is_empty():
         other_histogram_df = process_histogram_data(other_radios_df)
 
     def generate_histogram(df: pl.DataFrame, show_yaxis_title: bool = True):
@@ -805,7 +805,7 @@ def display_play_count_histogram(radio_df: pl.DataFrame, view_option: str, other
         st.plotly_chart(generate_histogram(radio_histogram_df, show_yaxis_title=True), use_container_width=True)
 
     # Display right chart (other radios) if provided
-    if other_radios_df is not None:
+    if other_radios_df is not None and not other_radios_df.is_empty():
         with col2:
             st.plotly_chart(generate_histogram(other_histogram_df, show_yaxis_title=False), use_container_width=True)
 
@@ -846,7 +846,7 @@ def display_popularity_vs_plays_quadrant(
     )
 
     # Create two columns if `other_radios_df` is provided
-    if other_radios_df is not None:
+    if other_radios_df is not None and not other_radios_df.is_empty():
         col1, col2 = st.columns(2)
     else:
         col1 = st.container()
@@ -863,7 +863,7 @@ def display_popularity_vs_plays_quadrant(
         return df
 
     radio_scatter_df = process_scatter_data(radio_df)
-    if other_radios_df is not None:
+    if other_radios_df is not None and not other_radios_df.is_empty():
         other_scatter_df = process_scatter_data(other_radios_df)
 
     def generate_quadrant_chart(df: pl.DataFrame, tooltip_color: str = "#4E87F9"):
@@ -971,7 +971,7 @@ def display_popularity_vs_plays_quadrant(
         st.plotly_chart(generate_quadrant_chart(radio_scatter_df), use_container_width=True)
 
     # Display right chart (other radios) if provided
-    if other_radios_df is not None:
+    if other_radios_df is not None and not other_radios_df.is_empty():
         with col2:
             st.plotly_chart(generate_quadrant_chart(other_scatter_df), use_container_width=True)
 
@@ -1201,7 +1201,7 @@ def display_top_genres_evolution(radio_df: pl.DataFrame, other_radios_df: Option
     )
 
     # Create two columns if `other_radios_df` is provided
-    if other_radios_df is not None:
+    if other_radios_df is not None and not other_radios_df.is_empty():
         col1, col2 = st.columns(2)
     else:
         col1 = st.container()
@@ -1242,7 +1242,7 @@ def display_top_genres_evolution(radio_df: pl.DataFrame, other_radios_df: Option
 
     radio_genre_evolution = process_genre_evolution(radio_df)
     
-    if other_radios_df is not None:
+    if other_radios_df is not None and not other_radios_df.is_empty():
         other_genre_evolution = process_genre_evolution(other_radios_df)
     else:
         other_genre_evolution = None
@@ -1444,7 +1444,7 @@ def display_top_genres_evolution(radio_df: pl.DataFrame, other_radios_df: Option
 
     # Get all unique genres appearing in either dataset
     all_genres = set(radio_genre_evolution[cm.SPOTIFY_GENRE_COLUMN].unique().to_list())
-    if other_radios_df is not None:
+    if other_radios_df is not None and not other_radios_df.is_empty():
         all_genres.update(other_genre_evolution[cm.SPOTIFY_GENRE_COLUMN].unique().to_list())
     sorted_genres_desc = union_sums[cm.SPOTIFY_GENRE_COLUMN].to_list()
 
@@ -1468,7 +1468,7 @@ def display_top_genres_evolution(radio_df: pl.DataFrame, other_radios_df: Option
         )
         st.plotly_chart(fig_left, use_container_width=True)
 
-    if other_radios_df is not None:
+    if other_radios_df is not None and not other_radios_df.is_empty():
         with col2:
             fig_right = generate_bump_chart(
                 df=other_genre_evolution,
