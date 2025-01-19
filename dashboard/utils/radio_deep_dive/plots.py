@@ -414,6 +414,13 @@ def display_top_bar_chart(radio_df: pl.DataFrame, view_option: str, other_radios
         # Sort for visual consistency
         bar_chart_df = bar_chart_df.sort('play_count', descending=False)
 
+        # Create gradient colors
+        base_color = [78, 135, 249]  # RGB for #4E87F9
+        gradient_colors = [
+            f"rgba({base_color[0]}, {base_color[1]}, {base_color[2]}, {0.1 + 0.1 * i})"
+            for i in range(len(bar_chart_df))
+        ]
+
         # Create the bar chart
         bar_chart_fig = px.bar(
             bar_chart_df.to_pandas(),
@@ -421,6 +428,7 @@ def display_top_bar_chart(radio_df: pl.DataFrame, view_option: str, other_radios
             y=color_col,
             text='formatted_play_count',
             orientation='h',
+            color_discrete_sequence=gradient_colors,  # Apply gradient colors
         )
         bar_chart_fig.update_traces(
             textposition="outside",
@@ -434,6 +442,7 @@ def display_top_bar_chart(radio_df: pl.DataFrame, view_option: str, other_radios
                 "<extra></extra>"
             ),
             customdata=bar_chart_df[['formatted_play_count']].to_pandas().values,
+            marker=dict(color=gradient_colors)  # Explicitly set the gradient colors
         )
 
         bar_chart_fig.update_layout(
