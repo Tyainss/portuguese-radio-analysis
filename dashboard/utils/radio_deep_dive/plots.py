@@ -13,7 +13,20 @@ from utils.helper import number_formatter, week_dates_start_end
 cm = ConfigManager()
 
 def display_sparkline(radio_df: pl.DataFrame, view_option: str):
-    """Displays a sparkline with top X and date-range filters."""
+    """
+    Displays a sparkline chart illustrating the trend of plays over time for the selected view option (Artist or Track).
+
+    Parameters:
+        radio_df (pl.DataFrame): Input data containing play counts, dates, and relevant metadata.
+        view_option (str): Determines the grouping, either "Artist" or "Track".
+
+    Functionality:
+        - Filters data based on a user-selected date range.
+        - Aggregates play counts by day, with an option for cumulative views.
+        - Limits display to the top X entities based on total plays in the date range.
+        - Ensures all dates are covered by filling missing days with zero plays.
+        - Visualizes trends using an interactive line chart.
+    """
 
     with st.expander("Trend of Plays Over Time", expanded=True, icon='📈'):
         # Handle empty dataframe scenario
@@ -199,6 +212,21 @@ def display_sparkline(radio_df: pl.DataFrame, view_option: str):
 
 
 def display_plot_dataframe(radio_df: pl.DataFrame, view_option: str, last_x_days: int = 60):
+    """
+    Displays a data table overview with sparkline charts showing daily plays for the top 50 entities (Artists or Tracks) over the past X days.
+
+    Parameters:
+        radio_df (pl.DataFrame): Input data containing play counts, dates, and metadata.
+        view_option (str): Determines the grouping, either "Artist" or "Track".
+        last_x_days (int): Number of recent days to include in the sparkline data (default: 60).
+
+    Functionality:
+        - Aggregates total plays and computes daily play counts for the last X days.
+        - Adds sparkline visuals for daily plays, with missing dates filled with zeros.
+        - Normalizes play counts to indicate relative performance.
+        - Displays an editable table for exploration with configurable columns.
+    """
+
     st.subheader(f"Top 50 {view_option} :blue[Table Overview]")
     # Handle empty dataframe scenario
     if radio_df.is_empty():
@@ -325,6 +353,20 @@ def display_plot_dataframe(radio_df: pl.DataFrame, view_option: str, last_x_days
     )
 
 def display_top_bar_chart(radio_df: pl.DataFrame, view_option: str, other_radios_df: Optional[pl.DataFrame] = None):
+    """
+    Displays side-by-side bar charts comparing the top 10 Artists or Tracks in the selected radio versus other radios.
+
+    Parameters:
+        radio_df (pl.DataFrame): Input data for the selected radio containing play counts and metadata.
+        view_option (str): Determines the grouping, either "Artist" or "Track".
+        other_radios_df (Optional[pl.DataFrame]): Data for other radios to include in the comparison (default: None).
+
+    Functionality:
+        - Aggregates play counts for the top 10 entities in each dataset.
+        - Generates horizontal bar charts with dynamic tooltips showing play counts.
+        - Allows side-by-side comparisons if data for other radios is provided.
+    """
+
     if view_option == "Artist":
         group_cols = [cm.ARTIST_NAME_COLUMN]
     else:  # "Track"
@@ -415,9 +457,19 @@ def display_top_bar_chart(radio_df: pl.DataFrame, view_option: str, other_radios
 
 def display_top_by_week_chart(radio_df: pl.DataFrame, view_option: str, other_radios_df: Optional[pl.DataFrame] = None):
     """
-    Displays a vertical bar chart comparing the top artist/track by total plays per week
-    for the selected radio vs all other radios (if provided), while ensuring consistent colors for overlapping artists.
+    Displays a weekly leaderboard chart for the most played Artist or Track, with an option to compare the selected radio to other radios.
+
+    Parameters:
+        radio_df (pl.DataFrame): Input data for the selected radio containing weekly play counts.
+        view_option (str): Determines the grouping, either "Artist" or "Track".
+        other_radios_df (Optional[pl.DataFrame]): Data for other radios to include in the comparison (default: None).
+
+    Functionality:
+        - Identifies the top entity each week by total plays.
+        - Ensures consistent color mapping across entities.
+        - Visualizes weekly leaders with interactive vertical bar charts.
     """
+
     if view_option == "Artist":
         group_cols = [cm.ARTIST_NAME_COLUMN]
         legend_title = "Artist Name"
@@ -598,7 +650,17 @@ def display_top_by_week_chart(radio_df: pl.DataFrame, view_option: str, other_ra
 
 def display_play_count_histogram(radio_df: pl.DataFrame, view_option: str, other_radios_df: Optional[pl.DataFrame] = None):
     """
-    Displays a histogram of the number of artists/tracks that fall into predefined play count buckets.
+    Displays a histogram illustrating the distribution of play counts for Artists or Tracks in predefined play count ranges.
+
+    Parameters:
+        radio_df (pl.DataFrame): Input data for the selected radio containing play counts and metadata.
+        view_option (str): Determines the grouping, either "Artist" or "Track".
+        other_radios_df (Optional[pl.DataFrame]): Data for other radios to include in the comparison (default: None).
+
+    Functionality:
+        - Aggregates play counts into predefined ranges (buckets) for Artists or Tracks.
+        - Visualizes the count of entities in each range as a bar chart.
+        - Highlights the distribution differences when comparing to other radios.
     """
 
     if view_option == "Artist":
@@ -730,9 +792,23 @@ def display_play_count_histogram(radio_df: pl.DataFrame, view_option: str, other
             st.plotly_chart(generate_histogram(other_histogram_df, show_yaxis_title=False), use_container_width=True)
 
 
-def display_popularity_vs_plays_quadrant(radio_df: pl.DataFrame, view_option: str, other_radios_df: Optional[pl.DataFrame] = None, top_n_labels: int = 10):
+def display_popularity_vs_plays_quadrant(
+    radio_df: pl.DataFrame, view_option: str, other_radios_df: Optional[pl.DataFrame] = None, top_n_labels: int = 10
+):
     """
-    Displays a quadrant chart comparing Popularity vs. Number of Plays, with labels for the top N played artists/tracks and quadrant legends.
+    Displays a quadrant chart comparing popularity vs. play counts for Artists or Tracks, highlighting top-performing entities.
+
+    Parameters:
+        radio_df (pl.DataFrame): Input data for the selected radio containing play counts and popularity scores.
+        view_option (str): Determines the grouping, either "Artist" or "Track".
+        other_radios_df (Optional[pl.DataFrame]): Data for other radios to include in the comparison (default: None).
+        top_n_labels (int): Number of top-played entities to label in the chart (default: 10).
+
+    Functionality:
+        - Aggregates total play counts and average popularity scores for entities.
+        - Plots a scatterplot divided into quadrants based on median play count and popularity.
+        - Highlights top-performing entities with labels.
+        - Optionally compares data from the selected radio to other radios.
     """
 
     if view_option == "Artist":
@@ -884,7 +960,18 @@ def display_popularity_vs_plays_quadrant(radio_df: pl.DataFrame, view_option: st
 
 def display_underplayed_overplayed_highlights(radio_df: pl.DataFrame, other_radios_df: pl.DataFrame, view_option: str):
     """
-    Highlights the most underplayed and most overplayed artist/track.
+    Highlights the most underplayed and overplayed Artists or Tracks in the selected radio compared to other radios.
+
+    Parameters:
+        radio_df (pl.DataFrame): Input data for the selected radio containing play counts.
+        other_radios_df (pl.DataFrame): Data for other radios to use in the comparison.
+        view_option (str): Determines the grouping, either "Artist" or "Track".
+
+    Functionality:
+        - Identifies entities with high play counts in other radios but low in the selected radio (underplayed).
+        - Identifies entities with high play counts in the selected radio but low in other radios (overplayed).
+        - Displays detailed highlights for the most underplayed and overplayed entities.
+        - Provides a full list of underplayed and overplayed entities for further exploration.
     """
 
     if view_option == "Artist":
@@ -1075,7 +1162,16 @@ def display_underplayed_overplayed_highlights(radio_df: pl.DataFrame, other_radi
 
 def display_top_genres_evolution(radio_df: pl.DataFrame, other_radios_df: Optional[pl.DataFrame] = None):
     """
-    Displays a bump chart tracking the evolution of the top 5 genres per week.
+    Displays a bump chart tracking the weekly evolution of the top 5 genres by total plays.
+
+    Parameters:
+        radio_df (pl.DataFrame): Input data for the selected radio containing play counts and genre information.
+        other_radios_df (Optional[pl.DataFrame]): Data for other radios to include in the comparison (default: None).
+
+    Functionality:
+        - Ranks genres weekly by total plays and identifies the top 5.
+        - Ensures consistent ranking and visualizes changes in popularity over time.
+        - Allows comparison of genre trends between the selected radio and other radios.
     """
     st.subheader("🎼 How Have the :blue[Top Genres] Shifted Over Time?")
 
