@@ -339,7 +339,7 @@ def calculate_country_counts(
 
     return result.sort(by="metric", descending=True)
 
-@st.cache_data(show_spinner=True)
+# @st.cache_data(show_spinner=True)
 def calculate_decade_metrics(
     _df: pl.DataFrame,
     date_column: str,
@@ -454,7 +454,7 @@ def calculate_decade_metrics(
 
     return result.sort("decade_year")
 
-@st.cache_data(show_spinner=True)
+# @st.cache_data(show_spinner=True)
 def calculate_duration_metrics(
     _df: pl.DataFrame,
     duration_column: str,
@@ -541,7 +541,7 @@ def calculate_duration_metrics(
 
     return result.sort("duration_minutes")
 
-@st.cache_data(show_spinner=True)
+# @st.cache_data(show_spinner=True)
 def calculate_genre_metrics(
     _df: pl.DataFrame,
     genre_column: str,

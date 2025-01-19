@@ -253,7 +253,13 @@ def display_track_languages(app_config: dict, ncols: int, num_languages: int, ma
             )
             st.plotly_chart(fig, use_container_width=True, key=f'{radio_name}_tracks_by_language')
 
-def display_track_decades(app_config: dict, ncols: int, metric_type_option: str, mapped_metric_type: str):
+def display_track_decades(
+    app_config: dict, 
+    ncols: int, 
+    metric_type_option: str, 
+    mapped_metric_type: str, 
+    metric_ranges: dict
+):
     st.subheader(
         f':date: {st.session_state['metric_type']} Tracks by :blue[*decade*]', 
         divider="gray", 
@@ -322,6 +328,12 @@ def display_track_decades(app_config: dict, ncols: int, metric_type_option: str,
                 yaxis_title=None,
                 margin=dict(l=10, r=30, t=0, b=0),
                 height=400,
+                yaxis=dict(
+                    range=(
+                        0,
+                        metric_ranges['track_decades']['max'] * 1.05
+                    )
+                ),
                 xaxis=dict(type='category', categoryorder='array', categoryarray=df_tracks_decade_pandas["decade_label"].tolist()),  # Ensure proper ordering
                 hoverlabel_align="left",
             )
@@ -497,7 +509,13 @@ def display_artist_countries(app_config: dict, ncols: int, num_countries: int, m
             st.plotly_chart(fig, use_container_width=True, key=f'{radio_name}_artists_by_country')
 
 
-def display_artist_decades(app_config: dict, ncols: int, metric_type_option: str, mapped_metric_type: str):
+def display_artist_decades(
+    app_config: dict, 
+    ncols: int, 
+    metric_type_option: str, 
+    mapped_metric_type: str, 
+    metric_ranges: dict
+):
     st.subheader(
         f':date: {st.session_state['metric_type']} Artists by :blue[*decade*]', 
         divider="gray",
@@ -566,13 +584,26 @@ def display_artist_decades(app_config: dict, ncols: int, metric_type_option: str
                 yaxis_title=None,
                 margin=dict(l=10, r=30, t=10, b=0),
                 height=400,
+                yaxis=dict(
+                    range=(
+                        0,
+                        metric_ranges['artist_decades']['max'] * 1.05
+                    )
+                ),
                 xaxis=dict(type='category', categoryorder='array', categoryarray=df_artists_decade_pandas["decade_year"].tolist()),  # Ensure proper ordering
                 hoverlabel_align="left",
             )
             st.plotly_chart(fig_artists, use_container_width=True, key=f'{radio_name}_artists_by_decade')
 
 
-def display_track_duration(app_config: dict, ncols: int, metric_type_option: str, mapped_metric_type: str):
+def display_track_duration(
+    app_config: dict, 
+    ncols: int, 
+    metric_type_option: str, 
+    mapped_metric_type: str, 
+    metric_ranges: dict
+):
+    
     st.subheader(
         f':clock4: :blue[Track Duration]', 
         divider='gray',
@@ -648,8 +679,13 @@ def display_track_duration(app_config: dict, ncols: int, metric_type_option: str
                 yaxis_title=None,
                 margin=dict(l=10, r=30, t=0, b=0),
                 height=400,
+                yaxis=dict(
+                    range=(
+                        0,
+                        metric_ranges['track_duration']['max'] * 1.05
+                    )
+                ),
                 xaxis=dict(type="category"),  # Treat durations as categories
-                yaxis=dict(title=metric_type_option, tickformat=","),
                 hoverlabel_align="left"  # Ensure left alignment for tooltips
             )
             st.plotly_chart(fig_duration, use_container_width=True, key=f"{radio_name}_tracks_by_duration")

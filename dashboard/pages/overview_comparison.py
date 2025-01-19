@@ -116,11 +116,18 @@ with st.sidebar:
     # Reset settings button
     st.button('Reset Page Settings', on_click=reset_settings)
 
+mapped_metric_type = mappings.metric_type_map.get(st.session_state['metric_type'])
+selected_metric = mappings.graph_metric_map[st.session_state['ts_graph']]
 
 # Calculate global min and max values
 metrics = ['avg_tracks', 'avg_time_played', 'avg_popularity']
 metric_ranges = {}
-global_max_mean_values = {}  # Dictionary to store global max values for each metric
+global_max_mean_values = {}  # Dictionary to store global max values for each Sentiment metric
+
+# Extend global min/max calculation for "Tracks by Decade"
+metric_ranges['track_decades'] = {'max': float('-inf')}
+metric_ranges['artist_decades'] = {'max': float('-inf')}
+metric_ranges['track_duration'] = {'max': float('-inf')}
 
 # Initialize config for each radio
 for i, (key, val) in enumerate(app_config.items()):
@@ -166,7 +173,48 @@ for i, (key, val) in enumerate(app_config.items()):
                     metric_ranges[metric]['hour']['max'], hour_max
                 )
 
-    # Compute mean values for the current radio
+    # Track Decade y-axis
+    # Calculate metrics by decade
+    df_decades_tracks = calculations.calculate_decade_metrics(
+        _df=app_config[key]['radio_df'],
+        date_column='spotify_release_date',
+        count_columns=[cm.TRACK_TITLE_COLUMN, cm.ARTIST_NAME_COLUMN],
+        metric_type=mapped_metric_type,
+        include_most_played="track",
+        id=radio_name,
+    )
+    # Calculate metrics by decade, including most played artist
+    df_decades_artists = calculations.calculate_decade_metrics(
+        _df=app_config[key]['radio_df'],
+        date_column="mb_artist_career_begin",
+        count_columns=[cm.ARTIST_NAME_COLUMN],
+        metric_type=mapped_metric_type,
+        include_most_played="artist",
+        id=radio_name,
+    )
+    # Calculate duration metrics
+    df_duration_tracks = calculations.calculate_duration_metrics(
+        _df=app_config[key]['radio_df'],
+        duration_column='spotify_duration_ms',
+        count_columns=[cm.TRACK_TITLE_COLUMN, cm.ARTIST_NAME_COLUMN],
+        metric_type=mapped_metric_type,
+        include_most_played=True,
+        id=radio_name,
+    )
+
+    # Update min/max
+    track_decade_max = df_decades_tracks['metric'].max()
+    artist_decade_max = df_decades_artists['metric'].max()
+    track_duration_max = df_duration_tracks['metric'].max()
+
+    if track_decade_max is not None:
+        metric_ranges['track_decades']['max'] = max(metric_ranges['track_decades']['max'], track_decade_max)
+    if artist_decade_max is not None:
+        metric_ranges['artist_decades']['max'] = max(metric_ranges['artist_decades']['max'], artist_decade_max)
+    if track_duration_max is not None:
+        metric_ranges['track_duration']['max'] = max(metric_ranges['track_duration']['max'], track_duration_max)
+
+    # Compute mean values of Sentiments for the current radio
     mean_values = app_config[key]['radio_df'].select(
         "lyrics_joy", "lyrics_sadness", "lyrics_optimism", "lyrics_anger", "lyrics_love_occurrences"
     ).mean().to_dict(as_series=False)
@@ -179,8 +227,6 @@ for i, (key, val) in enumerate(app_config.items()):
             global_max_mean_values[metric] = max(global_max_mean_values[metric], mean_value)
 
 
-mapped_metric_type = mappings.metric_type_map.get(st.session_state['metric_type'])
-selected_metric = mappings.graph_metric_map[st.session_state['ts_graph']]
 
 ########################
 ## Header KPIs + Logo ##
@@ -266,6 +312,7 @@ with track_plots_expander:
         ncols=ncols,
         metric_type_option=metric_type_option,
         mapped_metric_type=mapped_metric_type,
+        metric_ranges=metric_ranges,
     )
 
 
@@ -304,6 +351,7 @@ with artist_plots_expander:
         ncols=ncols,
         metric_type_option=metric_type_option,
         mapped_metric_type=mapped_metric_type,
+        metric_ranges=metric_ranges,
     )
     
 
@@ -315,6 +363,7 @@ plots.display_track_duration(
     ncols=ncols,
     metric_type_option=metric_type_option,
     mapped_metric_type=mapped_metric_type,
+    metric_ranges=metric_ranges,
 )
 
 
