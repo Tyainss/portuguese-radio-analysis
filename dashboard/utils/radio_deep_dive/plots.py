@@ -555,6 +555,15 @@ def display_top_by_week_chart(radio_df: pl.DataFrame, view_option: str, other_ra
     # Assign Colors for Artists in Selected Radio
     all_colors = pc.qualitative.Pastel1  # Select a color palette
     # all_colors = pc.qualitative.Bold
+    all_artists = sorted(
+        set(radio_weekly_top[color_col_1].unique().to_list()) |
+        (set(other_weekly_top[color_col_2].unique().to_list()) if other_radios_df is not None else set()),
+        reverse=True
+    )
+    color_map = {
+        artist: all_colors[i % len(all_colors)]
+        for i, artist in enumerate(all_artists)
+    }
 
     # Extract unique artists from both datasets
     selected_artists = radio_weekly_top[color_col_1].unique().to_list()
@@ -605,13 +614,13 @@ def display_top_by_week_chart(radio_df: pl.DataFrame, view_option: str, other_ra
             color=color_col,
             labels={color_col: legend_title},
             title='',
-            color_discrete_map=artist_colors,
+            color_discrete_map=color_map,
             category_orders={"week_label": ordered_weeks}  # Enforce ordering for week_label
         )
 
         # Add custom data for tooltips
         customdata_values = df[["hover_label", "formatted_play_count", "start_date", "end_date"]].to_pandas().values
-        for i, trace in enumerate(fig.data):
+        for _, trace in enumerate(fig.data):
             # Match the trace's name to the corresponding hover label
             trace_hover_label = trace.name  # This should match `hover_label`
             trace_customdata = [
@@ -1442,8 +1451,8 @@ def display_top_genres_evolution(radio_df: pl.DataFrame, other_radios_df: Option
     # Create a color map from the union
     pastel_colors = px.colors.qualitative.Pastel
     color_map = {
-        g: pastel_colors[i % len(pastel_colors)]
-        for i, g in enumerate(sorted_genres_desc)
+        genre: pastel_colors[i % len(pastel_colors)]
+        for i, genre  in enumerate(sorted_genres_desc)
     }
 
     # Generate the left chart (Selected Radio)

@@ -507,28 +507,4 @@ else:
 
 
 
-### Graphs
-# 0 - Explore other ways of showing several sparklines, 1 by artist, besides the dataframe [Done]
-#       - Line chart with top 30/50 artist for last 60d, cumulative or non-cumulative? [Done]
-# 1 - Dataframe table with graphs [Done]
-# 2 - Bar Chart (possibly not) [Done]
-#   - To Improve visually: Try a grading color on the chart. Use the same color for the artist 
-#       from the selected radio on the chart for the other radios, this way highlighting them
-# 3 - Most Played per week [Done]
-# 4 - Histogram by num plays [Done]
-# 5 - Evolution - Cumultive and non-cumulative [Done]
-# 6 - Scatterplot Popularity vs Plays [Done]
-# 7 - Radar Chart for song feelings sound [Rejected]
-# 8 - Underplayed and Overplayed songs/artists (add a list of top 5 as "extra") [Done]
-#   - Format artists name by removing "acentos" and spaces at the end of their names [Done]
-#   - Issue with "Bruno Mars, Lady Gaga" and "Lady Gaga,Bruno Mars"
-
 # Add image of selected radio up top
-
-# If 'release_year_range' wasn't filtered, keep it the min/max for every radio
-    # i.e if it's 1997-2024 (min-max) for Cidade and we change to RFM, keep the min-max of RFM
-# Same thing for genres filter - If it was filtered, don't had other genres as 'true' when switching between radios
-
-
-# Improve functions comments etc
-# Format tooltips
