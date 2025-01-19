@@ -3,7 +3,9 @@ from setuptools import setup, find_packages
 # Read requirements.txt for dependencies
 def parse_requirements():
     with open('requirements.txt') as f:
-        return f.read().splitlines()
+        lines = f.read().splitlines()
+        # Filter out -e and git+ lines
+        return [line for line in lines if not line.startswith('-e') and 'git+' not in line]
 
 setup(
     name='radio_song_analysis',
@@ -18,6 +20,9 @@ setup(
     # packages=find_packages(), 
     include_package_data=False,  # Ensures non-Python files are included
     install_requires=parse_requirements(),  # Install dependencies from requirements.txt
+    dependency_links=[
+        "git+https://github.com/Tyainss/radio_song_analysis@da24e1546d82fb55dd15bbac0a19fb87236a8dbb#egg=radio_song_analysis"
+    ],
     python_requires='>=3.8',  # Specify Python version compatibility
     classifiers=[
         'Programming Language :: Python :: 3',
