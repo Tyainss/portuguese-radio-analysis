@@ -118,10 +118,11 @@ def display_track_kpis(app_config: dict, ncols: int):
 
 def display_track_languages(app_config: dict, ncols: int, num_languages: int, mapped_metric_type: str):
     st.subheader(
-        f':earth_africa: :blue[Top {num_languages} Languages] by {st.session_state['metric_type']} Tracks', 
+        f':earth_africa: :blue[Top {num_languages} Languages]', 
         divider="gray",
         help='Language detected by :blue-background[**analysing the lyrics**] with a language-detection Python library'
     )
+    st.caption(f'*by {st.session_state['metric_type']} Tracks*')
     track_plots_cols = st.columns(ncols)
 
     for i, (_, val) in enumerate(app_config.items()):
@@ -246,7 +247,7 @@ def display_track_languages(app_config: dict, ncols: int, num_languages: int, ma
             fig.update_layout(
                 xaxis_title=None,  # Remove x-axis label
                 yaxis_title=None,  # Remove y-axis label
-                margin=dict(l=10, r=30, t=30, b=0),  # Add padding around the plot
+                margin=dict(l=10, r=30, t=0, b=0),  # Add padding around the plot
                 height=400,
                 hoverlabel_align="left",
             )
@@ -319,7 +320,7 @@ def display_track_decades(app_config: dict, ncols: int, metric_type_option: str,
             fig_tracks.update_layout(
                 xaxis_title=None,
                 yaxis_title=None,
-                margin=dict(l=10, r=30, t=30, b=0),
+                margin=dict(l=10, r=30, t=0, b=0),
                 height=400,
                 xaxis=dict(type='category', categoryorder='array', categoryarray=df_tracks_decade_pandas["decade_label"].tolist()),  # Ensure proper ordering
                 hoverlabel_align="left",
@@ -365,10 +366,11 @@ def display_artist_kpis(app_config: dict, ncols: int):
 
 def display_artist_countries(app_config: dict, ncols: int, num_countries: int, mapped_metric_type: str):
     st.subheader(
-        f':earth_africa: :blue[Top {num_countries} countries] by {st.session_state['metric_type']} Artists', 
+        f':earth_africa: :blue[Top {num_countries} countries]', 
         divider="gray",
         help='Country data extracted from :blue-background[**MusicBrainz**] and complemented with :blue-background[**Wikipedia**] when missing.'
         )
+    st.caption(f'*by {st.session_state['metric_type']} Artists*')
     artist_plots_cols = st.columns(ncols)
 
     for i, (_, val) in enumerate(app_config.items()):
@@ -488,7 +490,7 @@ def display_artist_countries(app_config: dict, ncols: int, num_countries: int, m
             fig.update_layout(
                 xaxis_title=None,
                 yaxis_title=None,
-                margin=dict(l=10, r=30, t=30, b=0),
+                margin=dict(l=10, r=30, t=0, b=0),
                 height=400,
                 hoverlabel_align="left",
             )
@@ -562,7 +564,7 @@ def display_artist_decades(app_config: dict, ncols: int, metric_type_option: str
             fig_artists.update_layout(
                 xaxis_title=None,
                 yaxis_title=None,
-                margin=dict(l=10, r=30, t=30, b=0),
+                margin=dict(l=10, r=30, t=10, b=0),
                 height=400,
                 xaxis=dict(type='category', categoryorder='array', categoryarray=df_artists_decade_pandas["decade_year"].tolist()),  # Ensure proper ordering
                 hoverlabel_align="left",
@@ -576,7 +578,7 @@ def display_track_duration(app_config: dict, ncols: int, metric_type_option: str
         divider='gray',
         help='Truncated based on the number of minutes of the song. The duration of the song is extracted from :green[Spotify]'
     )
-    st.caption('*Duration in minutes*')
+    st.caption(f'*Duration in minutes; by {st.session_state['metric_type']} Tracks*')
     track_duration_cols = st.columns(ncols)
 
     for i, (_, val) in enumerate(app_config.items()):
@@ -659,6 +661,7 @@ def display_top_genres(app_config: dict, ncols: int, metric_type_option: str, ma
         divider="gray",
         help='Genre information gathered from :green[**Spotify**] and :blue-background[**based of the main genre of the artist**].'
     )
+    st.caption(f'*by {st.session_state['metric_type']} Tracks*')
     genre_cols = st.columns(ncols)
 
     for i, (_, val) in enumerate(app_config.items()):
@@ -783,8 +786,8 @@ def display_sentiment_analysis(app_config: dict, ncols: int, global_max_mean_val
                 ),
                 # showlegend=True,
                 # title=f"Lyrics Sentiment Star Plot for {radio_name}"
-                margin=dict(l=100, r=100, t=50, b=50),  # Adjust for long genre names
-                height=400,
+                margin=dict(l=100, r=100, t=0, b=0),  # Adjust for long genre names
+                height=300,
                 hoverlabel_align = 'left',
             )
 
@@ -808,7 +811,7 @@ def display_sentiment_analysis(app_config: dict, ncols: int, global_max_mean_val
                     }
                     """,
             ):
-                _, csv_col, _ = st.columns([1,2,1])
+                _, csv_col, _ = st.columns([1,3,1])
                 with csv_col:
                     st.download_button(
                         label=f"Export :grey-background[**{radio_name}**] Data as CSV",
