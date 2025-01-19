@@ -8,11 +8,11 @@ import plotly.graph_objects as go
 from data_extract.config_manager import ConfigManager
 
 from utils import storage, filters, calculations
-
 from utils.helper import (
     language_to_flag_dict, nationality_to_flag_dict, language_full_name_dict,
     flag_to_nationality_dict, number_formatter,
 )
+from utils.overview_comparison import mappings
 
 
 cm = ConfigManager()
@@ -34,7 +34,6 @@ def load_main_df(pandas_format=False):
 
 df_joined = load_main_df()
 df_joined = filters.filter_by_most_recent_min_date(df_joined, cm.RADIO_COLUMN, cm.DAY_COLUMN)
-
 
 min_date = df_joined[cm.DAY_COLUMN].min()
 max_date = df_joined[cm.DAY_COLUMN].max()
@@ -158,34 +157,8 @@ for i, (key, val) in enumerate(app_config.items()):
             global_max_mean_values[metric] = max(global_max_mean_values[metric], mean_value)
 
 
-graph_metric_map = {
-    'Avg Tracks': 'avg_tracks',
-    'Avg Hours Played': 'avg_time_played',
-    'Avg Popularity': 'avg_popularity'
-}
-
-metric_type_map = {
-    'Unique Tracks': 'unique',
-    'Unique Artists': 'unique',
-    'Unique': 'unique',
-    'Total Tracks': 'total',
-    'Total Artists': 'total',
-    'Total': 'total',
-    'Avg Tracks': 'average',
-    'Avg Artists': 'average',
-    'Average': 'average',
-}
-
-category_map = {
-    "lyrics_joy": "Joy",
-    "lyrics_sadness": "Sadness",
-    "lyrics_optimism": "Optimism",
-    "lyrics_anger": "Anger",
-    "lyrics_love_occurrences": "Love Mentions"
-}
-
-mapped_metric_type = metric_type_map.get(st.session_state['metric_type'])
-selected_metric = graph_metric_map[st.session_state['ts_graph']]
+mapped_metric_type = mappings.metric_type_map.get(st.session_state['metric_type'])
+selected_metric = mappings.graph_metric_map[st.session_state['ts_graph']]
 
 ### Header KPIs + Logo
 ncols = len(app_config)
@@ -1000,7 +973,7 @@ for i, (key, val) in enumerate(app_config.items()):
         # Close the loop for the radar chart
         normalized_values.append(normalized_values[0])  # Repeat the first value to close the radar chart
         categories = list(mean_values.keys()) + [list(mean_values.keys())[0]]  # Repeat the first category
-        categories = list(category_map.values()) + [list(category_map.values())[0]]  # Map to display labels
+        categories = list(mappings.category_map.values()) + [list(mappings.category_map.values())[0]]  # Map to display labels
 
         # Create radar chart
         fig = go.Figure()
