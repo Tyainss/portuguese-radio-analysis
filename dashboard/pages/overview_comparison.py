@@ -346,8 +346,5 @@ plots.display_sentiment_analysis(
 # Define color pallete for each radio
 
 
-# Allow to select year of release for comparison
-# Add filter to select radios
 # Make all bar charts the same y-axis
 # Add a 'Segmented Control' to allow to choose between seeing percentages or total values (or toggle?)
-# Format Weekday names shorter

@@ -78,7 +78,7 @@ def display_weekly_graph(app_config: dict, ncols: int, selected_metric: str, met
                 metric=selected_metric,
                 radio_name=radio_name,
                 x_axis_column='weekday_name',
-                x_axis_label='Day of Week',
+                x_axis_label='',
                 y_axis_range=(
                     metric_ranges[selected_metric]['weekday']['min'] * 0.95,
                     metric_ranges[selected_metric]['weekday']['max'] * 1.05

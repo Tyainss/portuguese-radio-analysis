@@ -99,7 +99,7 @@ def prepare_weekday_metrics(_df: pl.DataFrame, metric: str, output_unit: str = '
     """
     # Extract the weekday from the 'day' column
     df = _df.with_columns(
-        pl.col(cm.DAY_COLUMN).dt.to_string('%A').alias("weekday"),
+        pl.col(cm.DAY_COLUMN).dt.to_string('%a').alias("weekday"),
         pl.col(cm.DAY_COLUMN).dt.weekday().alias("weekday_number"),
     )
 
