@@ -115,7 +115,6 @@ pytz==2024.2
 PyWavelets==1.8.0
 PyYAML==6.0.2
 quickjs==1.19.4
-git+https://github.com/Tyainss/radio_song_analysis@da24e1546d82fb55dd15bbac0a19fb87236a8dbb#egg=radio_song_analysis
 redis==5.2.0
 referencing==0.35.1
 regex==2024.11.6
