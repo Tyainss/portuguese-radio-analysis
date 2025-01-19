@@ -1,16 +1,16 @@
 {
-    "RADIO_CSV_PATH": ".\\transform_folder\\radio_data.csv",
-    "TRACK_INFO_CSV_PATH": ".\\transform_folder\\track_info.csv",
-    "ARTIST_INFO_CSV_PATH": ".\\transform_folder\\artist_info.csv",
+    "RADIO_CSV_PATH": ".//transform_folder//radio_data.csv",
+    "TRACK_INFO_CSV_PATH": ".//transform_folder//track_info.csv",
+    "ARTIST_INFO_CSV_PATH": ".//transform_folder//artist_info.csv",
     
-    "SPOTIFY_INFO_CSV_PATH": ".\\extract_folder\\spotify_info_extract.csv",
-    "LYRICS_INFO_CSV_PATH": ".\\extract_folder\\lyrics_info_extract.csv",
-    "MUSICBRAINZ_INFO_CSV_PATH": ".\\extract_folder\\musicbrainz_info_extract.csv",
-    "WIKIPEDIA_INFO_CSV_PATH": ".\\extract_folder\\wikipedia_info_extract.csv",
+    "SPOTIFY_INFO_CSV_PATH": ".//extract_folder//spotify_info_extract.csv",
+    "LYRICS_INFO_CSV_PATH": ".//extract_folder//lyrics_info_extract.csv",
+    "MUSICBRAINZ_INFO_CSV_PATH": ".//extract_folder//musicbrainz_info_extract.csv",
+    "WIKIPEDIA_INFO_CSV_PATH": ".//extract_folder//wikipedia_info_extract.csv",
 
     "WEB_SCRAPPER": {
-        "CHROME_DRIVER_PATH": "D:\\Transferências\\chromedriver-win64\\chromedriver.exe",
-        "CSV_PATH": ".\\extract_folder\\{radio}_track_data_extract.csv",
+        "CHROME_DRIVER_PATH": "D://Transferências//chromedriver-win64//chromedriver.exe",
+        "CSV_PATH": ".//extract_folder//{radio}_track_data_extract.csv",
         "WAIT_DURATION": 15,
 
         "WEB_SITES": {
