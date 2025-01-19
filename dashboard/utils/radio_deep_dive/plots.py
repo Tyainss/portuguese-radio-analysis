@@ -206,7 +206,7 @@ def display_sparkline(radio_df: pl.DataFrame, view_option: str):
 
 
 def display_plot_dataframe(radio_df: pl.DataFrame, view_option: str):
-    st.subheader("Dataframe Overview")
+    st.subheader(f"Top 50 {view_option} :blue[Table Overview]")
     # Handle empty dataframe scenario
     if radio_df.is_empty():
         st.warning("No available data to display.")
@@ -753,7 +753,7 @@ def display_popularity_vs_plays_quadrant(radio_df: pl.DataFrame, view_option: st
     else:  # "Track"
         group_cols = [cm.ARTIST_NAME_COLUMN, cm.TRACK_TITLE_COLUMN]
 
-    st.subheader(f'🔍 Does Popularity Always Mean More Plays?')
+    st.subheader(f'🔍 Does :blue[Popularity] Always Mean More Plays?')
 
     st.markdown(
         f"""
@@ -785,8 +785,23 @@ def display_popularity_vs_plays_quadrant(radio_df: pl.DataFrame, view_option: st
     if other_radios_df is not None:
         other_scatter_df = process_scatter_data(other_radios_df)
 
-    def generate_quadrant_chart(df: pl.DataFrame, title_suffix: str):
-        """Generates a scatterplot quadrant chart with labels for top-played artists/tracks and quadrant lines."""
+    def generate_quadrant_chart(df: pl.DataFrame, tooltip_color: str = "#4E87F9"):
+        """
+        Generates a scatterplot quadrant chart with labels for top-played artists/tracks and quadrant lines.
+        
+        Parameters:
+            df (pl.DataFrame): The dataframe to visualize.
+            tooltip_color (str): Hex color for tooltip styling (default: light blue).
+        """
+        if view_option == 'Track':
+            df = df.with_columns(
+                (pl.col(cm.TRACK_TITLE_COLUMN) + ' - ' + pl.col(cm.ARTIST_NAME_COLUMN)).alias('display_label')
+            )
+            color_col = 'display_label'
+        else:
+            color_col = cm.ARTIST_NAME_COLUMN
+
+        # Convert Polars dataframe to Pandas for Plotly compatibility
         df_pd = df.to_pandas()
 
         # Calculate median values for quadrants
@@ -796,14 +811,33 @@ def display_popularity_vs_plays_quadrant(radio_df: pl.DataFrame, view_option: st
         # Select only the top N most played artists/tracks for labeling
         top_played = df_pd.nlargest(top_n_labels, "play_count")
 
+        # Prepare customdata for tooltips
+        df_pd["customdata"] = df_pd.apply(
+            lambda row: [row[color_col], number_formatter(row["play_count"]), number_formatter(row["total_popularity"])],
+            axis=1
+        )
+
+        # Create the scatter plot
         fig = px.scatter(
             df_pd,
             x="play_count",
             y="total_popularity",
-            # title=f"Popularity vs. Plays - {title_suffix}"
+            hover_data={"play_count": False, "total_popularity": False},  # Exclude these from default hover
             title='',
-            hover_data={group_cols[-1]: True, "play_count": True, "total_popularity": True},
         )
+
+        # Enhanced tooltips
+        for trace in fig.data:
+            # Set hovertemplate with custom formatting
+            trace.update(
+                hovertemplate=(
+                     f"<span style='font-size:16px; font-weight:bold; color:{tooltip_color};'>%{{customdata[0]}}</span><br>"  # Artist/Track Name
+                    "<span style='font-size:14px; font-weight:bold;'>🎵 %{customdata[1]} Plays</span><br>"  # Plays
+                    "<span style='font-size:14px; font-weight:bold;'>⭐ %{customdata[2]} Popularity</span><br>"  # Popularity
+                    "<extra></extra>"
+                ),
+                customdata=df_pd["customdata"].tolist(),
+            )
 
         # Add quadrant dividing lines (with labels)
         fig.add_shape(go.layout.Shape(
@@ -853,12 +887,12 @@ def display_popularity_vs_plays_quadrant(radio_df: pl.DataFrame, view_option: st
 
     # Display left chart (selected radio)
     with col1:
-        st.plotly_chart(generate_quadrant_chart(radio_scatter_df, "(Selected Radio)"), use_container_width=True)
+        st.plotly_chart(generate_quadrant_chart(radio_scatter_df), use_container_width=True)
 
     # Display right chart (other radios) if provided
     if other_radios_df is not None:
         with col2:
-            st.plotly_chart(generate_quadrant_chart(other_scatter_df, "(Other Radios)"), use_container_width=True)
+            st.plotly_chart(generate_quadrant_chart(other_scatter_df), use_container_width=True)
 
 
 def display_underplayed_overplayed_highlights(radio_df: pl.DataFrame, other_radios_df: pl.DataFrame, view_option: str):
@@ -1059,7 +1093,7 @@ def display_top_genres_evolution(radio_df: pl.DataFrame, other_radios_df: Option
     """
     Displays a bump chart tracking the evolution of the top 5 genres per week.
     """
-    st.subheader("🎼 How Have the Top Genres Shifted Over Time?")
+    st.subheader("🎼 How Have the :blue[Top Genres] Shifted Over Time?")
 
     st.markdown(
         """
@@ -1266,7 +1300,6 @@ def display_top_genres_evolution(radio_df: pl.DataFrame, other_radios_df: Option
 
         # Tweak layout
         fig.update_layout(
-            # title=f"Top 5 Genres Evolution {title_suffix}",
             title='',
             xaxis_title=None,
             yaxis_title='Rank' if show_yaxis_title else None,
