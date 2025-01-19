@@ -106,8 +106,8 @@ with st.sidebar:
         )
 
     # Get min and max dates
-    min_date = radio_df[cm.DAY_COLUMN].min()
-    max_date = radio_df[cm.DAY_COLUMN].max()
+    min_date = df_joined[cm.DAY_COLUMN].min()
+    max_date = df_joined[cm.DAY_COLUMN].max()
 
     if 'date_period' not in st.session_state:
         st.session_state['date_period'] = (min_date, max_date)
@@ -126,10 +126,11 @@ with st.sidebar:
         start_date, *end_date = new_date_period
         radio_df = filters.filter_by_date(radio_df, cm.DAY_COLUMN, start_date, end_date[0] if end_date else None)
         other_radios_df = filters.filter_by_date(other_radios_df, cm.DAY_COLUMN, start_date, end_date[0] if end_date else None)
+        df_joined = filters.filter_by_date(df_joined, cm.DAY_COLUMN, start_date, end_date[0] if end_date else None)
 
     # Relase Year Filter
     release_years = (
-        radio_df
+        df_joined
         .with_columns(pl.col('spotify_release_date').dt.year().cast(pl.Int32).alias('release_year'))
         .drop_nulls('release_year')
         .select('release_year')
@@ -162,76 +163,6 @@ with st.sidebar:
     radio_df = filters.filter_by_release_year_range(radio_df, 'spotify_release_date', start_release_year, end_release_year)
     other_radios_df = filters.filter_by_release_year_range(other_radios_df, 'spotify_release_date', start_release_year, end_release_year)
 
-    # # Genres Filter
-    # with st.expander(label='Filter by :blue[**Genres**]', icon='🎼'):
-    #     # Checkbox for Select All
-    #     filters.update_select_all_checkbox(
-    #         state_key='genres_selection',
-    #         filter_column='Selected?',
-    #         checkbox_key='select_all_genres'
-    #     )
-
-    #     # Render the checkbox
-    #     st.checkbox(
-    #         'Select All',
-    #         key='select_all_genres',
-    #         on_change=filters.toggle_select_all,
-    #         args=('genres_selection', 'Selected?', 'select_all_genres'),
-    #         help='Genres ordered by importance\n\ni.e Number of plays, in descending order'
-    #     )
-
-    #     unique_genres = radio_df.select('spotify_genres').unique()
-    #     # Extract unique genres and their count from radio_df
-    #     genre_counts = (
-    #         radio_df
-    #         .group_by('spotify_genres')
-    #         .len()
-    #         .rename({'len': 'genre_count'})
-    #     )
-
-    #     # If 'genres_selection' is not in session_state, initialize it
-    #     # Otherwise refresh it with the selcted radio genres
-    #     if 'genres_selection' not in st.session_state:
-    #         genre_df = (
-    #             unique_genres
-    #             .join(genre_counts, on='spotify_genres', how='left')
-    #             .with_columns(pl.col('genre_count').fill_null(0))
-    #             .sort('genre_count', descending=True)
-    #             .with_columns(pl.lit(True).alias('Selected?'))  # Default selection to True
-    #         )
-    #         st.session_state['genres_selection'] = genre_df
-    #     else:
-    #         # Drop genre_count from session_state before joining to avoid duplication
-    #         existing_selection = st.session_state['genres_selection'].drop(['genre_count'], strict=False)
-
-    #         # Perform a LEFT JOIN to merge existing selections with new genres
-    #         genre_df = (
-    #             unique_genres
-    #             .join(existing_selection, on='spotify_genres', how='left')
-    #             .join(genre_counts, on='spotify_genres', how='left')
-    #             .with_columns(
-    #                 pl.col('Selected?').fill_null(True),
-    #                 pl.col('genre_count').fill_null(0)
-    #             )
-    #             .sort('genre_count', descending=True)
-    #         )
-
-    #         # Update session_state with new genre_df
-    #         st.session_state['genres_selection'] = genre_df
-
-    #     st.data_editor(
-    #         st.session_state['genres_selection'].drop(['genre_count'], strict=False),
-    #         use_container_width=True,
-    #         column_config={
-    #             'spotify_genres': {'width': 150},
-    #             'Selected?': {'width': 80},
-    #         },
-    #         key='genre_editor',
-    #         on_change=filters.update_editor_selection_in_session_state,
-    #         args=('genre_editor', 'genres_selection'),
-    #         hide_index=True
-    #     )
-    
     # Genres Filter
     with st.expander(label='Filter by :blue[**Genres**]', icon='🎼'):
         st.caption("• Marks genres present in the selected radio")
@@ -361,7 +292,7 @@ with st.sidebar:
     # Artists Filter
     with st.expander(label='Filter by :blue[**Artist**]', icon='🎤'):
         st.caption("• Marks artists present in the selected radio")
-        # st.markdown("**Note:** • flags artists present in the selected radio")
+        
         # Checkbox for Select All
         filters.update_select_all_checkbox(
             state_key='artists_selection',
@@ -471,55 +402,6 @@ with st.sidebar:
             args=('artists_editor', 'artists_selection'),
             hide_index=True
         )
-        # artists_counts = (
-        #     radio_df
-        #     .group_by(cm.ARTIST_NAME_COLUMN)
-        #     .len()
-        #     .rename({'len': 'artist_count'})
-        # )
-
-        # # If 'artists_selection' is not in session_state, initialize it
-        # # Otherwise refresh it with the selcted radio artists
-        # if 'artists_selection' not in st.session_state:
-        #     artists_df = (
-        #         unique_artists
-        #         .join(artists_counts, on=cm.ARTIST_NAME_COLUMN, how='left')
-        #         .with_columns(pl.col('artist_count').fill_null(0))
-        #         .sort('artist_count', descending=True)
-        #         .with_columns(pl.lit(True).alias('Selected?'))  # Default selection to True
-        #     )
-        #     st.session_state['artists_selection'] = artists_df
-        # else:
-        #     # Drop artiste_count from session_state before joining to avoid duplication
-        #     existing_selection = st.session_state['artists_selection'].drop(['artist_count'], strict=False)
-
-        #     # Perform a LEFT JOIN to merge existing selections with new artists
-        #     artists_df = (
-        #         unique_artists
-        #         .join(existing_selection, on=cm.ARTIST_NAME_COLUMN, how='left')
-        #         .join(artists_counts, on=cm.ARTIST_NAME_COLUMN, how='left')
-        #         .with_columns(
-        #             pl.col('Selected?').fill_null(True),  # Fill missing selections with True
-        #             pl.col('artist_count').fill_null(0)  # Fill missing counts with 0
-        #         )
-        #         .sort('artist_count', descending=True)  # Sort by descending count
-        #     )
-
-        #     # Update session_state with new artists_df
-        #     st.session_state['artists_selection'] = artists_df
-
-        # st.data_editor(
-        #     st.session_state['artists_selection'].drop(['artist_count'], strict=False),
-        #     use_container_width=True,
-        #     column_config={
-        #         cm.ARTIST_NAME_COLUMN: {'width': 150},
-        #         'Selected?': {'width': 80},
-        #     },
-        #     key='artists_editor',
-        #     on_change=filters.update_editor_selection_in_session_state,
-        #     args=('artists_editor', 'artists_selection'),
-        #     hide_index=True
-        # )
 
     # Filter the dataframe by selected artists
     if not st.session_state['select_all_artists']:
@@ -535,13 +417,6 @@ with st.sidebar:
     # Reset settings button
     st.button('Reset Page Settings', on_click=reset_page_settings)
 
-radio_chosen
-
-
-# radio_df.height
-# other_radios_df.height
-# radio_df
-# other_radios_df
 
 # Handle empty dataframe scenario
 if radio_df.is_empty():
