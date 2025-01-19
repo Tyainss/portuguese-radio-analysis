@@ -43,13 +43,13 @@ class ConfigManager:
         # spotify_popularity
 
     def _initialize_secrets(self) -> None:
-        self.SPOTIFY_CLIENT_ID = self.config['SPOTIFY_CLIENT_ID']
-        self.SPOTIFY_CLIENT_SECRET = self.config['SPOTIFY_CLIENT_SECRET']
+        self.SPOTIFY_CLIENT_ID = self.config.get('SPOTIFY_CLIENT_ID')
+        self.SPOTIFY_CLIENT_SECRET = self.config.get('SPOTIFY_CLIENT_SECRET')
 
-        self.MUSICBRAINZ_CLIENT_ID = self.config['MUSICBRAINZ_CLIENT_ID']
-        self.MUSICBRAINZ_CLIENT_SECRET = self.config['MUSICBRAINZ_CLIENT_SECRET']
+        self.MUSICBRAINZ_CLIENT_ID = self.config.get('MUSICBRAINZ_CLIENT_ID')
+        self.MUSICBRAINZ_CLIENT_SECRET = self.config.get('MUSICBRAINZ_CLIENT_SECRET')
 
-        self.GENIUS_ACCESS_TOKEN = self.config['GENIUS_ACCESS_TOKEN']       
+        self.GENIUS_ACCESS_TOKEN = self.config.get('GENIUS_ACCESS_TOKEN')
 
         self.WIKI_ACCESS_TOKEN = self.config.get('WIKIPEDIA_ACCESS_TOKEN', None)
         self.WIKI_CLIENT_SECRET = self.config.get('WIKIPEDIA_CLIENT_SECRET', None)
