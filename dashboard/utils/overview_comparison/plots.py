@@ -40,7 +40,7 @@ def display_header_kpis(app_config: dict, ncols: int):
 
 def display_hourly_graph(app_config: dict, ncols: int, selected_metric: str, metric_ranges: dict):
     st.subheader(
-        f'{st.session_state['ts_graph']} by hour', 
+        f'{st.session_state['ts_graph']} :blue[by hour]', 
         divider="gray",
         help="Track duration extracted from :green[Spotify].\n\nThe average played time of an hour can be above 1 if the song is not played in its entirety on the radio."
     )
@@ -64,7 +64,7 @@ def display_hourly_graph(app_config: dict, ncols: int, selected_metric: str, met
             )
 
 def display_weekly_graph(app_config: dict, ncols: int, selected_metric: str, metric_ranges: dict):
-    st.subheader(f'{st.session_state['ts_graph']} by weekday', divider="gray")
+    st.subheader(f'{st.session_state['ts_graph']} :blue[by weekday]', divider="gray")
     weekday_graph_cols = st.columns(ncols)
 
     for i, (_, val) in enumerate(app_config.items()):
@@ -118,7 +118,7 @@ def display_track_kpis(app_config: dict, ncols: int):
 
 def display_track_languages(app_config: dict, ncols: int, num_languages: int, mapped_metric_type: str):
     st.subheader(
-        f':earth_africa: Top {num_languages} Languages by {st.session_state['metric_type']} Tracks', 
+        f':earth_africa: :blue[Top {num_languages} Languages] by {st.session_state['metric_type']} Tracks', 
         divider="gray",
         help='Language detected by :blue-background[**analysing the lyrics**] with a language-detection Python library'
     )
@@ -254,7 +254,7 @@ def display_track_languages(app_config: dict, ncols: int, num_languages: int, ma
 
 def display_track_decades(app_config: dict, ncols: int, metric_type_option: str, mapped_metric_type: str):
     st.subheader(
-        f':date: {st.session_state['metric_type']} Tracks by *decade*', 
+        f':date: {st.session_state['metric_type']} Tracks by :blue[*decade*]', 
         divider="gray", 
         help="""Based on the :blue-background[**year of release**] of the track
         \n\nData Obtained from :green[Spotify]"""
@@ -365,7 +365,7 @@ def display_artist_kpis(app_config: dict, ncols: int):
 
 def display_artist_countries(app_config: dict, ncols: int, num_countries: int, mapped_metric_type: str):
     st.subheader(
-        f':earth_africa: Top {num_countries} countries by {st.session_state['metric_type']} Artists', 
+        f':earth_africa: :blue[Top {num_countries} countries] by {st.session_state['metric_type']} Artists', 
         divider="gray",
         help='Country data extracted from :blue-background[**MusicBrainz**] and complemented with :blue-background[**Wikipedia**] when missing.'
         )
@@ -497,7 +497,7 @@ def display_artist_countries(app_config: dict, ncols: int, num_countries: int, m
 
 def display_artist_decades(app_config: dict, ncols: int, metric_type_option: str, mapped_metric_type: str):
     st.subheader(
-        f':date: {st.session_state['metric_type']} Artists by *decade*', 
+        f':date: {st.session_state['metric_type']} Artists by :blue[*decade*]', 
         divider="gray",
         help="""Based on either the :blue-background[**birth year**] of the artists if they're a person
         or the :blue-background[**career start year**] of a group
@@ -572,10 +572,11 @@ def display_artist_decades(app_config: dict, ncols: int, metric_type_option: str
 
 def display_track_duration(app_config: dict, ncols: int, metric_type_option: str, mapped_metric_type: str):
     st.subheader(
-        f':clock4: Track Duration (minutes)', 
+        f':clock4: :blue[Track Duration]', 
         divider='gray',
         help='Truncated based on the number of minutes of the song. The duration of the song is extracted from :green[Spotify]'
     )
+    st.caption('*Duration in minutes*')
     track_duration_cols = st.columns(ncols)
 
     for i, (_, val) in enumerate(app_config.items()):
@@ -633,7 +634,7 @@ def display_track_duration(app_config: dict, ncols: int, metric_type_option: str
                 hover_data={"tooltip_text": True},  # Use custom tooltips
             )
             fig_duration.update_traces(
-                marker_color="#d3d3d3",  # Light gray for bars
+                # marker_color="#d3d3d3",  # Light gray for bars
                 texttemplate="%{text}",
                 textposition="outside",
                 hovertemplate="%{customdata[0]}",
@@ -643,7 +644,7 @@ def display_track_duration(app_config: dict, ncols: int, metric_type_option: str
             fig_duration.update_layout(
                 xaxis_title=None,
                 yaxis_title=None,
-                margin=dict(l=10, r=30, t=30, b=0),
+                margin=dict(l=10, r=30, t=0, b=0),
                 height=400,
                 xaxis=dict(type="category"),  # Treat durations as categories
                 yaxis=dict(title=metric_type_option, tickformat=","),
@@ -654,7 +655,7 @@ def display_track_duration(app_config: dict, ncols: int, metric_type_option: str
 
 def display_top_genres(app_config: dict, ncols: int, metric_type_option: str, mapped_metric_type: str):
     st.subheader(
-        f':musical_score: Top 10 Genres', 
+        f':musical_score: Top 10 :blue[Genres]', 
         divider="gray",
         help='Genre information gathered from :green[**Spotify**] and :blue-background[**based of the main genre of the artist**].'
     )
@@ -726,7 +727,7 @@ def display_top_genres(app_config: dict, ncols: int, metric_type_option: str, ma
             fig_genres.update_layout(
                 xaxis_title=None,
                 yaxis_title=None,
-                margin=dict(l=150, r=30, t=30, b=10),  # Adjust for long genre names
+                margin=dict(l=150, r=30, t=0, b=10),  # Adjust for long genre names
                 height=400,
                 hoverlabel_align = 'left',
             )
@@ -735,7 +736,7 @@ def display_top_genres(app_config: dict, ncols: int, metric_type_option: str, ma
 
 def display_sentiment_analysis(app_config: dict, ncols: int, global_max_mean_values: dict):
     st.subheader(
-        f'😊 Sentiment Analysis', 
+        f'😊 :blue[Sentiment Analysis]', 
         divider="gray",
         help="""These plots show the relative strength of various sentiment metrics (Joy, Sadness, Optimism, Anger, and Love) 
         :blue-background[**calculated from the song lyrics played**]. Sentiments are derived using NLP models, while the 
