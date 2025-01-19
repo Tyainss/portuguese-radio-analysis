@@ -31,6 +31,9 @@ def load_main_df(pandas_format=False):
 df_joined = load_main_df()
 df_joined = filters.filter_by_most_recent_min_date(df_joined, cm.RADIO_COLUMN, cm.DAY_COLUMN)
 
+min_release_date = df_joined.with_columns(pl.col(cm.SPOTIFY_RELEASE_DATE_COLUMN).dt.year().cast(pl.Int32).alias('release_year'))['release_year'].min()
+max_release_date = df_joined.with_columns(pl.col(cm.SPOTIFY_RELEASE_DATE_COLUMN).dt.year().cast(pl.Int32).alias('release_year'))['release_year'].max()
+
 
 def reset_page_settings():
     '''
@@ -54,7 +57,8 @@ def reset_page_settings():
 
     # Reset release year filter
     if release_years:
-        st.session_state['release_year_range'] = (release_years[0], release_years[-1])
+        # st.session_state['release_year_range'] = (release_years[0], release_years[-1])
+        st.session_state['release_year_range'] = (min_release_date, max_release_date)
 
 if 'radio_name_filter' not in st.session_state:
     st.session_state['radio_name_filter'] = radio_options[0]

@@ -29,6 +29,9 @@ df_joined = filters.filter_by_most_recent_min_date(df_joined, cm.RADIO_COLUMN, c
 
 min_date = df_joined[cm.DAY_COLUMN].min()
 max_date = df_joined[cm.DAY_COLUMN].max()
+min_release_date = df_joined.with_columns(pl.col(cm.SPOTIFY_RELEASE_DATE_COLUMN).dt.year().cast(pl.Int32).alias('release_year'))['release_year'].min()
+max_release_date = df_joined.with_columns(pl.col(cm.SPOTIFY_RELEASE_DATE_COLUMN).dt.year().cast(pl.Int32).alias('release_year'))['release_year'].max()
+
 
 if 'date_period' not in st.session_state:
     st.session_state['date_period'] = (min_date, max_date)
@@ -39,6 +42,9 @@ def reset_settings():
     st.session_state['date_period'] = (min_date, max_date)
     st.session_state['ts_graph'] = 'Avg Tracks'
     st.session_state['metric_type'] = 'Unique'
+    # Reset release year filter
+    if release_years:
+        st.session_state['release_year_range'] = (min_release_date, max_release_date)
 
 # Sidebar Settings
 with st.sidebar:
@@ -68,23 +74,47 @@ with st.sidebar:
             \nApplies for :red-background[**Tracks**] and :red-background[**Artists**] metrics"""
     )
 
+    # If user selected a date range
+    if isinstance(new_date_period, tuple) and new_date_period:
+        start_date, *end_date = new_date_period
+        df_joined = filters.filter_by_date(df_joined, cm.DAY_COLUMN, start_date, end_date[0] if end_date else None)
+
+    # Relase Year Filter
+    release_years = (
+        df_joined
+        .with_columns(pl.col(cm.SPOTIFY_RELEASE_DATE_COLUMN).dt.year().cast(pl.Int32).alias('release_year'))
+        .drop_nulls('release_year')
+        .select('release_year')
+        .unique()
+        .sort('release_year', descending=False)
+        ['release_year']
+    ).to_list()
+
+    if 'release_year_range' not in st.session_state:
+        st.session_state['release_year_range'] = (release_years[0], release_years[-1])    
+
+    st.session_state['release_year_range'] = (
+        max(release_years[0], st.session_state['release_year_range'][0]),
+        min(release_years[-1], st.session_state['release_year_range'][1])
+    )
+
+    # Define the range slider and store its value in session state
+    st.slider(
+        ':date: Select the range of :blue[**release years**] for the tracks',
+        min_value=release_years[0],
+        max_value=release_years[-1],
+        value=st.session_state['release_year_range'],
+        key='release_year_slider',
+        on_change=filters.update_release_year_selection_in_session_state,
+        step=1
+    )
+
+    # Unpack selected range from session state
+    start_release_year, end_release_year = st.session_state['release_year_range']
+    df_joined = filters.filter_by_release_year_range(df_joined, 'spotify_release_date', start_release_year, end_release_year)
+
     # Reset settings button
     st.button('Reset Page Settings', on_click=reset_settings)
-
-
-# Apply Date Filter Only After Both Dates Are Selected
-if len(st.session_state['date_period']) == 2:
-    start_date, end_date = st.session_state['date_period']
-    df_filtered = df_joined.filter(
-        (pl.col(cm.DAY_COLUMN) >= start_date) & (pl.col(cm.DAY_COLUMN) <= end_date)
-    )
-elif len(st.session_state['date_period']) == 1:
-    start_date = st.session_state['date_period'][0]
-    df_filtered = df_joined.filter(
-        pl.col(cm.DAY_COLUMN) >= start_date
-    )
-else:
-    df_filtered = df_joined  # Keep unfiltered data if only one date is selected
 
 
 # Calculate global min and max values
@@ -95,7 +125,7 @@ global_max_mean_values = {}  # Dictionary to store global max values for each me
 # Initialize config for each radio
 for i, (key, val) in enumerate(app_config.items()):
     radio_name = val.get('name')
-    app_config[key]['radio_df'] = df_filtered.filter(
+    app_config[key]['radio_df'] = df_joined.filter(
             pl.col(cm.RADIO_COLUMN) == val.get('name')
         )
     app_config[key]['radio_csv'] = storage.generate_csv(app_config[key]['radio_df'])
@@ -163,7 +193,7 @@ plots.display_header_kpis(app_config=app_config, ncols=ncols)
 #######################
 ## Time Series Plots ##
 #######################
-expander = st.expander(label=f'Time Series plots - *{st.session_state['ts_graph']}*', expanded=True, icon='📈')
+expander = st.expander(label=f'Time Series plots', expanded=True, icon='📈')
 with expander:
     
     ###################
@@ -315,11 +345,7 @@ plots.display_sentiment_analysis(
 # Color PT bar differently
 # Define color pallete for each radio
 
-## Minor details
-# Reduce file size with helper functions, if possible
-# Perhaps refactor calculations_helper.py
 
-# Mention on last graphs what is the measure being ussed
 # Allow to select year of release for comparison
 # Add filter to select radios
 # Make all bar charts the same y-axis
