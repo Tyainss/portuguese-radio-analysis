@@ -38,6 +38,7 @@ class ConfigManager:
     def _initialize_columns_config(self) -> None:
         self.SPOTIFY_GENRE_COLUMN = 'spotify_genres'
         self.SPOTIFY_POPULARITY_COLUMN = 'spotify_popularity'
+        self.SPOTIFY_RELEASE_DATE_COLUMN = 'spotify_release_date'
         
         # spotify_popularity
 

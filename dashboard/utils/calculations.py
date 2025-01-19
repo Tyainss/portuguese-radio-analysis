@@ -20,7 +20,7 @@ def _convert_ms(duration_ms, output_unit: str = 'hours') -> float:
     factor = conversion_factors.get(output_unit, 1)
     return round(duration_ms * factor, 2)
 
-@st.cache_data(show_spinner=True)
+# @st.cache_data(show_spinner=True)
 def prepare_hourly_metrics(_df: pl.DataFrame, metric: str, id=None, **kwargs) -> pl.DataFrame:
     """
     Prepares hourly metrics for plotting.
@@ -85,7 +85,7 @@ def prepare_hourly_metrics(_df: pl.DataFrame, metric: str, id=None, **kwargs) ->
     # result = hourly_data
     return result
 
-@st.cache_data(show_spinner=True)
+# @st.cache_data(show_spinner=True)
 def prepare_weekday_metrics(_df: pl.DataFrame, metric: str, output_unit: str = 'hours', id=None) -> pl.DataFrame:
     """
     Prepares weekday metrics for plotting.
@@ -99,7 +99,7 @@ def prepare_weekday_metrics(_df: pl.DataFrame, metric: str, output_unit: str = '
     """
     # Extract the weekday from the 'day' column
     df = _df.with_columns(
-        pl.col(cm.DAY_COLUMN).dt.to_string('%A').alias("weekday"),
+        pl.col(cm.DAY_COLUMN).dt.to_string('%a').alias("weekday"),
         pl.col(cm.DAY_COLUMN).dt.weekday().alias("weekday_number"),
     )
 
@@ -151,7 +151,7 @@ def prepare_weekday_metrics(_df: pl.DataFrame, metric: str, output_unit: str = '
 
     return weekday_data.select(["weekday_name", metric])
 
-@st.cache_data(show_spinner=True)
+# @st.cache_data(show_spinner=True)
 def calculate_avg_tracks(_df: pl.DataFrame, adjusted_calc=True, id=None) -> float:
     df = _df # '_' before indicates the variable is not hashed in cache_data
     if df.is_empty():
@@ -166,7 +166,7 @@ def calculate_avg_tracks(_df: pl.DataFrame, adjusted_calc=True, id=None) -> floa
 
     return round(avg_tracks, 2)
 
-@st.cache_data(show_spinner=True)
+# @st.cache_data(show_spinner=True)
 def calculate_avg_time(_df: pl.DataFrame, output_unit: str = "hours", adjusted_calc=True, id=None) -> float:
     df = _df # '_' before indicates the variable is not hashed in cache_data
     if df.is_empty():
@@ -182,7 +182,7 @@ def calculate_avg_time(_df: pl.DataFrame, output_unit: str = "hours", adjusted_c
 
     return round(avg_time, 2)
     
-@st.cache_data(show_spinner=True) 
+# @st.cache_data(show_spinner=True) 
 def calculate_avg_popularity(_df: pl.DataFrame, id=None) -> float:
     df = _df # '_' before indicates the variable is not hashed in cache_data
     if df.is_empty():
@@ -339,7 +339,7 @@ def calculate_country_counts(
 
     return result.sort(by="metric", descending=True)
 
-@st.cache_data(show_spinner=True)
+# @st.cache_data(show_spinner=True)
 def calculate_decade_metrics(
     _df: pl.DataFrame,
     date_column: str,
@@ -454,7 +454,7 @@ def calculate_decade_metrics(
 
     return result.sort("decade_year")
 
-@st.cache_data(show_spinner=True)
+# @st.cache_data(show_spinner=True)
 def calculate_duration_metrics(
     _df: pl.DataFrame,
     duration_column: str,
@@ -541,7 +541,7 @@ def calculate_duration_metrics(
 
     return result.sort("duration_minutes")
 
-@st.cache_data(show_spinner=True)
+# @st.cache_data(show_spinner=True)
 def calculate_genre_metrics(
     _df: pl.DataFrame,
     genre_column: str,

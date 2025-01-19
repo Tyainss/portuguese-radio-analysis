@@ -5,6 +5,7 @@ from tqdm.asyncio import tqdm_asyncio
 
 from config_manager import ConfigManager
 from helper import Helper
+from data_extract import logger
 
 class AsyncSpotifyAPI:
     
@@ -16,6 +17,13 @@ class AsyncSpotifyAPI:
         self.token_url = 'https://accounts.spotify.com/api/token'
         self.base_url = 'https://api.spotify.com/v1'
         self.access_token = None
+        self.semaphore = asyncio.Semaphore(10)  # Limit to 10 concurrent requests
+
+    def _encode_client_credentials(self):
+        """Helper function to encode client credentials in base64."""
+        import base64
+        credentials = f"{self.client_id}:{self.client_secret}"
+        return base64.b64encode(credentials.encode()).decode()
 
     async def authenticate(self):
         """Obtain the access token asynchronously using client credentials."""
@@ -37,51 +45,78 @@ class AsyncSpotifyAPI:
                             return
                         elif response.status == 502:
                             wait_time = 2 ** attempt
-                            print(f"Received 502 error. Retrying after {wait_time} seconds.")
+                            logger.info(f"Received 502 error. Retrying after {wait_time} seconds.")
                             await asyncio.sleep(wait_time)
                         else:
-                            print(f"Failed to authenticate: Status {response.status}")
+                            logger.error(f"Failed to authenticate: Status {response.status}")
                             await response.text()
                 except aiohttp.ClientConnectorError as e:
-                    print(f"Connection error during authentication attempt {attempt + 1}: {e}")
+                    logger.error(f"Connection error during authentication attempt {attempt + 1}: {e}")
                     await asyncio.sleep(2 ** attempt)
                 except Exception as e:
-                    print(f"Unexpected error during authentication: {e}")
+                    logger.error(f"Unexpected error during authentication: {e}")
             raise Exception("Max retries exceeded during authentication")
 
-    def _encode_client_credentials(self):
-        """Helper function to encode client credentials in base64."""
-        import base64
-        credentials = f"{self.client_id}:{self.client_secret}"
-        return base64.b64encode(credentials.encode()).decode()
+    async def limited_task(self, func, *args, **kwargs):
+        """
+        Wrap a task with concurrency control. 
+        """
+        async with self.semaphore:
+            return await func(*args, **kwargs)
 
     async def _make_request(self, endpoint, params=None):
-        """Helper function to make asynchronous GET requests to Spotify API."""
+        """Helper function to make asynchronous GET requests to Spotify API with retry logic."""
+        if not self.access_token:
+            await self.authenticate()
+
         headers = {
             'Authorization': f'Bearer {self.access_token}',
         }
 
-        async with aiohttp.ClientSession() as session:
-            previous_retry_after = None
-            last_printed_message = None  # Track the last printed message
-            while True:  # Loop to retry on rate limits
-                async with session.get(f"{self.base_url}/{endpoint}", headers=headers, params=params) as response:
-                    if response.status == 200:
-                        return await response.json()
-                    elif response.status == 429:
-                        # Handle rate limit by checking the Retry-After header
-                        retry_after = int(response.headers.get("Retry-After", 5))  # Default to 5 seconds if not provided
-                        
-                        if retry_after != previous_retry_after:
-                            message = f"Rate limit exceeded. Retrying after {retry_after} seconds."
-                            if message != last_printed_message:  # Only print if the message has changed
-                                # print(message)
-                                last_printed_message = message
-                        
-                        previous_retry_after = retry_after
-                        await asyncio.sleep(retry_after)
+        async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=90)) as session:
+            max_attempts = 5
+            for attempt in range(max_attempts):
+                try:
+                    while True:
+                        async with session.get(f"{self.base_url}/{endpoint}", headers=headers, params=params) as response:
+                            if response.status == 200:
+                                return await response.json()
+
+                            elif response.status == 429:
+                                # Handle rate limit
+                                retry_after = int(response.headers.get("Retry-After", 5))
+                                logger.info(f"Rate limit exceeded. Retrying after {retry_after} seconds.")
+                                await asyncio.sleep(retry_after)
+
+                            # Retry on 5xx errors (server errors) — ephemeral
+                            elif 500 <= response.status < 600:
+                                wait_time = 2 ** attempt
+                                logger.info(f"Server error {response.status}, retrying in {wait_time} seconds (attempt {attempt+1}).")
+                                await asyncio.sleep(wait_time)
+                                break  # Break out of the while True to do another for-loop attempt
+
+                            else:
+                                # For all other non-200, non-429, non-5xx statuses, raise an exception
+                                error_text = await response.text()
+                                raise Exception(f"API request failed with status code {response.status}: {error_text}")
+
+                except aiohttp.ClientConnectorError as e:
+                    # Retry connection errors
+                    if attempt < max_attempts - 1:
+                        wait_time = 2 ** attempt
+                        logger.info(f"Connection error: {e}. Retrying in {wait_time} seconds (attempt {attempt+1}).")
+                        await asyncio.sleep(wait_time)
                     else:
-                        raise Exception(f"API request failed with status code {response.status}: {await response.text()}")
+                        raise e
+                else:
+                    # If we get here without "break" in the while True, it means we successfully returned or raised
+                    # If we returned, we're done; if we raised, we won't get here.
+                    # So let's end the for-loop if everything went well.
+                    break
+            else:
+                # If we exit the for-loop normally (i.e., no break) -> too many retries
+                raise Exception("Max retries exceeded in _make_request")
+
 
     async def get_track_info(self, track_name, artist_name):
         """Asynchronous function to fetch track information by track name and artist."""
@@ -113,7 +148,7 @@ class AsyncSpotifyAPI:
             except Exception as e:
                 # Check if the error is '403 Forbidden'
                 if '403' in str(e):
-                    print(f"403 Forbidden error for audio-features/{track_id}. Setting default values.")
+                    logger.info(f"403 Forbidden error for audio-features/{track_id}. Setting default values.")
                     audio_features = {
                         'danceability': None,
                         'energy': None,
@@ -127,8 +162,8 @@ class AsyncSpotifyAPI:
                         'loudness': None,
                         'time_signature': None
                     }
-            else:
-                raise
+                else:
+                    raise
             
             # Build the track info dictionary
             track_info = {
@@ -161,20 +196,34 @@ class AsyncSpotifyAPI:
         for row in df.iter_rows(named=True):
             track_name = row[self.config_manager.TRACK_TITLE_COLUMN]
             artist_name = row[self.config_manager.ARTIST_NAME_COLUMN]
-            tasks.append(self.get_track_info(track_name, artist_name))
+            # tasks.append(self.get_track_info(track_name, artist_name))
+            tasks.append(self.limited_task(self.get_track_info, track_name, artist_name))
         return await asyncio.gather(*tasks)
 
-    async def process_data(self, df, batch_size=100, delay=5):
+    async def process_data(self, df, batch_size=50, delay=10):
         """Fetch track info in batches to avoid API rate limits and return a dataframe with Spotify data."""
         spotify_data = []
+        print(df)
 
         # Split the dataframe into batches
         num_batches = (len(df) + batch_size - 1) // batch_size
-        for start in tqdm_asyncio(range(0, len(df), batch_size), desc='Processing batches of SpotifyAPI requests', total=num_batches, unit='batch'):
+
+        for start in tqdm_asyncio(
+            range(0, len(df), batch_size), 
+            desc='Processing batches of SpotifyAPI requests', 
+            total=num_batches, 
+            unit='batch'
+        ):
             batch = df[start:start + batch_size]
-            tasks = [self.get_track_info(row[self.config_manager.TRACK_TITLE_COLUMN], 
-                                        row[self.config_manager.ARTIST_NAME_COLUMN]) 
-                    for row in batch.iter_rows(named=True)]
+
+            tasks = [
+                self.limited_task(
+                    self.get_track_info,
+                    row[self.config_manager.TRACK_TITLE_COLUMN],
+                    row[self.config_manager.ARTIST_NAME_COLUMN]
+                )
+                for row in batch.iter_rows(named=True)
+            ]
 
             # Await and gather all tasks in the current batch
             batch_results = await asyncio.gather(*tasks)
@@ -206,8 +255,8 @@ if __name__ ==  "__main__":
         print(spotify_df)
 
     df = pl.DataFrame({
-    'track_title': ['Houdini', 'Please Please Please', 'She Will Be Loved'],
-    'artist_name': ['Dua Lipa', 'Sabrina Carpenter', 'Maroon 5']
+    'track_title': ['Houdini', 'Please Please Please', 'She Will Be Loved', 'cartaxo'],
+    'artist_name': ['Dua Lipa', 'Sabrina Carpenter', 'Maroon 5', 'new york new york']
     })
 
     asyncio.run(process(df))
