@@ -75,7 +75,7 @@ def display_sparkline(radio_df: pl.DataFrame, view_option: str):
             group_cols = [cm.ARTIST_NAME_COLUMN, cm.TRACK_TITLE_COLUMN]
             legend_title = "Track Name"
 
-        # Aggregate daily plays (each row is a play)
+        # Aggregate daily plays
         plays_by_day = (
             df_filtered
             .group_by(group_cols + [cm.DAY_COLUMN])
@@ -179,16 +179,9 @@ def display_sparkline(radio_df: pl.DataFrame, view_option: str):
             trace.line.width = line_widths.get(trace.name, 2)
             
             # Use the trace's line color for the bold text
-            line_color = trace.line.color if trace.line.color else '#000'  # fallback if no color assigned
+            line_color = trace.line.color if trace.line.color else '#000'
 
             # Updated hovertemplate with colored, bold labels
-            # trace.update(
-            #     hovertemplate=(
-            #         f"<span style='font-weight:bold; color:{line_color};'>{view_option} Name</span>: %{{customdata[0]}}<br>"
-            #         f"<span style='font-weight:bold; color:{line_color};'>Plays</span>: %{{y}}<br>"
-            #         "%{x}<extra></extra>"
-            #     )
-            # )
             trace.update(
                 hovertemplate=(
                     f"<span style='font-size:16px; font-weight:bold; color:{line_color};'>%{{customdata[0]}}</span> <br>"
@@ -198,14 +191,14 @@ def display_sparkline(radio_df: pl.DataFrame, view_option: str):
             )
 
         st.write(
-            "**Tip**: You can hover over the lines to see exact values. "
+            "**Tip**: You can hover over the lines to see exact values."
             "You can also click legend entries to toggle them on/off."
         )
 
         st.plotly_chart(fig, use_container_width=True)
 
 
-def display_plot_dataframe(radio_df: pl.DataFrame, view_option: str):
+def display_plot_dataframe(radio_df: pl.DataFrame, view_option: str, last_x_days: int = 60):
     st.subheader(f"Top 50 {view_option} :blue[Table Overview]")
     # Handle empty dataframe scenario
     if radio_df.is_empty():
@@ -232,7 +225,7 @@ def display_plot_dataframe(radio_df: pl.DataFrame, view_option: str):
 
     # Identify last days from the max date for the sparkline
     max_date_in_df = df_all_time[cm.DAY_COLUMN].max()
-    last_days_start = max_date_in_df - timedelta(days=61)
+    last_days_start = max_date_in_df - timedelta(days=1 + last_x_days)
     last_days_end   = max_date_in_df - timedelta(days=1)
     df_days = radio_df.filter(
         (pl.col(cm.DAY_COLUMN) >= last_days_start)
@@ -295,16 +288,16 @@ def display_plot_dataframe(radio_df: pl.DataFrame, view_option: str):
     col_config = {}
     if view_option == 'Artist':
         col_config[cm.ARTIST_NAME_COLUMN] = st.column_config.Column(label="Artist", width="small")
-        col_config[cm.SPOTIFY_GENRE_COLUMN] = st.column_config.Column(label=cm.SPOTIFY_GENRE_COLUMN, width="small")
+        col_config[cm.SPOTIFY_GENRE_COLUMN] = st.column_config.Column(label='Genre', width="small")
     else:
         col_config[cm.TRACK_TITLE_COLUMN] = st.column_config.Column(label="Track Title", width="small")
         col_config[cm.ARTIST_NAME_COLUMN] = st.column_config.Column(label="Artist", width="small")
-        col_config[cm.SPOTIFY_GENRE_COLUMN] = st.column_config.Column(label=cm.SPOTIFY_GENRE_COLUMN, width="small")
+        col_config[cm.SPOTIFY_GENRE_COLUMN] = st.column_config.Column(label='Genre', width="small")
 
     col_config["plays_list"] = st.column_config.LineChartColumn(
-        label="Daily Plays (Last 60d)",
+        label=f"Daily Plays (Last {last_x_days}d)",
         width="big",
-        help="Zero-filled daily plays for last 60 days"
+        help=f"Zero-filled daily plays for last {last_x_days} days"
     )
 
     col_config["Total Plays"] = st.column_config.Column(
@@ -363,7 +356,6 @@ def display_top_bar_chart(radio_df: pl.DataFrame, view_option: str, other_radios
             .agg(pl.count().alias('play_count'))
             .sort('play_count', descending=True)
             .head(10)
-            # .with_columns(pl.col('play_count').map_elements(number_formatter).alias('formatted_play_count'))
             .with_columns(
                 pl.col('play_count').map_elements(number_formatter, return_dtype=pl.Utf8).alias('formatted_play_count')
             )
@@ -1162,7 +1154,7 @@ def display_top_genres_evolution(radio_df: pl.DataFrame, other_radios_df: Option
         Generates a bump chart showing the ranking evolution of top 5 genres 
         with improved visuals, ensuring the legend includes all genres.
         """
-        import pandas as pd
+
         df = df.with_columns([
             # Assuming `start_date` and `end_date` are in the dataframe
             pl.col("week_label").map_elements(lambda w: week_dates_start_end(w), return_dtype=pl.List(pl.Utf8)).alias("week_dates"),
