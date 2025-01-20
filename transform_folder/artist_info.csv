@@ -7,6 +7,7 @@ artist_name,mb_artist_country,mb_artist_main_genre,mb_artist_type,mb_artist_care
 21 Savage ,United States,hip hop,Person,1992-10-22,,false,United States of America,United States
 24kgoldn,United States,hip hop,Person,2000-11-13,,false,United States of America,United States
 3 Doors Down,United States,alternative rock,Group,1996-01-01,,false,Unknown,United States
+4 Non Blondes,United States,pop rock,Group,1989-01-01,1994-01-01,true,Unknown,United States
 50 Cent ,United States,hip hop,Person,1975-07-06,,false,United States of America,United States
 6ix9ine ,United States,hip hop,Person,1996-05-08,,false,United States of America,United States
 A Garota Não,Portugal,"",Person,1983-10-29,,false,Portugal,Portugal
@@ -714,6 +715,7 @@ Jessie J,United Kingdom,author,Person,1965-07-31,,false,United Kingdom,United Ki
 Jessie Ware,United Kingdom,contemporary r&b,Person,1984-10-15,,false,United Kingdom,United Kingdom
 Jewel,United States,pop,Person,1974-05-23,,false,Unknown,United States
 Jhay Cortez ,Argentina,latin ballad,Person,1940-03-11,2019-04-04,true,Puerto Rico,Argentina
+Jim Diamond,United States,singer-songwriter,Person,1941-01-24,,false,United Kingdom,United States
 Jimin,"Korea, Republic of",ballad,Person,1995-10-13,,false,South Korea,"Korea, Republic of"
 Jimin ,"Korea, Republic of",ballad,Person,1995-10-13,,false,South Korea,"Korea, Republic of"
 Jimmy Fallon Feat. Ariana Grande & Megan Thee Stallion,United States,pop,Person,1993-06-26,,false,United States of America,United States
@@ -1066,6 +1068,7 @@ Mitski,United States,indie rock,Person,1990-09-27,,false,United States of Americ
 Mizzy Miles,United States,jazz,Person,1926-05-26,1991-09-28,true,Unknown,United States
 Mizzy Miles ,United States,jazz,Person,1926-05-26,1991-09-28,true,Unknown,United States
 Mizzy Miles Feat. Deejay Telio & Teto & Gson,Portugal,"",Person,1996-07-20,,false,Unknown,Portugal
+Mizzy Miles Feat. Gson & Slow J,United States,jazz,Person,1926-05-26,1991-09-28,true,Unknown,United States
 Mizzy Miles Feat. Ivandro & Piruka,Portugal,"",Person,1998-07-26,,false,Unknown,Portugal
 Mizzy Miles Feat. T-Rex & Zara G.,United Kingdom,glam rock,Group,1967-01-01,1977-09-16,true,Unknown,United Kingdom
 Mizzy Miles Feat. Van Zee & Bispo,United States,jazz,Person,1926-05-26,1991-09-28,true,Portugal,United States
@@ -1178,6 +1181,7 @@ One Direction,Unknown,boy band,Group,2010-07-23,2015-12-31,true,Unknown,Unknown
 One Voice Children'S Choir,Unknown,"",Choir,,,false,Unknown,Unknown
 Onerepublic,United States,pop,Group,2004-01-01,,false,Unknown,United States
 Ornatos Violeta,Portugal,alternative rock,Group,1991-01-01,2002-01-01,true,Unknown,Portugal
+"Oruam Feat. Ze Filipe, Mc Tuto & Rodrigo Do Cn",Brazil,"",Person,,,false,Unknown,Brazil
 Os Azeitonas,Portugal,"",Group,2002-01-01,,false,Unknown,Portugal
 Os Quatro E Meia,Portugal,"",Group,2013-01-01,,false,Unknown,Portugal
 "Os Quatro E Meia, Carlão",Portugal,"",Group,2013-01-01,,false,Unknown,Portugal
