@@ -25,7 +25,7 @@ class RadioMusicETL:
         self.spotify_api = SpotifyAPI()
         self.async_spotify_api = AsyncSpotifyAPI()
         self.wikipedia_api = WikipediaAPI()
-        self.async_wikipedia_api = AsyncWikipediaAPI()
+        # self.async_wikipedia_api = AsyncWikipediaAPI()
         self.lyrics_analyzer = LyricsAnalyzer()
         self._initialize_column_names()
 
@@ -263,6 +263,14 @@ class RadioMusicETL:
             .alias('combined_nationality')
         )
 
+        # Combine both Wiki and MusicBrainz start date columns into one
+        artist_info_df = artist_info_df.with_columns(
+            pl.when((pl.col('wiki_artist_start_date').is_not_null()))
+            .then(pl.col('wiki_artist_start_date'))
+            .otherwise(pl.col('mb_artist_career_begin'))
+            .alias('combined_artist_start_date')
+        )
+
         self.data_storage.output_csv(
             df=artist_info_df,
             path=self.config_manager.ARTIST_INFO_CSV_PATH,
@@ -359,7 +367,3 @@ if __name__ == "__main__":
         # await etl.transform_data(df)
 
     asyncio.run(run_test())
-
-    # TODO
-    # Add another process to get artist career begin date from Wikipedia to make data more robust - Example: Richie Campbell
-    # Add a 'combined_artist_genres' column
