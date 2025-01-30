@@ -12,6 +12,7 @@ artist_name,mb_artist_country,mb_artist_main_genre,mb_artist_type,mb_artist_care
 5 Seconds Of Summer,Australia,pop rock,Group,2011-01-01,,false,Unknown,2011-01-01,Australia,2011-01-01
 50 Cent ,United States,hip hop,Person,1975-07-06,,false,United States,1996-01-01,United States,1996-01-01
 6ix9ine ,United States,hip hop,Person,1996-05-08,,false,United States,2014-01-01,United States,2014-01-01
+9 Miller ,United States,jazz,Person,1904-03-01,1944-12-15,true,United States,1994-10-09,United States,1994-10-09
 A Garota Não,Portugal,"",Person,1983-10-29,,false,Portugal,1983-10-29,Portugal,1983-10-29
 A Great Big World / Christina Aguilera,United States,pop,Person,1980-12-18,,false,Unknown,,United States,1980-12-18
 "A Great Big World, Christina Aguilera",United States,pop,Person,1980-12-18,,false,Unknown,,United States,1980-12-18
@@ -481,6 +482,7 @@ Drake & 21savage ,Unknown,special purpose artist,Other,,,false,United States,201
 Drake Feat. Wizkid & Kyla,Nigeria,afropop,Person,1990-07-16,,false,Unknown,,Nigeria,1990-07-16
 Dreamers,Unknown,"","",,,false,Unknown,,Unknown,
 Dua Lipa,Unknown,dance-pop,Person,1995-08-22,,false,United Kingdom,2014-01-01,United Kingdom,2014-01-01
+Dua Lipa ,United Kingdom,dance-pop,Person,1995-08-22,,false,United Kingdom,2014-01-01,United Kingdom,2014-01-01
 "Dua Lipa, Dababy",Unknown,dance-pop,Person,1995-08-22,,false,Unknown,,Unknown,1995-08-22
 Duffy,United Kingdom,soul,Person,1984-06-23,,false,Unknown,,United Kingdom,1984-06-23
 "Duncan Laurence, Fletcher",United Kingdom,"",Person,,,false,Kingdom of the Netherlands,2014-01-01,United Kingdom,2014-01-01
@@ -608,6 +610,7 @@ Gims ,France,french hip hop,Person,1986-05-06,,false,Democratic Republic of the 
 Gino Vanelli,Canada,2008 universal fire victim,Person,1952-06-16,,false,Italy,1917-01-01,Canada,1917-01-01
 Giulia Be,United States,alternative rock,Group,1982-01-01,,false,Brazil,2018-01-01,United States,2018-01-01
 Giulia Be Feat. Luan Santana,Brazil,country,Person,1991-03-13,,false,Brazil,2018-01-01,Brazil,2018-01-01
+Givéon,United States,r&b,Person,1990-02-21,,false,United States,2018-01-01,United States,2018-01-01
 Gladys Knight,United States,soul,Person,1944-05-28,,false,United States,1952-01-01,United States,1952-01-01
 Glass Animals,United Kingdom,electronic,Group,2010-01-01,,false,Unknown,2010-01-01,United Kingdom,2010-01-01
 Glee Cast,United States,aln-sh,Group,2009-05-19,2015-03-20,true,Unknown,,United States,2009-05-19
@@ -625,6 +628,7 @@ Green Day,United States,punk rock,Group,1989-01-01,,false,Unknown,1982-01-01,Uni
 Grelo,Unknown,"",Person,,,false,Unknown,,Unknown,
 Grelo ,Unknown,"",Person,,,false,Unknown,,Unknown,
 Griff,United Kingdom,alternative pop,Person,2001-01-21,,false,Unknown,,United Kingdom,2001-01-21
+Guaynaa ,Puerto Rico,latin,Person,1992-09-16,,false,United States,2017-01-01,Puerto Rico,2017-01-01
 Guga,Brazil,"",Person,,,false,Unknown,,Brazil,
 Gui Aly,Portugal,"",Person,2001-03-22,,false,Unknown,,Portugal,2001-03-22
 Gunna,United States,hip hop,Person,1993-06-14,,false,United States,2010-01-01,United States,2010-01-01
@@ -899,6 +903,7 @@ Leann Rimes,United States,country,Person,1982-08-28,,false,United States,1991-01
 Leela James,United States,soul,Person,1933-05-03,2006-12-25,true,United States,2005-01-01,United States,2005-01-01
 "Left, Jüra",Portugal,"",Person,,,false,Unknown,,Portugal,
 Left.,Unknown,"",Group,1996-05-01,,false,Unknown,,Unknown,1996-05-01
+Lele Pons ,"Venezuela, Bolivarian Republic of","",Person,1996-07-25,,false,Venezuela,2013-01-01,"Venezuela, Bolivarian Republic of",2013-01-01
 Lenny Kravitz,United States,rock,Person,1964-05-26,,false,United States,1988-01-01,United States,1988-01-01
 Leo Sayer,United Kingdom,aln-sh,Person,1948-05-21,,false,United Kingdom,1973-01-01,United Kingdom,1973-01-01
 Leona Lewis,"","","",,,,United Kingdom,2005-01-01,United Kingdom,2005-01-01
@@ -1349,6 +1354,7 @@ Rauw Alejandro Feat. Bad Bunny,Puerto Rico,latin trap,Person,1994-03-10,,false,U
 Raye Feat. 070 Shake,United States,2010s,Person,1997-06-13,,false,United States,2015-01-01,United States,2015-01-01
 Reamonn,Germany,pop rock,Group,1999-01-01,2012-01-01,true,Unknown,1999-01-01,Germany,1999-01-01
 Red Hot Chili Peppers,United States,alternative rock,Group,1983-01-01,,false,Unknown,1982-01-01,United States,1982-01-01
+Rem,United States,alternative rock,Group,1980-04-05,2011-09-21,true,Unknown,,United States,1980-04-05
 Rema & Selena Gomez,United States,dance-pop,Person,1992-07-22,,false,Unknown,,United States,1992-07-22
 "Rema, Selena Gomez",United States,dance-pop,Person,1992-07-22,,false,Unknown,,United States,1992-07-22
 Reo Speedwagon,United States,rock,Group,1967-01-01,2025-01-01,true,Unknown,1967-01-01,United States,1967-01-01
@@ -1517,6 +1523,7 @@ Taylor Swift Feat. Post Malone,United States,hip hop,Person,1995-07-04,,false,Un
 "Taylor Swift, Shawn Mendes",Canada,pop,Person,1998-08-08,,false,Unknown,,Canada,1998-08-08
 Teddy Swims,United States,alternative rock,Person,1992-09-25,,false,United States,2011-01-01,United States,2011-01-01
 Teddy Swims Feat. Giveon,United States,alternative rock,Person,1992-09-25,,false,Unknown,,United States,1992-09-25
+"Teddy Swims, Giveon",United States,alternative rock,Person,1992-09-25,,false,Unknown,,United States,1992-09-25
 "Teddy Swims, Givéon",United States,alternative rock,Person,1992-09-25,,false,Unknown,,United States,1992-09-25
 Temptations,United States,soul,Group,1960-01-01,,false,Unknown,1960-01-01,United States,1960-01-01
 Tems ,Nigeria,afrobeats,Person,1995-06-11,,false,Nigeria,2015-01-01,Nigeria,2015-01-01
