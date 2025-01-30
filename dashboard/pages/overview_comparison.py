@@ -6,7 +6,7 @@ from data_extract.config_manager import ConfigManager
 from utils import storage, filters, calculations
 from utils.overview_comparison import mappings, plots
 
-
+# st.logo('dashboard/logo/RFM_2008.png')
 cm = ConfigManager()
 app_config = cm.load_json(path='dashboard/app_config.json')
 
@@ -60,7 +60,7 @@ with st.sidebar:
     new_graph_option = st.radio(
         label='📈 Select :blue-background[**Time Series**] to display:',
         options=['Avg Tracks', 'Avg Hours Played', 'Avg Popularity'],
-        index=0,
+        index=1,
         key='ts_graph'
     )
 
@@ -186,7 +186,7 @@ for i, (key, val) in enumerate(app_config.items()):
     # Calculate metrics by decade, including most played artist
     df_decades_artists = calculations.calculate_decade_metrics(
         _df=app_config[key]['radio_df'],
-        date_column="mb_artist_career_begin",
+        date_column="combined_artist_start_date",
         count_columns=[cm.ARTIST_NAME_COLUMN],
         metric_type=mapped_metric_type,
         include_most_played="artist",
