@@ -19,7 +19,7 @@ def display_header_kpis(app_config: dict, ncols: int):
             radio_name = val.get('name')
             logo = val.get('logo')
             radio_df = val.get('radio_df')
-            # st.image(logo, use_container_width=True)
+            st.image(logo, use_container_width=True)
             with st.container(border=True):
                 kpi_1, kpi_2, kpi_3 = st.columns(3)
                 kpi_1.metric(
@@ -49,6 +49,7 @@ def display_hourly_graph(app_config: dict, ncols: int, selected_metric: str, met
         with hour_graph_cols[i]:
             radio_name = val.get('name')
             radio_df = val.get('radio_df')
+            radio_color = val.get('color')
             hourly_df = calculations.prepare_hourly_metrics(radio_df, metric=selected_metric, id=radio_name)
             calculations.plot_metrics(
                 hourly_df,
@@ -60,7 +61,8 @@ def display_hourly_graph(app_config: dict, ncols: int, selected_metric: str, met
                     metric_ranges[selected_metric]['hour']['min'] * 0.95,
                     metric_ranges[selected_metric]['hour']['max'] * 1.05
                 ),
-                title=''
+                title='',
+                color=radio_color
             )
 
 def display_weekly_graph(app_config: dict, ncols: int, selected_metric: str, metric_ranges: dict):
@@ -71,6 +73,7 @@ def display_weekly_graph(app_config: dict, ncols: int, selected_metric: str, met
         with weekday_graph_cols[i]:
             radio_name = val.get('name')
             radio_df = val.get('radio_df')
+            radio_color = val.get('color')
             # Prepare the selected Weekday Metric
             weekday_df = calculations.prepare_weekday_metrics(radio_df, metric=selected_metric, id=radio_name)
             calculations.plot_metrics(
@@ -83,7 +86,8 @@ def display_weekly_graph(app_config: dict, ncols: int, selected_metric: str, met
                     metric_ranges[selected_metric]['weekday']['min'] * 0.95,
                     metric_ranges[selected_metric]['weekday']['max'] * 1.05
                 ),
-                title=''
+                title='',
+                color=radio_color
             )
 
 def display_track_kpis(app_config: dict, ncols: int):
