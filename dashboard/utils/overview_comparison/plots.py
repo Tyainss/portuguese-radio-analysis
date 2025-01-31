@@ -133,6 +133,7 @@ def display_track_languages(app_config: dict, ncols: int, num_languages: int, ma
         with track_plots_cols[i]:
             radio_name = val.get('name')
             radio_df = val.get('radio_df')
+            radio_color = val.get('color')
             
             # st.write(radio_df)
             language_counts = calculations.calculate_country_counts(
@@ -238,7 +239,7 @@ def display_track_languages(app_config: dict, ncols: int, num_languages: int, ma
 
             # Apply conditional coloring for "Portugal" or "PT"
             colors = [
-                "#1f77b4" if lang != "PT" else "#ff7f0e"  # Default color vs highlight color
+                radio_color if lang != "PT" else "#12592D"
                 for lang in data_df["flag"]
             ]
             fig.update_traces(
@@ -276,6 +277,7 @@ def display_track_decades(
         with track_decade_cols[i]:
             radio_name = val.get('name')
             radio_df = val.get('radio_df')
+            radio_color = val.get('color')
 
             # Calculate metrics by decade, including most played track
             df_decades_tracks = calculations.calculate_decade_metrics(
@@ -322,6 +324,7 @@ def display_track_decades(
                 hover_data={"tooltip_text": True}
             )
             fig_tracks.update_traces(
+                marker_color=radio_color,
                 hovertemplate="%{customdata[0]}",
                 customdata=df_tracks_decade_pandas[["tooltip_text"]].to_numpy(),
                 texttemplate="%{text}",
@@ -393,6 +396,7 @@ def display_artist_countries(app_config: dict, ncols: int, num_countries: int, m
         with artist_plots_cols[i]:
             radio_name = val.get('name')
             radio_df = val.get('radio_df')
+            radio_color = val.get('color')
 
             # Add flag mapping
             radio_df = radio_df.with_columns(
@@ -496,6 +500,10 @@ def display_artist_countries(app_config: dict, ncols: int, num_countries: int, m
                 "#1f77b4" if country != "🇵🇹" else "#ff7f0e"  # Default color vs highlight color
                 for country in data_df["flag"]
             ]
+            colors = [
+                radio_color if lang != "🇵🇹"  else "#12592D"
+                for lang in data_df["flag"]
+            ]
             fig.update_traces(
                 marker_color=colors,
                 textposition="outside",
@@ -533,6 +541,7 @@ def display_artist_decades(
         with artist_decade_cols[i]:
             radio_name = val.get('name')
             radio_df = val.get('radio_df')
+            radio_color = val.get('color')
 
             # Calculate metrics by decade, including most played artist
             df_decades_artists = calculations.calculate_decade_metrics(
@@ -578,6 +587,7 @@ def display_artist_decades(
                 hover_data={"tooltip_text": True},
             )
             fig_artists.update_traces(
+                marker_color=radio_color,
                 hovertemplate="%{customdata[0]}",
                 customdata=df_artists_decade_pandas[["tooltip_text"]].to_numpy(),
                 texttemplate="%{text}",
@@ -620,6 +630,7 @@ def display_track_duration(
         with track_duration_cols[i]:
             radio_name = val.get('name')
             radio_df = val.get('radio_df')
+            radio_color = val.get('color')
 
             # Calculate duration metrics with most played track details
             df_duration_tracks = calculations.calculate_duration_metrics(
@@ -671,7 +682,7 @@ def display_track_duration(
                 hover_data={"tooltip_text": True},  # Use custom tooltips
             )
             fig_duration.update_traces(
-                # marker_color="#d3d3d3",  # Light gray for bars
+                marker_color=radio_color,
                 texttemplate="%{text}",
                 textposition="outside",
                 hovertemplate="%{customdata[0]}",
@@ -708,6 +719,7 @@ def display_top_genres(app_config: dict, ncols: int, metric_type_option: str, ma
         with genre_cols[i]:
             radio_name = val.get('name')
             radio_df = val.get('radio_df')
+            radio_color = val.get('color')
             
             # Calculate genre metrics
             df_genres_cleaned = calculations.calculate_genre_metrics(
@@ -761,6 +773,7 @@ def display_top_genres(app_config: dict, ncols: int, metric_type_option: str, ma
                 hover_data={"tooltip_text": True},  # Use custom tooltips
             )
             fig_genres.update_traces(
+                marker_color=radio_color,
                 texttemplate="%{text}", 
                 textposition="outside",
                 hovertemplate="%{customdata[0]}",
@@ -792,6 +805,7 @@ def display_sentiment_analysis(app_config: dict, ncols: int, global_max_mean_val
     for i, (_, val) in enumerate(app_config.items()):
         with sentiment_cols[i]:
             radio_name = val.get('name')
+            radio_color = val.get('color')
             mean_values = val.get('mean_values')  # Retrieve mean values for this radio
             radio_csv = val.get('radio_csv')
             
@@ -812,6 +826,7 @@ def display_sentiment_analysis(app_config: dict, ncols: int, global_max_mean_val
                 r=normalized_values,
                 theta=categories,
                 fill='toself',
+                line=dict(color=radio_color),
                 # name=f'{radio_name}'
                 name=None,
             ))
@@ -835,28 +850,29 @@ def display_sentiment_analysis(app_config: dict, ncols: int, global_max_mean_val
             st.plotly_chart(fig, use_container_width=True, key=f"{radio_name}_radar_chart")
 
             st.divider()
-
+            # st.write(radio_color)
             # Add an export button for the radio CSV data
             # csv = radio_df.to_pandas().to_csv(index=False)  # Convert to pandas and CSV
             with stylable_container(
-                key=f'csv_export_button',
-                css_styles="""
-                    button {
+                key=f'csv_export_button_{i}',
+                css_styles=f"""
+                    button {{
                         width: 275px;
                         height: 60px;
-                        background-color: #add8e6; /* Light Blue */
+                        background-color: {radio_color};  /* Use the radio_color for background */
                         color: white;
                         border-radius: 5px;
                         white-space: nowrap;
-                    }
-                    """,
+                    }}
+                """,
             ):
                 _, csv_col, _ = st.columns([1,3,1])
                 with csv_col:
+                    st.write(radio_color)
                     st.download_button(
                         label=f"Export :grey-background[**{radio_name}**] Data as CSV",
                         data=radio_csv,
                         file_name=f"{radio_name}_data.csv",
                         mime="text/csv",
-                        key=f"{radio_name}_export_button"
+                        key=f"{radio_name}_export_button_{i}"
                     )
