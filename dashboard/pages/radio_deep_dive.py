@@ -457,6 +457,10 @@ with st.sidebar:
     # Reset settings button
     st.button('Reset Page Settings', on_click=reset_page_settings)
 
+radio_logo = app_config[radio_chosen].get('logo')
+radio_color = app_config[radio_chosen].get('color')
+
+st.image(radio_logo, use_container_width=False)
 
 # Handle empty dataframe scenario
 if radio_df.is_empty():
@@ -484,7 +488,7 @@ else:
                 <ul style="font-size: 16px; margin-left: 20px;">
                     <li>🎵 <b>Which artists/tracks are more popular on this radio compared to others?</b></li>
                     <li>📈 <b>How do play counts vary across different stations?</b></li>
-                    <li>🎨 <b>Are there unique genre preferences in this radio’s audience?</b></li>
+                    <li>🎨 <b>Are there unique genre preferences in this radio's audience?</b></li>
                 </ul>
                 <p style="font-size: 16px;">
                     Each visualization below is designed to <b>highlight key differences</b> between the selected radio 
@@ -547,8 +551,3 @@ else:
     ## Artist/Track Dataframe with plots  ##
     ########################################
     plots.display_plot_dataframe(radio_df, view_option)
-
-
-
-
-# Add image of selected radio up top
