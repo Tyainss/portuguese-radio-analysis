@@ -117,12 +117,12 @@ def display_track_kpis(app_config: dict, ncols: int):
                 )
             
             avg_plays_per_track = f'{(total_tracks / unique_tracks if unique_tracks > 0 else 0):.2f}'
-            st.write(f'That means each track is played **{avg_plays_per_track}** times on average')
+            st.write(f'That means each track is played :blue[**{avg_plays_per_track}**] times on average')
 
 
 def display_track_languages(app_config: dict, ncols: int, num_languages: int, mapped_metric_type: str):
     st.subheader(
-        f':earth_africa: :blue[Top {num_languages} Languages]', 
+        f':earth_africa: Top {num_languages} :blue[Languages]', 
         divider="gray",
         help='Language detected by :blue-background[**analysing the lyrics**] with a language-detection Python library'
     )
@@ -134,6 +134,7 @@ def display_track_languages(app_config: dict, ncols: int, num_languages: int, ma
             radio_name = val.get('name')
             radio_df = val.get('radio_df')
             radio_color = val.get('color')
+            radio_light_color = val.get('light_color')
             
             # st.write(radio_df)
             language_counts = calculations.calculate_country_counts(
@@ -239,7 +240,7 @@ def display_track_languages(app_config: dict, ncols: int, num_languages: int, ma
 
             # Apply conditional coloring for "Portugal" or "PT"
             colors = [
-                radio_color if lang != "PT" else "#12592D"
+                radio_light_color if lang != "PT" else radio_color
                 for lang in data_df["flag"]
             ]
             fig.update_traces(
@@ -336,6 +337,7 @@ def display_track_decades(
                 margin=dict(l=10, r=30, t=0, b=0),
                 height=400,
                 yaxis=dict(
+                    gridcolor="#E0E0E0",
                     range=(
                         0,
                         metric_ranges['track_decades']['max'] * 1.05
@@ -355,7 +357,7 @@ def display_track_decades(
                 average_plays_per_track = 0.0
             st.markdown(
                 f'''**{unique_2024_tracks}** unique tracks released in :blue-background[2024], and were played a total of **{helper.number_formatter(total_2024_tracks)}** times
-                \ni.e. **{average_plays_per_track:.1f}** times per track'''
+                \ni.e. :blue[**{average_plays_per_track:.1f}**] times per track'''
             )
 
 def display_artist_kpis(app_config: dict, ncols: int):
@@ -385,7 +387,7 @@ def display_artist_kpis(app_config: dict, ncols: int):
 
 def display_artist_countries(app_config: dict, ncols: int, num_countries: int, mapped_metric_type: str):
     st.subheader(
-        f':earth_africa: :blue[Top {num_countries} countries]', 
+        f':earth_africa: Top {num_countries} :blue[countries]', 
         divider="gray",
         help='Country data extracted from :blue-background[**MusicBrainz**] and complemented with :blue-background[**Wikipedia**] when missing.'
         )
@@ -397,6 +399,7 @@ def display_artist_countries(app_config: dict, ncols: int, num_countries: int, m
             radio_name = val.get('name')
             radio_df = val.get('radio_df')
             radio_color = val.get('color')
+            radio_light_color = val.get('light_color')
 
             # Add flag mapping
             radio_df = radio_df.with_columns(
@@ -497,11 +500,7 @@ def display_artist_countries(app_config: dict, ncols: int, num_countries: int, m
             )
             # Apply conditional coloring for "Portugal" or "PT"
             colors = [
-                "#1f77b4" if country != "🇵🇹" else "#ff7f0e"  # Default color vs highlight color
-                for country in data_df["flag"]
-            ]
-            colors = [
-                radio_color if lang != "🇵🇹"  else "#12592D"
+                radio_light_color if lang != "🇵🇹"  else radio_color
                 for lang in data_df["flag"]
             ]
             fig.update_traces(
@@ -599,6 +598,7 @@ def display_artist_decades(
                 margin=dict(l=10, r=30, t=10, b=0),
                 height=400,
                 yaxis=dict(
+                    gridcolor="#E0E0E0",
                     range=(
                         0,
                         metric_ranges['artist_decades']['max'] * 1.05
@@ -619,7 +619,7 @@ def display_track_duration(
 ):
     
     st.subheader(
-        f':clock4: :blue[Track Duration]', 
+        f':clock4: Track :blue[Duration]', 
         divider='gray',
         help='Truncated based on the number of minutes of the song. The duration of the song is extracted from :green[Spotify]'
     )
@@ -695,6 +695,7 @@ def display_track_duration(
                 margin=dict(l=10, r=30, t=0, b=0),
                 height=400,
                 yaxis=dict(
+                    gridcolor="#E0E0E0",
                     range=(
                         0,
                         metric_ranges['track_duration']['max'] * 1.05
@@ -792,7 +793,7 @@ def display_top_genres(app_config: dict, ncols: int, metric_type_option: str, ma
 
 def display_sentiment_analysis(app_config: dict, ncols: int, global_max_mean_values: dict):
     st.subheader(
-        f'😊 :blue[Sentiment Analysis]', 
+        f'😊 :blue[Sentiment] Analysis', 
         divider="gray",
         help="""These plots show the relative strength of various sentiment metrics (Joy, Sadness, Optimism, Anger, and Love) 
         :blue-background[**calculated from the song lyrics played**]. Sentiments are derived using NLP models, while the 
@@ -868,7 +869,6 @@ def display_sentiment_analysis(app_config: dict, ncols: int, global_max_mean_val
             ):
                 _, csv_col, _ = st.columns([1,3,1])
                 with csv_col:
-                    st.write(radio_color)
                     st.download_button(
                         label=f"Export :grey-background[**{radio_name}**] Data as CSV",
                         data=radio_csv,

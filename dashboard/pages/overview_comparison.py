@@ -58,14 +58,14 @@ with st.sidebar:
         key='date_period'
     )
     new_graph_option = st.radio(
-        label='📈 Select :blue-background[**Time Series**] to display:',
+        label='📈 Select :blue[**Time Series**] to display:',
         options=['Avg Tracks', 'Avg Hours Played', 'Avg Popularity'],
         # index=1,
         key='ts_graph'
     )
 
     metric_type_option = st.radio(
-        label='📊 Select :blue-background[**Metric**] Type',
+        label='📊 Select :blue[**Metric**] Type',
         options=['Unique', 'Total', 'Average'],
         index=0,
         horizontal=False,

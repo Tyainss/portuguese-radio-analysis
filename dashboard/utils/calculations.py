@@ -236,7 +236,7 @@ def plot_metrics(
         height=350,
         hoverlabel_align="left",
         yaxis=dict(
-            gridcolor="#F4F4F4"  # Replace "lightgray" with your desired color
+            gridcolor="#E0E0E0"
         )
     )
     fig.update_traces(
@@ -245,6 +245,8 @@ def plot_metrics(
             f"<b>{metric_name}</b>: " "%{y:.2f}<br>"
         )
     )
+
+    fig.update_traces(line=dict(width=3))
 
     # Apply the y-axis range if provided
     if y_axis_range:

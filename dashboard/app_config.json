@@ -1,22 +1,26 @@
 {
     "CidadeFM": {
-        "logo": "dashboard/logo/CidadeFM_logo.png",
+        "logo": "dashboard/logo/Cidade_FM_logo.png",
         "name": "CIDADE",
-        "color": "#FFEC01"
+        "color": "#D9D901",
+        "light_color": "#E5E579"
     },
     "Comercial": {
-        "logo": "dashboard/logo/Rádio_Comercial_2023.png",
+        "logo": "dashboard/logo/Radio_Comercial_logo.png",
         "name": "Rádio Comercial",
-        "color": "#1D1D1B"
+        "color": "#1D1D1B",
+        "light_color": "#878786"
     },
     "RFM": {
-        "logo": "dashboard/logo/RFM_2008.png",
+        "logo": "dashboard/logo/RFM_logo.png",
         "name": "RFM",
-        "color": "#FE0000"
+        "color": "#FE0000",
+        "light_color": "#F77979"
     },
     "MegaHits": {
-        "logo": "dashboard/logo/Mega_Hits_2018.png",
+        "logo": "dashboard/logo/Mega_Hits_logo.png",
         "name": "MegaHits",
-        "color": "#F47925"
+        "color": "#F47925",
+        "light_color": "#F3B58B"
     }
 }
