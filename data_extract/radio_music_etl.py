@@ -5,10 +5,8 @@ from config_manager import ConfigManager
 from data_storage import DataStorage
 from radio_scraper import  PassouTypeRadioScraper, RFMRadioScraper, MegaHitsRadioScraper
 from musicbrainz_api import MusicBrainzAPI
-from spotify_api import SpotifyAPI
 from asynchronous_spotify_api import AsyncSpotifyAPI
 from wikipedia_api import WikipediaAPI
-from asynchronous_wikipedia_api import AsyncWikipediaAPI
 from lyrics import LyricsAnalyzer
 
 from data_extract import logger
@@ -22,10 +20,8 @@ class RadioMusicETL:
         self.config_manager = ConfigManager(config_path, schema_path)
         self.data_storage = DataStorage()
         self.mb_api = MusicBrainzAPI()
-        self.spotify_api = SpotifyAPI()
         self.async_spotify_api = AsyncSpotifyAPI()
         self.wikipedia_api = WikipediaAPI()
-        # self.async_wikipedia_api = AsyncWikipediaAPI()
         self.lyrics_analyzer = LyricsAnalyzer()
         self._initialize_column_names()
 
