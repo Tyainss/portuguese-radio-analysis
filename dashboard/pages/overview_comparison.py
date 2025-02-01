@@ -36,11 +36,11 @@ max_release_date = df_joined.with_columns(pl.col(cm.SPOTIFY_RELEASE_DATE_COLUMN)
 if 'date_period' not in st.session_state:
     st.session_state['date_period'] = (min_date, max_date)
 if 'ts_graph' not in st.session_state:
-    st.session_state['ts_graph'] = 'Avg Tracks'
+    st.session_state['ts_graph'] = 'Avg Hours Played'
 
 def reset_settings():
     st.session_state['date_period'] = (min_date, max_date)
-    st.session_state['ts_graph'] = 'Avg Tracks'
+    st.session_state['ts_graph'] = 'Avg Hours Played'
     st.session_state['metric_type'] = 'Unique'
     # Reset release year filter
     if release_years:
@@ -60,7 +60,7 @@ with st.sidebar:
     new_graph_option = st.radio(
         label='📈 Select :blue-background[**Time Series**] to display:',
         options=['Avg Tracks', 'Avg Hours Played', 'Avg Popularity'],
-        index=1,
+        # index=1,
         key='ts_graph'
     )
 
