@@ -14,5 +14,6 @@ def define_pages():
     
 pg = define_pages()
 
+st.logo('dashboard/logo/personal_mark.png')
 
 pg.run()
