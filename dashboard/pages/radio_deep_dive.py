@@ -460,7 +460,9 @@ with st.sidebar:
 radio_logo = app_config[radio_chosen].get('logo')
 radio_color = app_config[radio_chosen].get('color')
 
-st.image(radio_logo, use_container_width=False)
+_, logo_col, _ = st.columns([1,1,1])
+with logo_col:
+    st.image(radio_logo, use_container_width=False)
 
 # Handle empty dataframe scenario
 if radio_df.is_empty():
@@ -528,13 +530,13 @@ else:
                 )
         
         st.write('#####')
-        plots.display_top_bar_chart(radio_df, view_option, other_radios_df)
+        plots.display_top_bar_chart(radio_df, view_option, other_radios_df, radio_color=radio_color)
         st.divider()
         plots.display_top_by_week_chart(radio_df, view_option, other_radios_df)
         st.divider()
-        plots.display_play_count_histogram(radio_df, view_option, other_radios_df)
+        plots.display_play_count_histogram(radio_df, view_option, other_radios_df, radio_color=radio_color)
         st.divider()
-        plots.display_popularity_vs_plays_quadrant(radio_df, view_option, other_radios_df)
+        plots.display_popularity_vs_plays_quadrant(radio_df, view_option, other_radios_df, radio_color=radio_color)
         st.divider()
         plots.display_top_genres_evolution(radio_df, other_radios_df)
 
