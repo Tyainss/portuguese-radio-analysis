@@ -1,6 +1,6 @@
-# 🎶 Radio Song Analysis
+# 🎶 Portuguese Radio Analysis
 
-Radio Song Analysis is a comprehensive project designed to scrape and analyze data from multiple radio stations, providing insights into the music being played. The project consists of two main parts:
+Portuguese Radio Analysis is a comprehensive project designed to scrape and analyze data from 4 Portuguese radio stations, providing insights into the music being played. The project consists of two main parts:
 
 1. **ETL Process**: Scrapes and processes data from radio websites and integrates additional information from APIs.
 2. **Streamlit Dashboard**: Visualizes the analyzed data in an interactive and user-friendly web application.
@@ -19,57 +19,65 @@ Radio Song Analysis is a comprehensive project designed to scrape and analyze da
   - MusicBrainz
 - **Sentiment Analysis**: Uses machine learning to analyze song lyrics for emotions and sentiment.
 - **Data Transformation**: Cleans and standardizes data for seamless analysis and visualization.
+- **Asyncio for Concurrency**: The use of Python's `asyncio` allows concurrent API requests, significantly improving performance.
+- **Polars for Efficiency**: The project uses Polars for fast and memory-efficient DataFrame operations.
 
 ### Streamlit Dashboard
 
 - **Overview Comparison**: Compare data from four radio stations side-by-side, including:
   - Total tracks and playtime.
-  - Popular genres, track durations, and sentiment.
+  - Main track language and artists countries, and how Portuguese/Portugal place.
+  - Decade comparison of tracks and artists
+  - Popular genres, track durations, and sentiment analysis.
 - **Deep Dive**: Focuses on one radio station and compares it to others grouped together.
 - **Self-Service Exploration**: Allows users to explore and extract data for custom analysis.
 - **Interactive Visualizations**: Provides charts and filters for dynamic insights.
+
+The dashboard is structured as follows:
+- `overview_comparison.py`: Provides a broad comparison across multiple radios.
+- `radio_deep_dive.py`: Offers detailed insights into a selected radio and its comparison with others.
+- `self_service.py`: Allows users to freely explore and download the dataset.
+
+Each page uses helper modules from `dashboard/utils/` for data processing, filtering, and visualization. The main entry point (`app.py`) initializes the dashboard and integrates all pages seamlessly.
+
 
 ---
 
 ## 🗂️ Project Structure
 
 ```plaintext
-radio_song_analysis/
-├── dashboard/                 # Streamlit dashboard files
-│   ├── app.py                 # Main entry point for the Streamlit app
-│   ├── pages/                 # Code for each dashboard page
-│   ├── spec/                  # Dashboard specification files
-│   ├── logo/                  # Logos used in the dashboard
-│   └── utils/                 # Helper modules for plotting and data handling
-│       ├── calculations.py    # Contains calculation logic for the dashboard
-│       ├── filters.py         # Filtering functionality for plots
-│       ├── helper.py          # Helper functions
-│       └── storage.py         # Handles data access for the dashboard
-├── data_extract/              # ETL process files
-│   ├── logs/                  # Logging for the ETL process
+portuguese-radio-analysis/
+├── dashboard/                       # Streamlit dashboard files
+│   ├── app.py                       # Main entry point for the Streamlit app
+│   ├── pages/                       # Code for each dashboard page
+│   ├── spec/                        # Self-Service page specification file
+│   ├── logo/                        # Logos used in the dashboard
+│   └── utils/                       # Helper modules for plotting and data handling
+│       ├── calculations.py          # Contains calculation logic for the dashboard
+│       ├── filters.py               # Filtering functionality for plots
+│       ├── helper.py                # Helper functions
+│       └── storage.py               # Handles data loading for the dashboard
+├── data_extract/                    # ETL process files
+│   ├── logs/                        # Logging for the ETL process
 │   ├── asynchronous_spotify_api.py  # Spotify API integration with asyncio
-│   ├── asynchronous_wikipedia_api.py  # Wikipedia API integration with asyncio
-│   ├── config_manager.py      # Configuration manager
-│   ├── data_storage.py        # Handles data storage and loading
-│   ├── genius.api.py          # Genius Lyrics API integration
-│   ├── logger.py              # Logging utilities
-│   ├── lyrics.py              # Lyrics sentiment analysis
-│   ├── musicbrainz_api.py     # MusicBrainz API integration
-│   ├── radio_music_etl.py     # Main ETL pipeline
-│   ├── radio_scraper.py       # Web scraping logic
-│   ├── spotify_api.py         # Spotify API integration
-│   └── wikipedia_api.py       # Wikipedia API integration
-├── documentation/             # Additional documentation and metric explanations
-│   └── spotify_metrics.md     # Documentation on Spotify-related metrics
-├── extract_folder/            # Raw data extracted from scrapers and APIs
-├── transform_folder/          # Transformed and cleaned data
-├── streamlit_testing/         # Streamlit testing environment
-├── .env.example               # Example environment variables file
-├── config.json                # File paths and scraper configurations
-├── schema.json                # Data schema definitions
-├── setup.py                   # Converts ETL into a package for reuse
-├── requirements.txt           # Python dependencies
-└── README.md                  # Project documentation (this file)
+│   ├── config_manager.py            # Configuration manager
+│   ├── data_storage.py              # Handles data storage and loading
+│   ├── genius.api.py                # Genius Lyrics API integration
+│   ├── logger.py                    # Logging utilities
+│   ├── lyrics.py                    # Lyrics sentiment analysis
+│   ├── musicbrainz_api.py           # MusicBrainz API integration
+│   ├── radio_music_etl.py           # Main ETL pipeline
+│   ├── radio_scraper.py             # Web scraping logic
+│   └── wikipedia_api.py             # Wikipedia API integration
+├── documentation/                   # Additional documentation and metric explanations
+├── extract_folder/                  # Raw data extracted from scrapers and APIs
+├── transform_folder/                # Transformed and cleaned data
+├── .env.example                     # Example environment variables file
+├── config.json                      # File paths and scraper configurations
+├── schema.json                      # Data schema definitions
+├── setup.py                         # Converts data_extract into a package for reuse
+├── requirements.txt                 # Python dependencies
+└── README.md                        # Project documentation (this file)
 ```
 
 ---
@@ -82,6 +90,8 @@ Ensure you have the following installed:
 
 - **Python 3.8+**
 - **Pip**
+- **Google Chrome**: Required for Selenium-based web scraping.
+- **ChromeDriver**: Must be installed to match your Chrome version. Download it from [ChromeDriver Downloads](https://sites.google.com/chromium.org/driver/). Place the executable in a folder and update the `CHROME_DRIVER_PATH` in `.env` or `config.json`.
 
 ### Installation
 
@@ -176,7 +186,7 @@ Defines paths for data storage and scraper configurations:
     "WIKIPEDIA_INFO_CSV_PATH": "./extract_folder/wikipedia_info_extract.csv",
 
     "WEB_SCRAPPER": {
-        "CHROME_DRIVER_PATH": "D://Transferências//chromedriver-win64//chromedriver.exe",
+        "CHROME_DRIVER_PATH": "/path/to/chromedriver",
         "CSV_PATH": "./extract_folder/{radio}_track_data_extract.csv",
         "WAIT_DURATION": 15,
         "WEB_SITES": {
@@ -223,5 +233,4 @@ Modify the code in the `dashboard/pages` and `dashboard/utils` directories to ad
 
 ---
 
-Enjoy exploring the world of radio music with Radio Song Analysis! 🎶
-
+Enjoy exploring and getting insights into the main Portuguese Radios with Portuguese Radio Analysis! 🎶
