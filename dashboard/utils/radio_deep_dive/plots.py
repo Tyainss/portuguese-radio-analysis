@@ -205,7 +205,7 @@ def display_sparkline(radio_df: pl.DataFrame, view_option: str):
 
         st.write(
             "**Tip**: You can hover over the lines to see exact values."
-            "You can also click legend entries to toggle them on/off."
+            " You can also click legend entries to toggle them on/off."
         )
 
         st.plotly_chart(fig, use_container_width=True)
@@ -355,7 +355,8 @@ def display_plot_dataframe(radio_df: pl.DataFrame, view_option: str, last_x_days
 def display_top_bar_chart(
     radio_df: pl.DataFrame, 
     view_option: str, 
-    other_radios_df: Optional[pl.DataFrame] = None, 
+    other_radios_df: Optional[pl.DataFrame] = None,
+    radio_name: str = 'This Radio', 
     radio_color: str = "#4E87F9"
 ):
     """
@@ -377,8 +378,7 @@ def display_top_bar_chart(
     else:  # "Track"
         group_cols = [cm.ARTIST_NAME_COLUMN, cm.TRACK_TITLE_COLUMN]
     
-    selected_radio_name = radio_df[cm.RADIO_COLUMN].unique().item()
-    st.subheader(f'🎤 :blue[Top 10 {view_option}s:] How Does This {selected_radio_name} Compare?')
+    st.subheader(f'🎤 :blue[Top 10 {view_option}s:] How Does {radio_name} Compare?')
     st.markdown(
         f"""
         A side-by-side look at the most played {view_option}s.
@@ -1004,7 +1004,12 @@ def display_popularity_vs_plays_quadrant(
             st.plotly_chart(generate_quadrant_chart(other_scatter_df, radio_color='#878786'), use_container_width=True)
 
 
-def display_underplayed_overplayed_highlights(radio_df: pl.DataFrame, other_radios_df: pl.DataFrame, view_option: str):
+def display_underplayed_overplayed_highlights(
+    radio_df: pl.DataFrame, 
+    other_radios_df: pl.DataFrame, 
+    view_option: str,
+    radio_name: str = 'This Radio'
+):
     """
     Highlights the most underplayed and overplayed Artists or Tracks in the selected radio compared to other radios.
 
@@ -1012,6 +1017,7 @@ def display_underplayed_overplayed_highlights(radio_df: pl.DataFrame, other_radi
         radio_df (pl.DataFrame): Input data for the selected radio containing play counts.
         other_radios_df (pl.DataFrame): Data for other radios to use in the comparison.
         view_option (str): Determines the grouping, either "Artist" or "Track".
+        radio_name (str): The name of the radio to be displayed.
 
     Functionality:
         - Identifies entities with high play counts in other radios but low in the selected radio (underplayed).
@@ -1026,9 +1032,6 @@ def display_underplayed_overplayed_highlights(radio_df: pl.DataFrame, other_radi
     else:  # "Track"
         group_cols = [cm.ARTIST_NAME_COLUMN, cm.TRACK_TITLE_COLUMN]
         display_col = 'Track Title'
-
-    # Get the selected radio name
-    selected_radio_name = radio_df[cm.RADIO_COLUMN].unique().item()
 
     # Aggregate total plays for each artist/track
     radio_plays = (
@@ -1139,7 +1142,7 @@ def display_underplayed_overplayed_highlights(radio_df: pl.DataFrame, other_radi
                 <div style="background-color:#e8f5e9;padding:12px;border-radius:8px;">
                 🔥 <b>Missed Opportunity!</b><br>
                 <b>{entity_name}</b><br>
-                <b>{row[most_underplayed.columns.index("radio_play_count")]} plays on {selected_radio_name}</b><br>
+                <b>{row[most_underplayed.columns.index("radio_play_count")]} plays on {radio_name}</b><br>
                 but <b>heavily played on other radios ({row[most_underplayed.columns.index("other_play_count")]:,} plays)</b>!
                 </div>
                 """
@@ -1160,7 +1163,7 @@ def display_underplayed_overplayed_highlights(radio_df: pl.DataFrame, other_radi
                     <div style="background-color:#ffebee;padding:12px;border-radius:8px;">
                     📢 <b>Unique Pick!</b><br>
                     <b>{entity_name}</b><br>
-                    <b>{row[most_overplayed.columns.index("radio_play_count")]:,} plays on {selected_radio_name}</b><br>
+                    <b>{row[most_overplayed.columns.index("radio_play_count")]:,} plays on {radio_name}</b><br>
                     but <b>barely played on other radios ({other_play_count:,} plays)</b>!
                     </div>
                     """
@@ -1169,7 +1172,7 @@ def display_underplayed_overplayed_highlights(radio_df: pl.DataFrame, other_radi
                     <div style="background-color:#ffebee;padding:12px;border-radius:8px;">
                     📢 <b>Unique Pick!</b><br>
                     <b>{entity_name}</b><br>
-                    <b>{row[most_overplayed.columns.index("radio_play_count")]:,} plays on {selected_radio_name}</b><br>
+                    <b>{row[most_overplayed.columns.index("radio_play_count")]:,} plays on {radio_name}</b><br>
                     and <b>doesn't have any plays on other radios!</b>
                     </div>
                     """
@@ -1188,7 +1191,7 @@ def display_underplayed_overplayed_highlights(radio_df: pl.DataFrame, other_radi
                 .select([display_col, "radio_play_count", "other_play_count"])
                 .head(10)
                 .rename({
-                    "radio_play_count": f"Plays on {selected_radio_name}",
+                    "radio_play_count": f"Plays on {radio_name}",
                     "other_play_count": "Plays on Other Radios"
                 })
             )
@@ -1200,7 +1203,7 @@ def display_underplayed_overplayed_highlights(radio_df: pl.DataFrame, other_radi
                 .select([display_col, "radio_play_count", "other_play_count"])
                 .head(10)
                 .rename({
-                    "radio_play_count": f"Plays on {selected_radio_name}",
+                    "radio_play_count": f"Plays on {radio_name}",
                     "other_play_count": "Plays on Other Radios"
                 })
             )
