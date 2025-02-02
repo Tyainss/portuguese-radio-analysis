@@ -1,5 +1,4 @@
 import polars as pl
-# from googletrans import Translator
 from deep_translator import GoogleTranslator
 from langdetect import detect
 from textblob import TextBlob
@@ -22,7 +21,6 @@ class LyricsAnalyzer:
     def detect_language(self, lyrics):
         try:
             language = detect(lyrics)
-            # print(f'Detected language: {language}')
             return language
         except Exception as e:
             print('Error detecting language:', e)

@@ -352,14 +352,8 @@ class RadioMusicETL:
 
 if __name__ == "__main__":
     etl = RadioMusicETL()
-    
-    # df = pl.DataFrame({
-    # 'track_title': ['Houdini', 'Please Please Please', 'She Will Be Loved'],
-    # 'artist_name': ['Dua Lipa', 'Sabrina Carpenter', 'Maroon 5']
-    # })
 
     async def run_test():
         await etl.run(scrape_radios=True , fetch_info=True, transform_data=True)
-        # await etl.transform_data(df)
 
     asyncio.run(run_test())

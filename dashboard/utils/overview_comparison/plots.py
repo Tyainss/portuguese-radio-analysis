@@ -7,7 +7,6 @@ import plotly.graph_objects as go
 
 from utils import calculations, helper
 from utils.overview_comparison import mappings
-# from utils.helper import helper.number_formatter, language_full_name_dict
 
 from data_extract.config_manager import ConfigManager
 cm = ConfigManager()
@@ -136,7 +135,6 @@ def display_track_languages(app_config: dict, ncols: int, num_languages: int, ma
             radio_color = val.get('color')
             radio_light_color = val.get('light_color')
             
-            # st.write(radio_df)
             language_counts = calculations.calculate_country_counts(
                 _df=radio_df,
                 country_col='lyrics_language',
@@ -295,7 +293,6 @@ def display_track_decades(
             
             # Display the values percentages
             total_tracks = df_tracks_decade_pandas["metric"].sum()
-            # df_tracks_decade_pandas["percentage"] = (df_tracks_decade_pandas["metric"] / total_tracks) * 100
             df_tracks_decade_pandas["percentage"] = (
                 df_tracks_decade_pandas["metric"] / total_tracks * 100
             ).apply(lambda x: f"{x:.1f}%")
@@ -806,7 +803,7 @@ def display_sentiment_analysis(app_config: dict, ncols: int, global_max_mean_val
         with sentiment_cols[i]:
             radio_name = val.get('name')
             radio_color = val.get('color')
-            mean_values = val.get('mean_values')  # Retrieve mean values for this radio
+            mean_values = val.get('mean_values')
             radio_csv = val.get('radio_csv')
             
             # Normalize mean values using global max mean values
@@ -827,7 +824,6 @@ def display_sentiment_analysis(app_config: dict, ncols: int, global_max_mean_val
                 theta=categories,
                 fill='toself',
                 line=dict(color=radio_color),
-                # name=f'{radio_name}'
                 name=None,
             ))
 
@@ -839,9 +835,7 @@ def display_sentiment_analysis(app_config: dict, ncols: int, global_max_mean_val
                         range=[0, 1]  # Ensure all metrics are on the same scale (0 to 1)
                     )
                 ),
-                # showlegend=True,
-                # title=f"Lyrics Sentiment Star Plot for {radio_name}"
-                margin=dict(l=100, r=100, t=20, b=20),  # Adjust for long genre names
+                margin=dict(l=100, r=100, t=20, b=20),
                 height=300,
                 hoverlabel_align = 'left',
             )
@@ -850,9 +844,8 @@ def display_sentiment_analysis(app_config: dict, ncols: int, global_max_mean_val
             st.plotly_chart(fig, use_container_width=True, key=f"{radio_name}_radar_chart")
 
             st.divider()
-            # st.write(radio_color)
+
             # Add an export button for the radio CSV data
-            # csv = radio_df.to_pandas().to_csv(index=False)  # Convert to pandas and CSV
             with stylable_container(
                 key=f'csv_export_button_{i}',
                 css_styles=f"""

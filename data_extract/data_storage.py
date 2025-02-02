@@ -35,8 +35,6 @@ class DataStorage:
     def _output_schema(self, df, schema):
         # Convert DataFrame columns to the specified data types
         for column, dtype in schema.items():
-            # logger.info(f'Processing column: {column}, dtype: {dtype}')
-
             if dtype == pl.Date:
                 df = df.with_columns(
                         pl.col(column).cast(pl.Utf8)
@@ -44,11 +42,6 @@ class DataStorage:
                           .alias(column)
                 )
             elif dtype == pl.Time:
-                # df = df.with_columns(
-                #         pl.col(column).cast(pl.Utf8)
-                #           .str.strptime(pl.Time, format="%H:%M", strict=False)
-                #           .alias(column)
-                # )
                 # Handle multiple time formats
                 df = df.with_columns(
                     pl.when(

@@ -19,7 +19,6 @@ df_track_info = storage.load_data(cm.TRACK_INFO_CSV_PATH, cm.TRACK_INFO_SCHEMA)
 
 radio_options = list(app_config.keys())
 
-# @st.cache_data
 def load_main_df(pandas_format=False):
     return storage.load_joined_data(
         df_radio_data, df_artist_info, df_track_info,
@@ -87,9 +86,6 @@ if 'other_radios_filter' not in st.session_state:
     update_other_radios()
 
 
-
-# st.session_state.clear()
-
 ### Sidebar Filters ###
 with st.sidebar:
     st.title(':gear: Page Settings')
@@ -155,7 +151,6 @@ with st.sidebar:
     # Date Filter
     new_date_period = st.date_input(
         label=':calendar: Select the time period',
-        # value=(min_date, max_date),
         min_value=min_date,
         max_value=max_date,
         key='date_period'
@@ -254,9 +249,9 @@ with st.sidebar:
                 genre_status_dict[genre] = "only_other"
 
         STATUS_TO_SYMBOL = {
-            "only_selected": "•", #  "⚫",
-            "both":         "•", # "⚫",
-            "only_other":   "" # "⚪"
+            "only_selected": "•",
+            "both":         "•",
+            "only_other":   ""
         }
 
         # Create the main genre DataFrame for the filter
@@ -355,7 +350,7 @@ with st.sidebar:
             .unique()
         )
 
-        # Count total number of plays (rows) per artist across *both* DFs
+        # Count total number of plays (rows) per artist across both dataframes
         all_artists_count = (
             pl.concat([radio_df, other_radios_df])
             .group_by(cm.ARTIST_NAME_COLUMN)
@@ -365,7 +360,7 @@ with st.sidebar:
         radio_artists = set(radio_df.select(cm.ARTIST_NAME_COLUMN).unique().to_series())
         other_artists = set(other_radios_df.select(cm.ARTIST_NAME_COLUMN).unique().to_series())
 
-        # Build a Python dict mapping artist -> status
+        # Build a dict mapping artist -> status
         status_dict = {}
         for artist in radio_artists.union(other_artists):
             if (artist in radio_artists) and (artist in other_artists):
@@ -376,9 +371,9 @@ with st.sidebar:
                 status_dict[artist] = "only_other"
 
         STATUS_TO_SYMBOL = {
-            "only_selected": "•", #  "⚫",
-            "both":         "•", # "⚫",
-            "only_other":   "" # "⚪"
+            "only_selected": "•",
+            "both":         "•",
+            "only_other":   ""
         }
         artists_df = (
             all_artists
@@ -400,7 +395,7 @@ with st.sidebar:
             # Now rewrite the original artist column, appending the status symbol
             .with_columns(
                 (
-                    pl.col("artist_raw") +           # original name
+                    pl.col("artist_raw") +
                     pl.lit(" ") +
                     pl.col("radio_status").replace(STATUS_TO_SYMBOL)
                 )
@@ -451,8 +446,7 @@ with st.sidebar:
             ['artist_raw']
         )
         radio_df = filters.filter_by_list(radio_df, cm.ARTIST_NAME_COLUMN, selected_artists.to_list())
-        other_radios_df = filters.filter_by_list(other_radios_df, cm.ARTIST_NAME_COLUMN, selected_artists.to_list())
-    
+        other_radios_df = filters.filter_by_list(other_radios_df, cm.ARTIST_NAME_COLUMN, selected_artists.to_list())    
     
     # Reset settings button
     st.button('Reset Page Settings', on_click=reset_page_settings)

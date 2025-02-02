@@ -16,8 +16,6 @@
 
 ![streamlit_app](documentation/images/streamlit_app.png)
 
-<!-- # 🎶 Portuguese Radio Analysis -->
-
 
 Ever wondered what songs dominate Portuguese radio? This project scrapes and analyzes music data from 4 major Portuguese radio stations (CidadeFM, RFM, MegaHits and Rádio Comercial), providing a deep dive into what’s being played, from trending hits to long-standing classics. Using **web scraping, machine learning, and interactive visualizations**, this project helps uncover trends in music preferences across stations.
 

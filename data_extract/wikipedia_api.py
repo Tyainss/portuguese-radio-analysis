@@ -190,8 +190,6 @@ class WikipediaAPI:
 
 if __name__ == '__main__':
     wiki = WikipediaAPI()
-    # res = wiki.get_artist_start_year(artist_name='Richie Campbell')
-    # print(res)
     df = pl.DataFrame({
     'artist_name': ['Dua Lipa', 'Sabrina Carpenter', 'Richie Campbell', 'Coldplay']
     })

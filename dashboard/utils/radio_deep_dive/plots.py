@@ -421,7 +421,6 @@ def display_top_bar_chart(
         bar_chart_df = bar_chart_df.sort('play_count', descending=False)
 
         # Create gradient colors
-        # base_color = [78, 135, 249]  # RGB for #4E87F9
         base_rgb = hex_to_rgb(radio_color)
         gradient_colors = [
             f"rgba({base_rgb[0]}, {base_rgb[1]}, {base_rgb[2]}, {0.1 + 0.1 * i})"
@@ -629,7 +628,7 @@ def display_top_by_week_chart(radio_df: pl.DataFrame, view_option: str, other_ra
         customdata_values = df[["hover_label", "formatted_play_count", "start_date", "end_date"]].to_pandas().values
         for _, trace in enumerate(fig.data):
             # Match the trace's name to the corresponding hover label
-            trace_hover_label = trace.name  # This should match `hover_label`
+            trace_hover_label = trace.name
             trace_customdata = [
                 data_row for data_row in customdata_values if data_row[0] == trace_hover_label
             ]

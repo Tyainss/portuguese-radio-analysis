@@ -1,5 +1,3 @@
-# utils/filters.py
-
 import polars as pl
 import streamlit as st
 
@@ -149,12 +147,10 @@ def update_select_all_checkbox(state_key: str, filter_column: str, checkbox_key:
 
     # Determine current selection state
     all_selected = df[filter_column].all()
-    none_selected = not df[filter_column].any()
 
     # Update the checkbox state accordingly
     st.session_state[checkbox_key] = all_selected
 
-    # return all_selected, none_selected
 
 def toggle_select_all(state_key: str, filter_column: str, checkbox_key: str):
     """
