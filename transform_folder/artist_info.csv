@@ -182,11 +182,15 @@ Bing Crosby With V Of Bts,United States,jazz,Person,1903-05-03,1977-10-14,true,S
 Birdy,United Kingdom,pop,Person,1996-05-15,,false,United Kingdom,2008-01-01,United Kingdom,2008-01-01
 Bispo,Portugal,"",Person,1992-04-12,,false,Unknown,,Portugal,1992-04-12
 Bispo ,Portugal,"",Person,1992-04-12,,false,Unknown,,Portugal,1992-04-12
+Bispo ,Unknown,"",Person,1992-04-12,,false,Unknown,,Unknown,1992-04-12
+Bispo Feat. Barbara Tinoco,Unknown,"",Person,1998-11-16,,false,Portugal,2012-01-01,Portugal,2012-01-01
 Bispo Feat. Barbara Tinoco,Portugal,"",Person,1998-11-16,,false,Portugal,2012-01-01,Portugal,2012-01-01
 Bispo Feat. Ivandro,Portugal,"",Person,1998-07-26,,false,Portugal,2012-01-01,Portugal,2012-01-01
 Bispo Feat. Julinho Ksd,Portugal,"",Person,,,false,Unknown,,Portugal,
+Bispo Ft. Barbara Tinoco,Unknown,"",Person,1998-11-16,,false,Unknown,,Unknown,1998-11-16
 Bispo Ft. Barbara Tinoco,Portugal,"",Person,1998-11-16,,false,Unknown,,Portugal,1998-11-16
 "Bispo, Bárbara Tinoco",Portugal,"",Person,1998-11-16,,false,Unknown,,Portugal,1998-11-16
+"Bispo, Bárbara Tinoco",Unknown,"",Person,1998-11-16,,false,Unknown,,Unknown,1998-11-16
 "Bispo, Julinho Ksd",Portugal,"",Person,,,false,Unknown,,Portugal,
 "Bispo, Syro",Portugal,"",Person,,,false,Unknown,,Portugal,
 Bizarrap,Argentina,pop,Person,1998-01-01,,false,Argentina,1998-08-29,Argentina,1998-08-29
@@ -410,6 +414,7 @@ David Carreira Feat. Kell Smith,Brazil,"",Person,1993-04-07,,false,Portugal,2008
 David Fonseca,Colombia,latin,Person,1979-05-29,,false,Portugal,1998-01-01,Colombia,1998-01-01
 "David Fonseca, Márcia",Brazil,"",Person,1943-11-25,,false,Unknown,,Brazil,1943-11-25
 David Guetta,France,house,Person,1967-11-07,,false,France,1986-01-01,France,1986-01-01
+David Guetta ,France,house,Person,1967-11-07,,false,France,1986-01-01,France,1986-01-01
 David Guetta & Bebe Rexha,United States,pop,Person,1989-08-30,,false,Unknown,,United States,1989-08-30
 David Guetta & Kim Petras,United States,pop,Person,1992-08-27,,false,Unknown,,United States,1992-08-27
 David Guetta + Onerepublic,United States,pop,Group,2004-01-01,,false,Unknown,,United States,2004-01-01
@@ -578,6 +583,7 @@ Flying Pickets,United Kingdom,a cappella,Group,1982-01-01,,false,Unknown,1982-01
 Foo Fighters,United States,rock,Group,1994-01-01,,false,Unknown,1994-01-01,United States,1994-01-01
 Foreigner,United States,rock,Group,1976-01-01,,false,Unknown,,United States,1976-01-01
 Frances,United States,aln-sh,Person,1912-11-04,1991-11-08,true,Unknown,,United States,1912-11-04
+Francisca Borges,Unknown,"",Person,,,false,Brazil,1872-10-21,Brazil,1872-10-21
 Frank Ocean,United States,contemporary r&b,Person,1987-10-28,,false,United States,2005-01-01,United States,2005-01-01
 Frankie Goes To Hollywood,Canada,"",Group,1979-01-01,,true,Unknown,1980-01-01,Canada,1980-01-01
 Frankieontheguitar,Portugal,"",Person,,,false,Unknown,,Portugal,
@@ -888,6 +894,7 @@ Kygo Ft. Selena Gomez,United States,dance-pop,Person,1992-07-22,,false,Unknown,,
 "Kygo, Ava Max",United States,pop,Person,1994-02-16,,false,Unknown,,United States,1994-02-16
 "Kygo, Conrad",Germany,krautrock,Person,1937-03-17,2011-08-04,true,Norway,2009-01-01,Germany,2009-01-01
 "Kygo, Jonas Brothers",United States,teen pop,Group,2005-01-01,,false,Unknown,,United States,2005-01-01
+"Kygo, Onerepublic",United States,pop,Group,2004-01-01,,false,Norway,2009-01-01,United States,2009-01-01
 Kylie Minogue,Australia,dance-pop,Person,1968-05-28,,false,Australia,1979-01-01,Australia,1979-01-01
 Labrinth [+] Emeli Sande,United Kingdom,contemporary r&b,Person,1987-03-10,,false,United Kingdom,2008-01-01,United Kingdom,2008-01-01
 "Labrinth, Emeli Sandé",United Kingdom,contemporary r&b,Person,1987-03-10,,false,United Kingdom,2008-01-01,United Kingdom,2008-01-01
@@ -1222,6 +1229,7 @@ Noah Cyrus,United States,alternative country,Person,2000-01-08,,false,United Sta
 Noah Kahan,United States,folk pop,Person,1997-01-01,,false,United States,2016-01-01,United States,2016-01-01
 Noble,United Kingdom,jazz,Group,,,true,Unknown,,United Kingdom,
 Norah Jones,United States,vocal jazz,Person,1979-03-30,,false,United States,2001-01-01,United States,2001-01-01
+Notorious B.I.G. ,United States,hip hop,Person,1972-05-21,1997-03-09,true,United States,1992-01-01,United States,1992-01-01
 Nuno Ribeiro,Portugal,"",Person,,,false,Portugal,1977-09-09,Portugal,1977-09-09
 Nuno Ribeiro Ft. Ainoa Buitrago,Spain,"",Person,,,false,Unknown,,Spain,
 Nuno Ribeiro Ft. Conan Osiris,Unknown,"",Person,1989-01-05,,false,Unknown,,Unknown,1989-01-05
@@ -1700,6 +1708,7 @@ Xavi ,Unknown,"",Person,,,false,Unknown,,Unknown,
 Xtinto,Portugal,"",Person,,,false,Unknown,,Portugal,
 Xutos & Pontapés,Portugal,new wave,Group,1978-12-20,,false,Unknown,1978-01-01,Portugal,1978-01-01
 Xxxtentacion ,United States,trap,Person,1998-01-23,2018-06-18,true,United States,2013-01-01,United States,2013-01-01
+"Yandel, Feid ",Colombia,latin,Person,1992-08-19,,false,Unknown,,Colombia,1992-08-19
 Yang,United States,crunk,Group,2000-01-01,,false,Unknown,,United States,2000-01-01
 Ybn Nahmir ,United States,"",Person,1999-12-18,,false,United States,2014-01-01,United States,2014-01-01
 Years & Years,United Kingdom,electropop,Group,2010-07-20,2023-12-16,true,Unknown,2010-01-01,United Kingdom,2010-01-01
