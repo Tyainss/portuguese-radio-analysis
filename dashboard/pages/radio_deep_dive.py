@@ -122,8 +122,11 @@ with st.sidebar:
             horizontal=True
         )
 
-    with st.expander(label='Compare to...'):
-        st.caption('Select radios to compare with')
+    with st.expander(label='Choose radios to compare'):
+        st.caption(
+            body='Select the *Other Radios* to compare with',
+            help="Select one or more radios to compare with the main chosen radio. If no radios are selected, the page will focus solely on the main radio's performance."
+        )
         other_radios_chosen = st.segmented_control(
             label='Pick Radio',
             label_visibility='collapsed',
