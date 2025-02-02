@@ -61,14 +61,14 @@ with st.sidebar:
     )
     new_graph_option = st.radio(
         label='📈 Select :blue[**Time Series**] to display:',
-        options=['Avg Tracks', 'Avg Hours Played', 'Avg Popularity'],
+        options=['Avg Hours Played', 'Avg Tracks', 'Avg Popularity'],
         # index=1,
         key='ts_graph'
     )
 
     metric_type_option = st.radio(
         label='📊 Select :blue[**Metric**] Type',
-        options=['Unique', 'Total', 'Average'],
+        options=['Total', 'Unique', 'Average'],
         # index=0,
         horizontal=False,
         key='metric_type',
