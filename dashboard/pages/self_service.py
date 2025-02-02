@@ -2,8 +2,6 @@ import polars as pl
 import streamlit as st
 from pygwalker.api.streamlit import StreamlitRenderer
 from pathlib import Path
-# from ydata_profiling import ProfileReport
-# from streamlit_pandas_profiling import st_profile_report
 from streamlit_extras.stylable_container import stylable_container
 
 from data_extract.config_manager import ConfigManager
@@ -50,11 +48,6 @@ st.info('''
     **Data Exploration** uses a Tableau-like library to allow for free exploration of the whole dataset\n
     **Extract Dataset** Extract the whole dataset for your own use.
 ''')
-# **Data Profiling** provides information about the whole dataset, including a description for each column
-
-# Initialize session state for profiling generation
-if "profiling_started" not in st.session_state:
-    st.session_state["profiling_started"] = False
 
 # Get the path to the current script
 current_dir = Path(__file__).parent
@@ -74,30 +67,6 @@ with tab1:
 
     renderer = get_pyg_renderer()
     renderer.explorer()
-
-# # Data Profiling Tab
-# with tab2:
-#     st.title("Data Profiling")
-
-#     if st.session_state["profiling_started"]:
-#         # Profiling already started, reuse the saved report
-#         with st.spinner("Loading the existing profiling report..."):
-#             st_profile_report(st.session_state["profiling_report"])
-#     else:
-#         # Generate the profiling report and save to session_state
-#         with st.spinner("Generating the profiling report. This may take a few moments..."):
-#             df = load_df(pandas_format=True)
-#             profiling_report = ProfileReport(
-#                 df,
-#                 title="Profiling Report",
-#                 explorative=True,
-#             )
-#             # Save the report in session state
-#             st.session_state["profiling_started"] = True
-#             st.session_state["profiling_report"] = profiling_report
-
-#             # Display the profiling report
-#             st_profile_report(profiling_report)
 
 # Data Extract Tab
 with tab2:
