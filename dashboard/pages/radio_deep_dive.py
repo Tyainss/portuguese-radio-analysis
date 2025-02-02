@@ -477,8 +477,8 @@ else:
     with st.expander('', expanded=True):
         st.markdown(
             """
-            <div style="background-color: #e6e6e6; padding: 15px; border-radius: 10px;">
-                <h2 style="text-align: center; color: #333;">📊 Comparison to Other Radios</h2>
+            <div style="background-color: #e6e6e6; padding: 15px; border-radius: 10px; color: #31333F;">
+                <h2 style="text-align: center;">📊 Comparison to Other Radios</h2>
                 <p style="font-size: 16px;">
                     Understanding how a selected radio station compares to others is key to identifying trends, uniqueness, 
                     and performance. This section provides a side-by-side comparison of <b>top artists, play distributions, 
@@ -508,7 +508,7 @@ else:
             st.markdown(
                 f"""
                 <div style="text-align: center; background-color: #E9E9E9; padding: 8px; 
-                            border-radius: 8px; font-size: 20px; font-weight: bold; color: #1f2937;">
+                            border-radius: 8px; font-size: 20px; font-weight: bold; color: #31333F;">
                     🎧 {radio_chosen}
                 </div>
                 """,
@@ -519,7 +519,7 @@ else:
                 st.markdown(
                     """
                     <div style="text-align: center; background-color: #E9E9E9; padding: 8px; 
-                                border-radius: 8px; font-size: 20px; font-weight: bold; color: #1f2937;">
+                                border-radius: 8px; font-size: 20px; font-weight: bold; color: #31333F;">
                         📡 Other Radios
                     </div>
                     """,

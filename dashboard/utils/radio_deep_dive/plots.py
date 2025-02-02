@@ -1144,7 +1144,7 @@ def display_underplayed_overplayed_highlights(
             # Ensure no "None" or empty values are displayed
             if entity_name and entity_name.strip():
                 underplayed_text = f"""
-                <div style="background-color:#e8f5e9;padding:12px;border-radius:8px;">
+                <div style="background-color:#e8f5e9;padding:12px;border-radius:8px; color: #31333F;">
                 🔥 <b>Missed Opportunity!</b><br>
                 <b>{entity_name}</b><br>
                 <b>{row[most_underplayed.columns.index("radio_play_count")]} plays on {radio_name}</b><br>
@@ -1165,7 +1165,7 @@ def display_underplayed_overplayed_highlights(
                 other_play_count = row[most_overplayed.columns.index("other_play_count")]
                 if other_play_count > 0:
                     overplayed_text = f"""
-                    <div style="background-color:#ffebee;padding:12px;border-radius:8px;">
+                    <div style="background-color:#ffebee;padding:12px;border-radius:8px; color: #31333F;">
                     📢 <b>Unique Pick!</b><br>
                     <b>{entity_name}</b><br>
                     <b>{row[most_overplayed.columns.index("radio_play_count")]:,} plays on {radio_name}</b><br>
@@ -1174,7 +1174,7 @@ def display_underplayed_overplayed_highlights(
                     """
                 else:
                     overplayed_text = f"""
-                    <div style="background-color:#ffebee;padding:12px;border-radius:8px;">
+                    <div style="background-color:#ffebee;padding:12px;border-radius:8px; color: #31333F;">
                     📢 <b>Unique Pick!</b><br>
                     <b>{entity_name}</b><br>
                     <b>{row[most_overplayed.columns.index("radio_play_count")]:,} plays on {radio_name}</b><br>
