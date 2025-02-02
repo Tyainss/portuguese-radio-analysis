@@ -467,7 +467,7 @@ def display_top_bar_chart(
     # Display right chart (other radios) if provided
     if other_radios_df is not None and not other_radios_df.is_empty():
         with col2:
-            st.plotly_chart(generate_bar_chart(other_radios_df, radio_color='#878786'), use_container_width=True)
+            st.plotly_chart(generate_bar_chart(other_radios_df, radio_color='#A1A1A0'), use_container_width=True)
 
 
 def display_top_by_week_chart(radio_df: pl.DataFrame, view_option: str, other_radios_df: Optional[pl.DataFrame] = None):
@@ -827,7 +827,7 @@ def display_play_count_histogram(
         with col2:
             st.plotly_chart(
                 generate_histogram(
-                    other_histogram_df, show_yaxis_title=False, radio_color='#878786'
+                    other_histogram_df, show_yaxis_title=False, radio_color='#A1A1A0'
                 ), 
             use_container_width=True
         )
@@ -1006,7 +1006,7 @@ def display_popularity_vs_plays_quadrant(
     # Display right chart (other radios) if provided
     if other_radios_df is not None and not other_radios_df.is_empty():
         with col2:
-            st.plotly_chart(generate_quadrant_chart(other_scatter_df, radio_color='#878786', show_yaxis_title=False), use_container_width=True)
+            st.plotly_chart(generate_quadrant_chart(other_scatter_df, radio_color='#A1A1A0', show_yaxis_title=False), use_container_width=True)
 
 
 def display_underplayed_overplayed_highlights(
