@@ -842,7 +842,7 @@ def display_sentiment_analysis(app_config: dict, ncols: int, global_max_mean_val
                 ),
                 # showlegend=True,
                 # title=f"Lyrics Sentiment Star Plot for {radio_name}"
-                margin=dict(l=100, r=100, t=0, b=0),  # Adjust for long genre names
+                margin=dict(l=100, r=100, t=20, b=20),  # Adjust for long genre names
                 height=300,
                 hoverlabel_align = 'left',
             )
