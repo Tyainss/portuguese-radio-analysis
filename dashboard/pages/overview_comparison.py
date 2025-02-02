@@ -37,11 +37,13 @@ if 'date_period' not in st.session_state:
     st.session_state['date_period'] = (min_date, max_date)
 if 'ts_graph' not in st.session_state:
     st.session_state['ts_graph'] = 'Avg Hours Played'
+if 'metric_type' not in st.session_state:
+    st.session_state['metric_type'] = 'Total'
 
 def reset_settings():
     st.session_state['date_period'] = (min_date, max_date)
     st.session_state['ts_graph'] = 'Avg Hours Played'
-    st.session_state['metric_type'] = 'Unique'
+    st.session_state['metric_type'] = 'Total'
     # Reset release year filter
     if release_years:
         st.session_state['release_year_range'] = (min_release_date, max_release_date)
@@ -67,7 +69,7 @@ with st.sidebar:
     metric_type_option = st.radio(
         label='📊 Select :blue[**Metric**] Type',
         options=['Unique', 'Total', 'Average'],
-        index=0,
+        # index=0,
         horizontal=False,
         key='metric_type',
         help="""Display either unique or total combinations, or average.
