@@ -151,7 +151,6 @@ streamlit-extras==0.5.0
 streamlit-faker==0.0.3
 streamlit-image-coordinates==0.1.9
 streamlit-keyup==0.2.4
-# streamlit-pandas-profiling==0.1.3
 streamlit-toggle-switch==1.0.2
 streamlit-vertical-slider==2.5.5
 sympy==1.13.1
@@ -183,4 +182,3 @@ widgetsnbextension==4.0.13
 wordcloud==1.9.4
 wsproto==1.2.0
 yarl==1.18.3
-# ydata-profiling==4.12.1

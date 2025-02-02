@@ -176,7 +176,6 @@ def clean_name_column(df: pl.DataFrame, col: str) -> pl.DataFrame:
         pl.col(col)
         .str.strip_chars()  # Removes leading/trailing spaces
         .map_elements(lambda x: unidecode.unidecode(x) if isinstance(x, str) else x, return_dtype=pl.Utf8)  # Removes accents
-        # .str.to_lowercase()  # Ensures all names are lowercase for consistent joins
         .alias(col)
     )
     
@@ -187,3 +186,16 @@ def week_dates_start_end(week_label):
     start_date = datetime.strptime(f"{year}-W{week}-1", "%G-W%V-%u")  # First day of the week
     end_date = start_date + timedelta(days=6)  # Last day of the week
     return [start_date.strftime("%Y-%m-%d"), end_date.strftime("%Y-%m-%d")]
+
+def hex_to_rgb(hex_color: str) -> tuple[int, int, int]:
+    """
+    Converts a hex color string to an RGB tuple.
+    
+    Args:
+        hex_color (str): Color string in hex format (e.g., "#4E87F9").
+    
+    Returns:
+        tuple: A tuple (R, G, B) where each value is an integer between 0 and 255.
+    """
+    hex_color = hex_color.lstrip('#')
+    return tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))

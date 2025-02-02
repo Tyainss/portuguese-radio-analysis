@@ -20,7 +20,6 @@ def _convert_ms(duration_ms, output_unit: str = 'hours') -> float:
     factor = conversion_factors.get(output_unit, 1)
     return round(duration_ms * factor, 2)
 
-# @st.cache_data(show_spinner=True)
 def prepare_hourly_metrics(_df: pl.DataFrame, metric: str, id=None, **kwargs) -> pl.DataFrame:
     """
     Prepares hourly metrics for plotting.
@@ -32,7 +31,6 @@ def prepare_hourly_metrics(_df: pl.DataFrame, metric: str, id=None, **kwargs) ->
     Returns:
         A Polars DataFrame with 'hour' and the calculated metric.
     """
-    # print(id)
     # Extract the hour from the 'time' column
     df = _df.with_columns(
             pl.col(cm.TIME_PLAYED_COLUMN)
@@ -82,10 +80,8 @@ def prepare_hourly_metrics(_df: pl.DataFrame, metric: str, id=None, **kwargs) ->
     
     # Return the selected metric
     result = hourly_data.select(["hour", metric]).sort('hour', descending=False)
-    # result = hourly_data
     return result
 
-# @st.cache_data(show_spinner=True)
 def prepare_weekday_metrics(_df: pl.DataFrame, metric: str, output_unit: str = 'hours', id=None) -> pl.DataFrame:
     """
     Prepares weekday metrics for plotting.
@@ -151,7 +147,6 @@ def prepare_weekday_metrics(_df: pl.DataFrame, metric: str, output_unit: str = '
 
     return weekday_data.select(["weekday_name", metric])
 
-# @st.cache_data(show_spinner=True)
 def calculate_avg_tracks(_df: pl.DataFrame, adjusted_calc=True, id=None) -> float:
     df = _df # '_' before indicates the variable is not hashed in cache_data
     if df.is_empty():
@@ -166,7 +161,6 @@ def calculate_avg_tracks(_df: pl.DataFrame, adjusted_calc=True, id=None) -> floa
 
     return round(avg_tracks, 2)
 
-# @st.cache_data(show_spinner=True)
 def calculate_avg_time(_df: pl.DataFrame, output_unit: str = "hours", adjusted_calc=True, id=None) -> float:
     df = _df # '_' before indicates the variable is not hashed in cache_data
     if df.is_empty():
@@ -182,7 +176,6 @@ def calculate_avg_time(_df: pl.DataFrame, output_unit: str = "hours", adjusted_c
 
     return round(avg_time, 2)
     
-# @st.cache_data(show_spinner=True) 
 def calculate_avg_popularity(_df: pl.DataFrame, id=None) -> float:
     df = _df # '_' before indicates the variable is not hashed in cache_data
     if df.is_empty():
@@ -198,6 +191,7 @@ def plot_metrics(
     x_axis_column: str = 'weekday_name',
     x_axis_label: str = 'Day of Week',
     y_axis_range: tuple[float, float] = None,
+    color: str = None,
     **kwargs
 ):
     """
@@ -224,15 +218,18 @@ def plot_metrics(
         y=metric,
         title=title,
         labels={x_axis_column: x_axis_label, metric: metric_name},
-        markers=True
+        markers=True,
+        color_discrete_sequence=[color]
     )
     fig.update_layout(
         xaxis_title=x_axis_label,
-        # yaxis_title=metric_name,
         yaxis_title=None,
         margin=dict(l=0, r=0, t=0, b=0),
         height=350,
         hoverlabel_align="left",
+        yaxis=dict(
+            gridcolor="#E0E0E0"
+        )
     )
     fig.update_traces(
         hovertemplate=(
@@ -241,19 +238,20 @@ def plot_metrics(
         )
     )
 
+    fig.update_traces(line=dict(width=3))
+
     # Apply the y-axis range if provided
     if y_axis_range:
         fig.update_yaxes(range=y_axis_range)
 
     st.plotly_chart(fig, use_container_width=True, key=f'{radio_name}_{metric}_{x_axis_column}')
 
-# @st.cache_data(show_spinner=True)
 def calculate_country_counts(
     _df: pl.DataFrame,
     country_col: str,
     count_columns: List[str],
     metric_type: str = 'unique',
-    include_most_played: str = None,  # Options: "track", "artist", or None
+    include_most_played: str = None, 
     id=None,
 ) -> pl.DataFrame:
     """
@@ -339,13 +337,12 @@ def calculate_country_counts(
 
     return result.sort(by="metric", descending=True)
 
-# @st.cache_data(show_spinner=True)
 def calculate_decade_metrics(
     _df: pl.DataFrame,
     date_column: str,
     count_columns: List[str],
     metric_type: str = "unique",
-    include_most_played: str = None,  # Options: "track", "artist", or None
+    include_most_played: str = None,
     id=None,
 ) -> pl.DataFrame:
     """
@@ -454,7 +451,6 @@ def calculate_decade_metrics(
 
     return result.sort("decade_year")
 
-# @st.cache_data(show_spinner=True)
 def calculate_duration_metrics(
     _df: pl.DataFrame,
     duration_column: str,
@@ -541,7 +537,6 @@ def calculate_duration_metrics(
 
     return result.sort("duration_minutes")
 
-# @st.cache_data(show_spinner=True)
 def calculate_genre_metrics(
     _df: pl.DataFrame,
     genre_column: str,

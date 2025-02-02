@@ -19,7 +19,6 @@ df_track_info = storage.load_data(cm.TRACK_INFO_CSV_PATH, cm.TRACK_INFO_SCHEMA)
 
 radio_options = list(app_config.keys())
 
-# @st.cache_data
 def load_main_df(pandas_format=False):
     return storage.load_joined_data(
         df_radio_data, df_artist_info, df_track_info,
@@ -87,9 +86,6 @@ if 'other_radios_filter' not in st.session_state:
     update_other_radios()
 
 
-
-# st.session_state.clear()
-
 ### Sidebar Filters ###
 with st.sidebar:
     st.title(':gear: Page Settings')
@@ -126,8 +122,11 @@ with st.sidebar:
             horizontal=True
         )
 
-    with st.expander(label='Compare to...'):
-        st.caption('Select radios to compare with')
+    with st.expander(label='Choose radios to compare'):
+        st.caption(
+            body='Select the *Other Radios* to compare with',
+            help="Select one or more radios to compare with the main chosen radio. If no radios are selected, the page will focus solely on the main radio's performance."
+        )
         other_radios_chosen = st.segmented_control(
             label='Pick Radio',
             label_visibility='collapsed',
@@ -154,8 +153,7 @@ with st.sidebar:
 
     # Date Filter
     new_date_period = st.date_input(
-        label=':calendar: Select the time period',
-        # value=(min_date, max_date),
+        label=':date: Select the time period',
         min_value=min_date,
         max_value=max_date,
         key='date_period'
@@ -254,9 +252,9 @@ with st.sidebar:
                 genre_status_dict[genre] = "only_other"
 
         STATUS_TO_SYMBOL = {
-            "only_selected": "•", #  "⚫",
-            "both":         "•", # "⚫",
-            "only_other":   "" # "⚪"
+            "only_selected": "•",
+            "both":         "•",
+            "only_other":   ""
         }
 
         # Create the main genre DataFrame for the filter
@@ -355,7 +353,7 @@ with st.sidebar:
             .unique()
         )
 
-        # Count total number of plays (rows) per artist across *both* DFs
+        # Count total number of plays (rows) per artist across both dataframes
         all_artists_count = (
             pl.concat([radio_df, other_radios_df])
             .group_by(cm.ARTIST_NAME_COLUMN)
@@ -365,7 +363,7 @@ with st.sidebar:
         radio_artists = set(radio_df.select(cm.ARTIST_NAME_COLUMN).unique().to_series())
         other_artists = set(other_radios_df.select(cm.ARTIST_NAME_COLUMN).unique().to_series())
 
-        # Build a Python dict mapping artist -> status
+        # Build a dict mapping artist -> status
         status_dict = {}
         for artist in radio_artists.union(other_artists):
             if (artist in radio_artists) and (artist in other_artists):
@@ -376,9 +374,9 @@ with st.sidebar:
                 status_dict[artist] = "only_other"
 
         STATUS_TO_SYMBOL = {
-            "only_selected": "•", #  "⚫",
-            "both":         "•", # "⚫",
-            "only_other":   "" # "⚪"
+            "only_selected": "•",
+            "both":         "•",
+            "only_other":   ""
         }
         artists_df = (
             all_artists
@@ -400,7 +398,7 @@ with st.sidebar:
             # Now rewrite the original artist column, appending the status symbol
             .with_columns(
                 (
-                    pl.col("artist_raw") +           # original name
+                    pl.col("artist_raw") +
                     pl.lit(" ") +
                     pl.col("radio_status").replace(STATUS_TO_SYMBOL)
                 )
@@ -451,12 +449,17 @@ with st.sidebar:
             ['artist_raw']
         )
         radio_df = filters.filter_by_list(radio_df, cm.ARTIST_NAME_COLUMN, selected_artists.to_list())
-        other_radios_df = filters.filter_by_list(other_radios_df, cm.ARTIST_NAME_COLUMN, selected_artists.to_list())
-    
+        other_radios_df = filters.filter_by_list(other_radios_df, cm.ARTIST_NAME_COLUMN, selected_artists.to_list())    
     
     # Reset settings button
     st.button('Reset Page Settings', on_click=reset_page_settings)
 
+radio_logo = app_config[radio_chosen].get('logo')
+radio_color = app_config[radio_chosen].get('color')
+
+_, logo_col, _ = st.columns([1,1,1])
+with logo_col:
+    st.image(radio_logo, use_container_width=False)
 
 # Handle empty dataframe scenario
 if radio_df.is_empty():
@@ -474,8 +477,8 @@ else:
     with st.expander('', expanded=True):
         st.markdown(
             """
-            <div style="background-color: #edf0f5; padding: 15px; border-radius: 10px;">
-                <h2 style="text-align: center; color: #333;">📊 Comparison to Other Radios</h2>
+            <div style="background-color: #e6e6e6; padding: 15px; border-radius: 10px; color: #31333F;">
+                <h2 style="text-align: center;">📊 Comparison to Other Radios</h2>
                 <p style="font-size: 16px;">
                     Understanding how a selected radio station compares to others is key to identifying trends, uniqueness, 
                     and performance. This section provides a side-by-side comparison of <b>top artists, play distributions, 
@@ -484,7 +487,7 @@ else:
                 <ul style="font-size: 16px; margin-left: 20px;">
                     <li>🎵 <b>Which artists/tracks are more popular on this radio compared to others?</b></li>
                     <li>📈 <b>How do play counts vary across different stations?</b></li>
-                    <li>🎨 <b>Are there unique genre preferences in this radio’s audience?</b></li>
+                    <li>🎨 <b>Are there unique genre preferences in this radio's audience?</b></li>
                 </ul>
                 <p style="font-size: 16px;">
                     Each visualization below is designed to <b>highlight key differences</b> between the selected radio 
@@ -504,9 +507,9 @@ else:
         with col1:
             st.markdown(
                 f"""
-                <div style="text-align: center; background-color: #e3e7f1; padding: 8px; 
-                            border-radius: 8px; font-size: 20px; font-weight: bold; color: #1f2937;">
-                    🎧 {radio_df[cm.RADIO_COLUMN][0]}
+                <div style="text-align: center; background-color: #E9E9E9; padding: 8px; 
+                            border-radius: 8px; font-size: 20px; font-weight: bold; color: #31333F;">
+                    🎧 {radio_chosen}
                 </div>
                 """,
                 unsafe_allow_html=True
@@ -515,8 +518,8 @@ else:
             with col2:
                 st.markdown(
                     """
-                    <div style="text-align: center; background-color: #e3e7f1; padding: 8px; 
-                                border-radius: 8px; font-size: 20px; font-weight: bold; color: #1f2937;">
+                    <div style="text-align: center; background-color: #E9E9E9; padding: 8px; 
+                                border-radius: 8px; font-size: 20px; font-weight: bold; color: #31333F;">
                         📡 Other Radios
                     </div>
                     """,
@@ -524,13 +527,13 @@ else:
                 )
         
         st.write('#####')
-        plots.display_top_bar_chart(radio_df, view_option, other_radios_df)
+        plots.display_top_bar_chart(radio_df, view_option, other_radios_df, radio_name=radio_chosen, radio_color=radio_color)
         st.divider()
         plots.display_top_by_week_chart(radio_df, view_option, other_radios_df)
         st.divider()
-        plots.display_play_count_histogram(radio_df, view_option, other_radios_df)
+        plots.display_play_count_histogram(radio_df, view_option, other_radios_df, radio_color=radio_color)
         st.divider()
-        plots.display_popularity_vs_plays_quadrant(radio_df, view_option, other_radios_df)
+        plots.display_popularity_vs_plays_quadrant(radio_df, view_option, other_radios_df, radio_color=radio_color)
         st.divider()
         plots.display_top_genres_evolution(radio_df, other_radios_df)
 
@@ -539,7 +542,7 @@ else:
     ## Radio Highlights ##
     ######################
     if other_radios_df is not None and not other_radios_df.is_empty():
-        plots.display_underplayed_overplayed_highlights(radio_df, other_radios_df, view_option)
+        plots.display_underplayed_overplayed_highlights(radio_df, other_radios_df, view_option, radio_name=radio_chosen)
         st.divider()
         
 
@@ -547,8 +550,3 @@ else:
     ## Artist/Track Dataframe with plots  ##
     ########################################
     plots.display_plot_dataframe(radio_df, view_option)
-
-
-
-
-# Add image of selected radio up top

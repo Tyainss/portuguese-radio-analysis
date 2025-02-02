@@ -51,6 +51,16 @@ def load_joined_data(
     # Format 'spotify_genres' column
     if 'spotify_genres' in df.columns:
         df = df.with_columns(pl.col('spotify_genres').str.to_titlecase())
+    
+    if 'mb_artist_main_genre' in df.columns:
+        df = df.with_columns(pl.col('mb_artist_main_genre').str.to_titlecase())
+
+    df = df.with_columns(
+        pl.when((pl.col('spotify_genres').is_not_null()) & (~pl.col('spotify_genres').is_in(['Unknown', ''])))
+        .then(pl.col('spotify_genres'))
+        .otherwise(pl.col('mb_artist_main_genre'))
+        .alias('combined_artist_genre')
+    )
 
     if pandas_format:
         df = df.to_pandas()
