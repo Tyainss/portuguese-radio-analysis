@@ -52,7 +52,7 @@ with st.sidebar:
     st.title(':gear: Page Settings')
 
     new_date_period = st.date_input(
-        label=':calendar: Select the time period',
+        label='📅 Select the time period',
         min_value=min_date,
         max_value=max_date,
         key='date_period'

@@ -488,11 +488,11 @@ def display_top_by_week_chart(radio_df: pl.DataFrame, view_option: str, other_ra
     if view_option == "Artist":
         group_cols = [cm.ARTIST_NAME_COLUMN]
         legend_title = "Artist Name"
-        st.subheader("📆 :blue[Weekly Leaders:] Who Topped the Charts Each Week?")
+        st.subheader("📅 :blue[Weekly Leaders:] Who Topped the Charts Each Week?")
     else:  # "Track"
         group_cols = [cm.ARTIST_NAME_COLUMN, cm.TRACK_TITLE_COLUMN]
         legend_title = "Track Name"
-        st.subheader("📆 :blue[Weekly Leaders:] What Topped the Charts Each Week?")
+        st.subheader("📅 :blue[Weekly Leaders:] What Topped the Charts Each Week?")
 
     st.markdown(
         f"""

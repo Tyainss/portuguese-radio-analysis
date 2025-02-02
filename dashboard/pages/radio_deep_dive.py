@@ -153,7 +153,7 @@ with st.sidebar:
 
     # Date Filter
     new_date_period = st.date_input(
-        label=':calendar: Select the time period',
+        label=':date: Select the time period',
         min_value=min_date,
         max_value=max_date,
         key='date_period'
