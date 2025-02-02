@@ -7,7 +7,7 @@ def define_pages():
     self_service_page = st.Page('pages/self_service.py', title='Self Service', icon='👷‍♂️')
 
     pg = st.navigation([overview_page, radio_page, self_service_page])
-    st.set_page_config(layout='wide', page_title='Radio Songs Analysis', page_icon=':radio:')
+    st.set_page_config(layout='wide', page_title='Portuguese Radio Analysis', page_icon=':radio:')
 
     return pg
     
