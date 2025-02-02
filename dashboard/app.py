@@ -9,7 +9,6 @@ def define_pages():
     pg = st.navigation([overview_page, radio_page, self_service_page])
     st.set_page_config(layout='wide', page_title='Radio Songs Analysis', page_icon=':radio:')
 
-
     return pg
     
 pg = define_pages()

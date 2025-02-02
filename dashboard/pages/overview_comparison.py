@@ -6,7 +6,6 @@ from data_extract.config_manager import ConfigManager
 from utils import storage, filters, calculations
 from utils.overview_comparison import mappings, plots
 
-# st.logo('dashboard/logo/RFM_2008.png')
 cm = ConfigManager()
 app_config = cm.load_json(path='dashboard/app_config.json')
 
@@ -54,7 +53,6 @@ with st.sidebar:
 
     new_date_period = st.date_input(
         label=':calendar: Select the time period',
-        # value=(min_date, max_date),
         min_value=min_date,
         max_value=max_date,
         key='date_period'
@@ -62,14 +60,12 @@ with st.sidebar:
     new_graph_option = st.radio(
         label='📈 Select :blue[**Time Series**] to display:',
         options=['Avg Hours Played', 'Avg Tracks', 'Avg Popularity'],
-        # index=1,
         key='ts_graph'
     )
 
     metric_type_option = st.radio(
         label='📊 Select :blue[**Metric**] Type',
         options=['Total', 'Unique', 'Average'],
-        # index=0,
         horizontal=False,
         key='metric_type',
         help="""Display either unique or total combinations, or average.
@@ -274,19 +270,6 @@ plots.display_track_kpis(app_config=app_config, ncols=ncols)
 # Track Plots Expander
 track_plots_expander = st.expander(label=f'Track Plots', expanded=True, icon='📊')
 with track_plots_expander:
-    # with stylable_container(
-    #     key='track_plots_settings',
-    #     css_styles="""
-    #         button {
-    #             width: 150px;
-    #             height: 60px;
-    #             background-color: green;
-    #             color: white;
-    #             border-radius: 5px;
-    #             white-space: nowrap;
-    #         }
-    #         """,
-    # ):
     with st.popover(label='Settings', icon='⚙️', use_container_width=False):
         num_languages = st.number_input(
             label='Top Number of Languages',
@@ -386,12 +369,3 @@ plots.display_sentiment_analysis(
     ncols=ncols,
     global_max_mean_values=global_max_mean_values,
 )
-
-
-        
-
-## Visuals
-# Create logos for radios of the same size
-# Improve visual by trying to add some borders or background colors
-# Color PT bar differently
-# Define color pallete for each radio

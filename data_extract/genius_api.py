@@ -57,11 +57,9 @@ class GeniusAPI:
         song_url = self.search_song_on_genius(song_title, artist_name)
 
         if song_url:
-            # print(f"Song URL found: {song_url}")
             # Scrape the lyrics
             lyrics = self.scrape_lyrics_from_genius_url(song_url)
             if lyrics:
-                # print("Lyrics found")
                 return lyrics
             else:
                 print(f"Could not extract lyrics from the page for song {song_title}.")

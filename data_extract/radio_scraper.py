@@ -43,11 +43,8 @@ class RadioScraper:
         try:
             time.sleep(2)
             print("Waiting for cookie banner to appear...")
-            # cookies_banner = self.wait.until(EC.presence_of_element_located((By.CLASS_NAME, cookies_button)))
             cookies_banner = self.wait.until(EC.visibility_of_element_located((By.CLASS_NAME, cookies_button)))
             print("Cookie banner detected, searching for Accept button...")
-            # accept_button = cookies_banner.find_element(By.XPATH, f".//button[span[text()='{cookies_button_accept_text}']]")
-            # accept_button.click()
             # Try locating the button inside the banner
             try:
                 accept_button = cookies_banner.find_element(By.XPATH, f".//button[span[text()='{cookies_button_accept_text}']]")
@@ -267,7 +264,6 @@ class RFMRadioScraper(RadioScraper):
         
         day_track_data = []
 
-        # period_values = self._ignore_first_option(self._get_option_list(self.period_element_id))
         period_values = ['p-madrugada', 'p-manha', 'p-tarde', 'p-noite'] # Fix order since original was unordered
         for period in tqdm(period_values, desc=f'Processing period for radio {self.radio_name}', unit='period'):
             period_select = Select(self.driver.find_element(By.ID, self.period_element_id))
@@ -378,14 +374,10 @@ class MegaHitsRadioScraper(RadioScraper):
                             minute_input.clear()
                             minute_input.send_keys(f"{minute:02}")
 
-                            # search_button = self.wait.until(EC.element_to_be_clickable((By.ID, self.search_button_text)))
                             search_button = WebDriverWait(self.driver, 10).until(
                                 EC.element_to_be_clickable((By.ID, self.search_button_text))
                             )
-                            try:
-                                # self.driver.execute_script("arguments[0].scrollIntoView(true);", search_button)
-                                # self.driver.execute_script("arguments[0].click();", search_button)
-                                
+                            try:                                
                                 time.sleep(1)
                             except Exception as e:
                                 print(f"Failed to click search button: {e}")
@@ -460,8 +452,7 @@ class MegaHitsRadioScraper(RadioScraper):
 if __name__ == '__main__':
     cm = ConfigManager()
     ds = DataStorage()
-    rfm = MegaHitsRadioScraper(cm.WEB_SITES['MegaHits'])
-    # rfm = RFMRadioScraper(cm.WEB_SITES['RFM'])
+    rfm = RFMRadioScraper(cm.WEB_SITES['RFM'])
     print(rfm._get_last_time_played(rfm.csv_path, rfm.schema))
     
     existing_data = ds.read_csv(path=rfm.csv_path, schema=rfm.schema)

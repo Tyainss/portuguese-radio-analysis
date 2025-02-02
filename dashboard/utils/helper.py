@@ -176,7 +176,6 @@ def clean_name_column(df: pl.DataFrame, col: str) -> pl.DataFrame:
         pl.col(col)
         .str.strip_chars()  # Removes leading/trailing spaces
         .map_elements(lambda x: unidecode.unidecode(x) if isinstance(x, str) else x, return_dtype=pl.Utf8)  # Removes accents
-        # .str.to_lowercase()  # Ensures all names are lowercase for consistent joins
         .alias(col)
     )
     
