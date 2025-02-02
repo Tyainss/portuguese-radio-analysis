@@ -457,6 +457,12 @@ with st.sidebar:
     # Reset settings button
     st.button('Reset Page Settings', on_click=reset_page_settings)
 
+radio_logo = app_config[radio_chosen].get('logo')
+radio_color = app_config[radio_chosen].get('color')
+
+_, logo_col, _ = st.columns([1,1,1])
+with logo_col:
+    st.image(radio_logo, use_container_width=False)
 
 # Handle empty dataframe scenario
 if radio_df.is_empty():
@@ -474,7 +480,7 @@ else:
     with st.expander('', expanded=True):
         st.markdown(
             """
-            <div style="background-color: #edf0f5; padding: 15px; border-radius: 10px;">
+            <div style="background-color: #e6e6e6; padding: 15px; border-radius: 10px;">
                 <h2 style="text-align: center; color: #333;">📊 Comparison to Other Radios</h2>
                 <p style="font-size: 16px;">
                     Understanding how a selected radio station compares to others is key to identifying trends, uniqueness, 
@@ -484,7 +490,7 @@ else:
                 <ul style="font-size: 16px; margin-left: 20px;">
                     <li>🎵 <b>Which artists/tracks are more popular on this radio compared to others?</b></li>
                     <li>📈 <b>How do play counts vary across different stations?</b></li>
-                    <li>🎨 <b>Are there unique genre preferences in this radio’s audience?</b></li>
+                    <li>🎨 <b>Are there unique genre preferences in this radio's audience?</b></li>
                 </ul>
                 <p style="font-size: 16px;">
                     Each visualization below is designed to <b>highlight key differences</b> between the selected radio 
@@ -504,9 +510,9 @@ else:
         with col1:
             st.markdown(
                 f"""
-                <div style="text-align: center; background-color: #e3e7f1; padding: 8px; 
+                <div style="text-align: center; background-color: #E9E9E9; padding: 8px; 
                             border-radius: 8px; font-size: 20px; font-weight: bold; color: #1f2937;">
-                    🎧 {radio_df[cm.RADIO_COLUMN][0]}
+                    🎧 {radio_chosen}
                 </div>
                 """,
                 unsafe_allow_html=True
@@ -515,7 +521,7 @@ else:
             with col2:
                 st.markdown(
                     """
-                    <div style="text-align: center; background-color: #e3e7f1; padding: 8px; 
+                    <div style="text-align: center; background-color: #E9E9E9; padding: 8px; 
                                 border-radius: 8px; font-size: 20px; font-weight: bold; color: #1f2937;">
                         📡 Other Radios
                     </div>
@@ -524,13 +530,13 @@ else:
                 )
         
         st.write('#####')
-        plots.display_top_bar_chart(radio_df, view_option, other_radios_df)
+        plots.display_top_bar_chart(radio_df, view_option, other_radios_df, radio_name=radio_chosen, radio_color=radio_color)
         st.divider()
         plots.display_top_by_week_chart(radio_df, view_option, other_radios_df)
         st.divider()
-        plots.display_play_count_histogram(radio_df, view_option, other_radios_df)
+        plots.display_play_count_histogram(radio_df, view_option, other_radios_df, radio_color=radio_color)
         st.divider()
-        plots.display_popularity_vs_plays_quadrant(radio_df, view_option, other_radios_df)
+        plots.display_popularity_vs_plays_quadrant(radio_df, view_option, other_radios_df, radio_color=radio_color)
         st.divider()
         plots.display_top_genres_evolution(radio_df, other_radios_df)
 
@@ -539,7 +545,7 @@ else:
     ## Radio Highlights ##
     ######################
     if other_radios_df is not None and not other_radios_df.is_empty():
-        plots.display_underplayed_overplayed_highlights(radio_df, other_radios_df, view_option)
+        plots.display_underplayed_overplayed_highlights(radio_df, other_radios_df, view_option, radio_name=radio_chosen)
         st.divider()
         
 
@@ -547,8 +553,3 @@ else:
     ## Artist/Track Dataframe with plots  ##
     ########################################
     plots.display_plot_dataframe(radio_df, view_option)
-
-
-
-
-# Add image of selected radio up top

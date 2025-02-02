@@ -8,7 +8,7 @@ from datetime import timedelta
 from typing import Optional
 
 from data_extract.config_manager import ConfigManager
-from utils.helper import number_formatter, week_dates_start_end
+from utils.helper import number_formatter, week_dates_start_end, hex_to_rgb
 
 cm = ConfigManager()
 
@@ -179,6 +179,7 @@ def display_sparkline(radio_df: pl.DataFrame, view_option: str):
             margin=dict(l=10, r=30, t=30, b=0),
             height=600,
             hoverlabel_align="left",
+            yaxis=dict(gridcolor="#E0E0E0"),
         )
 
         # Define line width based on total plays
@@ -205,7 +206,7 @@ def display_sparkline(radio_df: pl.DataFrame, view_option: str):
 
         st.write(
             "**Tip**: You can hover over the lines to see exact values."
-            "You can also click legend entries to toggle them on/off."
+            " You can also click legend entries to toggle them on/off."
         )
 
         st.plotly_chart(fig, use_container_width=True)
@@ -352,7 +353,13 @@ def display_plot_dataframe(radio_df: pl.DataFrame, view_option: str, last_x_days
         use_container_width=True
     )
 
-def display_top_bar_chart(radio_df: pl.DataFrame, view_option: str, other_radios_df: Optional[pl.DataFrame] = None):
+def display_top_bar_chart(
+    radio_df: pl.DataFrame, 
+    view_option: str, 
+    other_radios_df: Optional[pl.DataFrame] = None,
+    radio_name: str = 'This Radio', 
+    radio_color: str = "#4E87F9"
+):
     """
     Displays side-by-side bar charts comparing the top 10 Artists or Tracks in the selected radio versus other radios.
 
@@ -372,8 +379,7 @@ def display_top_bar_chart(radio_df: pl.DataFrame, view_option: str, other_radios
     else:  # "Track"
         group_cols = [cm.ARTIST_NAME_COLUMN, cm.TRACK_TITLE_COLUMN]
     
-    selected_radio_name = radio_df[cm.RADIO_COLUMN].unique().item()
-    st.subheader(f'🎤 :blue[Top 10 {view_option}s:] How Does This {selected_radio_name} Compare?')
+    st.subheader(f'🎤 :blue[Top 10 {view_option}s:] How Does {radio_name} Compare?')
     st.markdown(
         f"""
         A side-by-side look at the most played {view_option}s.
@@ -385,13 +391,13 @@ def display_top_bar_chart(radio_df: pl.DataFrame, view_option: str, other_radios
     else:
         col1 = st.container()  # Use a single column if no comparison is needed
 
-    def generate_bar_chart(df: pl.DataFrame, tooltip_color: str = "#4E87F9"):
+    def generate_bar_chart(df: pl.DataFrame, radio_color: str = "#4E87F9"):
         """
         Generate a formatted bar chart from the dataframe with customizable tooltip color.
         
         Parameters:
             df (pl.DataFrame): The dataframe to visualize.
-            tooltip_color (str): Hex color for tooltip styling (default: light blue).
+            radio_color (str): Hex color for tooltip styling (default: light blue).
         """
         bar_chart_df = (
             df.group_by(group_cols)
@@ -415,9 +421,10 @@ def display_top_bar_chart(radio_df: pl.DataFrame, view_option: str, other_radios
         bar_chart_df = bar_chart_df.sort('play_count', descending=False)
 
         # Create gradient colors
-        base_color = [78, 135, 249]  # RGB for #4E87F9
+        # base_color = [78, 135, 249]  # RGB for #4E87F9
+        base_rgb = hex_to_rgb(radio_color)
         gradient_colors = [
-            f"rgba({base_color[0]}, {base_color[1]}, {base_color[2]}, {0.1 + 0.1 * i})"
+            f"rgba({base_rgb[0]}, {base_rgb[1]}, {base_rgb[2]}, {0.1 + 0.1 * i})"
             for i in range(len(bar_chart_df))
         ]
 
@@ -437,7 +444,7 @@ def display_top_bar_chart(radio_df: pl.DataFrame, view_option: str, other_radios
         # Update tooltips with the light blue color
         bar_chart_fig.update_traces(
             hovertemplate=(
-                f"<span style='font-size:16px; font-weight:bold; color:{tooltip_color};'>%{{y}}</span> <br>"
+                f"<span style='font-size:16px; font-weight:bold; color:{radio_color};'>%{{y}}</span> <br>"
                 f"<span style='font-weight:bold;'>%{{customdata[0]}} Plays</span><br>"
                 "<extra></extra>"
             ),
@@ -456,12 +463,12 @@ def display_top_bar_chart(radio_df: pl.DataFrame, view_option: str, other_radios
 
     # Display left chart (selected radio)
     with col1:
-        st.plotly_chart(generate_bar_chart(radio_df), use_container_width=True)
+        st.plotly_chart(generate_bar_chart(radio_df, radio_color=radio_color), use_container_width=True)
 
     # Display right chart (other radios) if provided
     if other_radios_df is not None and not other_radios_df.is_empty():
         with col2:
-            st.plotly_chart(generate_bar_chart(other_radios_df), use_container_width=True)
+            st.plotly_chart(generate_bar_chart(other_radios_df, radio_color='#878786'), use_container_width=True)
 
 
 def display_top_by_week_chart(radio_df: pl.DataFrame, view_option: str, other_radios_df: Optional[pl.DataFrame] = None):
@@ -553,8 +560,8 @@ def display_top_by_week_chart(radio_df: pl.DataFrame, view_option: str, other_ra
         other_weekly_top, color_col_2 = process_weekly_top(other_radios_df)
 
     # Assign Colors for Artists in Selected Radio
-    all_colors = pc.qualitative.Pastel1  # Select a color palette
-    # all_colors = pc.qualitative.Bold
+    all_colors = pc.qualitative.Pastel2  # Select a color palette
+    
     all_artists = sorted(
         set(radio_weekly_top[color_col_1].unique().to_list()) |
         (set(other_weekly_top[color_col_2].unique().to_list()) if other_radios_df is not None and not other_radios_df.is_empty() else set()),
@@ -666,7 +673,12 @@ def display_top_by_week_chart(radio_df: pl.DataFrame, view_option: str, other_ra
             st.plotly_chart(generate_bar_chart(other_weekly_top, color_col_2), use_container_width=True)
 
 
-def display_play_count_histogram(radio_df: pl.DataFrame, view_option: str, other_radios_df: Optional[pl.DataFrame] = None):
+def display_play_count_histogram(
+    radio_df: pl.DataFrame, 
+    view_option: str, 
+    other_radios_df: Optional[pl.DataFrame] = None, 
+    radio_color: str = "#4E87F9"
+):
     """
     Displays a histogram illustrating the distribution of play counts for Artists or Tracks in predefined play count ranges.
 
@@ -748,7 +760,7 @@ def display_play_count_histogram(radio_df: pl.DataFrame, view_option: str, other
     if other_radios_df is not None and not other_radios_df.is_empty():
         other_histogram_df = process_histogram_data(other_radios_df)
 
-    def generate_histogram(df: pl.DataFrame, show_yaxis_title: bool = True):
+    def generate_histogram(df: pl.DataFrame, show_yaxis_title: bool = True, radio_color: str = "#4E87F9"):
         """Generates a histogram bar chart from the processed data with enhanced tooltips, including percentages."""
         # Calculate the percentage of the total for each bucket
         total_count = df["count"].sum()
@@ -772,13 +784,11 @@ def display_play_count_histogram(radio_df: pl.DataFrame, view_option: str, other
         )
 
         for _, trace in enumerate(fig.data):
-            # Extract bar color
-            bar_color = trace.marker.color if trace.marker.color else '#000'
 
             # Set hovertemplate with enhanced formatting
             trace.update(
                 hovertemplate=(
-                    f"<span style='font-size:16px; font-weight:bold; color:{bar_color};'>%{{customdata[0]}}</span> <br>"
+                    f"<span style='font-size:16px; font-weight:bold; color:{radio_color};'>%{{customdata[0]}}</span> <br>"
                     f"<span style='font-weight:bold;'>%{{customdata[1]}} {view_option}s</span><br>"
                     f"<span >%{{customdata[2]}}% of Total</span><br>"
                     "<extra></extra>"
@@ -787,6 +797,10 @@ def display_play_count_histogram(radio_df: pl.DataFrame, view_option: str, other
                 textposition="outside",
                 cliponaxis=False,
             )
+
+        fig.update_traces(
+            marker_color=radio_color
+        )
 
         fig.update_layout(
             xaxis_title="Number of Plays",
@@ -802,16 +816,30 @@ def display_play_count_histogram(radio_df: pl.DataFrame, view_option: str, other
 
     # Display left chart (selected radio)
     with col1:
-        st.plotly_chart(generate_histogram(radio_histogram_df, show_yaxis_title=True), use_container_width=True)
+        st.plotly_chart(
+            generate_histogram(
+                radio_histogram_df, show_yaxis_title=True, radio_color=radio_color
+            ), 
+            use_container_width=True
+        )
 
     # Display right chart (other radios) if provided
     if other_radios_df is not None and not other_radios_df.is_empty():
         with col2:
-            st.plotly_chart(generate_histogram(other_histogram_df, show_yaxis_title=False), use_container_width=True)
+            st.plotly_chart(
+                generate_histogram(
+                    other_histogram_df, show_yaxis_title=False, radio_color='#878786'
+                ), 
+            use_container_width=True
+        )
 
 
 def display_popularity_vs_plays_quadrant(
-    radio_df: pl.DataFrame, view_option: str, other_radios_df: Optional[pl.DataFrame] = None, top_n_labels: int = 10
+    radio_df: pl.DataFrame, 
+    view_option: str, 
+    other_radios_df: Optional[pl.DataFrame] = None, 
+    top_n_labels: int = 10,
+    radio_color: str = "#4E87F9"
 ):
     """
     Displays a quadrant chart comparing popularity vs. play counts for Artists or Tracks, highlighting top-performing entities.
@@ -866,13 +894,17 @@ def display_popularity_vs_plays_quadrant(
     if other_radios_df is not None and not other_radios_df.is_empty():
         other_scatter_df = process_scatter_data(other_radios_df)
 
-    def generate_quadrant_chart(df: pl.DataFrame, tooltip_color: str = "#4E87F9"):
+    def generate_quadrant_chart(
+        df: pl.DataFrame, 
+        radio_color: str = "#4E87F9",
+        show_yaxis_title: bool = True,
+    ):
         """
         Generates a scatterplot quadrant chart with labels for top-played artists/tracks and quadrant lines.
         
         Parameters:
             df (pl.DataFrame): The dataframe to visualize.
-            tooltip_color (str): Hex color for tooltip styling (default: light blue).
+            radio_color (str): Hex color for tooltip styling (default: light blue).
         """
         if view_option == 'Track':
             df = df.with_columns(
@@ -905,6 +937,7 @@ def display_popularity_vs_plays_quadrant(
             y="total_popularity",
             hover_data={"play_count": False, "total_popularity": False},  # Exclude these from default hover
             title='',
+            color_discrete_sequence=[radio_color]
         )
 
         # Enhanced tooltips
@@ -912,7 +945,7 @@ def display_popularity_vs_plays_quadrant(
             # Set hovertemplate with custom formatting
             trace.update(
                 hovertemplate=(
-                     f"<span style='font-size:16px; font-weight:bold; color:{tooltip_color};'>%{{customdata[0]}}</span><br>"
+                     f"<span style='font-size:16px; font-weight:bold; color:{radio_color};'>%{{customdata[0]}}</span><br>"
                     "<span style='font-size:14px; font-weight:bold;'>🎵 %{customdata[1]} Plays</span><br>"
                     "<span style='font-size:14px; font-weight:bold;'>⭐ %{customdata[2]} Popularity</span><br>"
                     "<extra></extra>"
@@ -958,25 +991,31 @@ def display_popularity_vs_plays_quadrant(
 
         fig.update_layout(
             xaxis_title="Number of Plays",
-            yaxis_title="Popularity",
+            yaxis_title="Popularity" if show_yaxis_title else None,
             margin=dict(l=10, r=30, t=30, b=40),
             height=500,
             hoverlabel_align="left",
+            yaxis=dict(gridcolor="#E0E0E0"),
         )
 
         return fig
 
     # Display left chart (selected radio)
     with col1:
-        st.plotly_chart(generate_quadrant_chart(radio_scatter_df), use_container_width=True)
+        st.plotly_chart(generate_quadrant_chart(radio_scatter_df, radio_color=radio_color, show_yaxis_title=True), use_container_width=True)
 
     # Display right chart (other radios) if provided
     if other_radios_df is not None and not other_radios_df.is_empty():
         with col2:
-            st.plotly_chart(generate_quadrant_chart(other_scatter_df), use_container_width=True)
+            st.plotly_chart(generate_quadrant_chart(other_scatter_df, radio_color='#878786', show_yaxis_title=False), use_container_width=True)
 
 
-def display_underplayed_overplayed_highlights(radio_df: pl.DataFrame, other_radios_df: pl.DataFrame, view_option: str):
+def display_underplayed_overplayed_highlights(
+    radio_df: pl.DataFrame, 
+    other_radios_df: pl.DataFrame, 
+    view_option: str,
+    radio_name: str = 'This Radio'
+):
     """
     Highlights the most underplayed and overplayed Artists or Tracks in the selected radio compared to other radios.
 
@@ -984,6 +1023,7 @@ def display_underplayed_overplayed_highlights(radio_df: pl.DataFrame, other_radi
         radio_df (pl.DataFrame): Input data for the selected radio containing play counts.
         other_radios_df (pl.DataFrame): Data for other radios to use in the comparison.
         view_option (str): Determines the grouping, either "Artist" or "Track".
+        radio_name (str): The name of the radio to be displayed.
 
     Functionality:
         - Identifies entities with high play counts in other radios but low in the selected radio (underplayed).
@@ -998,9 +1038,6 @@ def display_underplayed_overplayed_highlights(radio_df: pl.DataFrame, other_radi
     else:  # "Track"
         group_cols = [cm.ARTIST_NAME_COLUMN, cm.TRACK_TITLE_COLUMN]
         display_col = 'Track Title'
-
-    # Get the selected radio name
-    selected_radio_name = radio_df[cm.RADIO_COLUMN].unique().item()
 
     # Aggregate total plays for each artist/track
     radio_plays = (
@@ -1111,7 +1148,7 @@ def display_underplayed_overplayed_highlights(radio_df: pl.DataFrame, other_radi
                 <div style="background-color:#e8f5e9;padding:12px;border-radius:8px;">
                 🔥 <b>Missed Opportunity!</b><br>
                 <b>{entity_name}</b><br>
-                <b>{row[most_underplayed.columns.index("radio_play_count")]} plays on {selected_radio_name}</b><br>
+                <b>{row[most_underplayed.columns.index("radio_play_count")]} plays on {radio_name}</b><br>
                 but <b>heavily played on other radios ({row[most_underplayed.columns.index("other_play_count")]:,} plays)</b>!
                 </div>
                 """
@@ -1132,7 +1169,7 @@ def display_underplayed_overplayed_highlights(radio_df: pl.DataFrame, other_radi
                     <div style="background-color:#ffebee;padding:12px;border-radius:8px;">
                     📢 <b>Unique Pick!</b><br>
                     <b>{entity_name}</b><br>
-                    <b>{row[most_overplayed.columns.index("radio_play_count")]:,} plays on {selected_radio_name}</b><br>
+                    <b>{row[most_overplayed.columns.index("radio_play_count")]:,} plays on {radio_name}</b><br>
                     but <b>barely played on other radios ({other_play_count:,} plays)</b>!
                     </div>
                     """
@@ -1141,7 +1178,7 @@ def display_underplayed_overplayed_highlights(radio_df: pl.DataFrame, other_radi
                     <div style="background-color:#ffebee;padding:12px;border-radius:8px;">
                     📢 <b>Unique Pick!</b><br>
                     <b>{entity_name}</b><br>
-                    <b>{row[most_overplayed.columns.index("radio_play_count")]:,} plays on {selected_radio_name}</b><br>
+                    <b>{row[most_overplayed.columns.index("radio_play_count")]:,} plays on {radio_name}</b><br>
                     and <b>doesn't have any plays on other radios!</b>
                     </div>
                     """
@@ -1160,7 +1197,7 @@ def display_underplayed_overplayed_highlights(radio_df: pl.DataFrame, other_radi
                 .select([display_col, "radio_play_count", "other_play_count"])
                 .head(10)
                 .rename({
-                    "radio_play_count": f"Plays on {selected_radio_name}",
+                    "radio_play_count": f"Plays on {radio_name}",
                     "other_play_count": "Plays on Other Radios"
                 })
             )
@@ -1172,7 +1209,7 @@ def display_underplayed_overplayed_highlights(radio_df: pl.DataFrame, other_radi
                 .select([display_col, "radio_play_count", "other_play_count"])
                 .head(10)
                 .rename({
-                    "radio_play_count": f"Plays on {selected_radio_name}",
+                    "radio_play_count": f"Plays on {radio_name}",
                     "other_play_count": "Plays on Other Radios"
                 })
             )

@@ -6,7 +6,7 @@ from data_extract.config_manager import ConfigManager
 from utils import storage, filters, calculations
 from utils.overview_comparison import mappings, plots
 
-
+# st.logo('dashboard/logo/RFM_2008.png')
 cm = ConfigManager()
 app_config = cm.load_json(path='dashboard/app_config.json')
 
@@ -36,12 +36,14 @@ max_release_date = df_joined.with_columns(pl.col(cm.SPOTIFY_RELEASE_DATE_COLUMN)
 if 'date_period' not in st.session_state:
     st.session_state['date_period'] = (min_date, max_date)
 if 'ts_graph' not in st.session_state:
-    st.session_state['ts_graph'] = 'Avg Tracks'
+    st.session_state['ts_graph'] = 'Avg Hours Played'
+if 'metric_type' not in st.session_state:
+    st.session_state['metric_type'] = 'Total'
 
 def reset_settings():
     st.session_state['date_period'] = (min_date, max_date)
-    st.session_state['ts_graph'] = 'Avg Tracks'
-    st.session_state['metric_type'] = 'Unique'
+    st.session_state['ts_graph'] = 'Avg Hours Played'
+    st.session_state['metric_type'] = 'Total'
     # Reset release year filter
     if release_years:
         st.session_state['release_year_range'] = (min_release_date, max_release_date)
@@ -58,20 +60,20 @@ with st.sidebar:
         key='date_period'
     )
     new_graph_option = st.radio(
-        label='📈 Select :blue-background[**Time Series**] to display:',
-        options=['Avg Tracks', 'Avg Hours Played', 'Avg Popularity'],
-        index=0,
+        label='📈 Select :blue[**Time Series**] to display:',
+        options=['Avg Hours Played', 'Avg Tracks', 'Avg Popularity'],
+        # index=1,
         key='ts_graph'
     )
 
     metric_type_option = st.radio(
-        label='📊 Select :blue-background[**Metric**] Type',
-        options=['Unique', 'Total', 'Average'],
-        index=0,
+        label='📊 Select :blue[**Metric**] Type',
+        options=['Total', 'Unique', 'Average'],
+        # index=0,
         horizontal=False,
         key='metric_type',
         help="""Display either unique or total combinations, or average.
-            \nApplies for :red-background[**Tracks**] and :red-background[**Artists**] metrics"""
+            \nApplies for **Tracks** and **Artists** metrics"""
     )
 
     # If user selected a date range
@@ -186,7 +188,7 @@ for i, (key, val) in enumerate(app_config.items()):
     # Calculate metrics by decade, including most played artist
     df_decades_artists = calculations.calculate_decade_metrics(
         _df=app_config[key]['radio_df'],
-        date_column="mb_artist_career_begin",
+        date_column="combined_artist_start_date",
         count_columns=[cm.ARTIST_NAME_COLUMN],
         metric_type=mapped_metric_type,
         include_most_played="artist",

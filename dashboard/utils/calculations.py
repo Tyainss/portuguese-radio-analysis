@@ -198,6 +198,7 @@ def plot_metrics(
     x_axis_column: str = 'weekday_name',
     x_axis_label: str = 'Day of Week',
     y_axis_range: tuple[float, float] = None,
+    color: str = None,
     **kwargs
 ):
     """
@@ -224,7 +225,8 @@ def plot_metrics(
         y=metric,
         title=title,
         labels={x_axis_column: x_axis_label, metric: metric_name},
-        markers=True
+        markers=True,
+        color_discrete_sequence=[color]
     )
     fig.update_layout(
         xaxis_title=x_axis_label,
@@ -233,6 +235,9 @@ def plot_metrics(
         margin=dict(l=0, r=0, t=0, b=0),
         height=350,
         hoverlabel_align="left",
+        yaxis=dict(
+            gridcolor="#E0E0E0"
+        )
     )
     fig.update_traces(
         hovertemplate=(
@@ -240,6 +245,8 @@ def plot_metrics(
             f"<b>{metric_name}</b>: " "%{y:.2f}<br>"
         )
     )
+
+    fig.update_traces(line=dict(width=3))
 
     # Apply the y-axis range if provided
     if y_axis_range:
