@@ -179,6 +179,7 @@ def display_sparkline(radio_df: pl.DataFrame, view_option: str):
             margin=dict(l=10, r=30, t=30, b=0),
             height=600,
             hoverlabel_align="left",
+            yaxis=dict(gridcolor="#E0E0E0"),
         )
 
         # Define line width based on total plays
@@ -559,8 +560,8 @@ def display_top_by_week_chart(radio_df: pl.DataFrame, view_option: str, other_ra
         other_weekly_top, color_col_2 = process_weekly_top(other_radios_df)
 
     # Assign Colors for Artists in Selected Radio
-    all_colors = pc.qualitative.Pastel1  # Select a color palette
-    # all_colors = pc.qualitative.Bold
+    all_colors = pc.qualitative.Pastel2  # Select a color palette
+    
     all_artists = sorted(
         set(radio_weekly_top[color_col_1].unique().to_list()) |
         (set(other_weekly_top[color_col_2].unique().to_list()) if other_radios_df is not None and not other_radios_df.is_empty() else set()),
@@ -994,6 +995,7 @@ def display_popularity_vs_plays_quadrant(
             margin=dict(l=10, r=30, t=30, b=40),
             height=500,
             hoverlabel_align="left",
+            yaxis=dict(gridcolor="#E0E0E0"),
         )
 
         return fig
