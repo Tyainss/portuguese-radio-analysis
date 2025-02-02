@@ -893,7 +893,11 @@ def display_popularity_vs_plays_quadrant(
     if other_radios_df is not None and not other_radios_df.is_empty():
         other_scatter_df = process_scatter_data(other_radios_df)
 
-    def generate_quadrant_chart(df: pl.DataFrame, radio_color: str = "#4E87F9"):
+    def generate_quadrant_chart(
+        df: pl.DataFrame, 
+        radio_color: str = "#4E87F9",
+        show_yaxis_title: bool = True,
+    ):
         """
         Generates a scatterplot quadrant chart with labels for top-played artists/tracks and quadrant lines.
         
@@ -986,7 +990,7 @@ def display_popularity_vs_plays_quadrant(
 
         fig.update_layout(
             xaxis_title="Number of Plays",
-            yaxis_title="Popularity",
+            yaxis_title="Popularity" if show_yaxis_title else None,
             margin=dict(l=10, r=30, t=30, b=40),
             height=500,
             hoverlabel_align="left",
@@ -996,12 +1000,12 @@ def display_popularity_vs_plays_quadrant(
 
     # Display left chart (selected radio)
     with col1:
-        st.plotly_chart(generate_quadrant_chart(radio_scatter_df, radio_color=radio_color), use_container_width=True)
+        st.plotly_chart(generate_quadrant_chart(radio_scatter_df, radio_color=radio_color, show_yaxis_title=True), use_container_width=True)
 
     # Display right chart (other radios) if provided
     if other_radios_df is not None and not other_radios_df.is_empty():
         with col2:
-            st.plotly_chart(generate_quadrant_chart(other_scatter_df, radio_color='#878786'), use_container_width=True)
+            st.plotly_chart(generate_quadrant_chart(other_scatter_df, radio_color='#878786', show_yaxis_title=False), use_container_width=True)
 
 
 def display_underplayed_overplayed_highlights(
