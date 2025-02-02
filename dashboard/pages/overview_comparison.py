@@ -73,7 +73,7 @@ with st.sidebar:
         horizontal=False,
         key='metric_type',
         help="""Display either unique or total combinations, or average.
-            \nApplies for :red-background[**Tracks**] and :red-background[**Artists**] metrics"""
+            \nApplies for **Tracks** and **Artists** metrics"""
     )
 
     # If user selected a date range

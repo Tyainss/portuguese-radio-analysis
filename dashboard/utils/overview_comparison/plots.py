@@ -34,7 +34,7 @@ def display_header_kpis(app_config: dict, ncols: int):
                     label='Avg Popularity',
                     value=calculations.calculate_avg_popularity(_df=radio_df, id=radio_name),
                     help='''Popularity is a **score** that reflects **how frequently a track has been played, 
-                    saved, or added to playlists** by users on :green[Spotify], with recent activity weighing more heavily than older interactions.'''
+                    saved, or added to playlists** by users on :green[**Spotify**], with recent activity weighing more heavily than older interactions.'''
                 )
 
 
@@ -42,7 +42,7 @@ def display_hourly_graph(app_config: dict, ncols: int, selected_metric: str, met
     st.subheader(
         f'{st.session_state['ts_graph']} :blue[by hour]', 
         divider="gray",
-        help="Track duration extracted from :green[Spotify].\n\nThe average played time of an hour can be above 1 if the song is not played in its entirety on the radio."
+        help="Track duration extracted from :green[**Spotify**].\n\nThe average played time of an hour can be above 1 if the song is not played in its entirety on the radio."
     )
     hour_graph_cols = st.columns(ncols)
     for i, (_, val) in enumerate(app_config.items()):
@@ -124,7 +124,7 @@ def display_track_languages(app_config: dict, ncols: int, num_languages: int, ma
     st.subheader(
         f':earth_africa: Top {num_languages} :blue[Languages]', 
         divider="gray",
-        help='Language detected by :blue-background[**analysing the lyrics**] with a language-detection Python library'
+        help='Language detected by :blue[**analysing the lyrics**] with a language-detection Python library'
     )
     st.caption(f'*by {st.session_state['metric_type']} Tracks*')
     track_plots_cols = st.columns(ncols)
@@ -269,8 +269,8 @@ def display_track_decades(
     st.subheader(
         f':date: {st.session_state['metric_type']} Tracks by :blue[*decade*]', 
         divider="gray", 
-        help="""Based on the :blue-background[**year of release**] of the track
-        \n\nData Obtained from :green[Spotify]"""
+        help="""Based on the :blue[**year of release**] of the track
+        \n\nData Obtained from :green[**Spotify**]"""
     )
     track_decade_cols = st.columns(ncols)
 
@@ -389,7 +389,7 @@ def display_artist_countries(app_config: dict, ncols: int, num_countries: int, m
     st.subheader(
         f':earth_africa: Top {num_countries} :blue[countries]', 
         divider="gray",
-        help='Country data extracted from :blue-background[**MusicBrainz**] and complemented with :blue-background[**Wikipedia**] when missing.'
+        help='Country data extracted from :blue[**MusicBrainz**] and supplemented with :blue[**Wikipedia**] when missing.'
         )
     st.caption(f'*by {st.session_state['metric_type']} Artists*')
     artist_plots_cols = st.columns(ncols)
@@ -530,9 +530,8 @@ def display_artist_decades(
     st.subheader(
         f':date: {st.session_state['metric_type']} Artists by :blue[*decade*]', 
         divider="gray",
-        help="""Based on either the :blue-background[**birth year**] of the artists if they're a person
-        or the :blue-background[**career start year**] of a group
-        \n\nData Obtained from MusicBrainz"""
+        help="""Based on either the :blue[**career start year**] of the artist, or, if unavailable, the :blue[**birth year**] (for individual artists).
+        \n\nData extracted from :blue[Wikipedia] and supplemented with :blue[MusicBrainz] when missing."""
     )
     artist_decade_cols = st.columns(ncols)
 
@@ -621,7 +620,7 @@ def display_track_duration(
     st.subheader(
         f':clock4: Track :blue[Duration]', 
         divider='gray',
-        help='Truncated based on the number of minutes of the song. The duration of the song is extracted from :green[Spotify]'
+        help='Truncated based on the :blue[number of minutes] of the song. The duration of the song is extracted from :green[**Spotify**]'
     )
     st.caption(f'*Duration in minutes; by {st.session_state['metric_type']} Tracks*')
     track_duration_cols = st.columns(ncols)
@@ -711,7 +710,7 @@ def display_top_genres(app_config: dict, ncols: int, metric_type_option: str, ma
     st.subheader(
         f':musical_score: Top 10 :blue[Genres]', 
         divider="gray",
-        help='Genre information gathered from :green[**Spotify**] and :blue-background[**based of the main genre of the artist**].'
+        help='Genre information gathered from :green[**Spotify**] and based of the :blue[**main genre of the artist**].'
     )
     st.caption(f'*by {st.session_state['metric_type']} Tracks*')
     genre_cols = st.columns(ncols)
