@@ -181,10 +181,10 @@ Billy Pilgrim,United States,"",Group,1991-01-01,2001-01-01,true,Unknown,,United 
 Bing Crosby With V Of Bts,United States,jazz,Person,1903-05-03,1977-10-14,true,South Korea,2013-01-01,United States,2013-01-01
 Birdy,United Kingdom,pop,Person,1996-05-15,,false,United Kingdom,2008-01-01,United Kingdom,2008-01-01
 Bispo,Portugal,"",Person,1992-04-12,,false,Unknown,,Portugal,1992-04-12
-Bispo ,Portugal,"",Person,1992-04-12,,false,Unknown,,Portugal,1992-04-12
 Bispo ,Unknown,"",Person,1992-04-12,,false,Unknown,,Unknown,1992-04-12
-Bispo Feat. Barbara Tinoco,Unknown,"",Person,1998-11-16,,false,Portugal,2012-01-01,Portugal,2012-01-01
+Bispo ,Portugal,"",Person,1992-04-12,,false,Unknown,,Portugal,1992-04-12
 Bispo Feat. Barbara Tinoco,Portugal,"",Person,1998-11-16,,false,Portugal,2012-01-01,Portugal,2012-01-01
+Bispo Feat. Barbara Tinoco,Unknown,"",Person,1998-11-16,,false,Portugal,2012-01-01,Portugal,2012-01-01
 Bispo Feat. Ivandro,Portugal,"",Person,1998-07-26,,false,Portugal,2012-01-01,Portugal,2012-01-01
 Bispo Feat. Julinho Ksd,Portugal,"",Person,,,false,Unknown,,Portugal,
 Bispo Ft. Barbara Tinoco,Unknown,"",Person,1998-11-16,,false,Unknown,,Unknown,1998-11-16
@@ -202,6 +202,7 @@ Black Eyed Peas,United States,hip hop,Group,1995-01-01,,false,Unknown,1995-01-01
 Black Eyed Peas X J. Balvin,United States,hip hop,Group,1995-01-01,,false,Unknown,,United States,1995-01-01
 Black Eyed Peas X Ozuna X J. Rey Soul,United States,hip hop,Group,1995-01-01,,false,Unknown,,United States,1995-01-01
 Blackout,Poland,blues rock,Group,1965-01-01,1967-01-01,true,Unknown,,Poland,1965-01-01
+Blessd ,Colombia,latin,Person,2000-01-27,,false,Colombia,2018-01-01,Colombia,2018-01-01
 Blocboy Jb ,United States,hip hop,Person,1996-05-19,,false,United States,2012-01-01,United States,2012-01-01
 Bluay,Unknown,"",Person,,,false,Unknown,,Unknown,
 Bluay ,Unknown,"",Person,,,false,Unknown,,Unknown,
@@ -438,6 +439,7 @@ Delfins,Unknown,"",Group,1981-01-01,,true,Unknown,2009-12-31,Unknown,2009-12-31
 Demi Lovato,United States,pop,Person,1992-08-20,,false,United States,2002-01-01,United States,2002-01-01
 Dengaz,Portugal,"",Person,,,false,Portugal,1998-01-01,Portugal,1998-01-01
 "Dengaz, Agir",Portugal,hip hop,Person,,,false,Unknown,,Portugal,
+"Dengaz, António Zambujo",Portugal,ballade,Person,1975-09-19,,false,Portugal,1998-01-01,Portugal,1998-01-01
 "Dengaz, Matay, Di Noise",Portugal,"",Person,,,false,Unknown,,Portugal,
 "Dengaz, Seu Jorge",Brazil,brazilian,Person,1970-06-08,,false,Unknown,,Brazil,1970-06-08
 Dennis,Jamaica,reggae,Person,1957-02-01,1999-07-01,true,Unknown,,Jamaica,1957-02-01
@@ -468,6 +470,7 @@ Disturbed,United States,alternative metal,Group,1996-01-01,,false,Unknown,,Unite
 Dj Dadda,Sweden,"",Person,,,false,Portugal,2000-01-01,Sweden,2000-01-01
 Dj Khaled ,Algeria,raï,Person,1960-02-29,,false,United States,1998-01-01,Algeria,1998-01-01
 Dj Snake,France,dance,Person,1986-06-13,,false,France,2008-01-01,France,2008-01-01
+Dj Snake ,France,dance,Person,1986-06-13,,false,France,2008-01-01,France,2008-01-01
 "Dj Snake, Justin Bieber",Canada,pop,Person,1994-03-01,,false,Unknown,,Canada,1994-03-01
 Dj Topo,Spain,"",Group,1978-01-01,,false,Unknown,,Spain,1978-01-01
 Dj Topo ,Spain,"",Group,1978-01-01,,false,Unknown,,Spain,1978-01-01
@@ -594,6 +597,7 @@ French Montana,United States,hip hop,Person,1984-11-09,,false,Algeria,2002-01-01
 French Montana Feat. Swae Lee,United States,hip hop,Person,1993-06-07,,false,Unknown,,United States,1993-06-07
 Fugees,United States,hip hop,Group,1992-01-01,2006-01-01,true,Unknown,1992-01-01,United States,1992-01-01
 Fumaxa,Unknown,"","",,,false,Unknown,,Unknown,
+"Fun, Janelle Monae",United States,funk,Person,1985-12-01,,false,Unknown,,United States,1985-12-01
 Future,United States,hip hop,Person,1983-11-20,,false,Unknown,,United States,1983-11-20
 Future ,United States,hip hop,Person,1983-11-20,,false,Unknown,,United States,1983-11-20
 Future & Metro Boomin Feat. Kendrick Lamar,United States,hip hop,Person,1993-09-16,,false,Unknown,,United States,1993-09-16
@@ -640,6 +644,7 @@ Green Day,United States,punk rock,Group,1989-01-01,,false,Unknown,1982-01-01,Uni
 Grelo,Unknown,"",Person,,,false,Unknown,,Unknown,
 Grelo ,Unknown,"",Person,,,false,Unknown,,Unknown,
 Griff,United Kingdom,alternative pop,Person,2001-01-21,,false,Unknown,,United Kingdom,2001-01-21
+Grognation ,Portugal,"",Group,,,false,Unknown,,Portugal,
 Guaynaa ,Puerto Rico,latin,Person,1992-09-16,,false,United States,2017-01-01,Puerto Rico,2017-01-01
 Guga,Brazil,"",Person,,,false,Unknown,,Brazil,
 Gui Aly,Portugal,"",Person,2001-03-22,,false,Unknown,,Portugal,2001-03-22
@@ -987,6 +992,7 @@ Luísa Sonza,Brazil,alternative pop,Person,1998-07-18,,false,Brazil,2017-01-01,B
 Luísa Sonza ,Brazil,alternative pop,Person,1998-07-18,,false,Brazil,2017-01-01,Brazil,2017-01-01
 Lykke Li,Sweden,art pop,Person,1986-03-18,,false,Sweden,2007-01-01,Sweden,2007-01-01
 Mabel,Unknown,pop,Person,1996-02-20,,false,Unknown,,Unknown,1996-02-20
+Mabel X King Promise,United States,king's x,Group,1985-01-01,,false,Sweden,2015-01-01,United States,2015-01-01
 Macklemore & Ryan Lewis ,United States,hip hop,Group,2009-01-01,,false,Unknown,2008-01-01,United States,2008-01-01
 Macklemore & Ryan Lewis Feat. Ray Dalton,United States,hip hop,Group,2009-01-01,,false,Unknown,,United States,2009-01-01
 "Macklemore & Ryan Lewis, Mary Lambert",United States,hip hop,Group,2009-01-01,,false,United States,,United States,2009-01-01
@@ -1013,6 +1019,7 @@ Maninho,Unknown,"","",,,false,Mozambique,1991-03-30,Mozambique,1991-03-30
 Manuel Turizo,Colombia,latin,Person,2000-04-12,,false,Colombia,2016-01-01,Colombia,2016-01-01
 Manuel Turizo ,Colombia,latin,Person,2000-04-12,,false,Colombia,2016-01-01,Colombia,2016-01-01
 Mar,Germany,"",Person,1966-01-01,,false,Unknown,,Germany,1966-01-01
+Marcia [+] J.P.Simoes,Unknown,"",Group,,,false,Unknown,,Unknown,
 Margarida,Unknown,"","",,,false,Unknown,2002-10-26,Unknown,2002-10-26
 Mariah Carey,United States,pop,Person,1969-03-27,,false,United States,1989-01-01,United States,1989-01-01
 "Mariah Carey, John Legend",United States,pop,Person,1969-03-27,,false,Unknown,,United States,1969-03-27
@@ -1184,6 +1191,7 @@ Nacho ,Spain,"",Person,1974-12-09,,false,Unknown,,Spain,1974-12-09
 Naill Horan,Ireland,pop,Person,1993-09-13,,false,Unknown,,Ireland,1993-09-13
 Nat King Cole,United States,jazz,Person,1919-03-17,1965-02-15,true,United States,1934-01-01,United States,1934-01-01
 Natalie Cole,United States,soul,Person,1950-02-06,2015-12-31,true,United States,1956-01-01,United States,1956-01-01
+Natalie Imbruglia,Australia,pop,Person,1975-02-04,,false,Australia,1992-01-01,Australia,1992-01-01
 Natasha Bedingfield,United Kingdom,pop,Person,1981-11-26,,false,United Kingdom,2001-01-01,United Kingdom,2001-01-01
 Natiruts [+] Monica Ferraz,Portugal,"",Person,1980-03-23,,false,Unknown,,Portugal,1980-03-23
 "Natiruts, Mónica Ferraz",Portugal,"",Person,1980-03-23,,false,Unknown,,Portugal,1980-03-23
@@ -1409,6 +1417,7 @@ Rixton,Unknown,boy band,Group,,,false,Unknown,2012-01-01,Unknown,2012-01-01
 Robbie Williams,United Kingdom,pop,Person,1974-02-13,,false,United Kingdom,1990-01-01,United Kingdom,1990-01-01
 "Robbie Williams, Bryan Adams",Canada,rock,Person,1959-11-05,,false,United Kingdom,1990-01-01,Canada,1990-01-01
 "Robbie Williams, Jamie Cullum",United Kingdom,jazz,Person,1979-08-20,,false,United Kingdom,1990-01-01,United Kingdom,1990-01-01
+Robin Thicke [+] Pharrell Williams,United States,contemporary r&b,Person,1973-04-05,,false,Unknown,,United States,1973-04-05
 Rod Stewart,United Kingdom,blues rock,Person,1945-01-10,,false,United Kingdom,1961-01-01,United Kingdom,1961-01-01
 Roddy Ricch ,United States,hip hop,Person,1998-10-22,,false,United States,2017-01-01,United States,2017-01-01
 Rodge Feat. Meerah,United States,southern rock,Group,1969-01-01,,false,Unknown,,United States,1969-01-01
@@ -1626,6 +1635,7 @@ Tommy Richman ,Unknown,"",Person,2000-03-21,,false,United States,2000-03-21,Unit
 Toni Braxton,United States,r&b,Person,1967-10-07,,false,United States,1989-01-01,United States,1989-01-01
 Tony Bennett,United States,jazz,Person,1926-08-03,2023-07-21,true,United States,1945-01-01,United States,1945-01-01
 Topic Ft. A7s,Sweden,vocal house,Person,1994-05-03,,false,Sweden,1994-05-03,Sweden,1994-05-03
+Topic X Daecolm,New Zealand,"",Person,,,false,Unknown,,New Zealand,
 "Topic, A7s",Sweden,vocal house,Person,1994-05-03,,false,Sweden,1994-05-03,Sweden,1994-05-03
 Toranja,Unknown,"",Group,,,false,Unknown,2000-01-01,Unknown,2000-01-01
 Tori Kelly,United States,soul,Person,1992-12-14,,false,United States,2003-01-01,United States,2003-01-01
