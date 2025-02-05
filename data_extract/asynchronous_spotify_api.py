@@ -1,4 +1,5 @@
 import polars as pl
+import re
 import aiohttp
 import asyncio
 from tqdm.asyncio import tqdm_asyncio
@@ -24,6 +25,20 @@ class AsyncSpotifyAPI:
         import base64
         credentials = f"{self.client_id}:{self.client_secret}"
         return base64.b64encode(credentials.encode()).decode()
+
+    def _clean_artist_name(self, artist_name):
+        """
+        Truncate the artist name at the first occurrence of any unwanted pattern.
+        These include 'Feat.', 'Ft.' or ' [', which are present on radio's artist names
+        """
+        # Define the patterns to check
+        unwanted_patterns = [r"\sfeat\.", r"\sFeat\.", r"\sft\.", r"\sFt\.", r"\s\["]
+
+        for pattern in unwanted_patterns:
+            match = re.search(pattern, artist_name)
+            if match:
+                return artist_name[: match.start()].strip()
+        return artist_name  # Return original name if no match
 
     async def authenticate(self):
         """Obtain the access token asynchronously using client credentials."""
@@ -117,78 +132,89 @@ class AsyncSpotifyAPI:
                 # If we exit the for-loop normally (i.e., no break) -> too many retries
                 raise Exception("Max retries exceeded in _make_request")
 
+    async def _process_track_info(self, search_results, track_name, artist_name):
+        """Process Spotify track data into a structured format."""
+        track = search_results["tracks"]["items"][0]
+        track_id = track["id"]
+        artist_id = track["artists"][0]["id"]
+
+        # Fetch genres for the artist
+        artist_info = await self._make_request(f"artists/{artist_id}")
+        genres = artist_info.get("genres", [])
+
+        # Fetch audio features for the track
+        # on 27/11/2024 Spotify changed their API to remove access to audio features
+        # the approach below tries to still access the audio features, in case they rollback their decision
+        try:
+            audio_features = await self._make_request(f"audio-features/{track_id}")
+        except Exception as e:
+            # Check if the error is '403 Forbidden'
+            if "403" in str(e):
+                logger.info(f"403 Forbidden error for audio-features/{track_id}. Using default values.")
+                audio_features = {key: None for key in [
+                    "danceability", "energy", "valence", "acousticness", 
+                    "instrumentalness", "liveness", "speechiness", "tempo", 
+                    "mode", "loudness", "time_signature"
+                ]}
+            else:
+                raise
+
+        # Build the track info dictionary
+        return {
+            self.config_manager.TRACK_TITLE_COLUMN: track_name,
+            self.config_manager.ARTIST_NAME_COLUMN: artist_name,
+            "spotify_album": track["album"]["name"],
+            "spotify_release_date": self.helper.format_date(track["album"]["release_date"]),
+            "spotify_duration_ms": track["duration_ms"],
+            "spotify_popularity": track["popularity"],
+            "spotify_genres": genres[0] if genres else None,
+            'spotify_danceability': audio_features.get('danceability'),
+            'spotify_energy': audio_features.get('energy'),
+            'spotify_valence': audio_features.get('valence'),
+            'spotify_acousticness': audio_features.get('acousticness'),
+            'spotify_instrumentalness': audio_features.get('instrumentalness'),
+            'spotify_liveness': audio_features.get('liveness'),
+            'spotify_speechiness': audio_features.get('speechiness'),
+            'spotify_tempo': audio_features.get('tempo'),
+            'spotify_mode': audio_features.get('mode'),
+            'spotify_loudness': audio_features.get('loudness'),
+            'spotify_time_signature': audio_features.get('time_signature'),
+        }
 
     async def get_track_info(self, track_name, artist_name):
-        """Asynchronous function to fetch track information by track name and artist."""
+        """
+        Asynchronous function to fetch track information by track name and artist from Spotify.
+        Attempting with cleaned artist names if needed.
+        """
         # First, ensure that we're authenticated
         if not self.access_token:
             await self.authenticate()
 
-        # Search for the track
+        # Generate the cleaned artist name
+        cleaned_artist_name = self._clean_artist_name(artist_name)
+
+        # Try first with the original artist name
         search_params = {
-            'q': f'track:{track_name} artist:{artist_name}',
-            'type': 'track',
-            'limit': 1
+            "q": f"track:{track_name} artist:{artist_name}",
+            "type": "track",
+            "limit": 1,
         }
-        search_results = await self._make_request('search', search_params)
-        if search_results['tracks']['items']:
-            track = search_results['tracks']['items'][0]
-            track_id = track['id']
-            artist_id = track['artists'][0]['id']
-            
-            # Fetch genres for the artist
-            artist_info = await self._make_request(f'artists/{artist_id}')
-            genres = artist_info.get('genres', [])
-            
-            # Fetch audio features for the track
-            # on 27/11/2024 Spotify changed their API to remove access to audio features
-            # the approach below tries to still access the audio features, in case they rollback their decision
-            try:
-                audio_features = await self._make_request(f'audio-features/{track_id}')
-            except Exception as e:
-                # Check if the error is '403 Forbidden'
-                if '403' in str(e):
-                    logger.info(f"403 Forbidden error for audio-features/{track_id}. Setting default values.")
-                    audio_features = {
-                        'danceability': None,
-                        'energy': None,
-                        'valence': None,
-                        'acousticness': None,
-                        'instrumentalness': None,
-                        'liveness': None,
-                        'speechiness': None,
-                        'tempo': None,
-                        'mode': None,
-                        'loudness': None,
-                        'time_signature': None
-                    }
-                else:
-                    raise
-            
-            # Build the track info dictionary
-            track_info = {
-                self.config_manager.TRACK_TITLE_COLUMN: track_name,
-                self.config_manager.ARTIST_NAME_COLUMN: artist_name,
-                'spotify_album': track['album']['name'],
-                'spotify_release_date': self.helper.format_date(track['album']['release_date']),
-                'spotify_duration_ms': track['duration_ms'],
-                'spotify_popularity': track['popularity'],
-                'spotify_genres': genres[0] if genres else None,
-                'spotify_danceability': audio_features.get('danceability'),
-                'spotify_energy': audio_features.get('energy'),
-                'spotify_valence': audio_features.get('valence'),
-                'spotify_acousticness': audio_features.get('acousticness'),
-                'spotify_instrumentalness': audio_features.get('instrumentalness'),
-                'spotify_liveness': audio_features.get('liveness'),
-                'spotify_speechiness': audio_features.get('speechiness'),
-                'spotify_tempo': audio_features.get('tempo'),
-                'spotify_mode': audio_features.get('mode'),
-                'spotify_loudness': audio_features.get('loudness'),
-                'spotify_time_signature': audio_features.get('time_signature')
-            }
-            return track_info
-        else:
-            return None
+        search_results = await self._make_request("search", search_params)
+
+        if not search_results["tracks"]["items"]:
+            # If no results, retry with the cleaned artist name
+            if cleaned_artist_name != artist_name:
+                logger.info(f"Retrying with cleaned artist name: {cleaned_artist_name}")
+
+                search_params["q"] = f"track:{track_name} artist:{cleaned_artist_name}"
+                search_results = await self._make_request("search", search_params)
+
+        if search_results["tracks"]["items"]:
+            return await self._process_track_info(
+                search_results, track_name, artist_name  # ✅ Save the original artist name
+            )
+
+        return None
         
     async def fetch_all_track_info(self, df):
         """Fetch Spotify info for all rows in the dataframe."""
@@ -252,11 +278,11 @@ if __name__ ==  "__main__":
 
     async def process(df):
         spotify_df = await spotify_api.process_data(df)
-        print(spotify_df)
+        print(spotify_df[['track_title', 'artist_name', 'spotify_duration_ms', 'spotify_genres']])
 
     df = pl.DataFrame({
-    'track_title': ['Houdini', 'Please Please Please', 'She Will Be Loved', 'cartaxo'],
-    'artist_name': ['Dua Lipa', 'Sabrina Carpenter', 'Maroon 5', 'new york new york']
+    'track_title': ['Bairro', 'Adore You'],
+    'artist_name': ['Wet Bed Gang', 'Hugel']
     })
 
     asyncio.run(process(df))
