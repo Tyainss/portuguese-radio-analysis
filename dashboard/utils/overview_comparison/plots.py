@@ -836,7 +836,7 @@ def display_sentiment_analysis(app_config: dict, ncols: int, global_max_mean_val
                         range=[0, 1]  # Ensure all metrics are on the same scale (0 to 1)
                     )
                 ),
-                margin=dict(l=100, r=100, t=20, b=20),
+                margin=dict(l=60, r=60, t=20, b=20),
                 height=300,
                 hoverlabel_align = 'left',
             )
@@ -856,7 +856,7 @@ def display_sentiment_analysis(app_config: dict, ncols: int, global_max_mean_val
                         background-color: {radio_color};  /* Use the radio_color for background */
                         color: white;
                         border-radius: 5px;
-                        white-space: nowrap;
+                        white-space: wrap;
                     }}
                 """,
             ):
