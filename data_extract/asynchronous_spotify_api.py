@@ -29,10 +29,17 @@ class AsyncSpotifyAPI:
     def _clean_artist_name(self, artist_name):
         """
         Truncate the artist name at the first occurrence of any unwanted pattern.
-        These include 'Feat.', 'Ft.' or ' [', which are present on radio's artist names
+        These include 'Feat.', 'Ft.', ' [' and now ' X ', which are present on radio's artist names.
         """
         # Define the patterns to check
-        unwanted_patterns = [r"\sfeat\.", r"\sFeat\.", r"\sft\.", r"\sFt\.", r"\s\["]
+        unwanted_patterns = [
+            r"\sfeat\.",
+            r"\sFeat\.",
+            r"\sft\.",
+            r"\sFt\.",
+            r"\s\[" ,
+            r"\sX\s"
+        ]
 
         for pattern in unwanted_patterns:
             match = re.search(pattern, artist_name)
@@ -282,7 +289,7 @@ if __name__ ==  "__main__":
 
     df = pl.DataFrame({
     'track_title': ['Bairro', 'Adore You'],
-    'artist_name': ['Wet Bed Gang', 'Hugel']
+    'artist_name': ['Wet Bed Gang X Lhast', 'Hugel']
     })
 
     asyncio.run(process(df))
