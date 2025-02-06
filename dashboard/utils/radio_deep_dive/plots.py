@@ -149,8 +149,9 @@ def display_sparkline(radio_df: pl.DataFrame, view_option: str):
 
         # Fix ordering for consistent colors
         top_data = top_data.join(sorted_top_entities.select(group_cols), on=group_cols, how='left')
-
         top_data_pandas = top_data.to_pandas()
+
+        color_palette = pc.qualitative.Pastel
 
         # Plot the sparkline
         fig = px.line(
@@ -165,6 +166,7 @@ def display_sparkline(radio_df: pl.DataFrame, view_option: str):
             line_shape="spline",
             hover_data=None, 
             custom_data=[color_col],
+            color_discrete_sequence=color_palette,
         )
 
         # Determine the min and max values for the y-axis
