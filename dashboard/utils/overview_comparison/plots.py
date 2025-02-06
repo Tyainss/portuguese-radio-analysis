@@ -805,6 +805,7 @@ def display_sentiment_analysis(app_config: dict, ncols: int, global_max_mean_val
             radio_color = val.get('color')
             mean_values = val.get('mean_values')
             radio_csv = val.get('radio_csv')
+            radio_df = val.get('radio_df')
             
             # Normalize mean values using global max mean values
             normalized_values = [
@@ -868,3 +869,20 @@ def display_sentiment_analysis(app_config: dict, ncols: int, global_max_mean_val
                         mime="text/csv",
                         key=f"{radio_name}_export_button_{i}"
                     )
+            
+            # Add % of nulls mention
+
+            # Filter the dataframe where spotify_duration_ms is null
+            df_null_spotify = radio_df.filter(
+                pl.col('spotify_duration_ms').is_null()
+            )
+
+            # Calculate percentage
+            spotify_null_percentage = (df_null_spotify.height / radio_df.height) * 100
+
+            # Display results
+            st.write('#####')
+            st.caption(f"""
+                Percentage of rows without Spotify information: {spotify_null_percentage:.2f}%\n
+                This includes track duration, release date and genres
+            """)
