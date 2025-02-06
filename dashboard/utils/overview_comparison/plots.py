@@ -805,6 +805,7 @@ def display_sentiment_analysis(app_config: dict, ncols: int, global_max_mean_val
             radio_color = val.get('color')
             mean_values = val.get('mean_values')
             radio_csv = val.get('radio_csv')
+            radio_df = val.get('radio_df')
             
             # Normalize mean values using global max mean values
             normalized_values = [
@@ -835,7 +836,7 @@ def display_sentiment_analysis(app_config: dict, ncols: int, global_max_mean_val
                         range=[0, 1]  # Ensure all metrics are on the same scale (0 to 1)
                     )
                 ),
-                margin=dict(l=100, r=100, t=20, b=20),
+                margin=dict(l=60, r=60, t=20, b=20),
                 height=300,
                 hoverlabel_align = 'left',
             )
@@ -855,7 +856,7 @@ def display_sentiment_analysis(app_config: dict, ncols: int, global_max_mean_val
                         background-color: {radio_color};  /* Use the radio_color for background */
                         color: white;
                         border-radius: 5px;
-                        white-space: nowrap;
+                        white-space: wrap;
                     }}
                 """,
             ):
@@ -868,3 +869,20 @@ def display_sentiment_analysis(app_config: dict, ncols: int, global_max_mean_val
                         mime="text/csv",
                         key=f"{radio_name}_export_button_{i}"
                     )
+            
+            # Add % of nulls mention
+
+            # Filter the dataframe where spotify_duration_ms is null
+            df_null_spotify = radio_df.filter(
+                pl.col('spotify_duration_ms').is_null()
+            )
+
+            # Calculate percentage
+            spotify_null_percentage = (df_null_spotify.height / radio_df.height) * 100
+
+            # Display results
+            st.write('#####')
+            st.caption(f"""
+                Percentage of rows without Spotify information: {spotify_null_percentage:.2f}%\n
+                This includes track duration, release date and genres
+            """)

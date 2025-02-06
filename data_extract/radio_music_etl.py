@@ -353,7 +353,7 @@ class RadioMusicETL:
 if __name__ == "__main__":
     etl = RadioMusicETL()
 
-    async def run_test():
+    async def run_async():
         await etl.run(scrape_radios=True , fetch_info=True, transform_data=True)
 
-    asyncio.run(run_test())
+    asyncio.run(run_async())

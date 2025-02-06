@@ -32,11 +32,11 @@ def load_joined_data(
     """
     # Clean artist and track names in all datasets
     df_radio_data = clean_name_column(df_radio_data, artist_col)
-    df_radio_data = clean_name_column(df_radio_data, track_col)
+    df_radio_data = clean_name_column(df_radio_data, track_col, remove_pi=True)
 
     df_artist_info = clean_name_column(df_artist_info, artist_col)
     df_track_info = clean_name_column(df_track_info, artist_col)
-    df_track_info = clean_name_column(df_track_info, track_col)    
+    df_track_info = clean_name_column(df_track_info, track_col, remove_pi=True)    
     
     # # Ensure all tables have unique values to prevent duplicates
     df_artist_info = df_artist_info.unique(subset=[artist_col])

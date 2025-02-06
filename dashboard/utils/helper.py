@@ -166,11 +166,12 @@ def number_formatter(number, decimal_places: int = 2) -> str:
         raise ValueError("Input must be a valid number.")
 
 
-def clean_name_column(df: pl.DataFrame, col: str) -> pl.DataFrame:
+def clean_name_column(df: pl.DataFrame, col: str, remove_pi: bool = False) -> pl.DataFrame:
     """
     Cleans a column by:
     - Stripping spaces.
     - Removing special characters (e.g., "Plutónio" → "Plutonio").
+    - Removing the " (Pi)" suffix if `remove_pi` is True.
     """
     df = df.with_columns(
         pl.col(col)
@@ -178,6 +179,12 @@ def clean_name_column(df: pl.DataFrame, col: str) -> pl.DataFrame:
         .map_elements(lambda x: unidecode.unidecode(x) if isinstance(x, str) else x, return_dtype=pl.Utf8)  # Removes accents
         .alias(col)
     )
+    if remove_pi:
+        df = df.with_columns(
+            pl.col(col)
+            .str.replace(r" \(Pi\)$", "", literal=False)  # Removes " (Pi)" at the end of the string
+            .alias(col)
+        )
     
     return df
 
